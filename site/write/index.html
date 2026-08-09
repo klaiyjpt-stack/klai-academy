@@ -364,7 +364,7 @@ function _load(k,def){const v=localStorage.getItem(k);if(v)return JSON.parse(v);
 let CLASSES=_load('klai_classes_v2',DEFAULT_CLASSES);
 function saveClasses(){localStorage.setItem('klai_classes_v2',JSON.stringify(CLASSES))}
 /* 공용 교재(wl_books) = amylab 판매본과 같은 소스. books/ 폴더→wl_books 반영분이 여기도 뜸 */
-const AMY_FN='https://zebpxedlasupgodjsyoz.supabase.co/functions/v1/books', AMY_CODE='PHW695F58F';
+const AMY_FN='https://zebpxedlasupgodjsyoz.supabase.co/functions/v1/books'; // 읽기전용(GET 공개)
 let SHARED=[]; let LOCAL=_load('klai_books_local',[]);
 let BOOKS=DEFAULT_BOOKS.concat(SHARED,LOCAL);
 function saveLocal(){localStorage.setItem('klai_books_local',JSON.stringify(LOCAL))}
@@ -490,21 +490,14 @@ function renderBooks(){
     ${(b._shared||b._local)?`<button class="btn ghost" style="padding:7px 10px;font-size:12px" onclick="delBook('${b.id}')">삭제</button>`:''}
   </div>`).join('');
 }
-async function addBook(){
+function addBook(){ // 이 기기에만 추가(공용은 books/ 폴더에서 자동 관리)
   const t=document.getElementById('nb-title').value.trim();
   if(!t)return;
-  try{const r=await fetch(AMY_FN,{method:'POST',headers:{'content-type':'application/json'},
-    body:JSON.stringify({code:AMY_CODE,title:t})});
-    if(r.ok){const j=await r.json();j.book.topics=j.book.topics||[];j.book._shared=true;SHARED.push(j.book);
-      document.getElementById('nb-title').value='';rebuild();return;}}catch(e){}
   LOCAL.push({id:'b'+Date.now().toString(36),title:t,level:2,topics:[],_local:true});
   saveLocal();document.getElementById('nb-title').value='';rebuild();
 }
-async function delBook(id){
-  const s=SHARED.find(x=>x.id===id);
-  if(s){try{const r=await fetch(AMY_FN,{method:'POST',headers:{'content-type':'application/json'},
-    body:JSON.stringify({code:AMY_CODE,action:'del',id})});
-    if(r.ok){SHARED=SHARED.filter(x=>x.id!==id);rebuild();}}catch(e){}return;}
+function delBook(id){
+  if(SHARED.find(x=>x.id===id)){alert('공용 교재는 books/ 폴더에서 관리돼요.');return;}
   LOCAL=LOCAL.filter(x=>x.id!==id);saveLocal();rebuild();
 }
 function teaLogin(){CUR.teacher=document.getElementById('tea-pick').value;fillTeaClasses();teaEnter();}
