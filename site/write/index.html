@@ -363,8 +363,13 @@ const DEFAULT_CLASSES=[
 function _load(k,def){const v=localStorage.getItem(k);if(v)return JSON.parse(v);localStorage.setItem(k,JSON.stringify(def));return JSON.parse(JSON.stringify(def));}
 let CLASSES=_load('klai_classes_v2',DEFAULT_CLASSES);
 function saveClasses(){localStorage.setItem('klai_classes_v2',JSON.stringify(CLASSES))}
-let BOOKS=_load('klai_books_v2',DEFAULT_BOOKS);
-function saveBooks(){localStorage.setItem('klai_books_v2',JSON.stringify(BOOKS))}
+/* 공용 교재(wl_books) = amylab 판매본과 같은 소스. books/ 폴더→wl_books 반영분이 여기도 뜸 */
+const AMY_FN='https://zebpxedlasupgodjsyoz.supabase.co/functions/v1/books', AMY_CODE='PHW695F58F';
+let SHARED=[]; let LOCAL=_load('klai_books_local',[]);
+let BOOKS=DEFAULT_BOOKS.concat(SHARED,LOCAL);
+function saveLocal(){localStorage.setItem('klai_books_local',JSON.stringify(LOCAL))}
+function rebuild(){const seen=new Set();BOOKS=DEFAULT_BOOKS.concat(SHARED,LOCAL).filter(b=>{const k=b.title;if(seen.has(k))return false;seen.add(k);return true;}); fillBooks(); renderBooks();}
+async function loadShared(){try{const r=await fetch(AMY_FN);if(r.ok){const j=await r.json();SHARED=(j.books||[]).map(b=>({...b,topics:b.topics||[],_shared:true}));}}catch(e){}rebuild();}
 function fillBooks(){document.getElementById('t-book').innerHTML=BOOKS.map(b=>`<option value="${b.id}">${esc(b.title)}</option>`).join('');}
 const clsById=id=>CLASSES.find(c=>c.id===id)||{en:'?',ko:'?'};
 const clsLabel=id=>{const c=clsById(id);return c.ko+' · '+c.en;};
@@ -474,25 +479,33 @@ function teaEnter(){
   renderClasses();
   renderBooks();
   renderSubs();
+  loadShared(); // 공용 교재(wl_books) 불러와 병합
 }
 function renderBooks(){
   const el=document.getElementById('book-list');
   const list=BOOKS.filter(b=>b.id!=='none');
   if(!list.length){el.innerHTML='<div class="empty">교재가 없어요. 아래에서 추가하세요.</div>';return;}
   el.innerHTML=list.map(b=>`<div class="item">
-    <div class="g"><div class="t">${esc(b.title)}</div><div class="s">${b.topics.length?b.topics.length+' 추천주제 (AI)':'제목만'}</div></div>
-    <button class="btn ghost" style="padding:7px 10px;font-size:12px" onclick="delBook('${b.id}')">삭제</button>
+    <div class="g"><div class="t">${esc(b.title)}${b._shared?' <span class="en">· 공용</span>':''}</div><div class="s">${b.topics.length?b.topics.length+' 추천주제 (AI)':'제목만'}</div></div>
+    ${(b._shared||b._local)?`<button class="btn ghost" style="padding:7px 10px;font-size:12px" onclick="delBook('${b.id}')">삭제</button>`:''}
   </div>`).join('');
 }
-function addBook(){
+async function addBook(){
   const t=document.getElementById('nb-title').value.trim();
   if(!t)return;
-  BOOKS.push({id:'b'+Date.now().toString(36),title:t,level:2,topics:[]});
-  saveBooks();document.getElementById('nb-title').value='';
-  renderBooks();fillBooks();
+  try{const r=await fetch(AMY_FN,{method:'POST',headers:{'content-type':'application/json'},
+    body:JSON.stringify({code:AMY_CODE,title:t})});
+    if(r.ok){const j=await r.json();j.book.topics=j.book.topics||[];j.book._shared=true;SHARED.push(j.book);
+      document.getElementById('nb-title').value='';rebuild();return;}}catch(e){}
+  LOCAL.push({id:'b'+Date.now().toString(36),title:t,level:2,topics:[],_local:true});
+  saveLocal();document.getElementById('nb-title').value='';rebuild();
 }
-function delBook(id){
-  BOOKS=BOOKS.filter(b=>b.id!==id);saveBooks();renderBooks();fillBooks();
+async function delBook(id){
+  const s=SHARED.find(x=>x.id===id);
+  if(s){try{const r=await fetch(AMY_FN,{method:'POST',headers:{'content-type':'application/json'},
+    body:JSON.stringify({code:AMY_CODE,action:'del',id})});
+    if(r.ok){SHARED=SHARED.filter(x=>x.id!==id);rebuild();}}catch(e){}return;}
+  LOCAL=LOCAL.filter(x=>x.id!==id);saveLocal();rebuild();
 }
 function teaLogin(){CUR.teacher=document.getElementById('tea-pick').value;fillTeaClasses();teaEnter();}
 
