@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>클라이 포털 · 프로젝트 현황판</title>
+<style>
+  :root{--blue:#2b74c4;--blue2:#215a99;--navy:#1a2740;--green:#7cc242;--green2:#5ea52c;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--bg:#f2f5fb;--warn:#c9862a;--red:#c0392b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .top{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:20px 24px}
+  .top h1{font-size:21px}.top p{font-size:12.5px;opacity:.9;margin-top:4px}
+  .body{max-width:1000px;margin:0 auto;padding:20px 22px 50px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+  .card h2{font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .card h2 .n{background:var(--blue);color:#fff;border-radius:8px;font-size:12px;padding:2px 9px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--sub);font-size:11.5px;font-weight:800;background:#f7f9fc}
+  .b{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:999px;white-space:nowrap}
+  .done{background:#e6f7f1;color:#0e7a58}.wip{background:#eaf2fc;color:#215a99}.wait{background:#f1f3f8;color:#6b7688}.chk{background:#fdf0e0;color:#a5641b}
+  ul{margin:0 0 0 2px;padding:0;list-style:none}
+  li{padding:6px 0;border-bottom:1px dashed var(--line);font-size:13px;display:flex;gap:8px;align-items:flex-start}
+  li:last-child{border-bottom:none}
+  li .m{flex-shrink:0}
+  .warn{background:#fff8ec;border:1px solid #f0dcb8}
+  .warn h2 .n{background:var(--warn)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .mini{border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+  .mini h3{font-size:13px;margin-bottom:8px;color:var(--blue2)}
+  .note{font-size:12px;color:var(--sub);background:#f6f7fb;border-radius:9px;padding:10px 12px;margin-top:6px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>🗂️ 클라이 어학원 포털 · 프로젝트 현황판</h1>
+  <p>지금까지의 결정 · 산출물 · 남은 일 · 놓치면 안 되는 것을 한 장에 정리했습니다. (2026-07-30 기준)</p>
+</div>
+<div class="body">
+
+  <div class="card">
+    <h2><span class="n">1</span> 전체 구조</h2>
+    <p style="font-size:13px">① <b>공개 홈페이지</b>(로그인 전: 학원 소개·수업 과정·이벤트·블로그·프로그램 링크·카카오 상담·로그인) + ② <b>로그인 학습 포털</b>(학생·학부모·선생님·원장).</p>
+    <div class="note">역할 5개 — 원장(전체+권한설정) · 부원장/관리자(대시보드별 권한 원장이 지정) · 선생님(담당 반) · 학부모(자녀+결제) · 학생(본인 학습만, 결제 비노출).</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">2</span> 페이지별 현황</h2>
+    <table>
+      <thead><tr><th>페이지</th><th>디자인 시안</th><th>실제 코드</th><th>메모</th></tr></thead>
+      <tbody>
+        <tr><td>공개 홈페이지</td><td><span class="b done">완료</span></td><td><span class="b wait">대기</span></td><td>수업 과정 5개, 슬로건, 카카오 연결</td></tr>
+        <tr><td>수업 과정 상세 5개</td><td><span class="b done">완료</span></td><td><span class="b wait">대기</span></td><td>스피킹·그래머라이팅·다독·IB·실력완성</td></tr>
+        <tr><td>학생 페이지</td><td><span class="b done">완료</span></td><td><span class="b wait">대기</span></td><td>점수 맞은/총, 출결(이코딩), 숙제, 학습과정</td></tr>
+        <tr><td>학부모 페이지</td><td><span class="b done">완료</span></td><td><span class="b wait">대기</span></td><td>결제(이코딩 링크), 레슨플랜, 포트폴리오</td></tr>
+        <tr><td>선생님 페이지(한/영)</td><td><span class="b done">완료</span></td><td><span class="b wait">대기</span></td><td>구글시트형 일괄입력, 개별/반별</td></tr>
+        <tr><td>원장 관리자 페이지</td><td><span class="b done">완료</span></td><td><span class="b wait">대기</span></td><td>학생관리·반이동·계정·권한·교재·프로그램</td></tr>
+        <tr><td>레슨플랜 생성기</td><td><span class="b done">완료·작동</span></td><td><span class="b wip">이식 예정</span></td><td>독립 도구로 실사용 가능</td></tr>
+        <tr><td>Supabase DB·권한</td><td>—</td><td><span class="b done">스키마 완료</span></td><td>schema.sql (테이블+RLS)</td></tr>
+      </tbody>
+    </table>
+    <div class="note">시안 파일: <b>학원전용페이지</b> 폴더 · 포털 코드: <b>klai homepage/klai-portal</b> 폴더.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">3</span> 확정된 핵심 결정</h2>
+    <ul>
+      <li><span class="m">🔐</span> 계정은 학원만 생성. 학생 아이디=영어이름+숫자. 학생+학부모 가정당 함께 생성.</li>
+      <li><span class="m">💳</span> 결제·수강료는 <b>이코딩</b>이 담당 → 학부모 페이지에 이코딩 링크. 학생 화면엔 결제 요소 없음.</li>
+      <li><span class="m">🗓️</span> 출결은 <b>선생님이 포털에서 직접 기록</b>해 학생·학부모에 표시(이코딩 출결은 그대로 병행). 결제만 이코딩 링크.</li>
+      <li><span class="m">🗄️</span> 데이터베이스 = <b>Supabase</b> 확정. 구글시트는 월간레포트 보조 연동(단방향 1단계).</li>
+      <li><span class="m">📊</span> 점수는 <b>맞은/총</b>(예: 18/20), 총 문항은 평가마다 다름.</li>
+      <li><span class="m">🔁</span> 반이동: 기록은 학생에 귀속(이동해도 유지). 개별학습(알파·클라이)은 잦은 이동, 레벨반(원어민)은 고정.</li>
+      <li><span class="m">✍️</span> 선생님 입력 기본 <b>비공개</b>, 공개 스위치 켤 때만 학생·학부모에 게시.</li>
+      <li><span class="m">🎬</span> 영상은 유튜브 비공개(Unlisted). 원어민 레슨플랜은 이미지 게시. 포트폴리오=알파리포트·원어민월말리포트·영상.</li>
+      <li><span class="m">🧩</span> 스택: Next.js+TS+Tailwind+shadcn/ui, Vercel, PWA. 카카오 채널 연결.</li>
+    </ul>
+  </div>
+
+  <div class="card warn">
+    <h2><span class="n">!</span> ⚠️ 놓치면 안 되는 것 · 원장님 확인/자료 필요</h2>
+    <ul>
+      <li><span class="m">✅</span> <b>출결·결제 방식 확정</b> — 출결=선생님 직접 기록, 결제=학부모 페이지에서 이코딩 결제 링크. (이코딩 엑셀 가져오기 불필요)</li>
+      <li><span class="m">🔗</span> <b>이코딩 학부모 결제 URL</b> — 학부모 결제 페이지/앱의 정확한 주소를 알려주시면 링크 버튼에 연결.</li>
+      <li><span class="m">🔗</span> <b>업무자동화 기존 시스템</b>(알파 결과리포트 · 원서반 월말리포트 · 교재주문서) 폴더 연결됨 → 파일이 iCloud '클라우드 전용'이라 <b>파인더에서 '지금 다운로드'</b> 후 포털에 이식 예정.</li>
+      <li><span class="m">📚</span> <b>엘리아 나머지 교재 · 키스톤 6단계</b> 목차 캡처 업로드 → 생성기 교재 추가.</li>
+      <li><span class="m">🏫</span> <b>엘리아영어·클라이영어 공식 소개</b> 정보(홈페이지/자료).</li>
+      <li><span class="m">📷</span> <b>학원 실제 IB·수업 사진</b>(저작권 안전한 자체 사진).</li>
+      <li><span class="m">📇</span> <b>기존 학생 명단·성적(구글시트 등)</b> → Supabase로 1회 이전.</li>
+      <li><span class="m">🌐</span> <b>도메인 확정: amyschool.kr</b> (가비아 구매) → 배포 시 Vercel 연결(A @→76.76.21.21, www→CNAME cname.vercel-dns.com). · PWA 아이콘 · 카카오 알림톡(선택).</li>
+    </ul>
+    <div class="note">이 항목들이 채워지면 대부분 자동으로 반영됩니다. 지금 막혀 있는 건 없고, 위 자료가 있으면 완성도가 올라갑니다.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">4</span> 반드시 통과할 필수 체크 (개발 시)</h2>
+    <ul>
+      <li><span class="m">①</span> <b>RLS 권한 테스트</b> — 학생 계정으로 남의 기록·결제가 안 보이는지 배포 전 실제 확인. (최우선)</li>
+      <li><span class="m">②</span> <b>알파 파이널 → 레벨 자동 매칭</b> — 매칭키=영어이름+숫자, 자동 반영 후 관리자 확정.</li>
+      <li><span class="m">③</span> <b>입력 표준화</b> — 과제·점수 표기 통일(자동완성/형식 검증).</li>
+      <li><span class="m">④</span> <b>공개 기본값 비공개</b> — 임시 기록이 바로 노출되지 않도록.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">5</span> 다음 단계 · 역할 분담</h2>
+    <div class="grid">
+      <div class="mini"><h3>🖥️ 여기(Cowork)에서</h3>
+        디자인 확정 · 레슨플랜 생성기 완성 · 포털 코드 파일 생성해 klai-portal 폴더에 채우기 · 새 교재/자료 반영.</div>
+      <div class="mini"><h3>💻 클로드 코드(맥)에서</h3>
+        klai-portal 폴더 열기 → npm install · Supabase 키 연결 · schema.sql 적용 · 로컬 실행 · 테스트 · Vercel 배포.</div>
+    </div>
+    <div class="note">두 곳이 같은 <b>klai-portal</b> 폴더를 공유합니다. 여기서 만든 코드를 맥의 클로드 코드가 실행·배포합니다.</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">6</span> 산출물 파일 목록</h2>
+    <div class="grid">
+      <div class="mini"><h3>학원전용페이지 (디자인 시안)</h3>
+        공개홈페이지 · 학생 · 학부모 · 선생님(한/영) · 원장관리자 · 수업과정 상세5 · IB상세 · 개발지시서 · DB비교선택 · 이코딩연동검토 · 학생페이지 구현이슈체크 · 구글드라이브 연동설계</div>
+      <div class="mini"><h3>klai homepage (실제 코드)</h3>
+        klai_lesson_plan_generator.html (작동) · klai-portal/ (README · BUILD_PLAN · supabase/schema.sql · package.json · .env.example · lib/supabaseClient)</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.DS_Store
+**/.DS_Store
+node_modules/
+*.zip
+# 저작권 교재 원본 (앱 런타임 미사용 · 공개 저장소 제외)
+site/write/books/
+# 로컬 산출물
+.vercel/

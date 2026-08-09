@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan Generator · KLAI Language Academy</title>
+<style>
+  :root{--blue:#2b74c4;--blue2:#215a99;--navy:#1a2740;--green:#7cc242;--green2:#5ea52c;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--bg:#f2f5fb;
+    --l1:#8e44ad;--l2:#2b74c4;--l3:#e08a1e;--l4:#159e8c;--test:#c0392b;--off:#e67e22;--ppt:#7d3cc9}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI","Apple SD Gothic Neo",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+  .flag{background:#111827;color:#fff;text-align:center;font-size:12px;padding:6px}
+  .top{background:linear-gradient(135deg,var(--green2),var(--blue));color:#fff;padding:14px 22px;display:flex;align-items:center;gap:10px}
+  .top .logo{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
+  .top b{font-size:16px}.top small{display:block;font-size:11px;opacity:.9}
+  .body{padding:18px 22px 50px;max-width:1200px;margin:0 auto}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+  .card h2{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .card .desc{color:var(--sub);font-size:12px;margin-bottom:12px}
+  .step{display:inline-block;background:var(--blue);color:#fff;font-size:11px;font-weight:800;border-radius:999px;padding:2px 9px;margin-right:6px}
+  .btn{border:none;border-radius:9px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+  .btn.pri{background:var(--blue);color:#fff}.btn.gr{background:var(--green);color:#fff}.btn.gh{background:#fff;border:1px solid var(--line);color:var(--ink)}
+  .btn.lg{padding:12px 20px;font-size:14px}
+  select,input[type=text],input[type=number],input[type=date]{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;font-family:inherit;color:var(--ink);background:#fff}
+  .grp{font-size:11px;font-weight:800;color:var(--sub);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+  .tbs{display:flex;gap:8px;flex-wrap:wrap}
+  .tbbtn{border:2px solid var(--line);border-radius:11px;padding:9px 13px;cursor:pointer;background:#fff;min-width:118px}
+  .tbbtn b{font-size:12.5px}.tbbtn small{display:block;color:var(--sub);font-size:10.5px;margin-top:2px}
+  .tbbtn.on{border-color:var(--blue);background:#eef5ff}
+  .tbadd{border:2px dashed #cdd7e6;border-radius:11px;padding:9px 13px;color:var(--sub);font-size:11.5px;display:flex;align-items:center;justify-content:center;min-width:118px;text-align:center}
+  .contents{margin-top:12px;border:1px solid var(--line);border-radius:10px;max-height:160px;overflow:auto;font-size:12px}
+  .contents div{padding:6px 10px;border-bottom:1px solid #f2f4f8;display:flex;gap:8px}
+  .contents div:last-child{border-bottom:none}
+  .contents .u{font-weight:800;color:var(--blue2);min-width:150px}
+  .contents .pg{margin-left:auto;color:var(--sub)}
+  .fr{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .fr label{font-size:12.5px;color:var(--sub);font-weight:800;width:110px;flex-shrink:0}
+  .wd{display:flex;gap:6px}
+  .wd span{width:38px;height:36px;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;cursor:pointer;color:var(--sub)}
+  .wd span.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .preset{font-size:12px;font-weight:800;padding:6px 10px;border-radius:8px;border:1px solid var(--line);cursor:pointer;background:#fff;color:var(--sub)}
+  .preset.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .calmode{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+  .mode{font-size:12px;font-weight:800;padding:6px 11px;border-radius:8px;border:1.5px solid var(--line);cursor:pointer;background:#fff}
+  .mode.on{color:#fff}
+  .mode[data-m=test].on{background:var(--test);border-color:var(--test)}
+  .mode[data-m=ppt].on{background:var(--ppt);border-color:var(--ppt)}
+  .mode[data-m=off].on{background:var(--off);border-color:var(--off)}
+  .mode[data-m=dbl].on{background:var(--green2);border-color:var(--green2)}
+  .mode[data-m=clear].on{background:#555;border-color:#555}
+  .cals{display:flex;gap:16px;flex-wrap:wrap}
+  .cal{border:1px solid var(--line);border-radius:12px;padding:10px;width:310px}
+  .cal .mn{text-align:center;font-weight:800;font-size:13px;margin-bottom:6px}
+  .cal table{width:100%;border-collapse:collapse}
+  .cal th{font-size:10.5px;color:var(--sub);padding:3px}
+  .cal td{text-align:center;padding:2px}
+  .day{width:36px;height:36px;line-height:36px;border-radius:8px;font-size:12.5px;cursor:pointer;margin:auto;position:relative}
+  .day.cls{background:#eef7e6;color:#2f6b12;font-weight:800}
+  .day.cls2{background:#bfe6a0;color:#2f6b12;font-weight:800}
+  .day.sun{color:#c0392b}
+  .day.off{background:var(--off);color:#fff;font-weight:800}
+  .day.empty{cursor:default}
+  .day .bt,.day .bp{position:absolute;top:-3px;font-size:9px;font-weight:900;color:#fff;border-radius:4px;width:13px;height:13px;line-height:13px;text-align:center}
+  .day .bt{right:-3px;background:var(--test)}
+  .day .bp{left:-3px;background:var(--ppt)}
+  .day .bd{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:900;color:#fff;background:var(--green2);border-radius:4px;padding:0 3px;line-height:12px}
+  .day .ba{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:900;color:#fff;background:var(--blue);border-radius:4px;padding:0 3px;line-height:12px}
+  .legend{font-size:11px;color:var(--sub);margin-top:8px;display:flex;gap:12px;flex-wrap:wrap}
+  .legend b{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:3px}
+  .rt{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+  table.plan{width:100%;border-collapse:collapse;font-size:12.5px;min-width:1000px}
+  table.plan th{background:var(--navy);color:#fff;padding:9px 10px;font-size:11.5px;font-weight:800}
+  table.plan td{border-bottom:1px solid var(--line);border-right:1px solid #f0f2f7;padding:8px 10px;vertical-align:middle}
+  table.plan td.c{text-align:center;white-space:nowrap}
+  .lz{display:inline-block;color:#fff;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 8px;margin-right:6px}
+  .l1{background:var(--l1)}.l2{background:var(--l2)}.l3{background:var(--l3)}.l4{background:var(--l4)}
+  .tag{display:inline-block;font-size:10px;font-weight:800;border-radius:6px;padding:2px 7px;margin-left:5px;color:#fff}
+  .tag.ft{background:var(--test)}.tag.pt{background:var(--ppt)}
+  .rowoff td{background:#fdf0e3;color:#a5561b;font-weight:700}
+  .rowfin td{background:#fff7df;font-weight:800}
+  .work{font-size:11px;color:var(--sub);line-height:1.4}
+  .hw{font-size:11.5px;color:#215a99;font-weight:700}
+  .wk{font-weight:900;color:var(--blue2)}
+  .note{font-size:11.5px;color:var(--sub);background:#f6f7fb;border-radius:9px;padding:10px 12px;margin-top:12px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="flag">🧪 Lesson Plan Generator (Prototype · for native teachers)</div>
+<div class="top">
+  <div class="logo">K</div>
+  <div><b>KLAI Language Academy · Lesson Plan Generator</b><small>Pick a book → enter basic info → auto-generate a monthly lesson plan · post it</small></div>
+</div>
+
+<div class="body">
+
+  <!-- STEP 1 -->
+  <div class="card">
+    <h2><span class="step">STEP 1</span> 📚 Choose a book</h2>
+    <div class="desc">Pick a series, then choose the book. The calendar sizes itself to the book's lesson count (12 or 16 lessons). This scales to any number of levels without a long list.</div>
+    <div class="tbs" id="seriesBtns">
+      <div class="tbbtn" data-s="Phonics"><b>Phonics</b><small>5 levels</small></div>
+      <div class="tbbtn" data-s="Zoom"><b>Zoom</b><small>12 books</small></div>
+      <div class="tbbtn" data-s="Keystone"><b>Keystone</b><small>levels (adding)</small></div>
+      <div class="tbadd">＋ Add series / book</div>
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <label style="font-size:12.5px;font-weight:800;color:var(--sub)">Book:</label>
+      <select id="bookSel" style="min-width:300px"><option value="">— Select a series first —</option></select>
+    </div>
+    <div class="contents hidden" id="contents"></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card">
+    <h2><span class="step">STEP 2</span> ⚙️ Basic info</h2>
+    <div class="fr"><label>Start date</label><input type="date" id="start" value="2026-08-03"/></div>
+    <div class="fr"><label>Classes / week</label>
+      <span class="preset" data-p="2">2 / week</span>
+      <span class="preset on" data-p="3">3 / week</span>
+      <span style="font-size:11.5px;color:var(--sub)">→ class days:</span>
+      <div class="wd" id="wd">
+        <span data-d="1">Mon</span><span data-d="2">Tue</span><span data-d="3">Wed</span><span data-d="4">Thu</span><span data-d="5">Fri</span><span data-d="6">Sat</span>
+      </div>
+    </div>
+    <div class="fr"><label>Info</label>
+      <span id="fitinfo" style="font-size:12px;color:var(--sub)"></span>
+      <span style="font-size:11.5px;color:var(--sub)">· To finish sooner, mark 2-lesson days on the calendar below.</span>
+    </div>
+
+    <div style="border-top:1px solid var(--line);margin:6px 0 12px"></div>
+    <div class="calmode">
+      <span style="font-size:12px;font-weight:800">Mark on calendar:</span>
+      <span class="mode on" data-m="test">🔴 Final Test</span>
+      <span class="mode" data-m="ppt">🟣 PPT Day</span>
+      <span class="mode" data-m="off">🟠 No Class</span>
+      <span class="mode" data-m="dbl">📚×2 2 Lessons</span>
+      <span class="mode" data-m="clear">Eraser</span>
+    </div>
+    <div style="font-size:11px;color:var(--sub);margin-bottom:8px">Final Test &amp; PPT stack on a class day (and each other). "2 Lessons" forces a day to cover two lessons. Korean 2026 public holidays are pre-marked as No Class.</div>
+    <div class="cals" id="cals"></div>
+    <div class="legend">
+      <span><b style="background:#eef7e6"></b>1 lesson</span>
+      <span><b style="background:#bfe6a0"></b>2 lessons (×2)</span>
+      <span><b style="background:var(--test)"></b>Final Test</span>
+      <span><b style="background:var(--ppt)"></b>PPT Day</span>
+      <span><b style="background:var(--off)"></b>No Class / Holiday</span>
+      <span style="color:#8a93a3">Double-click a day to clear it</span>
+    </div>
+    <div style="margin-top:16px"><button class="btn pri lg" id="gen">🪄 Generate lesson plan</button></div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card hidden" id="resultCard">
+    <h2><span class="step">STEP 3</span> 🗓️ Generated lesson plan <span id="tbname" style="font-size:12px;color:var(--sub);font-weight:600"></span></h2>
+    <div class="desc">Lessons are placed on class days in the book's order, with Final Test / PPT / No Class / 2-lesson days applied. You can still edit the table.</div>
+    <div class="rt"><table class="plan" id="plan"></table></div>
+    <div class="note">✅ Homework references the workbook pages (teachers attach their own homework sets). · Choose where to post below.</div>
+    <div style="margin-top:12px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:12.5px;font-weight:800;color:var(--sub)">Post to:</span>
+      <label style="font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:6px"><input type="checkbox" id="pt_teacher" checked/> Teacher page</label>
+      <label style="font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:6px"><input type="checkbox" id="pt_parent" checked/> Parent page</label>
+      <label style="font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:6px"><input type="checkbox" id="pt_student"/> Student page</label>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px"><button class="btn gh" id="dl">⬇ Export view</button><button class="btn gr" id="post">📮 Save &amp; Post</button></div>
+  </div>
+
+</div>
+
+<script>
+/* ---------- work text ---------- */
+var W_LS="Intro · Listen & Repeat · Listen and Chant · Speak Up · Show and Tell";
+var W_RD="Intro · Reading · Listen & Repeat · Speak Up · Show and Tell";
+var W_LG="Intro · Language Structure · Speak Up · Show and Tell";
+var W_PH="Intro & letter sounds · Word reading · Chant · Writing practice";
+function hw(pages){return "WB "+pages;}
+function span4(s){return "p."+s+"-"+(s+3);}
+
+/* phonics builder: [unit,title,start,end] */
+function ph(units){return units.map(function(u){return {unit:u[0],type:(u[1].indexOf('Review')>=0?'R':''),title:u[1],pages:'p.'+u[2]+'-'+u[3],w:W_PH};});}
+/* zoom builder: units=[[unitName,[t1,t2,t3,t4]] x4] */
+function zbook(name,units){
+  var starts=[[8,12,16,20],[26,30,34,38],[44,48,52,56],[62,66,70,74]];
+  var types=['L1','L2','L3','L4'], works=[W_LS,W_RD,W_LS,W_RD], out=[];
+  units.forEach(function(u,ui){u[1].forEach(function(t,li){out.push({unit:'Unit '+(ui+1)+' · '+u[0],type:types[li],title:t,pages:span4(starts[ui][li]),w:works[li]});});});
+  return {name:name,freq:3,lessons:out};
+}
+
+var textbooks={
+  ph1:{name:"Elia Phonics 1 (Alphabet)",freq:2,lessons:ph([
+    ["Alphabet","The Alphabet",6,7],["Unit 01","Aa·Bb·Cc",8,15],["Unit 02","Dd·Ee·Ff",16,23],["Unit 03","Gg·Hh·Ii",24,31],
+    ["Unit 04","Review 1 (Aa–Ii)",32,35],["Unit 05","Jj·Kk·Ll",36,43],["Unit 06","Mm·Nn·Oo",44,51],["Unit 07","Pp·Qq·Rr",52,59],
+    ["Unit 08","Review 2 (Jj–Rr)",60,63],["Unit 09","Ss·Tt",64,71],["Unit 10","Uu·Vv·Ww",72,79],["Unit 11","Xx·Yy·Zz",80,87],["Unit 12","Review 3 (Ss–Zz)",88,91]])},
+  ph2:{name:"Elia Phonics 2 (Short Vowels)",freq:2,lessons:ph([
+    ["Unit 01","an·at",8,15],["Unit 02","ap·ad·am",16,23],["Unit 03","ip·it·ix",24,31],["Unit 04","Review 1 (a·i)",32,35],
+    ["Unit 05","in·id·ig",36,43],["Unit 06","og·op",44,51],["Unit 07","ot·ox·od",52,59],["Unit 08","Review 2 (i·o)",60,63],
+    ["Unit 09","et·ed·en",64,71],["Unit 10","ug·ub·ud",72,79],["Unit 11","un·up·ut",80,87],["Unit 12","Review 3 (e·u)",88,91]])},
+  ph3:{name:"Elia Phonics 3 (Long Vowels)",freq:2,lessons:ph([
+    ["Unit 01","ake·ame·ape·ave",6,13],["Unit 02","ide·ike·ine·ite",14,21],["Unit 03","ole·ome·one·ope",22,29],["Unit 04","ube·ute·ule·une",30,37],
+    ["Unit 05","Review 1 (Long Vowels)",38,41],["Unit 06","bl·cl·gl·pl",42,49],["Unit 07","dr·fr·pr·tr",50,57],["Unit 08","sm·sn·st·sw",58,65],
+    ["Unit 09","ng·nk",66,73],["Unit 10","ch·sh",74,81],["Unit 11","ph·wh·th",82,89],["Unit 12","Review 2",90,93]])},
+  ph4:{name:"Elia Phonics 4 (Double Letter Vowels)",freq:2,lessons:ph([
+    ["Unit 01","ee·ea",6,13],["Unit 02","oa·ow",14,21],["Unit 03","ai·ay",22,29],["Unit 04","Review 1",30,33],
+    ["Unit 05","oi·oy",34,41],["Unit 06","ow·ou",42,49],["Unit 07","ir·er·ur",50,57],["Unit 08","Review 2",58,61],
+    ["Unit 09","ar·or",62,69],["Unit 10","oo",70,77],["Unit 11","ie",78,85],["Unit 12","Review 3",86,89]])},
+  ph5:{name:"Elia Phonics 5 (Review · 16 units)",freq:3,lessons:ph([
+    ["P1·Unit 1","an at ap ad am",8,13],["P1·Unit 2","ip it ix in id ig",14,19],["P1·Unit 3","ug ub ud un up ut",20,25],["P1·Unit 4","et ed en og op ot ox od",26,33],
+    ["P2·Unit 5","ake ame ape ave ace ate",34,39],["P2·Unit 6","ide ike ine ite ire ipe ice",40,45],["P2·Unit 7","ole ome one ope ose ote obe",46,51],["P2·Unit 8","ube ute ule une use",52,59],
+    ["P3·Unit 9","bl cl fl gl pl sl",60,65],["P3·Unit 10","br cr dr fr pr tr",66,71],["P3·Unit 11","sk sm sn st sw ng nk",72,77],["P3·Unit 12","ch sh ph wh th",78,85],
+    ["P4·Unit 13","ee ea oa ow",86,91],["P4·Unit 14","ai ay oi oy",92,97],["P4·Unit 15","ar or ir er ur",98,103],["P4·Unit 16","ow ou oo ie",104,111]])},
+  z11:zbook("Elia Zoom 1-1",[
+    ["At School",["What Is It?","I Like My Teacher","Is It a Globe?","I Like My School"]],
+    ["My House",["What Is This?","Where Is My Hamster?","What Is That?","I Love Yellow"]],
+    ["My Family",["Who Is He?","My Twin Sisters","Is He Tall?","My Family Likes Picnics"]],
+    ["My Birthday",["How Old Are You?","What Makes Me Happy?","This Toy Is for You","Mom and Dad Cook for Me"]]]),
+  z12:zbook("Elia Zoom 1-2",[
+    ["Colors",["What Color Is This?","I Have New Crayons","Is It Brown?","Colorful Animals"]],
+    ["Shapes",["What Shape Is This?","Yummy Foods","Is It a Red Circle?","Shapes in the Classroom"]],
+    ["My House",["What Are These?","On a Sunny Morning","What Are Those?","I Like Books"]],
+    ["People",["Who Is He?","Guess Who?","Is He Strong?","My Grandma"]]]),
+  z13:zbook("Elia Zoom 1-3",[
+    ["Feelings",["How Are You?","On the Playground","Are You Tired?","My Best Friend, Roy"]],
+    ["Jobs",["He's a Pilot","I Want To Be a Singer","Is He an Artist?","My Uncle"]],
+    ["At the Zoo",["How Many Lions?","Animals at the Zoo","Where Is the Bear?","The Safari Park"]],
+    ["My Body",["What Do You Have?","My Face","Do You Have Ten Toes?","Let's Take a Shower"]]]),
+  z21:zbook("Elia Zoom 2-1",[
+    ["Places and Countries",["Where Are You?","My Sister's Birthday Gifts","Where Are You From?","Julien From France"]],
+    ["Fruits",["What Do You Like?","Picking Fruits","Do You Like Mangoes?","We Make Juice!"]],
+    ["Food",["What Do You Want?","A Pajama Party","Do You Want Milk?","At Breakfast"]],
+    ["Monsters",["What Does It Have?","A Monster at Night","Does It Have a Big Face?","A Cookie Monster"]]]),
+  z22:zbook("Elia Zoom 2-2",[
+    ["Day and Weather",["What Day Is It Today?","My Summer Vacation","How's the Weather Today?","Snowing Outside"]],
+    ["Activities",["What Are You Doing?","On Saturday Afternoon","Are You Eating?","A Repair Day"]],
+    ["At the Park",["What Can You See?","Let's Get Together","Can You See a Swing?","Treasure Hunt"]],
+    ["Actions and Abilities",["What Can You Do?","A Camping Day","Can You Dance Well?","Making a Basketball Team"]]]),
+  z23:zbook("Elia Zoom 2-3",[
+    ["People/Things in Our Lives",["Who Is He?","On Christmas Eve","Whose Watch Is This?","Art Class"]],
+    ["At the Restaurant",["I Want Two Hamburgers","At the Bakery","Do You Want Some Spaghetti?","At a Buffet"]],
+    ["Favorites",["What's Your Favorite Vegetable?","Let's Make a Green Salad","What's Your Favorite Pet?","A Pet Day"]],
+    ["Routines",["What Do You Do in the Morning?","My Busy Sunday","Do You Have Breakfast Every Day?","Ready for the Talent Show"]]]),
+  z31:zbook("Elia Zoom 3-1",[
+    ["Clothes",["The Skirt Is Too Small","I Like This Dress","The Shorts Are Big for You","These Boots Look Nice"]],
+    ["Feelings",["How Do You Feel?","Happy Birthday, Amy!","Do You Feel Tired?","Ryan Is My Best Friend"]],
+    ["In My Room",["I Can't Find My Hat","The Egg Hunt","Where Is My Ball?","My Hamster, Milky"]],
+    ["In My House",["What's in Your House?","Welcome to My House","Is There a Bed in the Room?","The Map of My House"]]]),
+  z32:zbook("Elia Zoom 3-2",[
+    ["Transportation & Places",["How Do You Go to School?","Trucks","Do You Go to School by Bus?","Whose Feet Are They?"]],
+    ["Around the World",["Where Is This?","Paulo Is From Brazil","Can You Speak Korean?","This Is How We Say Hello"]],
+    ["How Much?",["How Much Is It?","Happy Mother's Day","How Much Is the Hamburger?","How To Make Pancakes"]],
+    ["Wild Animals",["How Many Animals Are There?","How Many Legs?","Do You Like Zebras?","Wild Animals in Kenya"]]]),
+  z33:zbook("Elia Zoom 3-3",[
+    ["Toys",["What Can You See?","Can You See Something?","Can You See Balloons?","Look at This Mess!"]],
+    ["Music",["What Can You Play?","Can You Whistle?","Can You Play the Recorder?","Who Plays the Pipe?"]],
+    ["Fun Things",["This Is My New Bike","Everyone Has Fun Together","What Do You Like?","Evan's New Scooter"]],
+    ["Mealtime",["What's for Lunch?","It's Time for Lunch","Do You Like Bread for Meals?","Our Special Meal"]]]),
+  z41:zbook("Elia Zoom 4-1",[
+    ["Time",["What Time Is It?","Day and Night","What Time Do You Get Up?","How Long Is a Day?"]],
+    ["Calendar",["What Month Is It?","How Do You Feel?","What Date Is It Today?","My Special Days"]],
+    ["Favorite Activities",["Let's Play Hopscotch","My New Bike","How About Playing Tag?","Fun Toys"]],
+    ["Indoor & Outdoor Activities",["What Do You Like To Do?","Felix Wants To Play","Do You Like Swimming?","The Ugly Duckling"]]]),
+  z42:zbook("Elia Zoom 4-2",[
+    ["Food",["What Do You Have?","Food From Vegetables","Do You Have Any Ham?","Let's Make Popcorn"]],
+    ["Activities",["What Are You Doing?","My Swimming Class","Are You Doing a Puzzle?","Playing Hopscotch"]],
+    ["Sports",["Are You Good at Soccer?","The Hare and the Tortoise","Can You Throw the Ball?","Let's Play Basketball!"]],
+    ["Comparison",["Are You Taller Than the Boy?","A Giant Turnip","Who Is Older?","We Are Different"]]]),
+  z43:zbook("Elia Zoom 4-3",[
+    ["Classes",["What Classes Do You Have Today?","Great Helpers","What Do You Do After School?","After-school Classes"]],
+    ["Holidays",["What's Your Favorite Holiday?","Merry Christmas!","What Do You Do on New Year's Day?","Chuseok: Korean Thanksgiving"]],
+    ["Jobs 1",["Who Is That Man?","People Around Town","What Does a Chef Do?","The Three Little Pigs"]],
+    ["Jobs 2",["What Does He Do?","My Teachers","What Do Pilots Do?","What Can Robots Do?"]]]),
+  keystone:{name:"Elia Keystone",freq:3,lessons:[
+    {unit:"Unit 01 · Describing People",type:"L1",title:"What Does She Look Like?",pages:span4(8),w:W_LS},
+    {unit:"Unit 01 · Describing People",type:"L2",title:"Danny DeVito",pages:span4(12),w:W_RD},
+    {unit:"Unit 01 · Describing People",type:"L3",title:"The Girl Needs Salt",pages:span4(16),w:W_LG},
+    {unit:"Unit 01 · Describing People",type:"L4",title:"My Friend, Jane",pages:span4(20),w:W_RD},
+    {unit:"Unit 02 · At Different Places",type:"L1",title:"Where Were You Yesterday?",pages:span4(26),w:W_LS},
+    {unit:"Unit 02 · At Different Places",type:"L2",title:"Places to Exercise",pages:span4(30),w:W_RD},
+    {unit:"Unit 02 · At Different Places",type:"L3",title:"Mom Likes Me",pages:span4(34),w:W_LG},
+    {unit:"Unit 02 · At Different Places",type:"L4",title:"Sandy Has a Good Job",pages:span4(38),w:W_RD},
+    {unit:"Unit 03 · About Weather",type:"L1",title:"How Was the Weather Yesterday?",pages:span4(44),w:W_LS},
+    {unit:"Unit 03 · About Weather",type:"L2",title:"Snow or No Snow",pages:span4(48),w:W_RD},
+    {unit:"Unit 03 · About Weather",type:"L3",title:"These Are Dolls",pages:span4(52),w:W_LG},
+    {unit:"Unit 03 · About Weather",type:"L4",title:"Varsha and the Rain",pages:span4(56),w:W_RD},
+    {unit:"Unit 04 · In the Future",type:"L1",title:"What Does She Want To Do in the Future?",pages:span4(62),w:W_LS},
+    {unit:"Unit 04 · In the Future",type:"L2",title:"Food Is Different",pages:span4(66),w:W_RD},
+    {unit:"Unit 04 · In the Future",type:"L3",title:"There Are Some Apples",pages:span4(70),w:W_LG},
+    {unit:"Unit 04 · In the Future",type:"L4",title:"Lucas in the Future",pages:span4(74),w:W_RD}]}
+};
+
+/* Korean public holidays 2026 */
+var HOLIDAYS={
+  '2026-01-01':"New Year's Day",'2026-02-16':"Seollal",'2026-02-17':"Seollal",'2026-02-18':"Seollal",
+  '2026-03-01':"Independence Day",'2026-03-02':"Substitute Holiday",'2026-05-05':"Children's Day",
+  '2026-05-24':"Buddha's Birthday",'2026-05-25':"Substitute Holiday",'2026-06-06':"Memorial Day",
+  '2026-08-15':"Liberation Day",'2026-08-17':"Substitute Holiday",'2026-09-24':"Chuseok",'2026-09-25':"Chuseok",
+  '2026-09-26':"Chuseok",'2026-10-03':"Foundation Day",'2026-10-05':"Substitute Holiday",'2026-10-09':"Hangeul Day",'2026-12-25':"Christmas"
+};
+
+/* state */
+var cur=null, mode="test", tags={};
+var DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], DL={0:'Su',1:'M',2:'T',3:'W',4:'Th',5:'F',6:'Sa'};
+function fmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function parseD(v){return new Date(v+'T00:00:00');}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function stripTime(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
+function ensure(k){if(!tags[k])tags[k]={};return tags[k];}
+function empty(t){return !(t.off||t.test||t.ppt||t.holiday||t.dbl);}
+function preloadHolidays(){for(var k in HOLIDAYS){tags[k]={off:true,holiday:HOLIDAYS[k]};}}
+
+function curLessons(){return cur?textbooks[cur].lessons.length:16;}
+function freqN(){return classDays().length||3;}
+/* plan window (weeks) — auto from lesson count */
+function planWeeks(){ return Math.ceil(curLessons()/freqN())+1; }    // 1 lesson/day + buffer (manual 2-lesson days shorten it)
+function calWeeks(){return Math.max(planWeeks()+1,5);}
+
+/* book pick — series → dropdown */
+var SERIES={
+  Phonics:['ph1','ph2','ph3','ph4','ph5'],
+  Zoom:['z11','z12','z13','z21','z22','z23','z31','z32','z33','z41','z42','z43'],
+  Keystone:['keystone']
+};
+document.querySelectorAll('#seriesBtns .tbbtn').forEach(function(b){b.addEventListener('click',function(){
+  document.querySelectorAll('#seriesBtns .tbbtn').forEach(function(x){x.classList.remove('on')}); b.classList.add('on');
+  var s=b.getAttribute('data-s'), sel=document.getElementById('bookSel');
+  sel.innerHTML='<option value="">— Select a book —</option>'+SERIES[s].map(function(id){return '<option value="'+id+'">'+textbooks[id].name+'</option>';}).join('');
+  cur=null; document.getElementById('contents').classList.add('hidden'); updateInfo(); buildCals();
+})});
+document.getElementById('bookSel').addEventListener('change',function(){
+  var v=this.value; if(!v){cur=null;document.getElementById('contents').classList.add('hidden');updateInfo();buildCals();return;}
+  cur=v; var tb=textbooks[cur]; setFreq(tb.freq);
+  var html=''; tb.lessons.forEach(function(l){html+='<div><span class="u">'+l.unit+'</span><span>'+(l.type&&l.type!='R'?l.type+' · ':'')+l.title+'</span><span class="pg">'+l.pages+'</span></div>'});
+  var c=document.getElementById('contents'); c.innerHTML=html; c.classList.remove('hidden');
+  updateInfo(); buildCals();
+});
+
+/* freq / weekdays */
+function setFreq(n){
+  document.querySelectorAll('.preset').forEach(function(p){p.classList.toggle('on',p.getAttribute('data-p')==String(n))});
+  var days=n==2?[1,3]:[1,3,5];
+  document.querySelectorAll('#wd span').forEach(function(s){s.classList.toggle('on',days.indexOf(+s.getAttribute('data-d'))>=0)});
+  updateInfo(); buildCals();
+}
+document.querySelectorAll('.preset').forEach(function(p){p.addEventListener('click',function(){setFreq(+p.getAttribute('data-p'))})});
+document.querySelectorAll('#wd span').forEach(function(s){s.addEventListener('click',function(){s.classList.toggle('on');updateInfo();buildCals()})});
+document.getElementById('start').addEventListener('change',function(){updateInfo();buildCals();});
+function classDays(){var a=[];document.querySelectorAll('#wd span.on').forEach(function(s){a.push(+s.getAttribute('data-d'))});return a;}
+function updateInfo(){
+  var el=document.getElementById('fitinfo'); if(!cur){el.textContent='';return;}
+  var fin=''; var pi=(typeof planInfo==='function')?planInfo():null;
+  if(pi&&pi.endKey){var d=parseD(pi.endKey); fin=' · 🏁 finishes '+(d.getMonth()+1)+'/'+d.getDate();}
+  el.textContent='Book has '+curLessons()+' lessons · '+freqN()+'/week'+fin;
+}
+
+/* mode */
+document.querySelectorAll('.mode').forEach(function(m){m.addEventListener('click',function(){
+  document.querySelectorAll('.mode').forEach(function(x){x.classList.remove('on')}); m.classList.add('on'); mode=m.getAttribute('data-m');
+})});
+
+/* calendar */
+function buildCals(){
+  var sv=document.getElementById('start').value; if(!sv)return;
+  var start=parseD(sv), weeks=calWeeks();
+  var m0=new Date(start.getFullYear(),start.getMonth(),1);
+  var last=addDays(start,weeks*7), mN=new Date(last.getFullYear(),last.getMonth(),1);
+  var months=[],mm=new Date(m0); while(mm<=mN){months.push(new Date(mm));mm.setMonth(mm.getMonth()+1);}
+  var cd=classDays(), host=document.getElementById('cals'); host.innerHTML='';
+  var pinfo=planInfo();
+  months.forEach(function(mDate){
+    var y=mDate.getFullYear(),m=mDate.getMonth(),first=new Date(y,m,1),pad=first.getDay(),dim=new Date(y,m+1,0).getDate();
+    var h='<div class="cal"><div class="mn">'+y+'. '+(m+1)+'</div><table><tr>';
+    DOW.forEach(function(d){h+='<th>'+d[0]+'</th>'}); h+='</tr><tr>';
+    for(var i=0;i<pad;i++)h+='<td><div class="day empty"></div></td>';
+    for(var day=1;day<=dim;day++){
+      var dd=new Date(y,m,day),key=fmt(dd),dow=dd.getDay();
+      var inRange=dd>=stripTime(start)&&dd<=addDays(start,weeks*7);
+      var t=tags[key]||{};
+      var cls='day'; if(dow==0)cls+=' sun';
+      var pm=pinfo?pinfo.map[key]:null;
+      if(t.off){cls+=' off';}
+      else if(pinfo){
+        if(pm&&pm.n==2)cls+=' cls2';
+        else if(pm)cls+=' cls';
+      } else if(inRange&&cd.indexOf(dow)>=0){cls+=' cls';}
+      var badges=(t.test?'<i class="bt">T</i>':'')+(t.ppt?'<i class="bp">P</i>':'')
+        +((pm&&pm.n==2)?(pm.manual?'<i class="bd">×2</i>':'<i class="ba">×2</i>'):'')
+        +((!pinfo&&t.dbl)?'<i class="bd">×2</i>':'');
+      var title=t.holiday?(' title="'+t.holiday+'"'):'';
+      h+='<td><div class="'+cls+'" data-k="'+key+'"'+title+'>'+day+badges+'</div></td>';
+      if(dow==6&&day<dim)h+='</tr><tr>';
+    }
+    h+='</tr></table></div>';
+    host.insertAdjacentHTML('beforeend',h);
+  });
+  host.querySelectorAll('.day:not(.empty)').forEach(function(el){
+    el.addEventListener('click',function(){
+      var k=el.getAttribute('data-k');
+      if(mode=='clear'){delete tags[k];}
+      else{var t=ensure(k); if(mode=='off'){t.off=!t.off; if(!t.off)delete t.holiday;} else {t[mode]=!t[mode];} if(empty(t))delete tags[k];}
+      buildCals(); updateInfo();
+    });
+    el.addEventListener('dblclick',function(){   // double-click clears the day
+      var k=el.getAttribute('data-k'); delete tags[k]; buildCals(); updateInfo();
+    });
+  });
+}
+
+/* shared plan computation (used by calendar preview AND generate) */
+function computePlan(){
+  if(!cur) return null;
+  var sv=document.getElementById('start').value; if(!sv) return null;
+  var tb=textbooks[cur], queue=tb.lessons.slice();
+  var start=parseD(sv), cd=classDays();
+  if(cd.length==0) return null;
+  var pw=planWeeks(), cw=calWeeks();
+  var mondayStart=stripTime(addDays(start,-((start.getDay()+6)%7)));
+  var days=[];
+  for(var i=0;i<cw*7+21;i++){var d=stripTime(addDays(start,i));if(cd.indexOf(d.getDay())<0)continue;var key=fmt(d);var t=tags[key]||{};days.push({d:d,key:key,t:t,off:!!t.off});}
+  var rows=[];
+  for(var j=0;j<days.length;j++){
+    var x=days[j], d=x.d, t=x.t, key=x.key;
+    var week=Math.floor((d-mondayStart)/(7*86400000))+1;
+    if(x.off){rows.push({d:d,key:key,week:week,kind:'off',label:t.holiday||'No Class'});continue;}
+    var take=t.dbl?2:1, manual=!!t.dbl;   // 2레슨은 수동 지정만
+    var l1=queue.length>0?queue.shift():null;
+    var l2=(take==2&&queue.length>0)?queue.shift():null;
+    if(!l1 && !t.test && !t.ppt){ break; }   // 레슨 소진 & 특이표시 없음 → 여기서 종료 (Final Task 없음)
+    rows.push({d:d,key:key,week:week,kind:'lesson',l:l1,l2:l2,manual:(manual&&!!l2),test:t.test,ppt:t.ppt});
+  }
+  return rows;
+}
+/* map keyed by date + finish day, for the calendar */
+function planInfo(){
+  var rows=computePlan(); if(!rows) return null;
+  var map={}, endKey=null, lastLessonKey=null;
+  rows.forEach(function(r){
+    if(r.kind=='lesson'){map[r.key]={n:r.l2?2:1,manual:!!r.manual}; lastLessonKey=r.key;}
+    else if(r.kind=='final'){map[r.key]={final:true}; endKey=r.key;}
+  });
+  if(!endKey) endKey=lastLessonKey;
+  return {map:map, endKey:endKey};
+}
+
+/* generate */
+document.getElementById('gen').addEventListener('click',function(){
+  if(!cur){alert('Please choose a book first.');return;}
+  if(classDays().length==0){alert('Please select class days.');return;}
+  var rows=computePlan(); if(!rows)return;
+  render(textbooks[cur],rows);
+});
+
+function render(tb,rows){
+  document.getElementById('tbname').textContent='· '+tb.name;
+  var lz={L1:'l1',L2:'l2',L3:'l3',L4:'l4'};
+  function lessonTr(l,ds,dl,wk,badges,dbl){
+    var badge=l.type&&l.type!='R'?'<span class="lz '+(lz[l.type]||'l1')+'">'+l.type+'</span>':(l.type=='R'?'<span class="lz l4">Review</span>':'');
+    return '<tr'+(dbl?' style="background:#f4fbef"':'')+'><td class="c">'+ds+'</td><td class="c">'+dl+'</td><td class="c">'+wk+'</td><td>'+l.unit+'</td><td>'+badge+l.title+badges+'</td><td class="work">'+(l.w||W_PH)+'</td><td class="hw">'+hw(l.pages)+'</td><td class="c">'+l.pages+'</td></tr>';
+  }
+  var h='<tr><th>Date</th><th>Day</th><th>Week</th><th>Unit</th><th>Lesson (Contents)</th><th>Class Work</th><th>Homework</th><th>Workbook</th></tr>';
+  var prev=null;
+  rows.forEach(function(r){
+    var ds=(r.d.getMonth()+1)+'/'+r.d.getDate()+' ('+DOW[r.d.getDay()].slice(0,3)+')';
+    var wk=r.week!=prev?'<span class="wk">'+r.week+'</span>':''; prev=r.week;
+    if(r.kind=='off'){h+='<tr class="rowoff"><td class="c">'+ds+'</td><td class="c">'+DL[r.d.getDay()]+'</td><td class="c">'+wk+'</td><td colspan="5" class="c">🟠 No Class — '+r.label+'</td></tr>';return;}
+    if(r.kind=='final'){h+='<tr class="rowfin"><td class="c">'+ds+'</td><td class="c">'+DL[r.d.getDay()]+'</td><td class="c">'+wk+'</td><td colspan="3" class="c">Review of all units · Final Task (writing + group discussion)</td><td class="c">—</td><td class="c">Final Task</td></tr>';return;}
+    var l=r.l, badges=(r.test?'<span class="tag ft">Final Test</span>':'')+(r.ppt?'<span class="tag pt">PPT Day</span>':'')+(r.l2?'<span class="tag" style="background:#5ea52c">2 Lessons</span>':'');
+    if(!l){
+      h+='<tr><td class="c">'+ds+'</td><td class="c">'+DL[r.d.getDay()]+'</td><td class="c">'+wk+'</td><td>—</td><td>'+(badges||'—')+'</td><td class="work">'+((r.test?'Final Test':'')+(r.test&&r.ppt?' · ':'')+(r.ppt?'PPT review lesson':''))+'</td><td>—</td><td class="c">—</td></tr>';return;
+    }
+    h+=lessonTr(l,ds,DL[r.d.getDay()],wk,badges,!!r.l2);
+    if(r.l2){h+=lessonTr(r.l2,'↳ same day','','','',true);}
+  });
+  document.getElementById('plan').innerHTML=h;
+  var rc=document.getElementById('resultCard'); rc.classList.remove('hidden'); rc.scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('post').addEventListener('click',function(){
+  var t=[]; if(document.getElementById('pt_teacher').checked)t.push('Teacher page');
+  if(document.getElementById('pt_parent').checked)t.push('Parent page');
+  if(document.getElementById('pt_student').checked)t.push('Student page');
+  alert('✅ (Demo) Lesson plan saved and posted to: '+(t.join(', ')||'(nothing selected)'));
+});
+document.getElementById('dl').addEventListener('click',function(){alert('The full version exports to image / Excel / Google Sheets.');});
+
+/* init */
+preloadHolidays();
+setFreq(3);
+</script>
+</body>
+</html>

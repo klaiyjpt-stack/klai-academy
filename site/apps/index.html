@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>클라이 학습 앱 · 클라이 어학원</title>
+<link rel="stylesheet" href="../courses/course.css">
+<style>
+  :root{--acc:#2b74c4;--acc-d:#215a99;--acc-2:#3b5bdb}
+  .lead-note{max-width:720px;margin:14px auto 0;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:14px 18px;font-size:14px;color:#fff}
+  .apphead{max-width:820px;margin:0 auto 26px;text-align:center}
+  .apphead .badge2{display:inline-block;background:var(--soft);color:var(--acc-d);font-weight:800;font-size:12px;letter-spacing:.06em;border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin-bottom:12px}
+  .apphead h2{font-size:clamp(22px,3.4vw,30px);font-weight:800;color:var(--navy)}
+  .apphead p{color:var(--sub);font-size:15.5px;margin-top:10px;line-height:1.8}
+  /* 보호 이미지 */
+  .shots{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:700px){.shots{grid-template-columns:1fr}}
+  .shot{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 4px 16px rgba(26,39,64,.06);user-select:none;-webkit-user-select:none}
+  .shot .pic{position:relative;line-height:0}
+  .shot .pic img{width:100%;display:block;-webkit-user-drag:none;user-drag:none;pointer-events:none}
+  .shot .wm{position:absolute;inset:0;pointer-events:none;background-repeat:repeat;
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='250'%20height='150'%3E%3Ctext%20x='16'%20y='88'%20fill='rgba(90,90,90,0.30)'%20font-family='Arial,sans-serif'%20font-size='19'%20font-weight='700'%20transform='rotate(-22%20125%2075)'%3EKlai%20Amy%20school%3C/text%3E%3C/svg%3E")}
+  .shot .cap{padding:14px 16px;border-top:1px solid var(--line)}
+  .shot .cap b{display:block;color:var(--navy);font-weight:800;font-size:15px}
+  .shot .cap span{color:var(--sub);font-size:13.5px}
+  /* 이미지 대기 자리 */
+  .slot{border:2px dashed #cdd6e3;border-radius:16px;background:var(--soft);min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;color:#9aa4b2;font-size:13.5px;padding:20px}
+</style>
+</head>
+<body oncontextmenu="return false" ondragstart="return false">
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../index.html">클라이 어학원</a>
+    <div class="right">
+      <a class="back" href="../index.html#events">← 소식</a>
+      <a class="login-btn" href="#">로그인</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="blob b1"></span><span class="blob b2"></span>
+  <div class="wrap">
+    <div class="num">클라이 학습 앱</div>
+    <div class="ico">📱</div>
+    <h1>클라이가 직접 만든 학습 앱</h1>
+    <p class="lead">원장님이 직접 개발한 클라이 전용 학습 앱들. 아이의 유창성·라이팅·기초 단어를 단계별로 키웁니다.</p>
+    <div class="lead-note">🔒 재원생 전용 앱입니다. 실제 이용은 등록 학생에게만 안내되며, 아래는 학습 화면 소개입니다.</div>
+  </div>
+</section>
+
+<!-- 유창성 앱 -->
+<section class="blk" id="fluency">
+  <div class="wrap">
+    <div class="apphead">
+      <div class="badge2">🎧 Fluency</div>
+      <h2>클라이 파닉스 유창성 앱</h2>
+      <p>단모음부터 매직 e·혼합자음·r통제모음까지, 25권의 이야기를 소리 내어 읽으며 파닉스 유창성을 키우는 앱. 듣고 따라 읽으며 정확한 발음과 읽기 자신감을 쌓습니다.</p>
+    </div>
+    <div class="shots">
+      <figure class="shot"><div class="pic"><img src="img/fluency-1.png" alt="파닉스 유창성 책장 화면"><div class="wm"></div></div><div class="cap"><b>25권 책장</b><span>단모음 → 매직 e → 혼합자음 → r통제모음 단계별</span></div></figure>
+      <figure class="shot"><div class="pic"><img src="img/fluency-2.png" alt="파닉스 유창성 읽기 연습 화면"><div class="wm"></div></div><div class="cap"><b>읽기 연습</b><span>듣고 따라 읽기 · 한글뜻 · 목표음 표시 · 속도 조절</span></div></figure>
+    </div>
+  </div>
+</section>
+
+<!-- Writing Lab -->
+<section class="blk alt" id="writing">
+  <div class="wrap">
+    <div class="apphead">
+      <div class="badge2">✍️ Writing Lab</div>
+      <h2>클라이 Writing Lab</h2>
+      <p>주제만 고르면 나만의 라이팅 워크시트가 만들어지고, 쓴 글은 바로 첨삭받는 앱. 생각을 글로 표현하는 힘을 키웁니다.</p>
+    </div>
+    <div class="shots">
+      <figure class="shot"><div class="pic"><img src="img/writing-1.png" alt="Writing Lab 첫 화면"><div class="wm"></div></div><div class="cap"><b>주제만 넣으면 시작</b><span>교재·주제를 고르면 나만의 워크시트 생성</span></div></figure>
+      <figure class="shot"><div class="pic"><img src="img/writing-2.png" alt="Writing Lab 워크시트"><div class="wm"></div></div><div class="cap"><b>IB 흐름 워크시트</b><span>탐구·Key Concept·Word Bank로 단계별 글쓰기</span></div></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 사이트워드 앱 -->
+<section class="blk" id="sightword">
+  <div class="wrap">
+    <div class="apphead">
+      <div class="badge2">🔤 Sight Words</div>
+      <h2>클라이 사이트워드 앱</h2>
+      <p>파닉스 이후, 자주 나오는 기본 단어(사이트워드)를 눈에 익혀 읽기 속도와 이해 정확도를 높이는 앱. 16레벨을 배우기·읽기·스펠링·뜻·게임으로 단계별로 익힙니다.</p>
+    </div>
+    <div class="shots">
+      <figure class="shot"><div class="pic"><img src="img/sightword-1.png" alt="사이트워드 레벨 선택 화면"><div class="wm"></div></div><div class="cap"><b>레벨 선택</b><span>16레벨 · 7단어씩 3세트로 차근차근</span></div></figure>
+      <figure class="shot"><div class="pic"><img src="img/sightword-2.png" alt="사이트워드 배우기 화면"><div class="wm"></div></div><div class="cap"><b>배우기</b><span>단어·발음·뜻·예문으로 눈과 귀에 익혀요</span></div></figure>
+    </div>
+  </div>
+</section>
+
+<section class="blk alt">
+  <div class="wrap" style="text-align:center">
+    <p style="color:var(--sub);font-size:15px">우리 아이에게 맞는 학습이 궁금하신가요?</p>
+    <a class="btn btn-k" style="margin-top:14px;background:var(--kakao);color:var(--kakao-ink)" href="https://pf.kakao.com/_ZxnMxdn/chat" target="_blank" rel="noopener">💬 카카오로 상담하기</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fb">클라이 어학원 · KLAI English Academy</div>
+    <div>세상을 읽고, 생각을 말하는 아이 · 평택 IB 프리미엄 영어</div>
+    <div style="margin-top:6px;font-size:12.5px">경기 평택시 용죽3로 19 (용이동) · ☎ 031-654-0571</div>
+  </div>
+</footer>
+
+<a class="float-k" href="https://pf.kakao.com/_ZxnMxdn/chat" target="_blank" rel="noopener">💬 카카오 상담</a>
+
+<script>
+// 복사 억제: 우클릭·드래그·선택 차단 (스크린샷은 못 막음 → 워터마크가 방어)
+['contextmenu','dragstart','selectstart'].forEach(e=>document.addEventListener(e,ev=>{ if(ev.target.closest('.shot')||ev.target.tagName==='IMG')ev.preventDefault(); }));
+</script>
+</body>
+</html>
