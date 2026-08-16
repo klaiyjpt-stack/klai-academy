@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>사이트워드 학습 · 클라이 어학원</title>
+<meta name="theme-color" content="#2563EB">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="사이트워드">
+<!-- 웹폰트는 온라인일 때만 적용. 오프라인이면 아래 시스템 폰트로 자동 폴백 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* 색·폰트: ui-ux-pro-max --design-system (Vibrant & Block-based / 아동 교육용) */
+:root{color-scheme:light;--brand:#2563EB;--brand2:#EC4899;--secondary:#F59E0B;
+  --bg:#EFF6FF;--ink:#0F172A;--sub:#64748B;--line:#E4ECFC;--ok:#16A34A;--radius:22px;
+  --font-ui:"Andika","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-read:"Andika","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+*{box-sizing:border-box;touch-action:manipulation;-webkit-tap-highlight-color:rgba(74,108,247,.15)}
+:focus-visible{outline:3px solid var(--brand2);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;scroll-behavior:auto !important}
+}
+body{margin:0;font-family:var(--font-ui);background:var(--bg);color:var(--ink);line-height:1.6;font-size:19px;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;min-height:100vh;background:#fff;overflow-x:hidden}
+.top{background:var(--brand);color:#fff;padding:calc(20px + env(safe-area-inset-top)) 22px 26px;display:flex;align-items:center;gap:10px}
+.top .home{margin-left:auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.35);color:#fff;border-radius:14px;padding:8px 15px;font:inherit;font-weight:600;cursor:pointer;font-size:15px;transition:background 200ms ease}
+.top .home:hover{background:rgba(255,255,255,.3)}
+.top .home:focus-visible{outline:3px solid var(--secondary);outline-offset:2px}
+.stepbar{background:#eef2ff;color:var(--brand);font-size:14px;font-weight:700;text-align:center;padding:9px 12px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top);z-index:5}
+.stepbar b{color:var(--brand2);font-weight:900}
+.card{background:#fff;border:2px solid var(--line);border-radius:var(--radius);padding:26px 22px;margin:16px;box-shadow:0 8px 24px rgba(74,108,247,.10)}
+.btn{display:inline-block;background:var(--brand);color:#fff;border:none;border-radius:999px;padding:16px 26px;font-size:19px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.10);transition:transform .08s}
+.btn:active{transform:translateY(2px) scale(.97);box-shadow:0 2px 0 rgba(0,0,0,.10)}
+.opt{display:block;width:100%;margin:9px 0;background:#eef2ff;color:var(--brand)}
+.tile{min-width:58px;font-size:28px;padding:16px 18px}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.mcard{min-height:74px;border:none;border-radius:16px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;line-height:1.25;word-break:keep-all;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.mcard.up{background:#fff;color:var(--ink);border:2px solid var(--brand)}
+.mcard.done{background:#e6f7ee;color:var(--ok);border:2px solid var(--ok);cursor:default;box-shadow:none}
+.sbar{height:14px;background:#eef1f8;border-radius:99px;overflow:hidden;margin:10px 0}
+.sbar>i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:99px}
+.pop{position:fixed;top:50%;left:50%;background:var(--ok);color:#fff;font-size:34px;font-weight:900;padding:18px 34px;border-radius:24px;box-shadow:0 12px 40px rgba(0,0,0,.25);z-index:99;pointer-events:none;animation:popin .85s ease}
+@keyframes popin{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}45%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-62%) scale(1)}}
+.toast{position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;background:var(--brand2);color:#fff;font-size:17px;font-weight:800;padding:12px 22px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.22);z-index:100;pointer-events:none;animation:toastin 1.7s ease}
+@keyframes toastin{0%{opacity:0;transform:translate(-50%,-14px)}12%{opacity:1;transform:translate(-50%,0)}85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
+/* 레벨 고르기 — 3열 블록. 진도는 색+아이콘+막대 3중 표시(색만으로 구분 안 되게) */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 16px 24px}
+/* 타일은 흰 바탕 + 같은 색 테두리. 상태(완료·진행중)만 색으로 구분한다. */
+.lv{position:relative;min-width:0;min-height:104px;
+  background:#fff;border:3px solid #BFD3FE;border-radius:18px;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:10px;
+  font:inherit;color:var(--ink);cursor:pointer;text-align:left;
+  transition:border-color 200ms ease,transform 200ms ease,box-shadow 200ms ease}
+.lv .mascot{position:absolute;top:8px;left:9px;font-size:26px;line-height:1}
+.lv:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 8px 18px rgba(37,99,235,.18)}
+.lv:active{transform:scale(.97)}
+.lv:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.lv .num{font-size:26px;font-weight:700;line-height:1;color:var(--brand)}
+.lv small{font-size:12px;color:var(--sub);font-weight:600;font-family:var(--font-read);line-height:1.25;word-break:keep-all}
+.lv .dot{position:absolute;top:9px;right:9px;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#F1F5FD}
+.lv .lbar{width:100%;height:8px;border-radius:99px;background:#F1F5FD;overflow:hidden;margin-top:6px}
+.lv .lbar i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.lv.done{border-color:var(--ok);background:#F0FDF4}
+.lv.done .dot{background:var(--ok)}
+.lv.now{border-color:var(--secondary);background:#FFFBEB}
+.lv.now .dot{background:var(--secondary)}
+
+/* 홈 최상단 — 다음에 할 행동 하나를 제일 크게 */
+.hero{margin:-16px 16px 0;background:#fff;border:3px solid var(--line);border-radius:20px;padding:16px 16px 14px}
+.hero h2{margin:0 0 4px;font-size:21px;line-height:1.25;text-wrap:balance}
+.hero p{margin:0;font-size:15px;line-height:1.6;color:#475569;font-family:var(--font-read)}
+.btn.cta{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;min-height:54px;
+  background:var(--brand2);border-radius:14px;padding:12px 16px;font-size:18px;box-shadow:none}
+.btn.cta .meta{margin-left:auto;font-size:14px;opacity:.92;font-weight:600;font-family:var(--font-read)}
+.sechead{display:flex;align-items:baseline;gap:8px;margin:22px 16px 12px}
+.sechead h3{margin:0;font-size:18px}
+.sechead em{font-style:normal;font-size:13px;color:var(--sub);font-family:var(--font-read)}
+.bar{height:8px;background:#eef1f8;border-radius:99px;overflow:hidden;margin:10px 0}
+.bar>i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .2s}
+.step-tag{font-size:12px;color:var(--sub)}
+input.spell{font-size:24px;text-align:center;padding:8px;border:2px solid var(--line);border-radius:12px;width:82%;margin:8px 0}
+.hidden{display:none}
+.story-line{cursor:pointer;padding:2px 0}
+.story-line:hover{color:var(--brand)}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><b style="font-size:22px">사이트워드 학습</b>
+      <div id="acadName" style="font-size:13px;opacity:.85;font-family:var(--font-read);line-height:1.2">클라이 어학원</div></div>
+    <button class="home" onclick="showScreen('home')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      홈
+    </button>
+  </div>
+  <div id="stepBar" class="stepbar hidden"></div>
+  <div id="screen-home">
+    <div id="resumeBox"></div>
+    <div class="sechead"><h3>레벨 고르기</h3><em>16레벨 · 7단어씩</em></div>
+    <div class="grid" id="levelGrid"></div>
+    <div class="card" style="font-size:17px;font-family:var(--font-read)">
+      <b>배우기·읽기·스펠링·뜻·게임</b>으로 익히고, 레벨 끝에 <b>스토리·PASS</b>! PASS 화면을 선생님께 보여주세요.
+      <div style="font-size:14px;color:var(--sub);margin-top:10px">🔈 소리가 안 나면 화면을 한 번 톡 눌러요. (아이패드는 옆면 <b>무음 스위치</b>를 꺼주세요)</div>
+    </div>
+    <div style="text-align:center;padding:6px 16px 26px">
+      <div style="font-size:13px;color:var(--sub);margin:8px 0 10px">👩‍🏫 선생님용 인쇄</div>
+      <a class="btn" style="margin:4px;text-decoration:none" href="print/worksheet.html" target="_blank" rel="noopener">📄 워드리스트</a>
+      <a class="btn" style="margin:4px;text-decoration:none" href="print/activity.html" target="_blank" rel="noopener">📖 워크북</a>
+      <a class="btn" style="margin:4px;text-decoration:none" href="print/progress_student.html" target="_blank" rel="noopener">🌟 진도표</a>
+    </div>
+  </div>
+  <div id="screen-learn" class="hidden"></div>
+  <div id="screen-read" class="hidden"></div>
+  <div id="screen-spell" class="hidden"></div>
+  <div id="screen-type" class="hidden"></div>
+  <div id="screen-meaning" class="hidden"></div>
+  <div id="screen-missing" class="hidden"></div>
+  <div id="screen-catch" class="hidden"></div>
+  <div id="screen-catchko" class="hidden"></div>
+  <div id="screen-speed" class="hidden"></div>
+  <div id="screen-cloze" class="hidden"></div>
+  <div id="screen-review" class="hidden"></div>
+  <div id="screen-setdone" class="hidden"></div>
+  <div id="screen-story" class="hidden"></div>
+  <div id="screen-test" class="hidden"></div>
+</div>
+<script src="data/words.js"></script>
+<script src="data/stories.js"></script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
+const state = { level:1, setIdx:0, wordIdx:0, wrong:[] };
+let optLock = false;   // input-lock so a double-tap can't skip items / corrupt the wrong-review
+
+function levelWords(lvl){ return window.WORDS.filter(w=>w.level===lvl); }
+
+let enVoice = null;
+function pickVoice(){
+  if(!("speechSynthesis" in window)) return;
+  const vs = speechSynthesis.getVoices();
+  const us = vs.filter(v=>/en[-_]US/i.test(v.lang));   // American English for Dolch words
+  const pool = us.length ? us : vs.filter(v=>/^en/i.test(v.lang));
+  // clear kid-friendly US voices, tried in this order
+  const pref = ["Samantha","Google US English","Karen","Microsoft Aria","Microsoft Zira","Alex"];
+  for(const p of pref){ const m = pool.find(v=>v.name.includes(p)); if(m){ enVoice=m; return; } }
+  enVoice = pool[0] || null;
+}
+if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+// 낱말 하나만 읽을 때 알파벳 이름으로 읽히는 단어 교정: "a"를 [에이]가 아니라 관사 [어]로 읽힌다.
+const SAY_AS = { "a":"uh" };
+function sayAs(t){ const k=String(t).trim(); return SAY_AS[k.toLowerCase()] || t; }
+function speak(text){
+  text = sayAs(text);
+  // 판매본(access.js 포함)에서만: 영어 음성이 없는 기기(일부 안드로이드·윈도우)는 서버 mp3로 대체
+  if(window.klaiHasEnVoice && !window.klaiHasEnVoice()){ if(window.klaiServerSpeak) window.klaiServerSpeak(text); return; }
+  if(!("speechSynthesis" in window)) return;
+  if(!enVoice) pickVoice();   // 안드로이드: 음성이 늦게 로드됨 → speak 시점에 재선택
+  speechSynthesis.cancel();
+  // small gap so cancel() doesn't swallow the new utterance (Chrome bug), and so it doesn't blurt instantly
+  setTimeout(()=>{
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = (enVoice && enVoice.lang) || "en-US"; u.rate = 0.5; u.pitch = 1; u.volume = 1;   // ponytail: slow+clear for first-time English kids; raise rate if too slow
+    if(enVoice) u.voice = enVoice;
+    speechSynthesis.resume();   // Chrome sometimes parks the queue in "paused"
+    speechSynthesis.speak(u);
+  }, 120);
+}
+// auto-play after a screen renders — waits so the word doesn't come out too fast
+function speakSoon(text){ setTimeout(()=>speak(text), 550); }
+// parameterless helpers for 🔊 buttons — avoids broken onclick="speak("word")" quoting
+function speakWord(){ const w = curWords()[state.wordIdx]; if(w) speak(w.en); }
+function speakStory(){ const s = window.STORIES.find(x=>x.level===state.level); if(s) speak(s.sentences.join(" ")); }
+
+// ---- answer feedback: happy chime + ✅ popup on correct, low buzz on wrong ----
+let audioCtx = null;
+function tone(freq, start, dur, type){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended") audioCtx.resume();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type=type||"sine"; o.frequency.value=freq; o.connect(g); g.connect(audioCtx.destination);
+    const t=audioCtx.currentTime+start;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.25,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.start(t); o.stop(t+dur+0.03);
+  }catch(e){}
+}
+function correct(){
+  tone(880,0,0.14); tone(1320,0.12,0.22);
+  const d=document.createElement("div"); d.className="pop"; d.setAttribute("role","status"); d.textContent="정답! ✅";
+  document.body.appendChild(d); setTimeout(()=>d.remove(), 850);
+}
+function wrong(){ tone(180,0,0.28,"square"); }
+function toast(msg){ const d=document.createElement("div"); d.className="toast"; d.setAttribute("role","status"); d.textContent=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),1700); }
+
+const STEP_NAME={learn:"① 배우기",read:"② 읽기",spell:"③ 스펠링",meaning:"④ 뜻",missing:"⑤ 빠진 글자",type:"⑥ 타이핑",catch:"⑦ 소리 듣고 잡기",catchko:"⑦ 소리 듣고 뜻",speed:"⑦ 뜻 스피드",cloze:"⑦ 문장 빈칸",story:"📖 스토리",test:"❓ 레벨 테스트"};
+function showScreen(name){
+  document.querySelectorAll("[id^=screen-]").forEach(el=>el.classList.add("hidden"));
+  document.getElementById("screen-"+name).classList.remove("hidden");
+  const sb=document.getElementById("stepBar");
+  if(STEP_NAME[name]){ sb.innerHTML=`지금 단계 · <b>${STEP_NAME[name]}</b> · L${state.level} 세트 ${state.setIdx+1}`; sb.classList.remove("hidden"); }
+  else if(name==="review"){ sb.innerHTML=`지금 단계 · <b>🔁 틀린 단어 다시</b>`; sb.classList.remove("hidden"); }
+  else if(name==="setdone"){ sb.innerHTML=`<b>🎉 세트 완료</b>`; sb.classList.remove("hidden"); }
+  else { sb.classList.add("hidden"); }
+  if(name==="home"){ renderResume(); renderLevelGrid(); }
+  else if(STEP_NAME[name]) toast(STEP_NAME[name]);   // 전환 순간 잠깐 표시 (상단 바는 계속 유지)
+  // 화면 전환 시 맨 위로. iOS 사파리는 window.scrollTo 만으로 안 먹는 경우가 있어 셋 다 건다.
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop = 0; document.body.scrollTop = 0;
+}
+
+// ---- levels are studied in small sets of 7 words (gentler for beginners) ----
+const SET_SIZE = 7;
+function levelSets(lvl){ const w=levelWords(lvl); const out=[]; for(let k=0;k<w.length;k+=SET_SIZE) out.push(w.slice(k,k+SET_SIZE)); return out; }
+function curWords(){ return levelSets(state.level)[state.setIdx] || []; }
+function setTag(name){ return `${name} · L${state.level} 세트 ${state.setIdx+1}/${levelSets(state.level).length}`; }
+function pushWrong(w){ if(!state.wrong.some(x=>x.en===w.en)) state.wrong.push(w); }
+function ding(){ tone(880,0,0.12); tone(1170,0.10,0.16); }   // light chime (no popup) for games
+
+// ---- resume (per-device, localStorage) — recovers accidental exits; not per-student ----
+function saveProg(){ try{ localStorage.setItem("klai_sw", JSON.stringify({level:state.level, setIdx:state.setIdx})); }catch(e){} }
+function loadProg(){ try{ return JSON.parse(localStorage.getItem("klai_sw")||"null"); }catch(e){ return null; } }
+function resumeProg(){ const p=loadProg(); if(!p) return;
+  state.level=Math.min(Math.max(p.level||1,1),16);
+  state.setIdx=Math.min(Math.max(p.setIdx||0,0), levelSets(state.level).length-1);
+  state.wordIdx=0; state.wrong=[]; saveProg(); renderLearn(); showScreen("learn"); }
+// 완주한 레벨 기록 — 홈 타일에 완료 표시를 실제 값으로 그리기 위함
+function doneLevels(){ try{ return JSON.parse(localStorage.getItem("klai_sw_done")||"[]"); }catch(e){ return []; } }
+function markDone(l){ try{ const d=doneLevels(); if(!d.includes(l)){ d.push(l); localStorage.setItem("klai_sw_done",JSON.stringify(d)); } }catch(e){} }
+const SVG_PLAY='<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';
+const SVG_CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 5 5L19 7"/></svg>';
+const SVG_PLAY_S='<svg width="13" height="13" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';
+function renderResume(){
+  const box=document.getElementById("resumeBox"); if(!box) return;
+  const p=loadProg(), first=allowedLevels()[0]||1;
+  // 샘플 접속이면 열리지 않은 레벨의 "이어서 하기"는 숨긴다
+  if(!p || !allowedLevels().includes(p.level)){
+    box.innerHTML=`<section class="hero"><h2>오늘 학습 시작</h2>
+      <p>레벨을 골라 첫 세트부터 시작해요.</p>
+      <button class="btn cta" onclick="startLevel(${first})">${SVG_PLAY} 레벨 ${first} 시작하기</button></section>`; return; }
+  const lvl=Math.min(Math.max(p.level||1,1),16), ns=levelSets(lvl).length, si=(p.setIdx||0)+1;
+  box.innerHTML=`<section class="hero"><h2>이어서 하기</h2>
+      <p>레벨 ${lvl} · 세트 ${si}부터 다시 시작해요.</p>
+      <button class="btn cta" onclick="resumeProg()">${SVG_PLAY} 바로 이어서 시작
+        <span class="meta">세트 ${si} / ${ns}</span></button></section>`;
+}
+// unlock audio on the first touch (iPad Safari blocks autoplay until a gesture)
+let unlocked=false;
+function unlockAudio(){ if(unlocked) return; unlocked=true;
+  try{ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); audioCtx.resume(); }catch(e){}
+  try{ speechSynthesis.resume(); }catch(e){}
+}
+document.addEventListener("pointerdown", unlockAudio, {once:true});
+
+function startLevel(lvl){ state.level=lvl; state.setIdx=0; state.wordIdx=0; state.wrong=[]; saveProg(); renderLearn(); showScreen("learn"); }
+
+// deterministic 4-option builder: correct + 3 distractors, rotated by idx
+function buildOptions(words, w, idx){
+  // exclude distractors with the same 뜻 as the answer — avoids two identical Korean buttons (unanswerable)
+  let others = words.filter(x=>x.en!==w.en && x.ko!==w.ko);
+  if(others.length < 3) others = words.filter(x=>x.en!==w.en);   // fallback if too few
+  const distract = [];
+  for(let i=0;i<Math.min(3,others.length);i++) distract.push(others[(idx+i)%others.length]);
+  const opts = [w, ...distract];
+  const rot = idx % opts.length;
+  for(let i=0;i<rot;i++) opts.push(opts.shift());
+  return opts;
+}
+
+function progressBar(i,n){ return `<div class="bar"><i style="width:${Math.round((i/n)*100)}%"></i></div>`; }
+
+// ---------- 1. Learn ----------
+function renderLearn(){
+  const words = curWords();
+  const w = words[state.wordIdx];
+  const el = document.getElementById("screen-learn");
+  el.innerHTML = `
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("배우기")} · ${state.wordIdx+1}/${words.length}</div>
+      ${progressBar(state.wordIdx, words.length)}
+      <div style="font-size:80px;margin:6px 0">${w.emoji||"📖"}</div>
+      <div style="font-size:60px;font-weight:900;color:var(--brand)">${w.en}</div>
+      <button class="btn" style="margin:14px 0" onclick="speakWord()">🔊 발음 듣기</button>
+      <div style="font-size:30px;font-weight:700;margin:8px 0">${w.ko}</div>
+      <div style="font-size:18px;color:var(--sub)">${w.example}</div>
+      <div style="margin-top:16px"><button class="btn" onclick="nextLearn()">다음 ▶</button></div>
+    </div>`;
+  speakSoon(w.en);
+}
+function nextLearn(){
+  const words = curWords();
+  if(state.wordIdx < words.length-1){ state.wordIdx++; renderLearn(); }
+  else { state.wordIdx=0; renderRead(); showScreen("read"); }
+}
+
+// ---------- Read — 영어+한글 함께 있는 카드 (읽기 연습) ----------
+function renderRead(){
+  const words = curWords();
+  const w = words[state.wordIdx];
+  const el = document.getElementById("screen-read");
+  el.innerHTML = `
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("읽기")} · ${state.wordIdx+1}/${words.length}</div>
+      ${progressBar(state.wordIdx, words.length)}
+      <div style="font-size:44px;margin:4px 0">${w.emoji||"📖"}</div>
+      <div style="font-size:34px;font-weight:700;color:var(--sub)">${w.en}</div>
+      <button class="btn" style="margin:10px 0" onclick="speakWord()">🔊 다시 듣기</button>
+      <div style="font-size:56px;font-weight:900;color:var(--brand);line-height:1.15;margin:6px 0">${w.ko}</div>
+      <div style="font-size:14px;color:var(--sub)">소리내어 읽어요</div>
+      <div style="margin-top:16px"><button class="btn" onclick="nextRead()">다음 ▶</button></div>
+    </div>`;
+  speakSoon(w.en);
+}
+function nextRead(){
+  const words = curWords();
+  if(state.wordIdx < words.length-1){ state.wordIdx++; renderRead(); }
+  else { state.wordIdx=0; renderSpell(); showScreen("spell"); }
+}
+
+// ---------- 3. Spell (listen → pick letters to build the word) ----------
+// deterministic seeded shuffle — actually reorders (Fisher-Yates), and never returns the original order
+function scramble(arr, seed){
+  const a = arr.slice();
+  let s = ((seed + 1) * 2654435761) >>> 0;
+  const rnd = ()=>{ s = (s * 1103515245 + 12345) >>> 0; return s / 4294967296; };
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  if(a.length>1 && a.join("") === arr.join("")){ [a[0],a[1]]=[a[1],a[0]]; }  // guard: don't hand back the answer
+  return a;
+}
+let spellPicked = [];
+function renderSpell(){
+  const words = curWords();
+  const w = words[state.wordIdx];
+  spellPicked = [];
+  const bank = scramble(w.en.split(""), state.wordIdx + 1);
+  const el = document.getElementById("screen-spell");
+  el.innerHTML = `
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("스펠링")} · ${state.wordIdx+1}/${words.length}</div>
+      ${progressBar(state.wordIdx, words.length)}
+      <div style="font-size:40px;margin:4px 0">${w.emoji||"🔤"}</div>
+      <button class="btn" onclick="speakWord()">🔊 다시 듣기</button>
+      <div style="font-size:14px;color:var(--sub);margin:8px 0">들은 단어를 글자를 눌러 만드세요</div>
+      <div id="spellSlots" style="font-size:40px;font-weight:900;letter-spacing:5px;min-height:52px;margin:8px 0;color:var(--brand)"></div>
+      <div id="spellBank" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0"></div>
+      <div id="spellMsg" style="min-height:22px;margin:4px 0;font-weight:700"></div>
+      <button class="btn" style="background:#eef2ff;color:var(--brand)" onclick="renderSpell()">← 지우기</button>
+    </div>`;
+  const bankBox = document.getElementById("spellBank");
+  bank.forEach(ch=>{
+    const b=document.createElement("button"); b.className="btn tile";
+    b.textContent = ch===" " ? "␣" : ch;
+    b.onclick=()=>{ if(b.disabled) return; spellPicked.push(ch); b.disabled=true; b.style.opacity=".25"; updateSpell(w); };
+    bankBox.appendChild(b);
+  });
+  updateSpell(w);
+  speakSoon(w.en);
+}
+function updateSpell(w){
+  const target = w.en;
+  const slots = document.getElementById("spellSlots");
+  let disp="";
+  for(let i=0;i<target.length;i++){
+    const ch = spellPicked[i];
+    disp += (ch===undefined ? "_" : (ch===" " ? "␣" : ch)) + " ";
+  }
+  slots.textContent = disp.trim();
+  if(spellPicked.length === target.length){
+    const built = spellPicked.join("");
+    const msg = document.getElementById("spellMsg");
+    if(built.toLowerCase() === target.toLowerCase()){
+      msg.textContent="정답! ✅"; msg.style.color="var(--ok)"; correct();
+      setTimeout(nextSpell, 1200);
+    } else {
+      msg.innerHTML=`다시 해볼까요? 정답: <b>${target}</b>`; msg.style.color="#c0392b"; wrong(); pushWrong(w);
+      setTimeout(renderSpell, 1500);   // clear and let them retry
+    }
+  }
+}
+function nextSpell(){
+  const words = curWords();
+  if(state.wordIdx < words.length-1){ state.wordIdx++; renderSpell(); }
+  else { state.wordIdx=0; renderMeaning(); showScreen("meaning"); }
+}
+
+// ---------- 4. Meaning (EN → KO) ----------
+function renderMeaning(){
+  const words = curWords();
+  const w = words[state.wordIdx];
+  const opts = buildOptions(words, w, state.wordIdx);
+  const el = document.getElementById("screen-meaning");
+  el.innerHTML = `
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("뜻")} · ${state.wordIdx+1}/${words.length}</div>
+      ${progressBar(state.wordIdx, words.length)}
+      <div style="font-size:48px;font-weight:900;margin:8px 0;color:var(--brand)">${w.emoji||""} ${w.en}</div>
+      <button class="btn" onclick="speakWord()">🔊 듣기</button>
+      <div style="font-size:17px;color:var(--sub);margin:10px 0 6px">뜻을 고르세요</div>
+      <div id="meanOpts"></div>
+    </div>`;
+  const box=document.getElementById("meanOpts"); optLock=false;
+  opts.forEach(o=>{
+    const b=document.createElement("button"); b.className="btn opt"; b.textContent=o.ko;
+    b.onclick=()=>{ if(optLock) return; if(o.en===w.en){ optLock=true; b.style.background="var(--ok)"; b.style.color="#fff"; correct(); setTimeout(nextMeaning,1100);} else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); pushWrong(w); } };
+    box.appendChild(b);
+  });
+  speakSoon(w.en);
+}
+function nextMeaning(){
+  const words=curWords();
+  if(state.wordIdx<words.length-1){ state.wordIdx++; renderMeaning(); }
+  else { renderMissing(); showScreen("missing"); }
+}
+
+// ---- game runner: one rotating game per set (missing-letter is now a core step, before 읽기) ----
+let gameQueue=[], gameIdx=0;
+function setGames(){ const rot=["catch","catchko","speed","cloze"]; return [ rot[(state.level+state.setIdx)%rot.length] ]; }
+function startGames(){ gameQueue=setGames(); gameIdx=0; runGame(); }
+function runGame(){
+  if(gameIdx>=gameQueue.length){
+    if(state.wrong.length) toast("틀린 단어 다시 학습하기 🔁");
+    renderWrongReview(); showScreen("review"); return;
+  }
+  const g=gameQueue[gameIdx];
+  if(g==="catch"){ renderCatch(); showScreen("catch"); }
+  else if(g==="catchko"){ renderCatchKo(); showScreen("catchko"); }
+  else if(g==="speed"){ renderSpeed(); showScreen("speed"); }
+  else { renderCloze(); showScreen("cloze"); }
+}
+function gameDone(){ gameIdx++; runGame(); }
+function toType(){ state.wordIdx=0; renderType(); showScreen("type"); }
+// ---------- 타이핑 연습 (단어 보고 직접 키보드로 치기 — 고르는 것 아님) ----------
+function renderType(){
+  const words=curWords(); const w=words[state.wordIdx];
+  const el=document.getElementById("screen-type");
+  el.innerHTML=`
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("타이핑")} · ${state.wordIdx+1}/${words.length}</div>
+      ${progressBar(state.wordIdx, words.length)}
+      <div style="font-size:40px;margin:4px 0">${w.emoji||"⌨️"}</div>
+      <div style="font-size:46px;font-weight:900;color:var(--brand);letter-spacing:2px">${w.en}</div>
+      <button class="btn" style="margin:8px 0" onclick="speakWord()">🔊 다시 듣기</button>
+      <div style="font-size:14px;color:var(--sub);margin:6px 0">보고 똑같이 쳐요</div>
+      <div><input id="typeIn" class="spell" aria-label="들은 단어를 영어로 입력" placeholder="영어로 입력…" lang="en" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+      <div id="typeMsg" style="min-height:22px;margin:4px 0;font-weight:700"></div>
+      <button class="btn" onclick="checkType()">확인</button>
+    </div>`;
+  speakSoon(w.en);
+  const inp=document.getElementById("typeIn"); inp.focus();
+  inp.onkeydown=(e)=>{ if(e.key==="Enter") checkType(); };
+}
+function checkType(){
+  const words=curWords(); const w=words[state.wordIdx];
+  const inp=document.getElementById("typeIn"); const val=inp.value.trim().toLowerCase();
+  const msg=document.getElementById("typeMsg");
+  if(!val) return;
+  if(val===w.en.toLowerCase()){ msg.textContent="정답! ✅"; msg.style.color="var(--ok)"; correct(); setTimeout(nextType,700); }
+  else { msg.innerHTML=`다시! 정답: <b>${w.en}</b>`; msg.style.color="#c0392b"; wrong(); pushWrong(w); inp.value=""; inp.focus(); }
+}
+function nextType(){
+  const words=curWords();
+  if(state.wordIdx<words.length-1){ state.wordIdx++; renderType(); }
+  else { startGames(); }
+}
+
+// ---------- Game 1: 🔡 빠진 글자 채우기 (extra spelling practice) ----------
+let missIdx=0;
+function speakMissWord(){ const w=curWords()[missIdx]; if(w) speak(w.en); }
+function renderMissing(){ missIdx=0; showMissing(); }
+function showMissing(){
+  const words=curWords();
+  const el=document.getElementById("screen-missing");
+  if(missIdx>=words.length){
+    el.innerHTML=`<div class="card" style="text-align:center;padding:40px 18px"><div style="font-size:60px">🔡</div><div style="font-size:24px;font-weight:900;color:var(--brand);margin:8px 0">빠진 글자 완성!</div><button class="btn" onclick="toType()">다음 ▶</button></div>`;
+    return;
+  }
+  const w=words[missIdx];
+  const letters=w.en.split("");
+  let pos=(missIdx*3+1)%letters.length, guard=0;
+  while(letters[pos]===" " && guard++<letters.length) pos=(pos+1)%letters.length;
+  const answer=letters[pos].toLowerCase();
+  const shown=letters.map((c,i)=> i===pos ? "_" : c).join("");
+  const alpha="abcdefghijklmnopqrstuvwxyz".split("");
+  let opts=[answer], k=missIdx*5+3;
+  while(opts.length<4){ const c=alpha[k%26]; if(!opts.includes(c)) opts.push(c); k+=7; }
+  opts=scramble(opts, missIdx+2);
+  el.innerHTML=`
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("🔡 빠진 글자")} · ${missIdx+1}/${words.length}</div>
+      <div style="font-size:44px;margin:6px 0">${w.emoji||"🔡"}</div>
+      <button class="btn" onclick="speakMissWord()">🔊 듣기</button>
+      <div id="missWord" style="font-size:48px;font-weight:900;letter-spacing:4px;color:var(--brand);margin:14px 0">${shown}</div>
+      <div style="font-size:14px;color:var(--sub);margin-bottom:6px">빠진 글자를 고르세요</div>
+      <div id="missOpts" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px"></div>
+    </div>`;
+  const box=document.getElementById("missOpts"); optLock=false;
+  opts.forEach(o=>{
+    const b=document.createElement("button"); b.className="btn tile"; b.textContent=o;
+    b.onclick=()=>{ if(optLock) return; if(o===answer){ optLock=true; document.getElementById("missWord").textContent=w.en; correct(); setTimeout(()=>{ missIdx++; showMissing(); },1000); }
+      else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); pushWrong(w); } };
+    box.appendChild(b);
+  });
+  speakSoon(w.en);
+}
+
+// ---------- Game 2: 소리 듣고 잡기 (slow, no timer) ----------
+let catchOrder=[], catchIdx=0, catchTarget=null;
+function speakCatchTarget(){ if(catchTarget) speak(catchTarget.en); }
+function renderCatch(){
+  const words=curWords();
+  catchOrder = scramble(words.map((_,i)=>i), state.setIdx*7 + 3);
+  catchIdx=0; showCatch();
+}
+function showCatch(){
+  const words=curWords();
+  if(catchIdx>=catchOrder.length){ gameDone(); return; }
+  catchTarget = words[catchOrder[catchIdx]];
+  const el=document.getElementById("screen-catch");
+  el.innerHTML=`
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("🎧 소리 듣고 잡기")} · ${catchIdx+1}/${catchOrder.length}</div>
+      <div style="font-size:52px;margin:8px 0">🎧</div>
+      <button class="btn" onclick="speakCatchTarget()">🔊 다시 듣기</button>
+      <div style="font-size:15px;color:var(--sub);margin:12px 0">들은 단어를 천천히 잡아요</div>
+      <div id="catchBubbles" style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px"></div>
+    </div>`;
+  const box=document.getElementById("catchBubbles"); optLock=false;
+  buildOptions(words, catchTarget, catchIdx).forEach(o=>{
+    const b=document.createElement("button"); b.className="btn"; b.style.cssText="margin:6px;padding:12px 18px;font-size:20px;line-height:1.25;text-align:center";
+    b.innerHTML=`${o.en}<br><span style="font-size:13px;font-weight:600;opacity:.82">${o.ko}</span>`;
+    b.onclick=()=>{
+      if(optLock) return;
+      if(o.en===catchTarget.en){ optLock=true; b.style.background="var(--ok)"; ding(); catchIdx++; setTimeout(showCatch,900); }
+      else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); }
+    };
+    box.appendChild(b);
+  });
+  speakSoon(catchTarget.en);
+}
+
+// ---------- Game 2b: 🎧 소리 듣고 뜻 잡기 (audio EN → tap Korean meaning) ----------
+let catchKoOrder=[], catchKoIdx=0, catchKoTarget=null;
+function speakCatchKoTarget(){ if(catchKoTarget) speak(catchKoTarget.en); }
+function renderCatchKo(){
+  const words=curWords();
+  catchKoOrder=scramble(words.map((_,i)=>i), state.setIdx*9+4);
+  catchKoIdx=0; showCatchKo();
+}
+function showCatchKo(){
+  const words=curWords();
+  if(catchKoIdx>=catchKoOrder.length){ gameDone(); return; }
+  catchKoTarget=words[catchKoOrder[catchKoIdx]];
+  const el=document.getElementById("screen-catchko");
+  el.innerHTML=`
+    <div class="card" style="text-align:center">
+      <div class="step-tag">${setTag("🎧 소리 듣고 뜻 잡기")} · ${catchKoIdx+1}/${catchKoOrder.length}</div>
+      <div style="font-size:52px;margin:8px 0">🎧</div>
+      <button class="btn" onclick="speakCatchKoTarget()">🔊 다시 듣기</button>
+      <div style="font-size:15px;color:var(--sub);margin:12px 0">들은 단어의 <b>뜻</b>을 천천히 잡아요</div>
+      <div id="catchKoOpts"></div>
+    </div>`;
+  const box=document.getElementById("catchKoOpts"); optLock=false;
+  buildOptions(words, catchKoTarget, catchKoIdx).forEach(o=>{
+    const b=document.createElement("button"); b.className="btn opt"; b.textContent=o.ko;
+    b.onclick=()=>{
+      if(optLock) return;
+      if(o.en===catchKoTarget.en){ optLock=true; b.style.background="var(--ok)"; b.style.color="#fff"; ding(); catchKoIdx++; setTimeout(showCatchKo,900); }
+      else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); }
+    };
+    box.appendChild(b);
+  });
+  speakSoon(catchKoTarget.en);
+}
+
+// ---------- Game 3: ⚡ 뜻 스피드 (gentle timer, star reward, no punishment) ----------
+let speedIdx=0, speedStars=0;
+function renderSpeed(){ speedIdx=0; speedStars=0; showSpeed(); }
+function showSpeed(){
+  const words=curWords();
+  const el=document.getElementById("screen-speed");
+  if(speedIdx>=words.length){
+    el.innerHTML=`<div class="card" style="text-align:center;padding:40px 18px">
+      <div style="font-size:60px">⭐</div>
+      <div style="font-size:26px;font-weight:900;color:var(--brand);margin:8px 0">별 ${speedStars} / ${words.length}</div>
+      <button class="btn" onclick="gameDone()">다음 ▶</button></div>`;
+    return;
+  }
+  const w=words[speedIdx];
+  const opts=buildOptions(words,w,speedIdx*3+2);
+  el.innerHTML=`<div class="card" style="text-align:center">
+    <div class="step-tag">${setTag("⚡ 뜻 스피드")} · ${speedIdx+1}/${words.length}</div>
+    <div style="font-size:44px;font-weight:900;color:var(--brand);margin:8px 0">${w.emoji||""} ${w.en}</div>
+    <div class="sbar"><i id="sbarFill"></i></div>
+    <div style="font-size:14px;color:var(--sub);margin:8px 0">빨리 뜻을 고르면 ⭐ (천천히 해도 괜찮아요)</div>
+    <div id="speedOpts"></div></div>`;
+  let done=false, expired=false;
+  const advance=()=>{ if(done) return; done=true; clearTimeout(t); setTimeout(()=>{ speedIdx++; showSpeed(); }, 850); };
+  const box=document.getElementById("speedOpts");
+  opts.forEach(o=>{
+    const b=document.createElement("button"); b.className="btn opt"; b.textContent=o.ko;
+    b.onclick=()=>{ if(done) return;
+      if(o.en===w.en){ b.style.background="var(--ok)"; b.style.color="#fff"; if(!expired){ speedStars++; correct(); } else ding(); advance(); }
+      else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); } };
+    box.appendChild(b);
+  });
+  speakSoon(w.en);
+  const fill=document.getElementById("sbarFill");
+  requestAnimationFrame(()=>{ fill.style.transition="width 5s linear"; fill.style.width="0%"; });
+  var t=setTimeout(()=>{ expired=true; }, 5000);
+}
+
+// ---------- Game 4: 📝 문장 빈칸 (fill the blank in the word's example) ----------
+let clozeIdx=0;
+function speakClozeExample(){ const w=curWords()[clozeIdx]; if(w) speak(w.example); }
+function renderCloze(){ clozeIdx=0; showCloze(); }
+function showCloze(){
+  const words=curWords();
+  const el=document.getElementById("screen-cloze");
+  if(clozeIdx>=words.length){
+    el.innerHTML=`<div class="card" style="text-align:center;padding:40px 18px"><div style="font-size:60px">📝</div><div style="font-size:24px;font-weight:900;color:var(--brand);margin:8px 0">문장 완성!</div><button class="btn" onclick="gameDone()">다음 ▶</button></div>`;
+    return;
+  }
+  const w=words[clozeIdx];
+  const esc=w.en.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const reTest=new RegExp('\\b'+esc+'\\b','i');
+  const reAll=new RegExp('\\b'+esc+'\\b','ig');
+  const blanked = reTest.test(w.example) ? w.example.replace(reAll,'____') : (w.example+' ____');
+  const opts=buildOptions(words,w,clozeIdx*2+1);
+  el.innerHTML=`<div class="card" style="text-align:center">
+    <div class="step-tag">${setTag("📝 문장 빈칸")} · ${clozeIdx+1}/${words.length}</div>
+    <button class="btn" onclick="speakClozeExample()">🔊 문장 듣기</button>
+    <div id="clozeSent" style="font-size:26px;font-weight:800;margin:16px 0 6px;line-height:1.5;color:var(--ink)">${blanked}</div>
+    <div style="font-size:17px;font-weight:700;color:var(--brand2);margin-bottom:8px">뜻: ${w.ko}</div>
+    <div style="font-size:14px;color:var(--sub);margin-bottom:6px">빈칸에 들어갈 단어를 고르세요</div>
+    <div id="clozeOpts"></div></div>`;
+  const box=document.getElementById("clozeOpts"); optLock=false;
+  opts.forEach(o=>{
+    const b=document.createElement("button"); b.className="btn opt"; b.textContent=o.en;
+    b.onclick=()=>{
+      if(optLock) return;
+      if(o.en===w.en){ optLock=true; document.getElementById("clozeSent").innerHTML=blanked.replace(/____/g,`<span style="color:var(--ok)">${w.en}</span>`); correct(); setTimeout(()=>{ clozeIdx++; showCloze(); }, 1100); }
+      else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); }
+    };
+    box.appendChild(b);
+  });
+  speakSoon(w.example);
+}
+
+// ---------- 틀린 문제 다시 학습 ----------
+function speakWrong(){ if(state.wrong[0]) speak(state.wrong[0].en); }
+function renderWrongReview(){
+  if(!state.wrong.length){ afterSet(); return; }
+  const w = state.wrong[0];
+  const opts = buildOptions(curWords(), w, state.wrong.length);
+  const el = document.getElementById("screen-review");
+  el.innerHTML = `
+    <div class="card" style="text-align:center">
+      <div class="step-tag">🔁 틀린 단어 다시! (${state.wrong.length}개 남음)</div>
+      <div style="font-size:64px;margin:4px 0">${w.emoji||"🔁"}</div>
+      <div style="font-size:44px;font-weight:900;color:var(--brand)">${w.en}</div>
+      <button class="btn" style="margin:10px 0" onclick="speakWrong()">🔊 듣기</button>
+      <div style="font-size:18px;font-weight:700">${w.ko}</div>
+      <div style="font-size:14px;color:var(--sub);margin:10px 0 4px">뜻을 다시 골라요</div>
+      <div id="revOpts"></div>
+    </div>`;
+  const box=document.getElementById("revOpts"); optLock=false;
+  opts.forEach(o=>{
+    const b=document.createElement("button"); b.className="btn opt"; b.textContent=o.ko;
+    b.onclick=()=>{
+      if(optLock) return;
+      if(o.en===w.en){ optLock=true; b.style.background="var(--ok)"; b.style.color="#fff"; correct(); state.wrong.shift(); setTimeout(()=>{ renderWrongReview(); showScreen("review"); },1100); }
+      else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); }
+    };
+    box.appendChild(b);
+  });
+  speakSoon(w.en);
+}
+
+// after a set: show a set-complete checkpoint (→ next set), or the level story + test
+function afterSet(){
+  const sets = levelSets(state.level);
+  const last = state.setIdx >= sets.length-1;
+  renderSetDone(last); showScreen("setdone");
+}
+function renderSetDone(last){
+  const el=document.getElementById("screen-setdone");
+  const btn = last
+    ? `<button class="btn" onclick="renderStory();showScreen('story')">스토리 ▶</button>`
+    : `<button class="btn" onclick="nextSet()">다음 세트 ▶</button>`;
+  el.innerHTML=`
+    <div class="card" style="text-align:center;padding:44px 20px">
+      <div style="font-size:72px">🎉</div>
+      <div style="font-size:26px;font-weight:900;color:var(--ok)">세트 ${state.setIdx+1} 완료!</div>
+      <div style="margin:12px;font-size:16px;color:var(--sub)">진도표 <b>L${state.level} 세트 ${state.setIdx+1}</b> 칸에 체크해요${last?' · 마지막 세트!':''}</div>
+      ${btn}
+    </div>`;
+  toast("세트 완료! 🎉");
+}
+function nextSet(){ state.setIdx++; state.wordIdx=0; state.wrong=[]; saveProg(); renderLearn(); showScreen("learn"); }
+
+// ---------- 5. Story (readalong) ----------
+function renderStory(){
+  const s = window.STORIES.find(x=>x.level===state.level);
+  const el=document.getElementById("screen-story");
+  el.innerHTML=`
+    <div class="card">
+      <div class="step-tag">스토리 읽기 · L${state.level}</div>
+      <h3 style="margin:6px 0;font-size:24px">${s.title}</h3>
+      <div style="font-size:15px;color:var(--sub);margin-bottom:10px">문장마다 <b>🔊 듣기</b>로 듣고 소리내 읽어요. <b>뜻 보기</b>로 의미도 확인!</div>
+      <button class="btn" onclick="speakStory()">🔊 전체 듣기</button>
+      <div id="storyText" style="margin:14px 0"></div>
+      <button class="btn" onclick="renderTest();showScreen('test')">이해 문제 ▶</button>
+    </div>`;
+  const box=document.getElementById("storyText");
+  s.sentences.forEach((sen,i)=>{
+    const row=document.createElement("div");
+    row.style.cssText="border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin:10px 0";
+    const en=document.createElement("div");
+    en.textContent=sen; en.style.cssText="font-size:23px;font-weight:700;line-height:1.5;color:var(--ink)";
+    const ctrl=document.createElement("div"); ctrl.style.cssText="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap";
+    const sb=document.createElement("button"); sb.className="btn"; sb.style.cssText="padding:9px 18px;font-size:16px"; sb.textContent="🔊 듣기"; sb.onclick=()=>speak(sen);
+    ctrl.appendChild(sb);
+    const koText = (s.ko && s.ko[i]) ? s.ko[i] : "";
+    let ko;
+    if(koText){
+      const mb=document.createElement("button"); mb.className="btn"; mb.style.cssText="padding:9px 18px;font-size:16px;background:#eef2ff;color:var(--brand)"; mb.textContent="뜻 보기";
+      ko=document.createElement("div"); ko.textContent=koText; ko.style.cssText="font-size:18px;color:var(--sub);margin-top:10px;display:none";
+      mb.onclick=()=>{ const show=ko.style.display==="none"; ko.style.display=show?"block":"none"; mb.textContent=show?"뜻 숨기기":"뜻 보기"; };
+      ctrl.appendChild(mb);
+    }
+    row.appendChild(en); row.appendChild(ctrl); if(ko) row.appendChild(ko);
+    box.appendChild(row);
+  });
+}
+
+// ---------- Level test + PASS ----------
+function renderTest(){
+  const s=window.STORIES.find(x=>x.level===state.level);
+  // deterministic choice shuffle so the answer is not always the same position
+  const rot = state.level % 4;
+  const choices = s.quiz.choices.slice();
+  let answer = s.quiz.answer;
+  for(let i=0;i<rot;i++){ choices.push(choices.shift()); answer = (answer - 1 + choices.length) % choices.length; }
+  const el=document.getElementById("screen-test");
+  el.innerHTML=`
+    <div class="card" style="text-align:center">
+      <div class="step-tag">레벨 테스트 · L${state.level}</div>
+      <div style="font-size:18px;font-weight:700;margin:12px 0">${s.quiz.q}</div>
+      <div id="testOpts"></div>
+    </div>`;
+  const box=document.getElementById("testOpts"); optLock=false;
+  choices.forEach((c,i)=>{
+    const b=document.createElement("button"); b.className="btn opt"; b.textContent=c;
+    b.onclick=()=>{ if(optLock) return; if(i===answer){ optLock=true; correct(); setTimeout(showPass, 700); } else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); } };
+    box.appendChild(b);
+  });
+}
+function showPass(){
+  markDone(state.level);
+  toast(state.level+"단계 완성! 🎉");
+  const el=document.getElementById("screen-test");
+  el.innerHTML=`
+    <div class="card" style="text-align:center;padding:48px 20px">
+      <div style="font-size:90px">🎉</div>
+      <div style="font-size:42px;font-weight:900;color:var(--ok)">${state.level}단계 완성!</div>
+      <div style="font-size:20px;font-weight:800;color:var(--brand);margin-top:4px">PASS · L${state.level}</div>
+      <div style="margin:12px;font-size:19px;color:var(--sub)">이 화면을 선생님께 보여주세요</div>
+      <button class="btn" onclick="showScreen('home')">홈으로</button>
+    </div>`;
+}
+
+// ---------- level grid ----------
+// 레벨 마스코트 — 아직 안 한 레벨도 허전하지 않게(장식용, 상태 구분은 아이콘·막대)
+const LV_EMOJI = ["🐣","🐤","🐰","🦊","🐨","🐼","🦁","🐸","🐙","🦄","🐝","🐬","🌟","🍭","🎈","🏆"];
+// 샘플 접속(?sample=1)은 레벨 1·9만, 정식 코드는 전 레벨
+function allowedLevels(){ return window.__LEVELS || Array.from({length:16},(_,i)=>i+1); }
+function renderLevelGrid(){
+  const grid = document.getElementById("levelGrid"); if(!grid) return;
+  const done = doneLevels(), p = loadProg();
+  const nowLvl = p && !done.includes(p.level) ? p.level : 0;
+  grid.innerHTML = "";
+  for(const l of allowedLevels()){
+    const ns = levelSets(l).length;
+    const isDone = done.includes(l), isNow = l===nowLvl;
+    const pct = isDone ? 100 : isNow ? Math.round(((p.setIdx||0)/ns)*100) : 0;
+    const state = isDone ? "완료" : isNow ? `${(p.setIdx||0)+1} / ${ns} 세트` : `${ns}세트`;
+    const b=document.createElement("button"); b.type="button";
+    b.className="lv"+(isDone?" done":isNow?" now":"");
+    b.setAttribute("aria-label",`레벨 ${l} ${isDone?"완료":isNow?"진행 중":"시작"} · 7단어씩 ${ns}세트`);
+    b.innerHTML=`<span class="mascot" aria-hidden="true">${LV_EMOJI[(l-1)%LV_EMOJI.length]}</span>
+      ${isDone?`<span class="dot">${SVG_CHECK}</span>`:isNow?`<span class="dot">${SVG_PLAY_S}</span>`:""}
+      <span class="num">${l}</span><small>${state}</small>
+      <span class="lbar"><i style="width:${pct}%"></i></span>`;
+    b.onclick=()=>startLevel(l); grid.appendChild(b);
+  }
+}
+// 판매본은 access.js가 있어 접속코드 확인 후 시작(샘플은 레벨 1·9만). 원내용은 바로 시작.
+if(window.KlaiAccess){
+  KlaiAccess.gate({ app:"sightword", onUnlock:(academyName,{sample})=>{
+    window.__ACADEMY = academyName || "";
+    const an=document.getElementById("acadName"); if(an && window.__ACADEMY) an.textContent = window.__ACADEMY;
+    window.__LEVELS = sample ? [1,9] : Array.from({length:16},(_,i)=>i+1);
+    renderResume(); renderLevelGrid();
+  }});
+} else {
+  renderResume(); renderLevelGrid();
+}
+</script>
+</body></html>

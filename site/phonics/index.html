@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1226">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="클라이 파닉스">
+<title>클라이 파닉스 이야기 · KLAI Phonics Tales</title>
+<style>
+:root{
+    color-scheme:dark;
+    --bg:#0f1226; --card:#1a1f3d; --ink:#eef1ff; --sub:#a7b0d8;
+    --line:#2a3160; --accent:#ffd166; --good:#4ade80; --bad:#fb7185;
+    --a:#ff7a7a; --i:#ffb457; --e:#5ecb8f; --o:#4aa8ff; --u:#b58cff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  html,body{margin:0;padding:0}
+  /* 클릭 요소를 전부 <button>으로 바꾸며 필요한 초기화. 아래 클래스 규칙이 덮어씀 */
+  button{font:inherit;color:inherit;background:none;border:none;padding:0;margin:0;text-align:inherit}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+  body{
+    font-family:'Segoe UI',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%,#1c2350 0%,var(--bg) 55%);
+    color:var(--ink);min-height:100dvh;padding:0 0 40px;
+  }
+  header{padding:calc(22px + env(safe-area-inset-top)) 18px 10px;text-align:center}
+  header h1{margin:0;font-size:22px;letter-spacing:.3px}
+  header .en{color:var(--sub);font-size:12.5px;margin-top:3px;letter-spacing:1px}
+  .wrap{max-width:860px;margin:0 auto;padding:0 16px}
+
+  /* Home */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:14px}
+  .book{
+    border-radius:20px;padding:18px 16px 16px;cursor:pointer;position:relative;overflow:hidden;
+    background:var(--card);border:1px solid var(--line);transition:transform .12s ease, box-shadow .12s;
+    min-height:150px;display:flex;flex-direction:column;justify-content:space-between
+  }
+  .book:active{transform:scale(.97)}
+  .book .v{font-size:46px;font-weight:800;line-height:1}
+  .book .emoji{font-size:30px;position:absolute;top:14px;right:14px;opacity:.9}
+  .book .bt{font-weight:700;font-size:15px;margin-top:8px}
+  .book .snd{color:var(--sub);font-size:12px;margin-top:2px}
+  .book .prog{height:6px;border-radius:6px;background:#00000040;margin-top:12px;overflow:hidden}
+  .book .prog i{display:block;height:100%;width:0;border-radius:6px;background:currentColor;transition:width .3s}
+  .tagA{color:var(--a)} .tagI{color:var(--i)} .tagE{color:var(--e)} .tagO{color:var(--o)} .tagU{color:var(--u)}
+
+  .hint{color:var(--sub);font-size:12.5px;text-align:center;margin:18px 6px 0;line-height:1.6}
+
+  /* Book screen */
+  #book{display:none}
+  .topbar{display:flex;align-items:center;gap:10px;padding:6px 0 2px}
+  .back{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:9px 13px;font-size:14px;cursor:pointer}
+  .bktitle{font-weight:700;font-size:17px}
+  .bktitle small{color:var(--sub);font-weight:400;font-size:12px;margin-left:6px}
+  .tabs{display:flex;gap:7px;margin:12px 0;overflow-x:auto;padding-bottom:4px}
+  .tab{white-space:nowrap;background:var(--card);border:1px solid var(--line);color:var(--sub);
+    border-radius:999px;padding:9px 15px;font-size:13.5px;cursor:pointer;font-weight:600}
+  .tab.on{background:var(--accent);color:#20242a;border-color:var(--accent)}
+  .panel{display:none;animation:fade .2s}
+  .panel.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+
+  /* Controls */
+  .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:12px;margin-bottom:12px}
+  .btn{background:#232a52;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 14px;
+    font-size:14px;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+  .btn.play{background:var(--accent);color:#20242a;border-color:var(--accent)}
+  .btn:active{transform:scale(.96)}
+  .btn.spd{padding:9px 14px}
+  .btn.spd.on{background:var(--accent);color:#20242a;border-color:var(--accent)}
+  .toggle{display:inline-flex;align-items:center;gap:6px;color:var(--sub);font-size:13px;cursor:pointer;user-select:none}
+  .toggle input{width:18px;height:18px;accent-color:var(--accent)}
+  .speed{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:13px}
+  .speed input{width:110px;accent-color:var(--accent)}
+  .cover{font-size:66px;text-align:center;margin:6px 0 4px}
+
+  /* Story */
+  .story .ln{padding:12px 14px;border-radius:14px;margin-bottom:9px;background:var(--card);border:1px solid var(--line);
+    cursor:pointer;transition:background .12s;line-height:1.55}
+  .story .ln:hover{background:#20264c}
+  .story .ln.active{background:#2c356e;border-color:var(--accent)}
+  .story .num{color:var(--sub);font-size:12px;margin-right:8px}
+  .story .en{font-size:19px;letter-spacing:.2px}
+  .story .w.hl{color:var(--accent);font-weight:700}
+  .story .w.speaking{background:var(--accent);color:#20242a;border-radius:5px;padding:0 2px}
+  .story .kr{color:var(--sub);font-size:14px;margin-top:6px;display:none}
+  .story.showkr .kr{display:block}
+  .lnact{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+  .mini{font-size:13px;padding:8px 12px;border-radius:10px;background:#232a52;border:1px solid var(--line);color:var(--ink);cursor:pointer;font-weight:600;display:inline-flex;gap:5px;align-items:center}
+  .mini.mic{background:#2c356e;border-color:var(--u)}
+  .mini.mic.listening{background:var(--bad);border-color:var(--bad);color:#fff;animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .mini:active{transform:scale(.96)}
+  .fb2{display:none;margin-top:10px;padding:11px;border-radius:12px;background:#12173a;border:1px solid var(--line)}
+  .scorebar{font-size:13px;color:var(--sub);margin-bottom:8px}
+  .scorebar b{font-size:18px}
+  .scorebar.good b{color:var(--good)} .scorebar.mid b{color:var(--accent)} .scorebar.bad b{color:var(--bad)}
+  .fbwords{font-size:18px;line-height:1.9}
+  .fbwords .w{cursor:pointer}
+  .fbwords .w.ok{color:var(--good);font-weight:700}
+  .fbwords .w.miss{color:var(--bad);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+  .fbwords .w.miss:active,.fbwords .w:active{opacity:.6}
+  .fbhint{color:#6b76a8;font-size:11px;margin-top:6px}
+  .mini.miss-btn{background:#3a1420;border-color:var(--bad);color:#ffd1d8}
+  .heard{color:#6b76a8;font-size:12.5px;margin-top:8px;font-style:italic}
+
+  .metric{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--sub)}
+  .chip b{color:var(--ink);font-size:16px}
+
+  /* Words */
+  .words{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .word{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;cursor:pointer;text-align:center}
+  .word:active{transform:scale(.97)}
+  .word .e{font-size:20px;font-weight:700}
+  .word .k{color:var(--sub);font-size:13px;margin-top:3px}
+  .word .sp{color:var(--accent);font-size:11px;margin-top:6px}
+
+  /* Quiz / activities */
+  .card2{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+  .q{font-size:16px;margin-bottom:12px}
+  .q .big{font-size:20px;font-weight:700;color:var(--accent)}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .opt{background:#232a52;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:13px;font-size:16px;cursor:pointer;text-align:center;font-weight:600}
+  .opt.correct{background:var(--good);color:#04240f;border-color:var(--good)}
+  .opt.wrong{background:var(--bad);color:#3a0410;border-color:var(--bad)}
+  .progress-row{display:flex;justify-content:space-between;color:var(--sub);font-size:13px;margin-bottom:10px}
+  .tokens{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .token{background:#232a52;border:1px solid var(--line);border-radius:11px;padding:9px 13px;font-size:16px;cursor:pointer}
+  .token:active{transform:scale(.95)}
+  .build{min-height:52px;background:#12173a;border:1px dashed var(--line);border-radius:12px;padding:11px;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+  .build .token{background:#2c356e;border-color:var(--accent)}
+  .placeholder{color:#55608f;font-size:13px}
+  input.ans{width:100%;background:#12173a;border:1px solid var(--line);border-radius:12px;padding:13px;color:var(--ink);font-size:17px;margin:10px 0}
+  .fb{font-size:15px;margin-top:10px;font-weight:600;min-height:20px}
+  .fb.ok{color:var(--good)} .fb.no{color:var(--bad)}
+  .rowbtns{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
+  .note{color:var(--sub);font-size:12.5px;margin:14px 2px 0;line-height:1.6;text-align:center}
+  .foot{text-align:center;color:#4a5488;font-size:11px;margin-top:26px}
+  .book .gtag{font-size:10.5px;color:var(--sub);margin-top:4px;opacity:.92}
+  .insp{text-align:center;color:var(--sub);font-size:12.5px;margin:-2px 0 10px}
+  .moralbox{background:#20264c;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px;margin-top:8px;font-size:15px}
+  .moralbox span{color:var(--sub);font-size:13px}
+  .qbox{background:#12173a;border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-top:10px;font-size:14px}
+  .qbox span{color:var(--sub);font-size:12px;margin-left:6px}
+
+
+  /* ===== PRINT (worksheet + progress chart) ===== */
+  #printroot{display:none}
+  @media print{
+    @page{margin:9mm}
+    html,body{background:#fff !important;color:#000 !important}
+    header,.wrap,.foot{display:none !important}
+    #printroot{display:block !important}
+    .pw-page{page-break-after:always;padding:3mm 9mm;box-sizing:border-box}
+    .pw-page:last-child{page-break-after:auto}
+    .pw-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;font-size:12px}
+    .pw-head b{font-size:14px}
+    .pw-titlerow{display:flex;justify-content:space-between;align-items:flex-end;margin:8px 0 2px;gap:12px}
+    .pw-title{font-size:20px;font-weight:800}
+    .pw-title small{font-size:12px;font-weight:400;color:#444;margin-left:8px}
+    .pw-sub{font-size:11px;color:#555;margin-bottom:8px}
+    .pw-datechk{text-align:right;flex:none}
+    .pw-datechk .lbl{font-size:10px;color:#555;margin-bottom:3px}
+    .pw-datebox{display:flex;gap:4px}
+    .pw-datebox span{width:52px;height:30px;border:1.2px solid #777;border-radius:4px}
+    .pw-lines{list-style:none;margin:0;padding:0;counter-reset:ln}
+    .pw-lines li{counter-increment:ln;margin:0 0 3px;padding:5px 0 0}
+    .pw-en{font-size:18px;font-weight:700;line-height:1.35}
+    .pw-en::before{content:counter(ln) ".";color:#666;font-weight:800;margin-right:8px}
+    .pw-kr{font-size:12.5px;color:#444;margin:2px 0 0 22px}
+    .pw-coach{margin:8px 22px 0 22px;border-bottom:1.5px dashed #555;height:19px}
+    .pw-coach2{display:none}
+    h3.pw-h{font-size:14px;margin:8px 0 5px;border-bottom:1.4px solid #000;padding-bottom:3px}
+    .pw-vocab{width:100%;border-collapse:collapse;font-size:12.5px}
+    .pw-vocab td{border:1.2px solid #888;padding:4px 6px}
+    .pw-vocab .en{font-weight:700;width:12%}
+    .pw-vocab .ko{width:21%;color:#333}
+    .pw-prog{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+    .pw-prog th,.pw-prog td{border:1px solid #999;padding:6px 5px;text-align:center}
+    .pw-prog th{background:#eee}
+    .pw-prog td.tt{text-align:left;font-weight:600}
+    .pw-prog td.ph{text-align:left;color:#555;font-size:11px}
+    .pw-prog td.dt{width:58px;height:28px}
+    .pw-note{margin-top:10px;font-size:11px;color:#555}
+    .pw-moral{margin-top:8px;font-size:12px;color:#333;border-top:1px dashed #bbb;padding-top:6px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>클라이 파닉스 이야기</h1>
+  <div class="en">이솝우화·전래동화로 배우는 영어 읽기 · 전 30편</div>
+</header>
+
+<div class="wrap">
+  <!-- HOME -->
+  <div id="home">
+    <div class="grid" id="bookgrid"></div>
+    <div class="hint">
+      각 책은 한 가지 <b>파닉스 패턴</b>(단모음 → 매직 e → 혼합자음 …)을 집중 훈련합니다.<br>
+      🔊 듣기 · 🎤 따라 읽기(발음 체크) · ▶ 전체 듣기 · 타이머로 읽기 속도(WPM)를 확인하세요.
+    </div>
+    <div style="text-align:center;margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn play" onclick="printProgress()">🖨 진도표 인쇄</button>
+      <button class="btn" onclick="printAll()">🖨 전체 학습지 인쇄 (30편)</button>
+    </div>
+  </div>
+
+  <!-- BOOK -->
+  <div id="book">
+    <div class="topbar">
+      <button class="back" onclick="goHome()">← 책장</button>
+      <div class="bktitle" id="bktitle"></div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div id="panels"></div>
+  </div>
+</div>
+
+<div class="foot">클라이 어학원 · 파닉스 유창성 프로그램 (원본 무관 창작 콘텐츠)</div>
+<div id="printroot"></div>
+
+<script>
+/* KLAI Phonics Tales — 30 folktale/Aesop stories (public-domain themes, original text). */
+window.BOOKS = [
+{id:"a",vowel:"a",sound:"단모음 a",cls:"tagA",emoji:"🐱",hl:"a",genre:"🦊 이솝우화",insp:"The Cat and the Mouse",title:"A Cat and a Rat",lines:[["A fat cat sat on a mat.","뚱뚱한 고양이가 매트에 앉았어요."],["A rat ran by the cat.","쥐가 고양이 옆을 지나 달렸어요."],["The cat ran at the rat.","고양이가 쥐에게 달려들었어요."],["The rat had a nap in a bag.","쥐는 가방 속에서 낮잠을 잤어요."],["The cat cannot nab the rat.","고양이는 쥐를 잡지 못해요."],["The rat has jam and ham.","쥐는 잼과 햄을 가졌어요."],["The sad cat has no jam.","슬픈 고양이는 잼이 없어요."],["The cat is mad. The rat is glad.","고양이는 화났고, 쥐는 기뻐요."],["The rat naps. The cat naps.","쥐도 낮잠, 고양이도 낮잠."],["A calm rat wins.","침착한 쥐가 이겨요."]],moral:["Stay calm, and you win.","침착하면 이겨요."],q:["Who is glad?","the rat"],vocab:[["cat","고양이"],["rat","쥐"],["fat","뚱뚱한"],["mat","매트"],["sat","앉았다"],["ran","달렸다"],["bag","가방"],["nap","낮잠"],["jam","잼"],["ham","햄"],["mad","화난"],["glad","기쁜"]]},
+{id:"i",vowel:"i",sound:"단모음 i",cls:"tagI",emoji:"🐷",hl:"i",genre:"🦊 이솝우화",insp:"The Ant and the Grasshopper",title:"A Pig Digs",lines:[["A big pig digs and digs.","큰 돼지가 파고 또 파요."],["The pig digs a pit for figs.","돼지가 무화과를 담을 구덩이를 파요."],["A bug sits. It will not dig.","벌레는 앉아만 있고 파지 않아요."],["\"Dig with me!\" says the pig.","\"같이 파자!\" 돼지가 말해요."],["The bug sits and sits.","벌레는 앉고 또 앉아 있어요."],["The pig fills the pit with figs.","돼지가 구덩이를 무화과로 채워요."],["The bug has no figs. The bug is sad.","벌레는 무화과가 없어 슬퍼요."],["Work now, and you win!","지금 일하면 얻어요!"]],moral:["Work now, win later.","부지런하면 나중에 넉넉해요."],q:["Who will not dig?","the bug"],vocab:[["pig","돼지"],["big","큰"],["dig","파다"],["pit","구덩이"],["fig","무화과"],["sit","앉다"],["fill","채우다"],["win","이기다"],["with","~와 함께"],["in","안에"]]},
+{id:"o",vowel:"o",sound:"단모음 o",cls:"tagO",emoji:"🦊",hl:"o",genre:"🦊 이솝우화",insp:"The Dog and the Shadow",title:"A Fox and a Dog",lines:[["A dog has a hot pot.","개가 뜨거운 냄비를 가졌어요."],["A fox is on a log.","여우가 통나무 위에 있어요."],["\"That pot is not hot,\" says the fox.","\"그 냄비는 안 뜨거워,\" 여우가 말해요."],["The dog nods and hops off.","개가 고개를 끄덕이고 폴짝 비켜요."],["The fox got the pot!","여우가 냄비를 가져갔어요!"],["The dog lost the pot. The dog sobs.","개는 냄비를 잃고 흐느껴요."],["The hot pot is on top.","뜨거운 냄비가 맨 위에 있어요."],["The dog is sad. The fox is glad.","개는 슬프고, 여우는 기뻐요."]],moral:["Do not fall for a fox's tricks.","여우의 꾀에 속지 마세요."],q:["Who got the pot?","the fox"],vocab:[["dog","개"],["hot","뜨거운"],["pot","냄비"],["fox","여우"],["log","통나무"],["not","아닌"],["nod","끄덕이다"],["hop","폴짝 뛰다"],["got","가져갔다"],["lost","잃었다"],["sob","흐느끼다"],["top","맨 위"]]},
+{id:"u",vowel:"u",sound:"단모음 u",cls:"tagU",emoji:"🐻",hl:"u",genre:"🏯 전래동화",insp:"The Clever Rabbit (토끼전)",title:"A Cub and a Bug",lines:[["A cub naps in the sun.","새끼 곰이 햇볕에서 낮잠을 자요."],["A bug is on the cub.","벌레가 곰 위에 있어요."],["\"Run, bug, run!\"","\"도망가, 벌레야!\""],["The bug runs up the cub.","벌레가 곰 위로 기어올라요."],["The cub gets in a tub.","곰이 욕조에 들어가요."],["Rub, rub, rub! The mud is gone.","문지르고 문질러! 진흙이 사라졌어요."],["The cub has fun in the sun.","곰이 햇볕에서 즐거워요."],["Be quick, be clever!","재빠르고 슬기롭게!"]],moral:["Be quick and clever.","꾀가 있으면 위기를 넘겨요."],q:["What is on the cub?","a bug"],vocab:[["cub","새끼 곰"],["sun","해"],["bug","벌레"],["run","달리다"],["up","위로"],["tub","욕조"],["rub","문지르다"],["mud","진흙"],["fun","재미"],["hut","오두막"]]},
+{id:"e",vowel:"e",sound:"단모음 e",cls:"tagE",emoji:"🐔",hl:"e",genre:"🦊 이솝우화",insp:"The Little Red Hen",title:"The Red Hen",lines:[["A red hen has ten eggs.","빨간 암탉이 달걀 열 개를 가졌어요."],["\"Help me!\" begs the red hen.","\"도와줘!\" 빨간 암탉이 부탁해요."],["But no pet helps.","하지만 아무도 돕지 않아요."],["The hen gets a net and a pen.","암탉이 그물과 우리를 가져와요."],["The hen sets the eggs in the pen.","암탉이 달걀을 우리에 놓아요."],["Ten eggs! The hen is glad.","달걀 열 개! 암탉은 기뻐요."],["The pets beg the hen.","동물들이 암탉에게 부탁해요."],["\"No! You did not help,\" says the hen.","\"안 돼! 안 도왔잖아,\" 암탉이 말해요."],["The red hen has the eggs.","빨간 암탉이 달걀을 가져요."]],moral:["Help others, and they help you.","도와야 나눠 받아요."],q:["Who helps the hen?","no one"],vocab:[["hen","암탉"],["red","빨간"],["ten","열"],["egg","달걀"],["beg","부탁하다"],["pet","반려동물"],["get","가져오다"],["net","그물"],["pen","우리"],["set","놓다"]]},
+{id:"rev1",vowel:"복습",sound:"단모음 복습·읽기",cls:"tagA",emoji:"📖",hl:"",genre:"📖 읽기·복습",insp:"The Tortoise and the Hare",title:"The Pup and the Bug",lines:[["A pup and a bug run.","강아지와 벌레가 달려요."],["The pup runs and runs.","강아지가 달리고 또 달려요."],["The pup naps in the hot sun.","강아지가 뜨거운 햇볕에 낮잠을 자요."],["The bug does not nap.","벌레는 낮잠을 안 자요."],["The bug jogs up to the top.","벌레가 천천히 꼭대기까지 가요."],["The pup gets up. The pup runs.","강아지가 일어나 달려요."],["But the bug is at the top!","하지만 벌레가 벌써 꼭대기에 있어요!"],["The pup did not win.","강아지는 이기지 못했어요."]],moral:["Slow and steady wins the race.","느려도 꾸준하면 이겨요."],q:["Who is at the top?","the bug"],vocab:[["pup","강아지"],["run","달리다"],["nap","낮잠"],["sun","해"],["jog","천천히 달리다"],["top","꼭대기"],["win","이기다"],["bug","벌레"]]},
+{id:"a_e",vowel:"a-e",sound:"매직 e · 장모음 a",cls:"tagA",emoji:"🎂",hl:"a[bcdfghjklmnpqrstvwxyz]e",genre:"🏯 전래동화",insp:"The Honest Woodcutter (금도끼 은도끼)",title:"A Cake by the Lake",lines:[["A man makes a cake by the lake.","한 사람이 호숫가에서 케이크를 만들어요."],["The cake is on a white plate.","케이크가 흰 접시에 있어요."],["A big wave takes the plate!","큰 물결이 접시를 가져가요!"],["The man cannot take his plate.","그는 접시를 가져오지 못해요."],["He is sad by the lake.","그는 호숫가에서 슬퍼요."],["A fish came up from the lake.","물고기가 호수에서 올라왔어요."],["The fish gave back his plate.","물고기가 접시를 돌려줬어요."],["The fish gave a big cake too.","물고기가 큰 케이크도 줬어요."],["The man is glad he came.","그는 온 것이 기뻐요."]],moral:["Honesty and kindness are repaid.","정직하고 착하면 복이 와요."],q:["Who gave the plate back?","the fish"],vocab:[["cake","케이크"],["lake","호수"],["plate","접시"],["wave","물결"],["take","가져가다"],["gave","주었다"],["came","왔다"],["make","만들다"],["made","만들었다"],["same","같은"]]},
+{id:"i_e",vowel:"i-e",sound:"매직 e · 장모음 i",cls:"tagI",emoji:"🪁",hl:"i[bcdfghjklmnpqrstvwxyz]e",genre:"🏯 전래동화",insp:"The Fairy and the Woodcutter (선녀와 나무꾼)",title:"Five Kites",lines:[["Five kites shine in the sky.","연 다섯 개가 하늘에서 빛나요."],["A man likes the white kite.","한 사람이 흰 연을 좋아해요."],["It is time to fly the kite.","연을 날릴 시간이에요."],["The kite glides for a mile.","연이 멀리 미끄러지듯 날아요."],["The kite dives to one side.","연이 한쪽으로 뚝 떨어져요."],["The man hides and waits.","그는 숨어서 기다려요."],["The white kite shines like a star.","흰 연이 별처럼 빛나요."],["The man smiles.","그는 미소 지어요."],["A fine kite makes him glad.","멋진 연이 그를 기쁘게 해요."]],moral:["Reach for the sky.","꿈을 크게 가지세요."],q:["How many kites?","five"],vocab:[["kite","연"],["white","흰"],["shine","빛나다"],["time","시간"],["mile","마일"],["glide","미끄러지듯 날다"],["dive","급강하하다"],["side","옆"],["hide","숨다"],["fine","멋진"],["smile","미소 짓다"],["like","좋아하다"]]},
+{id:"o_e",vowel:"o-e",sound:"매직 e · 장모음 o",cls:"tagO",emoji:"🌙",hl:"o[bcdfghjklmnpqrstvwxyz]e",genre:"🏯 전래동화",insp:"The Sun and the Moon (해와 달이 된 오누이)",title:"The Rope and the Stone",lines:[["Two kids are home alone.","두 아이가 집에 둘만 있어요."],["A long rope hangs from a hole.","긴 밧줄이 구멍에서 내려와요."],["They hope to climb the rope.","둘은 밧줄을 오르길 바라요."],["Up they go, past a big stone.","큰 돌을 지나 위로 올라가요."],["The rope is by a tall pole.","밧줄이 높은 기둥 옆에 있어요."],["They climb close to the sky.","둘은 하늘 가까이 올라가요."],["Close to the sky, they rose.","하늘 가까이 그들이 떠올랐어요."],["Now they shine from a home in the sky.","이제 하늘의 집에서 빛나요."],["Hope can take you home.","희망은 너를 집으로 데려가요."]],moral:["Hope lifts you up.","희망을 잃지 마세요."],q:["What hangs from the hole?","a rope"],vocab:[["rope","밧줄"],["stone","돌"],["hole","구멍"],["pole","기둥"],["home","집"],["hope","희망"],["close","가까운"],["rose","떠올랐다"],["alone","혼자"]]},
+{id:"u_e",vowel:"u-e",sound:"매직 e · 장모음 u",cls:"tagU",emoji:"🫏",hl:"u[bcdfghjklmnpqrstvwxyz]e",genre:"🏯 전래동화",insp:"The Good and Greedy Brothers (흥부와 놀부)",title:"A Cute Mule",lines:[["A man has a cute mule.","한 사람이 귀여운 노새를 가졌어요."],["The mule is huge but kind.","노새는 크지만 착해요."],["The man has one rule: be kind.","그에게는 규칙이 하나 있어요: 친절할 것."],["He gives the mule a cube of food.","그가 노새에게 먹이 한 덩이를 줘요."],["The man hums a tune.","그가 곡조를 흥얼거려요."],["The mule finds a huge prize.","노새가 커다란 보물을 찾아요."],["Inside is a huge cube of gold!","안에는 커다란 금덩이가 있어요!"],["The kind man is glad he was not rude.","착한 그는 무례하지 않아 기뻐요."],["Be kind, not rude.","무례하지 말고 친절하게."]],moral:["Kindness brings great reward.","착한 마음이 큰 복을 불러요."],q:["What is inside?","a huge cube of gold"],vocab:[["mule","노새"],["cute","귀여운"],["huge","거대한"],["rule","규칙"],["cube","덩이"],["tune","곡조"],["rude","무례한"]]},
+{id:"rev2",vowel:"복습",sound:"매직 e 복습·읽기",cls:"tagO",emoji:"📖",hl:"",genre:"📖 읽기·복습",insp:"The North Wind and the Sun",title:"The Wind and the Sun",lines:[["The sun and the wind play a game.","해와 바람이 내기를 해요."],["A man in a cape walks by.","망토를 두른 사람이 지나가요."],["\"I can make him take off the cape!\" says the wind.","\"내가 망토를 벗기게 할게!\" 바람이 말해요."],["The wind is rude and cold.","바람은 무례하고 차가워요."],["The man holds his cape close.","그는 망토를 꼭 여며요."],["Now the sun shines.","이제 해가 비쳐요."],["It is not rude. It is nice.","해는 무례하지 않고 따뜻해요."],["The man is hot. He takes off the cape.","그는 더워서 망토를 벗어요."],["The sun wins the game!","해가 내기에서 이겨요!"]],moral:["Kindness beats force.","따뜻함이 힘보다 세요."],q:["Who wins?","the sun"],vocab:[["game","내기"],["cape","망토"],["make","~하게 하다"],["take off","벗다"],["close","바짝"],["shine","비치다"],["rude","무례한"]]},
+{id:"ee",vowel:"ee",sound:"장모음 e · ee/ea",cls:"tagE",emoji:"🌳",hl:"ee|ea",genre:"🦊 이솝우화",insp:"The Reed and the Oak",title:"A Green Bean Tree",lines:[["A boy plants a seed.","한 아이가 씨앗을 심어요."],["\"Grow, seed!\" he says each week.","\"자라라, 씨앗아!\" 매주 말해요."],["Green leaves reach the sky.","초록 잎이 하늘까지 닿아요."],["A bean tree grows deep and tall.","콩나무가 깊고 높게 자라요."],["The boy sees three big beans.","아이가 큰 콩 세 개를 봐요."],["He eats a sweet bean.","달콤한 콩을 먹어요."],["Birds sleep in the green leaves.","새들이 초록 잎에서 잠자요."],["The boy feels glad.","아이는 기뻐요."],["A seed can grow a dream.","씨앗 하나가 꿈이 될 수 있어요."]],moral:["Small seeds grow big dreams.","작은 씨앗이 큰 꿈이 돼요."],q:["What grows from the seed?","a bean tree"],vocab:[["tree","나무"],["green","초록"],["seed","씨앗"],["bean","콩"],["leaf","잎"],["reach","닿다"],["deep","깊은"],["three","셋"],["sweet","달콤한"],["eat","먹다"],["sleep","자다"],["dream","꿈"]]},
+{id:"y_e",vowel:"-y",sound:"어미 y = /ē/",cls:"tagI",emoji:"🐶",hl:"[bcdfghjklmnpqrstvwxz]y$",genre:"🏯 전래동화",insp:"The Grateful Magpie (은혜 갚은 까치)",title:"A Happy Puppy",lines:[["A boy finds a muddy puppy.","한 아이가 진흙투성이 강아지를 발견해요."],["The puppy looks sad and sleepy.","강아지는 슬프고 졸려 보여요."],["The boy is kind. He keeps the puppy.","아이는 착해요. 강아지를 거둬요."],["Soon the puppy is happy.","곧 강아지는 행복해져요."],["It is fluffy and funny.","복슬복슬하고 웃겨요."],["One windy, foggy day, the boy is lost.","바람 불고 안개 낀 날, 아이가 길을 잃어요."],["The lucky puppy finds him!","다행히 강아지가 그를 찾아내요!"],["Now they are happy and cozy.","이제 둘은 행복하고 포근해요."],["The happy puppy stays for good.","행복한 강아지가 쭉 함께해요."]],moral:["Kindness comes back to you.","은혜는 돌아와요."],q:["Who finds the boy?","the puppy"],vocab:[["puppy","강아지"],["happy","행복한"],["muddy","진흙투성이의"],["sleepy","졸린"],["fluffy","복슬복슬한"],["funny","웃긴"],["windy","바람 부는"],["foggy","안개 낀"],["lucky","운 좋은"],["cozy","포근한"]]},
+{id:"rev3",vowel:"복습",sound:"복습·읽기",cls:"tagA",emoji:"🍇",hl:"",genre:"🦊 이솝우화",insp:"The Fox and the Grapes",title:"The Fox and the Grapes",lines:[["A hungry fox sees ripe grapes.","배고픈 여우가 잘 익은 포도를 봐요."],["The grapes hang up high.","포도가 높이 매달려 있어요."],["The fox hops up.","여우가 폴짝 뛰어요."],["He hops and hops.","뛰고 또 뛰어요."],["But the grapes are too high.","하지만 포도가 너무 높아요."],["The fox cannot reach them.","여우는 닿지 못해요."],["\"Those grapes are sour,\" he says.","\"저 포도는 시어,\" 여우가 말해요."],["He walks off, still hungry.","여전히 배고픈 채 걸어가요."],["It is easy to hate what you cannot get.","못 가진 걸 미워하긴 쉬워요."]],moral:["Do not scorn what you cannot get.","못 가진 걸 깎아내리지 마세요."],q:["Why does the fox leave?","he cannot reach the grapes"],vocab:[["grape","포도"],["see","보다"],["reach","닿다"],["hungry","배고픈"],["ripe","익은"],["hate","미워하다"],["easy","쉬운"]]},
+{id:"bl_br",vowel:"bl",sound:"혼합자음 · bl/br",cls:"tagI",emoji:"🧱",hl:"^(bl|br)",genre:"🦊 이솝우화",insp:"The Bundle of Sticks",title:"Blue Blocks",lines:[["Three kids have blue blocks.","세 아이가 파란 블록을 가졌어요."],["One block breaks fast.","블록 하나는 금방 부러져요."],["\"A block alone is weak,\" says a boy.","\"블록 하나는 약해,\" 한 아이가 말해요."],["They bring lots more blocks.","블록을 더 많이 가져와요."],["Black, brown, and blue blocks!","검정, 갈색, 파랑 블록!"],["Brave kids build a big block wall.","용감한 아이들이 큰 블록 벽을 쌓아요."],["The block wall does not break.","블록 벽은 부러지지 않아요."],["Many blocks stay together.","많은 블록이 함께 뭉쳐요."]],moral:["Together we are strong.","뭉치면 강해요."],q:["What breaks alone?","one block"],vocab:[["blue","파랑"],["block","블록"],["black","검정"],["brown","갈색"],["brave","용감한"],["bring","가져오다"],["break","부러지다"]]},
+{id:"cl_cr",vowel:"cl",sound:"혼합자음 · cl/cr",cls:"tagO",emoji:"🦀",hl:"^(cl|cr)",genre:"🏯 전래동화",insp:"Kongjwi and Patjwi (콩쥐팥쥐)",title:"A Clam and a Crab",lines:[["A clam is sad by the creek.","조개가 개울가에서 슬퍼해요."],["The clam must clean a lot.","조개는 청소를 많이 해야 해요."],["The clam begins to cry.","조개가 울기 시작해요."],["A kind crab crawls up.","착한 게가 기어 올라와요."],["\"Do not cry,\" says the crab.","\"울지 마,\" 게가 말해요."],["The crab helps the clam clean.","게가 조개의 청소를 도와요."],["Soon it is all clean!","곧 다 깨끗해져요!"],["The clam claps for the crab.","조개가 게에게 박수를 쳐요."],["Now the clam and the crab are close.","이제 조개와 게는 가까운 사이예요."]],moral:["A kind helper lightens hard work.","착한 도움이 큰 힘이 돼요."],q:["Who helps the clam?","the crab"],vocab:[["clam","조개"],["crab","게"],["creek","개울"],["clean","깨끗한"],["cry","울다"],["crawl","기다"],["clap","박수치다"],["close","가까운"]]},
+{id:"fl_fr",vowel:"fl",sound:"혼합자음 · fl/fr",cls:"tagE",emoji:"🐸",hl:"^(fl|fr)",genre:"🦊 이솝우화",insp:"The Frogs and the King",title:"A Frog and a Flag",lines:[["Frogs sit on flat rocks.","개구리들이 납작한 바위에 앉아요."],["\"We want a king!\" the frogs say.","\"우리는 왕이 필요해!\" 개구리들이 말해요."],["A big log floats from the sky.","큰 통나무가 하늘에서 떨어져 떠요."],["The frogs flip and flop away.","개구리들이 뒤집으며 도망가요."],["The log just floats. It does not move.","통나무는 그냥 떠 있고 움직이지 않아요."],["\"This king is no fun,\" says a frog.","\"이 왕은 재미없어,\" 한 개구리가 말해요."],["They put a flag on the log.","통나무에 깃발을 꽂아요."],["The frogs are free and glad.","개구리들은 자유롭고 기뻐요."]],moral:["Be careful what you wish for.","원하는 걸 신중히 바라세요."],q:["What floats from the sky?","a log"],vocab:[["frog","개구리"],["flat","납작한"],["flip","뒤집다"],["flop","털썩 넘어지다"],["flag","깃발"],["float","뜨다"],["free","자유로운"],["from","~에서"]]},
+{id:"gl_gr",vowel:"gl",sound:"혼합자음 · gl/gr",cls:"tagU",emoji:"🍇",hl:"^(gl|gr)",genre:"🦊 이솝우화",insp:"The Goose and the Golden Eggs",title:"Glad Green Grapes",lines:[["A man grows green grapes.","한 사람이 초록 포도를 길러요."],["Each day he gets a few grapes.","날마다 포도 몇 알을 얻어요."],["He grins. He is glad.","그는 활짝 웃어요. 기뻐요."],["But he is greedy.","하지만 그는 욕심이 많아요."],["He grabs all the grapes at once.","한 번에 포도를 다 움켜쥐어요."],["The green vine breaks.","초록 덩굴이 부러져요."],["Now he has no grapes.","이제 포도가 하나도 없어요."],["The greedy man is not glad.","욕심쟁이는 기쁘지 않아요."],["Greed can lose it all.","욕심은 모든 걸 잃게 해요."]],moral:["Greed loses everything.","욕심이 모든 걸 잃게 해요."],q:["Why does he lose the grapes?","he is greedy"],vocab:[["grow","기르다"],["green","초록"],["grape","포도"],["grin","활짝 웃다"],["glad","기쁜"],["grab","움켜쥐다"],["greedy","욕심 많은"],["greed","욕심"]]},
+{id:"pl_pr",vowel:"pl",sound:"혼합자음 · pl/pr",cls:"tagA",emoji:"✈️",hl:"^(pl|pr)",genre:"🦊 이솝우화",insp:"The Peacock and the Crane",title:"A Plane and a Prize",lines:[["Two kids play with planes.","두 아이가 비행기를 가지고 놀아요."],["One plane is pretty.","한 비행기는 예뻐요."],["One plane is plain.","한 비행기는 수수해요."],["\"My plane will win the prize!\" says the proud kid.","\"내 비행기가 상을 탈 거야!\" 자만한 아이가 말해요."],["They place the planes on a ramp.","비행기를 경사대에 놓아요."],["Please, planes, fly!","비행기야, 제발 날아라!"],["The plain plane flies the best.","수수한 비행기가 가장 잘 날아요."],["The proud kid is not glad.","자만한 아이는 기쁘지 않아요."],["Do not be too proud.","너무 자만하지 마세요."]],moral:["Pride comes before a fall.","자만하면 넘어져요."],q:["Which plane flies best?","the plain one"],vocab:[["plane","비행기"],["play","놀다"],["plain","수수한"],["pretty","예쁜"],["prize","상"],["proud","자만한"],["place","놓다"],["please","제발"]]},
+{id:"rev4",vowel:"복습",sound:"혼합자음 복습·읽기",cls:"tagI",emoji:"🦁",hl:"",genre:"📖 읽기·복습",insp:"The Lion and the Mouse",title:"The Lion and the Mouse",lines:[["A big lion sleeps.","큰 사자가 잠자요."],["A small mouse runs on him.","작은 쥐가 사자 위를 달려요."],["The lion grabs the mouse.","사자가 쥐를 붙잡아요."],["\"Please let me go!\" cries the mouse.","\"제발 놓아줘!\" 쥐가 울어요."],["The lion grins and sets it free.","사자가 웃으며 놓아줘요."],["Soon the lion is in a trap.","곧 사자가 덫에 걸려요."],["The mouse comes and bites the ropes.","쥐가 와서 밧줄을 물어 끊어요."],["The lion is free!","사자가 풀려나요!"],["Small friends can help a lot.","작은 친구도 큰 도움이 돼요."]],moral:["Even the small can help the great.","작은 친구도 큰 도움이 돼요."],q:["Who frees the lion?","the mouse"],vocab:[["small","작은"],["grab","붙잡다"],["please","제발"],["cry","울다"],["grin","웃다"],["free","자유로운"],["trap","덫"],["friend","친구"]]},
+{id:"sl_sm_sn",vowel:"sn",sound:"혼합자음 · sl/sm/sn",cls:"tagE",emoji:"🐌",hl:"^(sl|sm|sn)",genre:"🏯 전래동화",insp:"The Snail Bride (우렁각시)",title:"A Small Snail",lines:[["A man finds a small snail.","한 사람이 작은 달팽이를 발견해요."],["He is kind. He keeps it snug.","그는 착해서 달팽이를 포근히 둬요."],["The snail is very smart.","달팽이는 아주 똑똑해요."],["Each day, a smell of food fills the home.","날마다 음식 냄새가 집에 가득해요."],["The man smiles. Who cooks?","그가 미소 지어요. 누가 요리하지?"],["A slow, small helper: the snail!","느리고 작은 도우미, 달팽이예요!"],["They share a snack and smile.","둘은 간식을 나누며 웃어요."],["Be kind to the small, and be glad.","작은 것에게 친절하면 기뻐져요."]],moral:["Kindness to the small brings joy.","작은 것에게도 친절하세요."],q:["Who cooks the food?","the snail"],vocab:[["snail","달팽이"],["small","작은"],["smart","똑똑한"],["smell","냄새"],["smile","미소"],["snug","포근한"],["slow","느린"],["snack","간식"]]},
+{id:"sk_sp_st",vowel:"st",sound:"혼합자음 · sk/sp/st",cls:"tagO",emoji:"⭐",hl:"^(sk|sp|st)",genre:"🏯 전래동화",insp:"The Sun and Moon Siblings (해와 달)",title:"Stars in the Sky",lines:[["Two kids look up at the stars.","두 아이가 별을 올려다봐요."],["The stars spin in the sky.","별들이 하늘에서 돌아요."],["One star is a spot of gold.","별 하나는 금빛 점 같아요."],["The kids stand still and stare.","아이들이 가만히 서서 바라봐요."],["\"I wish to skip up to a star!\"","\"별까지 뛰어오르고 싶어!\""],["A step, a step, up the sky.","한 걸음 한 걸음 하늘로."],["Now they stand among the stars.","이제 별들 사이에 서 있어요."],["They spin and shine.","돌면서 빛나요."],["Look up: hope is in the sky.","올려다봐요, 희망은 하늘에 있어요."]],moral:["Reach for the stars.","별을 향해 꿈꿔요."],q:["What do the kids reach?","the stars"],vocab:[["star","별"],["sky","하늘"],["spin","돌다"],["spot","점"],["stand","서다"],["still","가만히"],["stare","바라보다"],["step","걸음"],["skip","뛰다"]]},
+{id:"tr_dr",vowel:"tr",sound:"혼합자음 · tr/dr",cls:"tagU",emoji:"🚂",hl:"^(tr|dr)",genre:"🦊 이솝우화",insp:"The Traveler and the Plane Tree",title:"A Train on the Track",lines:[["A train runs on a track.","기차가 선로 위를 달려요."],["Two travelers take a trip.","두 나그네가 여행을 떠나요."],["The sun is hot and dry.","해가 뜨겁고 건조해요."],["They rest under a big tree.","큰 나무 아래에서 쉬어요."],["\"This tree gives no fruit,\" they say.","\"이 나무는 열매가 없네,\" 그들이 말해요."],["But the tree drops cool shade.","하지만 나무는 시원한 그늘을 줘요."],["The tree keeps them dry in rain.","나무는 비에 그들을 젖지 않게 해줘요."],["They drink and thank the tree.","그들은 물을 마시고 나무에 감사해요."],["The tree is a true friend.","나무는 진정한 친구예요."]],moral:["Be grateful for quiet gifts.","조용한 은혜에 감사하세요."],q:["What gives them shade?","the tree"],vocab:[["train","기차"],["track","선로"],["trip","여행"],["tree","나무"],["travel","여행하다"],["dry","건조한"],["drop","떨어뜨리다"],["drink","마시다"],["true","진정한"]]},
+{id:"rev5",vowel:"복습",sound:"복습·읽기",cls:"tagE",emoji:"🐦‍⬛",hl:"",genre:"🦊 이솝우화",insp:"The Crow and the Pitcher",title:"The Crow and the Jar",lines:[["A crow is very thirsty.","까마귀가 몹시 목말라요."],["It finds a jar with a bit of water.","물이 조금 든 항아리를 찾아요."],["But the water is too low.","하지만 물이 너무 낮아요."],["The crow cannot reach it.","까마귀는 닿지 못해요."],["The smart crow has a plan.","똑똑한 까마귀에게 꾀가 있어요."],["It drops stones in the jar.","항아리에 돌을 떨어뜨려요."],["Plop, plop! The water goes up.","퐁당퐁당! 물이 올라와요."],["Now the crow can drink.","이제 까마귀가 마실 수 있어요."],["Clever thinking wins the day.","슬기로운 생각이 문제를 풀어요."]],moral:["Little by little does the trick.","조금씩 꾀를 내면 풀려요."],q:["How does the crow get water?","it drops stones in"],vocab:[["crow","까마귀"],["drop","떨어뜨리다"],["plan","꾀;계획"],["smart","똑똑한"],["drink","마시다"],["clever","슬기로운"],["reach","닿다"]]},
+{id:"str",vowel:"str",sound:"3중자음 · str/scr/squ",cls:"tagA",emoji:"🌾",hl:"^(str|scr|squ)",genre:"🦊 이솝우화",insp:"The Straw, the Coal, and the Bean",title:"A Straw Hut",lines:[["Three friends build with straw.","세 친구가 짚으로 지어요."],["A strong hut needs more than straw.","튼튼한 오두막엔 짚 이상이 필요해요."],["The straw hut is not square.","짚 오두막은 반듯하지 않아요."],["Squirrels squeak and scratch it.","다람쥐들이 찍찍대며 긁어요."],["They scrub and fix the straw.","그들은 문질러 닦고 짚을 고쳐요."],["They tie it with strong string.","튼튼한 끈으로 묶어요."],["Now the straw hut is strong.","이제 짚 오두막은 튼튼해요."],["The squirrels cannot scratch in.","다람쥐들이 뚫고 들어오지 못해요."],["Work as a team and stay strong.","함께 일하면 튼튼해져요."]],moral:["Build it strong, and stay safe.","튼튼히 지으면 안전해요."],q:["What makes the hut strong?","strong string and teamwork"],vocab:[["straw","짚"],["strong","튼튼한"],["string","끈"],["square","네모난"],["squirrel","다람쥐"],["squeak","찍찍대다"],["scratch","긁다"],["scrub","문질러 닦다"]]},
+{id:"spl",vowel:"spl",sound:"3중자음 · spl/squ/sl",cls:"tagI",emoji:"💦",hl:"^(spl|squ|sl)",genre:"🦊 이솝우화",insp:"The Frog and the Ox",title:"A Big Splash",lines:[["A slim frog meets a huge ox.","날씬한 개구리가 커다란 소를 만나요."],["\"I will not stay slim!\" says the frog.","\"나도 커질 거야!\" 개구리가 말해요."],["The frog puffs up with a splash of air.","개구리가 바람을 잔뜩 넣어 부풀어요."],["It grows, slow but sure.","천천히, 그러나 확실히 커져요."],["Splat! The frog is too puffed up.","철퍼덕! 개구리가 너무 부풀었어요."],["Kids splash and squeal near the pond.","아이들이 연못가에서 물을 튀기며 소리쳐요."],["\"Stop, little frog!\" they slip and call.","\"멈춰, 작은 개구리야!\" 미끄러지며 불러요."],["The slim frog gives up.","날씬한 개구리는 포기해요."],["The slim frog is glad to be small.","작은 게 좋다고 개구리는 기뻐해요."]],moral:["Do not overreach.","분수를 지키세요."],q:["What does the frog try to be?","as big as the ox"],vocab:[["slim","날씬한"],["splash","첨벙"],["splat","철퍼덕"],["slow","느린"],["squeal","소리치다"],["slip","미끄러지다"],["small","작은"]]},
+{id:"digraph",vowel:"sh",sound:"이중자음 · th/sh/ch",cls:"tagO",emoji:"🚢",hl:"th|sh|ch|wh",genre:"🏯 전래동화",insp:"The Magic Fish (물고기 이야기)",title:"A Ship and a Fish",lines:[["A kid sails a ship to fish.","한 아이가 배를 몰아 낚시하러 가요."],["The kid catches a shiny fish.","반짝이는 물고기를 잡아요."],["\"Free me, and make a wish,\" says the fish.","\"놓아주면 소원을 들어줄게,\" 물고기가 말해요."],["The kid thinks and thinks.","아이는 곰곰이 생각해요."],["\"I wish for a chest of gold.\"","\"금이 든 상자를 갖고 싶어.\""],["The fish shakes its thin tail.","물고기가 가느다란 꼬리를 흔들어요."],["A chest lands on the ship!","상자가 배 위에 떨어져요!"],["The kid is rich, but shares much.","아이는 부자가 됐지만 많이 나눠요."],["Share, and you will be rich in friends.","나누면 친구가 많아져요."]],moral:["Share your luck with others.","복은 나눌수록 커져요."],q:["What does the kid wish for?","a chest of gold"],vocab:[["ship","배"],["fish","물고기"],["wish","소원"],["think","생각하다"],["thin","가느다란"],["chest","상자"],["shine","빛나다"],["share","나누다"],["rich","부유한"],["much","많이"]]},
+{id:"or",vowel:"or",sound:"r통제모음 · or/ar",cls:"tagU",emoji:"🌽",hl:"ar|or",genre:"🏯 전래동화",insp:"The Farmer's Corn",title:"Corn at the Store",lines:[["A farmer grows corn on a farm.","농부가 농장에서 옥수수를 길러요."],["The farmer takes corn to the store.","농부가 옥수수를 가게로 가져가요."],["A storm starts in the north.","북쪽에서 폭풍이 시작돼요."],["The corn cart is stuck in the yard.","옥수수 수레가 마당에 갇혀요."],["It is hard and dark.","힘들고 어두워요."],["Kind hands help sort the corn.","고마운 손길이 옥수수 고르는 걸 도와요."],["They sort the corn in jars.","항아리에 옥수수를 나눠 담아요."],["Now there is more corn to share.","이제 나눌 옥수수가 더 많아요."],["Hard work and help fill the barn.","부지런함과 도움이 곳간을 채워요."]],moral:["Hard work fills the barn.","부지런하면 곳간이 차요."],q:["Where does the farmer take the corn?","to the store"],vocab:[["corn","옥수수"],["store","가게"],["storm","폭풍"],["north","북쪽"],["farm","농장"],["farmer","농부"],["cart","수레"],["yard","마당"],["hard","힘든"],["sort","고르다"],["more","더"],["barn","곳간"]]},
+{id:"ur",vowel:"ur",sound:"r통제모음 · ur/ir/er",cls:"tagA",emoji:"🐦",hl:"ur|ir|er",genre:"🦊 이솝우화",insp:"The Bird in Borrowed Feathers",title:"A Bird and a Girl",lines:[["A plain bird wants pretty feathers.","수수한 새가 예쁜 깃털을 원해요."],["It takes purple feathers that are not hers.","자기 것이 아닌 보라 깃털을 가져가요."],["The bird struts first in line.","새가 맨 앞에서 뽐내며 걸어요."],["\"Look at her!\" the birds chirp.","\"쟤 좀 봐!\" 새들이 지저귀어요."],["But the feathers turn and fall in the dirt.","하지만 깃털이 빠져 흙에 떨어져요."],["Now the bird is a mess.","이제 새는 엉망이 됐어요."],["A girl helps the hurt bird.","한 여자아이가 다친 새를 도와요."],["\"Just be you,\" says the girl.","\"그냥 너답게 지내,\" 여자아이가 말해요."],["It is best to be your own bird.","자기 자신으로 사는 게 제일 좋아요."]],moral:["Be yourself.","남을 흉내 내지 말고 자신이 되세요."],q:["Who helps the hurt bird?","a girl"],vocab:[["bird","새"],["girl","여자아이"],["first","첫째"],["chirp","지저귀다"],["turn","돌다"],["dirt","흙"],["purple","보라색"],["hurt","다친"],["her","그녀의"]]},
+{id:"rev6",vowel:"복습",sound:"마무리 읽기",cls:"tagE",emoji:"🐺",hl:"",genre:"📖 읽기·복습",insp:"The Boy Who Cried Wolf",title:"The Boy and the Wolf",lines:[["A boy watches sheep on a hill.","한 아이가 언덕에서 양을 지켜요."],["He is bored, so he plays a trick.","심심해서 장난을 쳐요."],["\"Wolf! Wolf!\" the boy shouts.","\"늑대다! 늑대!\" 아이가 소리쳐요."],["The people run up the hill.","사람들이 언덕으로 달려와요."],["But there is no wolf. The boy grins.","하지만 늑대는 없어요. 아이가 히죽 웃어요."],["He tricks them a third time.","세 번째로 또 속여요."],["Then a real wolf comes!","그때 진짜 늑대가 와요!"],["\"Wolf!\" he cries, but no one comes.","\"늑대!\" 외치지만 아무도 안 와요."],["Tell the truth, or no one will trust you.","진실을 말해요, 안 그러면 아무도 안 믿어요."]],moral:["Liars are not believed, even when true.","거짓말쟁이는 참말도 못 믿게 돼요."],q:["Why does no one come?","the boy lied before"],vocab:[["wolf","늑대"],["sheep","양"],["bored","심심한"],["trick","장난"],["third","셋째"],["real","진짜"],["cry","외치다"],["truth","진실"],["trust","믿다"]]}
+];
+
+</script>
+<script>
+/* KLAI Phonics Fluency — app logic. Depends on window.BOOKS (js/content.js) */
+const BOOKS = window.BOOKS;
+
+/* ============ SPEECH ============ */
+let VOICE=null;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  VOICE = vs.find(v=>/en[-_]US/i.test(v.lang)&&/female|samantha|zira|google us/i.test(v.name))
+       || vs.find(v=>/en[-_]US/i.test(v.lang))
+       || vs.find(v=>/^en/i.test(v.lang)) || null;
+}
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+let RATE=0.6;
+function speak(text,{rate,onword,onend}={}){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  if(VOICE)u.voice=VOICE; u.lang='en-US'; u.rate=rate||RATE; u.pitch=1.05;
+  if(onword)u.onboundary=e=>{ if(e.name==='word'||e.charIndex!=null) onword(e.charIndex); };
+  if(onend)u.onend=onend;
+  speechSynthesis.speak(u);
+}
+function stopSpeak(){ if('speechSynthesis' in window)speechSynthesis.cancel(); }
+
+/* ============ STATE ============ */
+const progress={}; BOOKS.forEach(b=>progress[b.id]={read:false,quiz:0});
+let cur=null, curTab='read';
+
+/* ============ HOME ============ */
+function renderHome(){
+  const g=document.getElementById('bookgrid'); g.innerHTML='';
+  BOOKS.forEach((b,idx)=>{
+    const pct = progress[b.id].read?100:0;
+    const el=document.createElement('button');
+    el.type='button'; el.className='book '+b.cls;
+    el.innerHTML=`<div class="emoji">${b.emoji}</div>
+      <div><div class="v">${b.vowel}</div>
+      <div class="bt">${b.title}</div>
+      <div class="gtag">${b.genre}</div>
+      <div class="snd">${b.sound} · Book ${idx+1}</div></div>
+      <div class="prog"><i style="width:${pct}%"></i></div>`;
+    el.onclick=()=>openBook(b.id);
+    g.appendChild(el);
+  });
+}
+function goHome(){ stopSpeak(); document.getElementById('book').style.display='none';
+  document.getElementById('home').style.display='block'; renderHome(); window.scrollTo(0,0);}
+
+/* ============ BOOK ============ */
+const TABS=[["read","읽기"],["words","단어"],["quiz","퀴즈"]];
+function openBook(id){
+  cur=BOOKS.find(b=>b.id===id); curTab='read';
+  document.getElementById('home').style.display='none';
+  document.getElementById('book').style.display='block';
+  document.getElementById('bktitle').innerHTML=`${cur.title} <small>${cur.genre} · ${cur.sound}</small>`;
+  const t=document.getElementById('tabs'); t.innerHTML='';
+  TABS.forEach(([k,label])=>{
+    const b=document.createElement('button'); b.type='button';
+    b.className='tab'+(k===curTab?' on':''); b.textContent=label;
+    b.setAttribute('aria-pressed',k===curTab);
+    b.onclick=()=>switchTab(k); t.appendChild(b);
+  });
+  renderPanels(); window.scrollTo(0,0);
+}
+function switchTab(k){ stopSpeak(); curTab=k;
+  [...document.getElementById('tabs').children].forEach((c,i)=>{
+    const on=TABS[i][0]===k; c.classList.toggle('on',on); c.setAttribute('aria-pressed',on);});
+  [...document.querySelectorAll('.panel')].forEach(p=>p.classList.toggle('on',p.dataset.k===k));
+  window.scrollTo(0,0);
+}
+function renderPanels(){
+  const p=document.getElementById('panels');
+  p.innerHTML=`
+   <div class="panel on" data-k="read">${readHTML()}</div>
+   <div class="panel" data-k="words"></div>
+   <div class="panel" data-k="quiz"></div>`;
+  buildRead(); buildWords(); buildQuiz();
+}
+
+/* ---- READ ---- */
+function readHTML(){
+  return `<div class="ctl">
+      <button class="btn play" id="playAll">▶ 전체 듣기</button>
+      <button class="btn" id="stopAll">■ 정지</button>
+      <label class="toggle"><input type="checkbox" id="tKr" checked>한글뜻</label>
+      <label class="toggle"><input type="checkbox" id="tHl" checked>목표음 표시</label>
+      <div class="speed">속도
+        <button class="btn spd" data-r="0.3">느리게</button>
+        <button class="btn spd on" data-r="0.6">보통</button>
+        <button class="btn spd" data-r="1.0">빠르게</button>
+      </div>
+    </div>
+    <div class="cover">${cur.emoji}</div>
+    <div class="insp">${cur.genre} · Inspired by 「${cur.insp}」</div>
+    <div class="story showkr" id="story"></div>
+    <div class="moralbox">💡 <b>오늘의 교훈 (Moral)</b> · ${cur.moral[0]}<br><span>${cur.moral[1]}</span></div>
+    <div class="qbox">❓ <b>${cur.q[0]}</b> <span>정답: ${cur.q[1]}</span></div>
+    <div class="ctl" style="justify-content:space-between">
+      <div><button class="btn" id="timerBtn">⏱ 혼자 읽기 타이머 시작</button>
+        <button class="btn" id="printBtn">🖨 학습지 인쇄</button></div>
+      <div class="metric" id="metric"></div>
+    </div>
+    <div class="note">🔊 <b>듣기</b>로 원어민 발음을 듣고 · 🎤 <b>따라 읽기</b>로 아이가 소리내어 읽으면 정답과 비교해 틀린 단어를 빨갛게 표시하고 정확도를 알려줍니다.<br><span style="color:#6b76a8">※ 음성 인식은 Chrome·Edge 브라우저에서 마이크 허용 시 작동합니다.</span></div>`;
+}
+const SIGHT=['this','the','is','his','are','said','with','they','her','she','have','one','from','what','will','and','a','an','to','of','for','be','he','him','all','my','me','no','not','yes','on','in','it','too','by','up','was','out'];
+function wordsHTML(line,book,hl){
+  let re=null; const src=(book&&book.hl)||(book&&book.vowel)||'';
+  try{re=new RegExp(src,'i');}catch(e){}
+  return line.split(/(\s+)/).map(tok=>{
+    if(/^\s+$/.test(tok))return tok;
+    const bare=tok.toLowerCase().replace(/[^a-z]/g,'');
+    const isT = hl && re && bare && re.test(bare) && !SIGHT.includes(bare);
+    return `<span class="w${isT?' hl':''}">${tok}</span>`;
+  }).join('');
+}
+function buildRead(){
+  const s=document.getElementById('story');
+  const hl=true;
+  s.innerHTML=cur.lines.map((L,i)=>`<div class="ln" data-i="${i}">
+     <div class="en"><span class="num">${i+1}</span>${wordsHTML(L[0],cur,hl)}</div>
+     <div class="kr">${L[1]}</div>
+     <div class="lnact">
+       <button class="mini act-hear" data-i="${i}">🔊 듣기</button>
+       <button class="mini mic act-say" data-i="${i}">🎤 따라 읽기</button>
+     </div>
+     <div class="fb2" data-i="${i}" role="status" aria-live="polite"></div></div>`).join('');
+  s.querySelectorAll('.act-hear').forEach(b=>b.onclick=()=>playLine(+b.dataset.i));
+  s.querySelectorAll('.act-say').forEach(b=>b.onclick=()=>listenLine(+b.dataset.i));
+  document.getElementById('tKr').onchange=e=>s.classList.toggle('showkr',e.target.checked);
+  document.getElementById('tHl').onchange=e=>{
+    s.querySelectorAll('.ln .en').forEach((en,i)=>{
+      en.innerHTML=`<span class="num">${i+1}</span>`+wordsHTML(cur.lines[i][0],cur,e.target.checked);
+    });
+  };
+  document.querySelectorAll('.spd').forEach(btn=>btn.onclick=()=>{
+    RATE=+btn.dataset.r;
+    document.querySelectorAll('.spd').forEach(b=>b.classList.toggle('on',b===btn));
+  });
+  document.getElementById('playAll').onclick=playAll;
+  document.getElementById('stopAll').onclick=()=>{stopSpeak();clearActive();};
+  document.getElementById('timerBtn').onclick=toggleTimer;
+  document.getElementById('printBtn').onclick=()=>printBook(cur);
+}
+function clearActive(){document.querySelectorAll('.story .ln').forEach(l=>l.classList.remove('active'));}
+function playLine(i,cb){
+  clearActive();
+  const ln=document.querySelector(`.ln[data-i="${i}"]`); if(ln){ln.classList.add('active');ln.scrollIntoView({block:'center',behavior:'smooth'});}
+  speak(cur.lines[i][0],{onend:()=>{ if(cb)cb(); }});
+}
+function playAll(){
+  let i=0; stopSpeak();
+  (function next(){ if(i>=cur.lines.length){clearActive(); progress[cur.id].read=true; return;} playLine(i,()=>{i++;setTimeout(next,220);}); })();
+}
+/* timer / WPM */
+let tStart=null;
+function totalWords(){return cur.lines.reduce((n,L)=>n+L[0].split(/\s+/).filter(w=>/[a-z]/i.test(w)).length,0);}
+function toggleTimer(){
+  const btn=document.getElementById('timerBtn'), m=document.getElementById('metric');
+  if(!tStart){ tStart=Date.now(); btn.textContent='⏹ 완료 (읽기 끝)'; m.innerHTML='<span class="chip">읽는 중…</span>'; }
+  else{
+    const sec=(Date.now()-tStart)/1000; tStart=null; btn.textContent='⏱ 혼자 읽기 타이머 시작';
+    const w=totalWords(); const wpm=Math.round(w/(sec/60));
+    m.innerHTML=`<span class="chip">시간 <b>${sec.toFixed(1)}s</b></span>
+      <span class="chip">단어 <b>${w}</b></span>
+      <span class="chip">유창성 <b>${wpm}</b> WPM</span>`;
+    progress[cur.id].read=true;
+  }
+}
+
+/* ---- VOICE: 따라 읽기 (speech recognition + word scoring) ---- */
+function _norm(s){return s.toLowerCase().replace(/[^a-z0-9' ]/g,' ').replace(/\s+/g,' ').trim();}
+function _tok(s){return _norm(s).split(' ').filter(Boolean);}
+function scoreLine(target,heard){
+  const T=_tok(target),H=_tok(heard),n=T.length,m=H.length;
+  const dp=Array.from({length:n+1},()=>new Array(m+1).fill(0));
+  for(let i=1;i<=n;i++)for(let j=1;j<=m;j++)
+    dp[i][j]=T[i-1]===H[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
+  const matched=new Array(n).fill(false); let i=n,j=m;
+  while(i>0&&j>0){ if(T[i-1]===H[j-1]){matched[i-1]=true;i--;j--;}
+    else if(dp[i-1][j]>=dp[i][j-1])i--; else j--; }
+  const correct=matched.filter(Boolean).length;
+  return {words:T.map((w,k)=>({w,ok:matched[k]})),correct,total:n,acc:n?Math.round(correct/n*100):0};
+}
+let REC=null;
+function micBtn(i){return document.querySelector(`.act-say[data-i="${i}"]`);}
+function setMic(i,state){
+  const b=micBtn(i); if(!b)return;
+  if(state==='listening'){b.classList.add('listening');b.textContent='🎙 듣는 중…';}
+  else{b.classList.remove('listening');b.textContent='🎤 따라 읽기';}
+}
+function fbBox(i){return document.querySelector(`.fb2[data-i="${i}"]`);}
+function showMsg(i,msg){const f=fbBox(i);if(!f)return;f.style.display='block';f.innerHTML=`<div class="scorebar">${msg}</div>`;}
+function listenLine(i){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ recordLine(i); return; }  // iOS 등 음성인식 미지원 → 녹음·들어보기 폴백
+  stopSpeak(); if(REC){try{REC.stop();}catch(e){}}
+  const rec=new SR(); REC=rec; rec.lang='en-US'; rec.interimResults=false; rec.maxAlternatives=3; rec.continuous=false;
+  setMic(i,'listening');
+  rec.onresult=e=>{ let heard=''; for(let r=0;r<e.results.length;r++)heard+=' '+e.results[r][0].transcript;
+    renderFeedback(i,scoreLine(cur.lines[i][0],heard),heard.trim()); };
+  rec.onerror=e=>{ setMic(i,'idle'); showMsg(i, e.error==='not-allowed'
+      ?'마이크 사용을 허용해 주세요.' : '잘 안 들렸어요. 다시 시도해 주세요.'); };
+  rec.onend=()=>setMic(i,'idle');
+  try{rec.start();}catch(e){setMic(i,'idle');}
+}
+/* iOS 등 음성인식 미지원 기기: 녹음→내 목소리 들어보기 (자기 점검) */
+let MREC=null, MRLINE=-1, MURL=null;
+function recordLine(i){
+  if(MREC && MRLINE===i){ try{MREC.stop();}catch(e){} return; }   // 다시 누르면 멈춤
+  if(!navigator.mediaDevices || !window.MediaRecorder){ showMsg(i,'이 기기는 녹음을 지원하지 않아요. <b>🔊 정답 문장 듣기</b>로 따라 읽어요.'); return; }
+  stopSpeak(); if(REC){try{REC.stop();}catch(e){}}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    let chunks=[], rec;
+    try{ rec=new MediaRecorder(stream); }catch(e){ stream.getTracks().forEach(t=>t.stop()); showMsg(i,'녹음을 시작할 수 없어요.'); return; }
+    MREC=rec; MRLINE=i;
+    rec.ondataavailable=e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+    rec.onstop=()=>{
+      stream.getTracks().forEach(t=>t.stop());
+      if(MURL) URL.revokeObjectURL(MURL);
+      MURL=URL.createObjectURL(new Blob(chunks));
+      MREC=null; MRLINE=-1; setMic(i,'idle');
+      renderRecPlayback(i,MURL);
+    };
+    setMic(i,'listening');
+    rec.start();
+  }).catch(err=>{ setMic(i,'idle'); showMsg(i, (err && err.name==='NotAllowedError') ? '마이크 사용을 허용해 주세요.' : '마이크를 열 수 없어요.'); });
+}
+function renderRecPlayback(i,url){
+  const f=fbBox(i); if(!f)return; f.style.display='block';
+  f.innerHTML=`<div class="scorebar mid">🎧 내 목소리와 정답 문장을 비교해 보세요!</div>
+     <div class="lnact">
+       <button class="mini" onclick="new Audio('${url}').play()">▶ 내 목소리 듣기</button>
+       <button class="mini" onclick="playLine(${i})">🔊 정답 문장 듣기</button>
+       <button class="mini mic" onclick="recordLine(${i})">🎤 다시 녹음</button></div>`;
+}
+function playWords(list,idx){ idx=idx||0; if(idx>=list.length)return;
+  speak(list[idx],{rate:0.6,onend:()=>setTimeout(()=>playWords(list,idx+1),380)}); }
+function renderFeedback(i,res,heard){
+  const f=fbBox(i); if(!f)return;
+  const cls=res.acc>=90?'good':res.acc>=60?'mid':'bad';
+  const emo=res.acc>=90?'🌟 아주 좋아요!':res.acc>=60?'👍 잘했어요, 빨간 단어를 다시!':'💪 다시 한 번 또박또박!';
+  const missed=res.words.filter(x=>!x.ok).map(x=>x.w);
+  const words=res.words.map(x=>`<button type="button" class="w ${x.ok?'ok':'miss'}">${x.w}</button>`).join(' ');
+  f.style.display='block';
+  f.innerHTML=`<div class="scorebar ${cls}">정확도 <b>${res.acc}%</b> · ${res.correct}/${res.total} 단어 · ${emo}</div>
+     <div class="fbwords">${words}</div>
+     <div class="fbhint">👆 단어를 누르면 그 단어만 들려줘요.</div>
+     <div class="heard">들린 말: ${heard||'(인식 안 됨)'}</div>
+     <div class="lnact">
+       ${missed.length?`<button class="mini miss-btn" id="missBtn">🔴 틀린 단어만 듣기 (${missed.length})</button>`:''}
+       <button class="mini" onclick="playLine(${i})">🔊 정답 문장 듣기</button>
+       <button class="mini mic" onclick="listenLine(${i})">🎤 다시 읽기</button></div>`;
+  f.querySelectorAll('.fbwords .w').forEach(sp=>sp.onclick=()=>speak(sp.textContent,{rate:0.6}));
+  const mb=f.querySelector('#missBtn'); if(mb)mb.onclick=()=>playWords(missed);
+}
+
+/* ---- WORDS ---- */
+function buildWords(){
+  const p=document.querySelector('.panel[data-k="words"]');
+  p.innerHTML=`<div class="note" style="margin-top:0">단어를 누르면 발음을 들려줍니다.</div><div class="words" id="wgrid"></div>`;
+  const g=p.querySelector('#wgrid');
+  cur.vocab.forEach(([e,k])=>{
+    const el=document.createElement('button'); el.type='button'; el.className='word';
+    el.innerHTML=`<div class="e">${e}</div><div class="k">${k}</div><div class="sp"><span aria-hidden="true">🔊</span> 발음</div>`;
+    el.onclick=()=>speak(e,{rate:0.8}); g.appendChild(el);
+  });
+}
+
+/* ---- QUIZ (KR -> choose EN) ---- */
+function buildQuiz(){
+  const p=document.querySelector('.panel[data-k="quiz"]');
+  const pool=cur.vocab.slice();
+  const order=shuffle(pool.map((_,i)=>i));
+  let idx=0, score=0;
+  function render(){
+    if(idx>=order.length){
+      p.innerHTML=`<div class="card2" style="text-align:center">
+        <div class="q">퀴즈 완료! 🎉</div>
+        <div class="big" style="font-size:30px;color:var(--accent)">${score} / ${order.length}</div>
+        <div class="rowbtns" style="justify-content:center"><button class="btn play" onclick="switchTab('quiz');buildQuizAgain()">다시 풀기</button></div>
+      </div>`; progress[cur.id].quiz=score; return;
+    }
+    const qi=order[idx]; const [en,kr]=cur.vocab[qi];
+    const opts=shuffle([en,...shuffle(cur.vocab.filter((_,i)=>i!==qi)).slice(0,3).map(v=>v[0])]);
+    p.innerHTML=`<div class="progress-row"><span>문제 ${idx+1} / ${order.length}</span><span>점수 ${score}</span></div>
+      <div class="card2"><div class="q">다음 뜻의 영어 단어는?<br><span class="big">${kr}</span></div>
+      <div class="opts">${opts.map(o=>`<button type="button" class="opt">${o}</button>`).join('')}</div>
+      <div class="fb" id="fb" role="status" aria-live="polite"></div></div>`;
+    p.querySelectorAll('.opt').forEach(o=>o.onclick=()=>{
+      if(p.dataset.locked)return; p.dataset.locked=1;
+      const fb=p.querySelector('#fb');
+      speak(en,{rate:0.8});
+      if(o.textContent===en){o.classList.add('correct');score++;fb.className='fb ok';fb.textContent='정답! 👍';}
+      else{o.classList.add('wrong');fb.className='fb no';fb.textContent='정답: '+en;
+        p.querySelectorAll('.opt').forEach(x=>{if(x.textContent===en)x.classList.add('correct');});}
+      setTimeout(()=>{idx++;p.dataset.locked='';render();},1100);
+    });
+  }
+  window.buildQuizAgain=()=>{idx=0;score=0;render();};
+  render();
+}
+
+/* ---- DICTATION (hear -> type) ---- */
+function buildDict(){
+  const p=document.querySelector('.panel[data-k="dict"]');
+  const items=cur.lines.map(L=>L[0]).filter(s=>s.split(' ').length<=7).slice(0,8);
+  let idx=0;
+  function norm(s){return s.toLowerCase().replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();}
+  function render(){
+    if(idx>=items.length){p.innerHTML=`<div class="card2" style="text-align:center"><div class="q">받아쓰기 완료! ✍️</div>
+      <button class="btn play" onclick="switchTab('dict');buildDict()">다시 하기</button></div>`;return;}
+    p.innerHTML=`<div class="progress-row"><span>문장 ${idx+1} / ${items.length}</span><span>🎧 듣고 받아쓰기</span></div>
+     <div class="card2">
+       <div class="rowbtns"><button class="btn play" id="hear">🔊 다시 듣기</button><button class="btn" id="slow">🐢 천천히</button></div>
+       <label class="note" for="ans" style="display:block;text-align:left;margin:8px 2px 0">들은 문장을 영어로 입력하세요</label>
+       <input class="ans" id="ans" placeholder="예) The cat sat on a mat…" autocomplete="off"
+              spellcheck="false" autocapitalize="off" autocorrect="off" lang="en" inputmode="text">
+       <div class="rowbtns"><button class="btn" id="chk">확인</button><button class="btn" id="show">정답 보기</button><button class="btn" id="skip">다음 ▶</button></div>
+       <div class="fb" id="fb" role="status" aria-live="polite"></div></div>`;
+    speak(items[idx]);
+    p.querySelector('#hear').onclick=()=>speak(items[idx]);
+    p.querySelector('#slow').onclick=()=>speak(items[idx],{rate:0.6});
+    p.querySelector('#chk').onclick=()=>{
+      const fb=p.querySelector('#fb'); const v=p.querySelector('#ans').value;
+      if(norm(v)===norm(items[idx])){fb.className='fb ok';fb.textContent='정답! 🎉';setTimeout(()=>{idx++;render();},900);}
+      else{fb.className='fb no';fb.textContent='다시 들어보세요.';}
+    };
+    p.querySelector('#show').onclick=()=>{const fb=p.querySelector('#fb');fb.className='fb';fb.style.color='var(--accent)';fb.textContent=items[idx];};
+    p.querySelector('#skip').onclick=()=>{idx++;render();};
+  }
+  render();
+}
+
+/* ---- UNSCRAMBLE ---- */
+function buildOrder(){
+  const p=document.querySelector('.panel[data-k="order"]');
+  const items=cur.lines.map(L=>L[0]).filter(s=>s.split(' ').length<=7).slice(0,8);
+  let idx=0;
+  function tidy(s){return s.replace(/[",.!?]/g,'').trim();}
+  function render(){
+    if(idx>=items.length){p.innerHTML=`<div class="card2" style="text-align:center"><div class="q">문장 배열 완료! 🧩</div>
+      <button class="btn play" onclick="switchTab('order');buildOrder()">다시 하기</button></div>`;return;}
+    const target=tidy(items[idx]); const parts=target.split(/\s+/); const shuffled=shuffle(parts.slice());
+    p.innerHTML=`<div class="progress-row"><span>문장 ${idx+1} / ${items.length}</span><span>🧩 순서대로 배열</span></div>
+     <div class="card2">
+       <div class="rowbtns"><button class="btn" id="hear">🔊 문장 듣기</button></div>
+       <div class="build" id="build"><span class="placeholder">단어를 눌러 문장을 완성하세요</span></div>
+       <div class="tokens" id="tok"></div>
+       <div class="rowbtns"><button class="btn" id="chk">확인</button><button class="btn" id="reset">↺ 초기화</button><button class="btn" id="skip">다음 ▶</button></div>
+       <div class="fb" id="fb" role="status" aria-live="polite"></div></div>`;
+    const build=p.querySelector('#build'), tok=p.querySelector('#tok'); let picked=[];
+    function redraw(){
+      build.innerHTML = picked.length? picked.map((w,i)=>`<button type="button" class="token" data-i="${i}">${w}</button>`).join('') : '<span class="placeholder">단어를 눌러 문장을 완성하세요</span>';
+      build.querySelectorAll('.token').forEach(t=>t.onclick=()=>{const i=+t.dataset.i;const w=picked.splice(i,1)[0];addTok(w);redraw();});
+    }
+    function addTok(w){const b=document.createElement('button');b.type='button';b.className='token';b.textContent=w;
+      b.onclick=()=>{picked.push(w);b.remove();redraw();};tok.appendChild(b);}
+    shuffled.forEach(addTok);
+    p.querySelector('#hear').onclick=()=>speak(items[idx]);
+    p.querySelector('#reset').onclick=()=>{picked=[];render();};
+    p.querySelector('#skip').onclick=()=>{idx++;render();};
+    p.querySelector('#chk').onclick=()=>{const fb=p.querySelector('#fb');
+      if(picked.join(' ')===parts.join(' ')){fb.className='fb ok';fb.textContent='정답! 🎉';speak(items[idx]);setTimeout(()=>{idx++;render();},1000);}
+      else{fb.className='fb no';fb.textContent='순서를 다시 확인해 보세요.';}};
+    redraw();
+  }
+  render();
+}
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ============ PRINT (worksheet + progress chart) ============ */
+function doPrint(html){ document.getElementById('printroot').innerHTML=html; window.print(); }
+function worksheetHTML(b){
+  const lines=b.lines.map(L=>
+    `<li><div class="pw-en">${L[0]}</div>
+       <div class="pw-kr">${L[1]}</div>
+       <div class="pw-coach"></div></li>`).join('');
+  const vrows=[];
+  for(let i=0;i<b.vocab.length;i+=3){
+    let r='';
+    for(let j=0;j<3;j++){const w=b.vocab[i+j]; r+= w?`<td class="en">${w[0]}</td><td class="ko">${w[1]}</td>`:`<td></td><td></td>`;}
+    vrows.push(`<tr>${r}</tr>`);
+  }
+  return `<div class="pw-page">
+    <div class="pw-head"><b>클라이 어학원 · 파닉스 이야기</b>
+      <span>이름 ____________　반 ______　코칭 ______</span></div>
+    <div class="pw-titlerow">
+      <div class="pw-title">${b.title} <small>${b.sound} · Book ${BOOKS.indexOf(b)+1}</small></div>
+      <div class="pw-datechk"><div class="lbl">읽은 날짜 (읽을 때마다 기록)</div>
+        <div class="pw-datebox"><span></span><span></span><span></span><span></span><span></span></div></div>
+    </div>
+    <div class="pw-sub">${b.genre} · Inspired by 「${b.insp}」</div>
+    <ol class="pw-lines">${lines}</ol>
+    <h3 class="pw-h">단어 Words</h3>
+    <table class="pw-vocab"><tbody>${vrows.join('')}</tbody></table>
+  </div>`;
+}
+function printBook(b){ doPrint(worksheetHTML(b||cur)); }
+function printAll(){ doPrint(BOOKS.map(worksheetHTML).join('')); }
+function printProgress(){
+  const rows=BOOKS.map((b,i)=>`<tr>
+     <td>${i+1}</td><td class="tt">${b.title}</td><td class="ph">${b.sound}</td>
+     <td class="dt"></td><td class="dt"></td><td class="dt"></td><td class="dt"></td><td class="dt"></td></tr>`).join('');
+  doPrint(`<div class="pw-page">
+    <div class="pw-head"><b>클라이 어학원 · 파닉스 이야기 진도표</b>
+      <span>이름 ____________　반 ______</span></div>
+    <div class="pw-sub">각 책을 읽은 날짜를 칸에 적으세요. (한 권당 최대 5회 · 전 25권)</div>
+    <table class="pw-prog"><thead><tr>
+      <th>#</th><th>책 제목</th><th>파닉스</th>
+      <th>1회</th><th>2회</th><th>3회</th><th>4회</th><th>5회</th>
+    </tr></thead><tbody>${rows}</tbody></table>
+  </div>`);
+}
+
+/* init */
+renderHome();
+
+/* ---- PWA service worker registration ---- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+
+</script>
+</body>
+</html>

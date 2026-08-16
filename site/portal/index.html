@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>학습 대시보드 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e7eaf1;--soft:#f4f7fc;--kakao:#fee500}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.6}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px}
+  /* header */
+  header{background:linear-gradient(135deg,var(--blue),#3b5bdb);color:#fff}
+  .hd{display:flex;align-items:center;justify-content:space-between;padding:18px}
+  .hd .who{font-weight:800;font-size:17px}
+  .hd .who small{display:block;font-weight:500;font-size:12px;opacity:.85}
+  .hd .out{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:9px;cursor:pointer}
+  /* setup banner */
+  .setup{background:#fff8e1;border-bottom:1px solid #f0e0a8;color:#7a5c00;font-size:12.5px;padding:9px 18px;text-align:center}
+  /* login */
+  .login{max-width:360px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 10px 40px rgba(20,30,60,.1)}
+  .login .lg{text-align:center;font-weight:800;font-size:20px;color:var(--navy);margin-bottom:4px}
+  .login .ls{text-align:center;color:var(--sub);font-size:13px;margin-bottom:22px}
+  .login label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px}
+  .login input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  .login input:focus{outline:none;border-color:var(--blue)}
+  .login .btn{width:100%;margin-top:18px;background:var(--blue);color:#fff;border:none;padding:13px;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer}
+  .login .btn:hover{background:var(--blue-d)}
+  .login .err{color:#c0392b;font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
+  .login .hint{color:var(--sub);font-size:11.5px;text-align:center;margin-top:14px}
+  /* dashboard */
+  .content{padding:20px 0 40px}
+  .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:22px 0 10px}
+  .apps{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.apps{grid-template-columns:1fr}}
+  .app{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;transition:.15s}
+  .app:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,39,64,.1);border-color:#d6e2f2}
+  .app .ic{font-size:30px;width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--soft);flex:none}
+  .app h3{font-size:15.5px;color:var(--navy);font-weight:800}
+  .app p{font-size:12.5px;color:var(--sub)}
+  .links{display:flex;flex-wrap:wrap;gap:8px}
+  .link{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 15px;font-weight:700;font-size:13px;color:var(--navy)}
+  .link:hover{border-color:var(--blue);color:var(--blue-d)}
+  .foot{text-align:center;color:var(--sub);font-size:11.5px;margin-top:30px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+
+<!-- 설정 배너 (Supabase 미설정 시) -->
+<div id="setupBanner" class="setup hidden">⚙ 로그인 미설정 — <b>portal/index.html</b> 상단 <b>SUPABASE_URL·ANON_KEY</b> 채우면 실제 로그인 작동. 지금은 대시보드 미리보기.</div>
+
+<!-- 로그인 화면 -->
+<div id="loginView" class="hidden">
+  <div class="login">
+    <div class="lg">클라이 학습 대시보드</div>
+    <div class="ls">학원에서 받은 아이디로 로그인</div>
+    <label>학생 아이디</label>
+    <input id="uid" type="text" autocomplete="username" placeholder="예: jimin01" autocapitalize="none">
+    <label>비밀번호</label>
+    <input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
+    <button class="btn" id="loginBtn">로그인</button>
+    <div class="err" id="loginErr"></div>
+    <div class="hint">아이디·비밀번호는 학원(원장님)이 발급해요.</div>
+  </div>
+</div>
+
+<!-- 대시보드 -->
+<div id="dashView" class="hidden">
+  <header>
+    <div class="wrap hd">
+      <div class="who">👋 <span id="stuName">우리 학생</span>의 학습실<small>클라이 어학원</small></div>
+      <button class="out" id="logoutBtn">로그아웃</button>
+    </div>
+  </header>
+  <div class="wrap content">
+
+    <div class="eyebrow">클라이 학습 앱</div>
+    <div class="apps">
+      <a class="app" href="../phonics/index.html"><div class="ic">🎧</div><div><h3>파닉스 유창성</h3><p>소리 내어 읽기 훈련</p></div></a>
+      <a class="app" href="../sightword/index.html"><div class="ic">🔤</div><div><h3>사이트워드</h3><p>기본 단어 익히기</p></div></a>
+      <a class="app" href="../write/index.html"><div class="ic">✍️</div><div><h3>Writing Lab</h3><p>라이팅 첨삭</p></div></a>
+      <a class="app" id="ipsiCard" href="#" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>입시 자료</h3><p>중·고 강의·자료</p></div></a>
+    </div>
+
+    <div class="eyebrow">우리 학원 프로그램</div>
+    <div class="links">
+      <a class="link" href="https://www.classcard.net/" target="_blank" rel="noopener">클래스카드 ↗</a>
+      <a class="link" href="https://rg.readingtouch.co.kr/login" target="_blank" rel="noopener">리딩터치 ↗</a>
+      <a class="link" href="https://klaiedu.co.kr/login" target="_blank" rel="noopener">클라이영어 ↗</a>
+      <a class="link" href="https://www.eleaenglish.com" target="_blank" rel="noopener">엘리아영어 ↗</a>
+    </div>
+
+    <div class="foot">클라이 어학원 · KLAI English Academy · 재원생 학습실</div>
+  </div>
+</div>
+
+<script type="module">
+// ====== 설정 (원장님: 아래 3개 값만 채우면 로그인 작동) ======
+const SUPABASE_URL  = "";              // 예: https://xxxx.supabase.co
+const SUPABASE_ANON = "";              // Supabase anon(public) key
+const ID_DOMAIN     = "@klai.kr";      // 학생 아이디에 붙는 내부 도메인
+const IPSI_STUDENT_URL = "https://ipsi-material-app.vercel.app/study";  // 입시앱 학생 화면
+// ============================================================
+
+const $ = s => document.querySelector(s);
+$('#ipsiCard').href = IPSI_STUDENT_URL;
+
+function show(view){ ['loginView','dashView'].forEach(v=>$('#'+v).classList.toggle('hidden', v!==view)); }
+
+if(!SUPABASE_URL || !SUPABASE_ANON){
+  // 미설정 → 대시보드 미리보기
+  $('#setupBanner').classList.remove('hidden');
+  show('dashView');
+} else {
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  async function route(){
+    const { data:{ session } } = await sb.auth.getSession();
+    if(session){
+      const name = session.user.user_metadata?.name || session.user.email?.split('@')[0] || '학생';
+      $('#stuName').textContent = name;
+      show('dashView');
+    } else show('loginView');
+  }
+  $('#loginBtn').onclick = async ()=>{
+    const id = $('#uid').value.trim(), pw = $('#upw').value;
+    $('#loginErr').textContent = '';
+    if(!id||!pw){ $('#loginErr').textContent='아이디와 비밀번호를 입력하세요.'; return; }
+    const email = id.includes('@') ? id : id + ID_DOMAIN;
+    const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+    if(error) $('#loginErr').textContent = '아이디 또는 비밀번호가 맞지 않아요.';
+    else route();
+  };
+  $('#upw').addEventListener('keydown', e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
+  $('#logoutBtn').onclick = async ()=>{ await sb.auth.signOut(); route(); };
+  sb.auth.onAuthStateChange(()=>route());
+  route();
+}
+</script>
+</body>
+</html>

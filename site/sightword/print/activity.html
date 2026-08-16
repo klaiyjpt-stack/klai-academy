@@ -1,0 +1,146 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>사이트워드 워크북</title>
+<style>
+@page{size:A4 portrait;margin:14mm}
+body{font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#111;font-size:13px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1{font-size:16px;margin:0 0 3px} h2{font-size:13.5px;border-bottom:2px solid #333;padding-bottom:2px;margin:10px 0 5px}
+.hd{display:flex;gap:20px;font-size:12.5px;margin:4px 0}
+.match td{vertical-align:top;line-height:1.85;font-size:14px}
+.match td:first-child{text-align:right;padding-right:36px;width:46%}
+.match td:last-child{text-align:left;padding-left:36px}
+.match .dot{font-size:16px}
+.miss{width:100%;border-collapse:collapse} .miss td{border:1px solid #444;padding:4px 9px;font-size:14px}
+.miss .word{font-size:18px;font-weight:800;letter-spacing:3px}
+.blank{border-bottom:2px solid #333;display:inline-block;min-width:20px;text-align:center}
+.wsgrid{border-collapse:collapse;margin:10px auto}
+.wsgrid td{border:1px solid #999;width:44px;height:35px;text-align:center;font-size:20px;font-weight:700;font-family:monospace}
+.wslist{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:center;margin-top:12px;font-size:16px;font-weight:700}
+/* page 2 — phonics-reader style */
+.page2{page-break-before:always;padding-top:4px}
+.hpill{display:inline-block;background:#efe9fb;color:#5b3bdb;border:1px solid #d5c9f2;border-radius:999px;padding:4px 14px;font-size:13px;font-weight:800}
+.pcards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.pcard{border:2px solid #cfc6ee;border-radius:14px;padding:7px 11px;display:flex;align-items:center;gap:10px;background:#faf9ff}
+.pcard .emo{font-size:30px;min-width:36px;text-align:center}
+.pcard .body{flex:1}
+.pcard .wq{font-size:20px;font-weight:800;letter-spacing:2px}
+.ppill{display:inline-block;border:2px solid #b9aee6;border-radius:12px;padding:2px 14px;font-size:16px;font-weight:800;margin:4px 8px 0 0;color:#5b3bdb}
+.pcard .wline{border-bottom:1.5px solid #999;height:16px;margin-top:6px}
+.hwrow{margin:4px 0}
+.hwlabel{font-size:14px;font-weight:800;margin-bottom:0}
+.hwlabel small{font-weight:600;color:#666;margin-left:8px}
+.hw{height:38px;position:relative}
+.hw .ln{position:absolute;left:0;right:0;border-top:1.5px solid #8f9bc0}
+.hw .l2{border-top:1px dashed #aab4d0}
+.hw .l3{border-top:2px solid #33436a}
+.hw .model{position:absolute;left:2px;top:0;font-size:22px;color:#cfc7e6;font-weight:700;line-height:38px;font-family:"Comic Sans MS","Apple SD Gothic Neo",sans-serif}
+.back{display:inline-block;background:#eef2ff;color:#3b5bdb;text-decoration:none;font-weight:800;padding:6px 14px;border-radius:8px;margin-right:14px}
+.controls{margin:10px 0;padding:10px;background:#f4f7fc;border-radius:8px}
+.controls select,.controls button{font-size:14px;padding:6px 10px;margin-right:6px}
+.controls button{background:#3b5bdb;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer}
+@media screen{body{max-width:760px;margin:20px auto;padding:0 12px}}
+@media print{.controls{display:none}}
+</style></head><body>
+<div class="controls">
+  <a href="../index.html" class="back">← 앱으로</a>
+  레벨: <select id="lvSel"></select>
+  세트: <select id="setSel"></select>
+  <button onclick="render()">워크북 생성</button>
+  <button onclick="print()">🖨 인쇄</button>
+  <span style="font-size:12px;color:#555">세트별 7단어 · 2쪽 · 숙제·보충 배부</span>
+</div>
+<div id="sheet"></div>
+<script src="../data/words.js"></script>
+<script>
+const SET_SIZE=7;
+const sel=document.getElementById("lvSel"), setSel=document.getElementById("setSel");
+for(let l=1;l<=16;l++){const o=document.createElement("option");o.value=l;o.textContent="L"+l+(l>=12?" (명사)":"");sel.appendChild(o);}
+function levelWords(l){ return window.WORDS.filter(w=>w.level===l); }
+function nSets(l){ return Math.ceil(levelWords(l).length/SET_SIZE); }
+function fillSets(){ const l=+sel.value; setSel.innerHTML=""; for(let s=0;s<nSets(l);s++){const o=document.createElement("option");o.value=s;o.textContent="세트 "+(s+1);setSel.appendChild(o);} }
+sel.onchange=fillSets; fillSets();
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+// --- word search grid ---
+function makeGrid(rawWords, size){
+  const g=Array.from({length:size},()=>Array(size).fill(""));
+  const dirs=[[0,1],[1,0],[1,1],[-1,1]];
+  const words=rawWords.map(w=>w.replace(/[^A-Za-z]/g,"").toUpperCase()).filter(w=>w.length>=2 && w.length<=size);
+  const place=(word)=>{ for(let t=0;t<300;t++){
+    const d=dirs[Math.floor(Math.random()*dirs.length)], len=word.length;
+    const r0=Math.floor(Math.random()*size), c0=Math.floor(Math.random()*size);
+    const r1=r0+d[0]*(len-1), c1=c0+d[1]*(len-1);
+    if(r1<0||r1>=size||c1<0||c1>=size) continue;
+    let ok=true; for(let i=0;i<len;i++){const r=r0+d[0]*i,c=c0+d[1]*i; if(g[r][c]&&g[r][c]!==word[i]){ok=false;break;}}
+    if(!ok) continue;
+    for(let i=0;i<len;i++){const r=r0+d[0]*i,c=c0+d[1]*i; g[r][c]=word[i];} return true;
+  } return false; };
+  words.forEach(place);
+  const A="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++) if(!g[r][c]) g[r][c]=A[Math.floor(Math.random()*26)];
+  return g;
+}
+
+function render(){
+  const lvl=+sel.value, setV=+setSel.value;
+  const words=levelWords(lvl).slice(setV*SET_SIZE, setV*SET_SIZE+SET_SIZE);
+  let h=`<h1>사이트워드 워크북 · L${lvl} 세트 ${setV+1}</h1>`;
+  h+=`<div class="hd"><span>이름: __________</span><span>날짜: __________</span></div>`;
+
+  // 1. 이어긋기
+  const kos=shuffle(words.map(w=>w.ko));
+  h+=`<h2>1. 단어와 뜻을 선으로 이어요</h2><table class="match"><tr><td width="45%">`;
+  words.forEach(w=>h+=`${w.emoji?w.emoji+" ":""}${esc(w.en)} <span class="dot">○</span><br>`);
+  h+=`</td><td>`; kos.forEach(k=>h+=`<span class="dot">○</span> ${esc(k)}<br>`); h+=`</td></tr></table>`;
+
+  // 2. 빠진 글자 채우기 (뜻을 보고 빈칸 글자 쓰기)
+  h+=`<h2>2. 빠진 글자를 써넣어요 (뜻을 보고!)</h2><table class="miss"><tbody>`;
+  words.forEach((w,i)=>{
+    const L=w.en.split(""); let p=(i*3+1)%L.length, g=0; while(L[p]===" "&&g++<L.length)p=(p+1)%L.length;
+    const shown=L.map((c,idx)=> idx===p ? '<span class="blank"></span>' : esc(c)).join("");
+    h+=`<tr><td width="40%">${esc(w.ko)}</td><td class="word">${shown}</td></tr>`;
+  });
+  h+=`</tbody></table>`;
+
+  // 3. 단어 찾기 퍼즐
+  const size=10, grid=makeGrid(words.map(w=>w.en), size);
+  h+=`<h2>3. 단어 찾기 퍼즐 (가로·세로·대각선)</h2><table class="wsgrid"><tbody>`;
+  for(let r=0;r<size;r++){ h+="<tr>"; for(let c=0;c<size;c++) h+=`<td>${grid[r][c]}</td>`; h+="</tr>"; }
+  h+=`</tbody></table><div class="wslist">`;
+  words.map(w=>w.en.replace(/[^A-Za-z]/g,"")).filter(w=>w.length>=2).forEach(w=>h+=`<span>☐ ${esc(w.toUpperCase())}</span>`);
+  h+=`</div>`;
+
+  // ---- Page 2 (phonics-reader style) ----
+  h+=`<div class="page2"><div style="text-align:right;margin-bottom:6px"><span class="hpill">클라이 · 사이트워드 L${lvl} 세트 ${setV+1}</span></div>`;
+  // 4. 빠진 글자 동그라미 + 쓰기
+  h+=`<h2>4. 빠진 글자에 동그라미 하고 단어를 써요</h2><div class="pcards">`;
+  words.forEach((w,i)=>{
+    const L=w.en.split(""); let p=(i*2+1)%L.length, g=0; while(L[p]===" "&&g++<L.length)p=(p+1)%L.length;
+    const ans=L[p].toLowerCase();
+    const shown=L.map((c,idx)=> idx===p ? "__" : esc(c)).join("");
+    const alpha="abcdefghijklmnopqrstuvwxyz".split("");
+    let dis=alpha[(i*7+5)%26]; if(dis===ans) dis=alpha[(i*7+8)%26];
+    const pills=shuffle([ans,dis]);
+    h+=`<div class="pcard"><div class="emo">${w.emoji||"🔤"}</div><div class="body">
+      <div class="wq">${shown}</div>
+      <div>${pills.map(x=>`<span class="ppill">${x}</span>`).join("")}</div>
+      <div class="wline"></div></div></div>`;
+  });
+  h+=`</div>`;
+  // 5. 오선지 5번 쓰기 (+ 뜻)
+  h+=`<h2>5. 오선지에 단어를 5번 써요 (뜻을 생각하며!)</h2>`;
+  words.forEach(w=>{
+    h+=`<div class="hwrow"><div class="hwlabel">${w.emoji?w.emoji+" ":""}${esc(w.en)}<small>${esc(w.ko)}</small></div>
+      <div class="hw"><span class="model">${esc(w.en)}</span>
+        <span class="ln" style="top:1px"></span>
+        <span class="ln l2" style="top:13px"></span>
+        <span class="ln l3" style="top:26px"></span>
+        <span class="ln" style="top:36px"></span>
+      </div></div>`;
+  });
+  h+=`</div>`;
+
+  document.getElementById("sheet").innerHTML=h;
+}
+render();
+</script></body></html>

@@ -447,17 +447,21 @@ function detectGenre(t){
   return'argument';
 }
 
-// ponytail: client-side PIN gate, casual-block only (static file, source-visible). Real auth = Supabase (원래 설계).
+// PIN 은 소스에 없다 — /api/teacher-auth 가 환경변수와 대조한다.
+// ponytail: 화면 전환은 브라우저가 하므로 devtools 우회는 여전히 가능. 진짜 잠금은 Supabase 세션(원래 설계).
 let TEA_OK=false;
-function teaAuth(){
+async function teaAuth(){
   if(TEA_OK)return true;
   const p=prompt('관리자 PIN · Admin PIN');
-  if(p==='0571'){TEA_OK=true;return true;}
-  if(p!==null)alert('PIN 오류 · Wrong PIN');
+  if(p===null)return false;
+  const ok=await fetch('/api/teacher-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({pin:p})})
+    .then(r=>r.ok).catch(()=>false);
+  if(ok){TEA_OK=true;return true;}
+  alert('PIN 오류 · Wrong PIN');
   return false;
 }
-function go(id){
-  if(id==='teacher'&&!teaAuth())return;
+async function go(id){
+  if(id==='teacher'&&!await teaAuth())return;
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   window.scrollTo(0,0);

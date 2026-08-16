@@ -1,0 +1,43 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>사이트워드 개별 진도표</title>
+<style>
+@page{size:A4 portrait;margin:12mm}
+body{font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#26304d;font-size:13px}
+h1{font-size:20px;margin:0;text-align:center;color:#5b3bdb}
+.sub{text-align:center;font-size:12.5px;color:#7a86a8;margin:2px 0 10px}
+.name{display:flex;gap:22px;justify-content:center;font-size:14px;margin-bottom:12px}
+.name b{color:#4a6cf7}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lv{border:2px solid #d5c9f2;border-radius:16px;padding:10px 8px;text-align:center;background:#faf9ff}
+.lv .top{font-size:22px;font-weight:900;color:#5b3bdb;line-height:1.1}
+.lv .emo{font-size:22px}
+.sets{display:flex;justify-content:center;gap:7px;margin:8px 0 4px}
+.sets .o{width:22px;height:22px;border:2px solid #b9aee6;border-radius:50%;display:inline-block}
+.star{font-size:20px;color:#e6b800;letter-spacing:2px}
+.note{font-size:11.5px;color:#7a86a8;margin-top:12px;line-height:1.7;text-align:center}
+.pbtn{margin:10px auto;display:block;padding:9px 18px;font-size:14px;font-weight:800;background:#5b3bdb;color:#fff;border:none;border-radius:999px;cursor:pointer}
+.topbar{display:flex;gap:12px;justify-content:center;align-items:center;margin:10px 0}
+.back{display:inline-block;background:#efe9fb;color:#5b3bdb;text-decoration:none;font-weight:800;padding:8px 16px;border-radius:999px}
+@media screen{body{max-width:720px;margin:20px auto;padding:0 12px}}
+@media print{.pbtn,.topbar{display:none}}
+</style></head><body>
+<div class="topbar"><a href="../index.html" class="back">← 앱으로</a><button class="pbtn" style="margin:0" onclick="print()">🖨 인쇄</button></div>
+<h1>🌟 나의 사이트워드 진도표 🌟</h1>
+<div class="sub">클라이 어학원 · Dolch 315단어 · 16레벨 (레벨당 7단어씩 3세트)</div>
+<div class="name"><span>이름: <b>____________</b></span><span>시작한 날: __________</span></div>
+<div class="grid" id="grid"></div>
+<div class="note">
+세트 하나를 끝내면 동그라미(○)에 <b>색칠·도장</b>! 레벨의 세트 3개를 다 하고 스토리·PASS까지 마치면 <b>⭐ 별</b>을 칠해요.<br>
+16개 레벨의 별을 모두 모으면 사이트워드 마스터! 🏆
+</div>
+<script>
+const EMO=["🐣","🐤","🐰","🦊","🐨","🐼","🦁","🐸","🐙","🦄","🐝","🐬","🌟","🍭","🎈","🏆"];
+const g=document.getElementById("grid");
+for(let l=1;l<=16;l++){
+  const d=document.createElement("div"); d.className="lv";
+  d.innerHTML=`<div class="emo">${EMO[l-1]}</div><div class="top">L${l}</div>
+    <div class="sets"><span class="o"></span><span class="o"></span><span class="o"></span></div>
+    <div class="star">☆</div>`;
+  g.appendChild(d);
+}
+</script></body></html>
