@@ -183,7 +183,8 @@
       <label class="ck"><input type="checkbox" id="mVidPub"><span id="mVidLbl"></span></label>
     </div>
     <div id="mNote">
-      <select id="mNoteType"><option value="general"></option><option value="warn"></option><option value="behavior"></option></select>
+      <select id="mNoteType" onchange="notePolicy()"><option value="general"></option><option value="repeat"></option><option value="sensitive"></option></select>
+      <div id="mNoteRule" style="font-size:12px;line-height:1.6;background:#f4f8ff;border:1px solid #d6e2f2;border-radius:9px;padding:8px 11px;margin:0 0 10px;color:var(--sub)"></div>
       <textarea id="mNoteTxt" rows="3"></textarea>
       <label class="ck"><input type="checkbox" id="mNotePub"><span id="mNoteLbl"></span></label>
     </div>
@@ -338,18 +339,34 @@ function openCell(btn,kind){
     $('#mVidUrl').placeholder=ko?'수업 영상 링크 (유튜브·드라이브 등)':'Class video link (YouTube, Drive…)';
     $('#mVidLbl').textContent=ko?'학생·학부모에게 공개':'Show to student & parent'; }
   else { $('#mNoteTxt').value=CELL.tr.dataset.note||''; $('#mNoteType').value=CELL.tr.dataset.notetype||'general'; $('#mNotePub').checked=CELL.tr.dataset.notepub==='1';
-    $('#mNoteTxt').placeholder=ko?'문제·주의·특이사항 (예: 숙제 3회 미제출)':'Issue / warning / note';
-    $('#mNoteLbl').textContent=ko?'학부모에게 공개 (기본: 선생님·원장만)':'Show to parent (default: staff only)'; }
-  [...$('#mNoteType').options].forEach((o,i)=>o.textContent=(LANG==='ko'?['일반 메모','⚠️ 주의','🚫 문제행동']:['General','⚠️ Warning','🚫 Behavior'])[i]);
+    $('#mNoteTxt').placeholder=ko?'객관적 사실만 (예: 숙제 미제출 3회, 수업 중 이석 반복)':'Objective facts only (e.g. HW missed 3×, repeated out-of-seat)';
+    notePolicy(); }
+  [...$('#mNoteType').options].forEach((o,i)=>o.textContent=(LANG==='ko'
+    ?['일반 메모 (내부 기록)','⚠️ 반복 지도 3회+ (학부모 공개·월말 반영)','🔒 민감 사항 (학부모 공개 금지)']
+    :['General (internal)','⚠️ Repeated 3×+ (shared · affects monthly)','🔒 Sensitive (never shared)'])[i]);
   $('#mSave').textContent=ko?'저장':'Save'; $('#mCancel').textContent=ko?'취소':'Cancel';
   $('#cellModal').classList.add('on');
 }
+function notePolicy(){
+  const ko=LANG==='ko', t=$('#mNoteType').value, cb=$('#mNotePub'), lbl=$('#mNoteLbl'), rule=$('#mNoteRule');
+  if(t==='sensitive'){ cb.checked=false; cb.disabled=true;
+    lbl.textContent=ko?'민감 사항은 학부모 공개 불가 (내부 보관만)':'Sensitive — cannot be shared (internal only)';
+    rule.textContent=ko?'🔒 가정사·심리·건강 등 예민한 내용. 원장·선생님만 열람. 학부모 공개·월말 반영 안 함.':'🔒 Family, emotional or health matters. Staff only. Never shared, never in monthly.'; }
+  else if(t==='repeat'){ cb.disabled=false;
+    lbl.textContent=ko?'학부모에게 공개 (권장 · 월말평가 반영)':'Share with parent (recommended · affects monthly)';
+    rule.textContent=ko?'⚠️ 3회 이상 지도에도 고쳐지지 않은 부분만 여기에. 공개 시 월말평가 학습태도에 반영돼요.':'⚠️ Only issues unchanged after 3+ reminders. When shared, it feeds the monthly attitude score.'; }
+  else { cb.disabled=false;
+    lbl.textContent=ko?'학부모에게 공개 (기본: 선생님·원장만)':'Share with parent (default: staff only)';
+    rule.textContent=ko?'일상 기록. 기본 비공개. 지도 횟수 쌓는 용도 — 3회+ 되면 "반복 지도"로 올려 공개.':'Everyday log. Private by default. Track reminders — escalate to "Repeated" once it hits 3+.'; }
+}
+window.notePolicy=notePolicy;
+
 function saveCell(){
   const tr=CELL.tr;
   if(CELL.kind==='vid'){ tr.dataset.vid=$('#mVidUrl').value.trim(); tr.dataset.vidpub=$('#mVidPub').checked?'1':'0';
     CELL.btn.textContent = tr.dataset.vid ? '🎬✓' : '🎬＋'; CELL.btn.classList.toggle('filled',!!tr.dataset.vid); }
   else { tr.dataset.note=$('#mNoteTxt').value.trim(); tr.dataset.notetype=$('#mNoteType').value; tr.dataset.notepub=$('#mNotePub').checked?'1':'0';
-    CELL.btn.textContent = tr.dataset.note ? (tr.dataset.notetype==='general'?'📝•':'⚠️•') : '📝'; CELL.btn.classList.toggle('filled',!!tr.dataset.note); }
+    CELL.btn.textContent = tr.dataset.note ? ({general:'📝•',repeat:'⚠️•',sensitive:'🔒•'}[tr.dataset.notetype]||'📝•') : '📝'; CELL.btn.classList.toggle('filled',!!tr.dataset.note); }
   $('#cellModal').classList.remove('on'); CELL=null;
 }
 window.openCell=openCell;
