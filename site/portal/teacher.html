@@ -215,9 +215,11 @@
 </div>
 
 <script>
-const SUPABASE_URL  = "";
-const SUPABASE_ANON = "";
-const ID_DOMAIN = "@klai.kr";
+const SUPABASE_URL  = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+const ID_DOMAIN = "";                 // 이메일 그대로 로그인(도메인 안 붙임)
+let SB=null, USER=null;
+const ATT_CODES=['present','late','absent','excused'];
 const NOTION_URL = "https://app.notion.com/p/0316540571/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8";
 
 const STR = {
@@ -318,7 +320,7 @@ function renderRows(cls){
   const MX = EVALMAX[$('#evalSel').selectedIndex] ?? '';
   $('#clsPill').textContent = `${cls} · ${list.length}${LANG==='ko'?'명':' '+s.students}`;
   $('#rows').innerHTML = list.map(st=>`
-    <tr>
+    <tr data-code="${st.code}" data-name="${st.ko}">
       <td class="name">${LANG==='ko'?st.ko:st.en} <span style="color:var(--sub);font-weight:500;font-size:12px">${st.code}</span><small>${LANG==='ko'?st.en:st.ko}</small></td>
       <td><select class="att">${s.att.map(a=>`<option>${a}</option>`).join('')}</select></td>
       <td><input type="checkbox" class="chk hw"></td>
@@ -328,18 +330,77 @@ function renderRows(cls){
       <td><button class="iconbtn notebtn" onclick="openCell(this,'note')">📝</button></td>
       <td><input type="checkbox" class="chk pub" checked></td>
     </tr>`).join('');
+  dbLoadRecords();   // DB 값 있으면 덮어씀
 }
 function collect(){ return [...document.querySelectorAll('#rows tr')].map(tr=>({
   att:ATTV[tr.querySelector('.att').value], homework:tr.querySelector('.hw').checked,
   score:tr.querySelector('.sc').value||null, max:tr.querySelector('.mx').value||null,
   attitude:tr.querySelector('.tae').selectedIndex, isPublic:tr.querySelector('.pub').checked })); }
-function save(publish){
-  const data=collect();
-  // TODO(Phase2): Supabase upsert attendance/scores (공개=반영)
-  console.log('save',{publish,class:$('#classSel').value,eval:$('#evalSel').value,data});
-  toast(publish ? STR[LANG].savedPub(data.length) : STR[LANG].savedDraft);
+async function save(publish){
+  const n=document.querySelectorAll('#rows tr').length;
+  if(SB && USER){ const err=await dbSaveRecords(publish);
+    if(err){ toast((LANG==='ko'?'저장 실패: ':'Save failed: ')+err.message); return; } }
+  toast(publish ? STR[LANG].savedPub(n) : STR[LANG].savedDraft);
 }
 window.save = save;
+
+// ── Supabase: 성적·출결 저장/로드 (class_records) ──────────────
+async function dbSaveRecords(publish){
+  const teacher=TEACHER, cls=$('#classSel').value, date=$('#dateSel').value, ev=$('#evalSel').value;
+  const rows=[...document.querySelectorAll('#rows tr')].map(tr=>({
+    teacher, class_name:cls, date, eval:ev,
+    student_code:tr.dataset.code, student_name:tr.dataset.name,
+    attendance:ATT_CODES[tr.querySelector('.att').selectedIndex],
+    homework:tr.querySelector('.hw').checked,
+    score:tr.querySelector('.sc').value!==''?parseInt(tr.querySelector('.sc').value):null,
+    max:tr.querySelector('.mx').value!==''?parseInt(tr.querySelector('.mx').value):null,
+    attitude:tr.querySelector('.tae').selectedIndex,
+    note:tr.dataset.note||null, note_type:tr.dataset.notetype||'general',
+    note_public:tr.dataset.notepub==='1',
+    video_url:tr.dataset.vid||null, video_public:!!tr.dataset.vid && tr.dataset.vidpub!=='0',
+    published: publish ? tr.querySelector('.pub').checked : false,
+    updated_at:new Date().toISOString()
+  }));
+  const { error } = await SB.from('class_records').upsert(rows,{onConflict:'teacher,class_name,date,eval,student_code'});
+  return error;
+}
+async function dbLoadRecords(){
+  if(!SB || !USER) return;
+  const { data } = await SB.from('class_records').select('*')
+    .eq('teacher',TEACHER).eq('class_name',$('#classSel').value)
+    .eq('date',$('#dateSel').value).eq('eval',$('#evalSel').value);
+  const by={}; (data||[]).forEach(r=>by[r.student_code]=r);
+  document.querySelectorAll('#rows tr').forEach(tr=>{
+    const r=by[tr.dataset.code]; if(!r) return;
+    if(r.attendance) tr.querySelector('.att').selectedIndex=Math.max(0,ATT_CODES.indexOf(r.attendance));
+    tr.querySelector('.hw').checked=!!r.homework;
+    if(r.score!=null) tr.querySelector('.sc').value=r.score;
+    if(r.max!=null)   tr.querySelector('.mx').value=r.max;
+    if(r.attitude!=null) tr.querySelector('.tae').selectedIndex=r.attitude;
+    tr.querySelector('.pub').checked=!!r.published;
+    if(r.note){ tr.dataset.note=r.note; tr.dataset.notetype=r.note_type||'general'; tr.dataset.notepub=r.note_public?'1':'0';
+      const nb=tr.querySelector('.notebtn'); nb.textContent={general:'📝•',repeat:'⚠️•',sensitive:'🔒•'}[tr.dataset.notetype]||'📝•'; nb.classList.add('filled'); }
+    if(r.video_url){ tr.dataset.vid=r.video_url; tr.dataset.vidpub=r.video_public?'1':'0';
+      const vb=tr.querySelector('.vidbtn'); vb.textContent='🎬✓'; vb.classList.add('filled'); }
+  });
+}
+// ── Supabase: 반메모·강사일지 저장/로드 (class_daily) ──────────
+async function dbSaveDaily(){
+  const { error } = await SB.from('class_daily').upsert({
+    teacher:TEACHER, class_name:$('#classSel').value, date:$('#dateSel').value,
+    class_memo:$('#clsMemo').value, class_memo_published:memoLocked,
+    teacher_log:$('#teaLog').value, updated_at:new Date().toISOString()
+  },{onConflict:'teacher,class_name,date'});
+  return error;
+}
+async function dbLoadDaily(){
+  const { data } = await SB.from('class_daily').select('*')
+    .eq('teacher',TEACHER).eq('class_name',$('#classSel').value).eq('date',$('#dateSel').value).maybeSingle();
+  if(data){ $('#clsMemo').value=data.class_memo||''; memoLocked=!!data.class_memo_published; memoEver=!!data.class_memo;
+    $('#teaLog').value=data.teacher_log||''; teaLocked=!!data.teacher_log; }
+  else { $('#clsMemo').value=''; memoLocked=false; memoEver=false; $('#teaLog').value=''; teaLocked=false; }
+  memoSync();
+}
 
 function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
   $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
@@ -357,6 +418,7 @@ function memoStore(){
     cls:$('#clsMemo').value, clsLocked:memoLocked, clsEver:memoEver, tea:$('#teaLog').value, teaLocked }));
 }
 function memoLoad(){
+  if(SB && USER){ dbLoadDaily(); return; }   // 로그인 시 DB
   let d={}; try{ d=JSON.parse(localStorage.getItem(memoKey())||'{}'); }catch(e){}
   $('#clsMemo').value=d.cls||''; memoLocked=!!d.clsLocked; memoEver=!!d.clsEver;
   $('#teaLog').value=d.tea||''; teaLocked = d.teaLocked ?? !!d.tea; memoSync();
@@ -379,15 +441,18 @@ function memoSync(){
   ts.textContent = teaLocked ? (ko?'🔒 나만 봄 · 저장됨':'🔒 Private · saved') : '';
   ts.style.color = teaLocked?'var(--sub)':'#c0392b';
 }
-function memoPublish(){
+async function memoPublish(){
   if(!$('#clsMemo').value.trim()){ toast(LANG==='ko'?'내용을 입력하세요':'Enter a note'); return; }
-  const re=memoEver; memoEver=true; memoLocked=true; memoStore(); memoSync();
+  const re=memoEver; memoEver=true; memoLocked=true; memoSync();
+  if(SB && USER){ const e=await dbSaveDaily(); if(e){ toast((LANG==='ko'?'발행 실패: ':'Publish failed: ')+e.message); return; } } else memoStore();
   toast(LANG==='ko'?(re?'반 전체 메모 재발행됨':'반 전체 메모 발행됨'):(re?'Re-published':'Published'));
 }
-function memoEdit(){ memoLocked=false; memoStore(); memoSync(); }
-function teaDirty(){ memoStore(); }   // 초안 자동 보관(잠금 전), 상태는 '수정 중'
-function teaSave(){ teaLocked=true; memoStore(); memoSync(); toast(LANG==='ko'?'강사 일지 저장됨':'Log saved'); }
-function teaEdit(){ teaLocked=false; memoStore(); memoSync(); }
+function memoEdit(){ memoLocked=false; if(!(SB&&USER)) memoStore(); memoSync(); }
+function teaDirty(){ if(!(SB&&USER)) memoStore(); }   // DB모드: 저장 버튼으로만 기록
+async function teaSave(){ teaLocked=true; memoSync();
+  if(SB && USER){ const e=await dbSaveDaily(); if(e){ toast((LANG==='ko'?'저장 실패: ':'Save failed: ')+e.message); return; } } else memoStore();
+  toast(LANG==='ko'?'강사 일지 저장됨':'Log saved'); }
+function teaEdit(){ teaLocked=false; if(!(SB&&USER)) memoStore(); memoSync(); }
 window.memoPublish=memoPublish; window.memoEdit=memoEdit; window.memoStore=memoStore;
 window.teaDirty=teaDirty; window.teaSave=teaSave; window.teaEdit=teaEdit;
 
@@ -442,10 +507,10 @@ if(!SUPABASE_URL || !SUPABASE_ANON){
   $('#teaName').dataset.demo='1'; boot(); show('dashView');
 } else { (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
-  const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON); SB=sb;
   async function route(){ const { data:{ session } } = await sb.auth.getSession();
-    if(session){ $('#teaName').textContent = session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Teacher';
-      $('#teaClasses').textContent=''; boot(); show('dashView'); } else { applyLang(); show('loginView'); } }
+    if(session){ USER=session.user; $('#teaName').textContent = session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Teacher';
+      $('#teaClasses').textContent=''; boot(); show('dashView'); } else { USER=null; applyLang(); show('loginView'); } }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent=STR[LANG].needInput; return; }
     const email=id.includes('@')?id:id+ID_DOMAIN; const {error}=await sb.auth.signInWithPassword({email,password:pw});
