@@ -370,7 +370,7 @@ function memoSync(){
   const st=$('#memoStatus');
   st.textContent = memoLocked ? (ko?'✅ 학생·학부모에게 발행됨':'✅ Published to students & parents')
     : memoEver ? (ko?'✏️ 수정 중 — 재발행하면 반영돼요':'✏️ Editing — re-publish to apply')
-    : (ko?'초안 (아직 발행 안 됨)':'Draft (not published)');
+    : '';
   st.style.color = memoLocked?'var(--green-d)':'var(--sub)';
   // 오른쪽 일지 (수정→저장 잠금→수정)
   const t2=$('#teaLog'); t2.readOnly=teaLocked; t2.classList.toggle('locked',teaLocked);
@@ -379,8 +379,7 @@ function memoSync(){
   $('#teaSaveBtn').textContent = ko?'💾 저장':'💾 Save';
   $('#teaEditBtn').textContent = ko?'✏️ 수정':'✏️ Edit';
   const ts=$('#teaStatus');
-  ts.textContent = teaLocked ? (ko?'🔒 나만 봄 · 저장됨':'🔒 Private · saved')
-                             : (ko?'✏️ 수정 중 — 저장 누르면 보관':'✏️ Editing — click Save');
+  ts.textContent = teaLocked ? (ko?'🔒 나만 봄 · 저장됨':'🔒 Private · saved') : '';
   ts.style.color = teaLocked?'var(--sub)':'#c0392b';
 }
 function memoPublish(){
