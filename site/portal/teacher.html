@@ -62,6 +62,16 @@
   .btn2{padding:11px 18px;border-radius:11px;font-weight:800;font-size:14px;border:none;cursor:pointer}
   .btn2.ghost{background:#fff;border:1px solid var(--line);color:var(--navy)}
   .btn2.pri{background:var(--blue);color:#fff}
+  /* 선생님 도구 */
+  .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:20px 2px 10px}
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:720px){.tools{grid-template-columns:1fr}}
+  .tool{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;transition:.15s}
+  .tool:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,39,64,.1);border-color:#c7dcc7}
+  .tool .ic{font-size:26px;width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--soft);flex:none}
+  .tool h3{font-size:15px;color:var(--navy);font-weight:800}
+  .tool p{font-size:12px;color:var(--sub);margin-top:2px}
+  .tool .soon{font-size:10px;font-weight:800;color:#8a6d1a;background:#fef6df;border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:80}
   .toast.on{opacity:1}
   .hidden{display:none}
@@ -98,6 +108,15 @@
   </header>
 
   <div class="wrap">
+
+    <div class="eyebrow">선생님 도구</div>
+    <div class="tools">
+      <a class="tool" href="../write/index.html"><div class="ic">✍️</div><div><h3>Writing Lab</h3><p>주제 내기 · 워크시트 · 1:1 첨삭</p></div></a>
+      <a class="tool" href="#" onclick="toast('원서반 리포트 연결 준비중 (자동화 앱)');return false"><div class="ic">📄</div><div><h3>원서반 리포트 <span class="soon">연결예정</span></h3><p>월말 리포트 생성·게시</p></div></a>
+      <a class="tool" href="#" onclick="toast('IB 워크북 제작 연결 준비중');return false"><div class="ic">📚</div><div><h3>IB 워크북 제작 <span class="soon">연결예정</span></h3><p>레벨별 IB 워크북·평가지</p></div></a>
+    </div>
+
+    <div class="eyebrow" style="margin-top:24px">반 기록 입력</div>
     <div class="bar">
       <select id="classSel"></select>
       <input type="date" id="dateSel">
