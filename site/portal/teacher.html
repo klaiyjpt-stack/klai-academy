@@ -106,6 +106,7 @@
         <button data-lang="ko">한국어</button>
         <button data-lang="en">English</button>
       </div>
+      <select id="teaSel" title="선생님 (데모)"></select>
       <select id="classSel"></select>
       <input type="date" id="dateSel">
       <div class="seg">
@@ -193,29 +194,35 @@ const STR = {
     savedDraft:'Draft saved (demo)',savedPub:n=>`Class saved & published (demo · ${n})`,needInput:'Enter ID and password.',badLogin:'ID or password is incorrect.' }
 };
 const ATTV = {출석:'present',지각:'late',결석:'absent',사유결석:'excused',Present:'present',Late:'late',Absent:'absent',Excused:'excused'};
-// 기초 명단 (이미지 추출 · 영어이름 기준 · 취소선 제외) ⚠️철자/코드 확인 필요
+// 원어민 선생님별 시간표 (영어이름+코드 · 취소선 제외) ⚠️철자/코드 확인 필요
 function S(en,code,ko){ return {en,code,ko}; }
-const DEMO = {
-  'ZOOM 4-2': [S('Leanna','4217','이연서'),S('Roy','1807','황지우'),S('Ain','1657','김아인'),S('Sarah','8294','이세아'),S('Elly','9949','전다은'),S('Stella','8514','이해인')],
-  'ZOOM 4-2 (B)': [S('Junsoo','7765','최준수'),S('Kenneth','3440','박성하'),S('William','1206','지우림'),S('Rosa','1431','박서윤')],
-  'ZOOM 1-1 (A)': [S('Elin','1136','김예린'),S('Luna','7204','이서안'),S('Lucas','9257','박시윤')],
-  'ZOOM 1-1 (B)': [S('Jake','8927','임재윤'),S('Ben','0618','반시후'),S('Ethan','3633','김민성'),S('Cara','6753','최다솜'),S('Lily','0601','허지원')],
-  'IB Year 1 (21/22) A': [S('Bona','1298','정혜인'),S('Ellie','9572','방서현'),S('Chloe','4784','오해솔'),S('Jane','6141','김라율')],
-  'IB Year 1 (27/28) A': [S('Sophia','4520','우소율'),S('Elena','5695','김태은'),S('Greg','3862','심근호'),S('Alex','8607','유정현'),S('Emma','5549','차연서'),S('Andy','3309','송태환')],
-  'KEYSTONE 1-2 A': [S('Harry','4004','이준규'),S('Jason','6548','탁규민'),S('Lucy','8478','정은휼'),S('Steven','0412','곽도윤')],
-  'KEYSTONE 1-2 B': [S('Andy','4520','우하율'),S('Leo','4220','김재원'),S('Audrey','4404','송채윤'),S('Amber','6691','서예인')],
-  'IB Year 1 (21/22) B': [S('Julia','4925','정예은'),S('Liz','8017','임채아'),S('Ella','6155','이채연'),S('Evan','6812','신승현')],
-  'IB Year 1 (23/24)': [S('Celina','0091','박채연')],
-  'KEYSTONE 3-1': [S('Daniel','5874','조민성'),S('Sunny','2337','조민서'),S('Yuncw','4359','윤채원'),S('Jude','0911','오예준')],
-  'IB Year 1 (21/22) C': [S('Rickey','7794','노범준'),S('Jayden','8478','정예립'),S('Jayden','3518','장범준'),S('Junho','7765','최준호'),S('Daisy','4270','박정음'),S('Ivy','3760','김윤서'),S('Jennie','4176','연진서'),S('Billy','4574','김승유')],
-  'IB Year 1 (27/28) B': [S('Ellie','4004','이규은'),S('June','6155','이준석'),S('Aiden','4404','최지운'),S('Clare','5818','송채윤'),S('Leah','0412','곽설아')],
-  'Pathways 2 A': [S('John','8607','유길태'),S('Crystal','2546','황수정'),S('Sophia','4003','김나연'),S('Ethan','5978','서승우')],
-  'IB Year 2 (1/2)': [S('Amy','1220','차서은'),S('Isabel','1220','차서연'),S('Jun','2503','박도준'),S('Henry','3309','송주환'),S('Evan','1891','이로운'),S('Selena','8479','김유솔')],
-  'Pathways 1 A': [S('Cindy','4405','최지유'),S('Jenny','8375','최효원'),S('Joseph','5524','조성현'),S('Hero','8017','임채우')],
-  'Pathways 2 B': [S('Giwon','0814','이기원'),S('Henry','9893','유지우'),S('Sihoon','4865','이시훈')],
-  'Pathways 1 B': [S('Mateo','9987','지효준'),S('Aiden','1206','지이룸')],
-  'Pathways 4': [S('Olivia','5818','송지윤'),S('David','2013','황승준')]
+const ROSTER = {
+  'NEZ (Class 1)': {
+    '2:00 ZOOM 4-2': [S('Leanna','4217','이연서'),S('Roy','1807','황지우'),S('Ain','1657','김아인'),S('Sarah','8294','이세아'),S('Elly','9949','전다은'),S('Stella','8514','이해인')],
+    '2:00 ZOOM 1-1': [S('Elin','1136','김예린'),S('Luna','7204','이서안'),S('Lucas','9257','박시윤')],
+    '3:00 IB Y1 (21/22)': [S('Bona','1298','정혜인'),S('Ellie','9572','방서현'),S('Chloe','4784','오해솔'),S('Jane','6141','김라율')],
+    '3:00 IB Y1 (27/28)': [S('Sophia','4520','우소율'),S('Elena','5695','김태은'),S('Greg','3862','심근호'),S('Alex','8607','유정현'),S('Emma','5549','차연서'),S('Andy','3309','송태환')],
+    '4:00 IB Y1 (21/22)': [S('Julia','4925','정예은'),S('Liz','8017','임채아'),S('Ella','6155','이채연'),S('Evan','6812','신승현')],
+    '4:00 ZOOM 1-1': [S('Jake','8927','임재윤'),S('Ben','0618','반시후'),S('Ethan','3633','김민성'),S('Cara','6753','최다솜'),S('Lily','0601','허지원')],
+    '5:00 IB Y1 (21/22)': [S('Rickey','7794','노범준'),S('Jayden','8478','정예립'),S('Jayden','3518','장범준'),S('Junho','7765','최준호'),S('Daisy','4270','박정음'),S('Ivy','3760','김윤서'),S('Jennie','4176','연진서'),S('Billy','4574','김승유')],
+    '5:00 IB Y1 (27/28)': [S('Ellie','4004','이규은'),S('June','6155','이준석'),S('Aiden','4404','최지운'),S('Clare','5818','송채윤'),S('Leah','0412','곽설아')],
+    '6:30 PATHWAYS 1': [S('Cindy','4405','최지유'),S('Jenny','8375','최효원'),S('Joseph','5524','조성현'),S('Hero','8017','임채우')],
+    '6:30 PATHWAYS 2': [S('Giwon','0814','이기원'),S('Henry','9893','유지우'),S('Sihoon','4865','이시훈')]
+  },
+  'Rosemary (Class 2)': {
+    '2:00 ZOOM 4-2': [S('Junsoo','7765','최준수'),S('Kenneth','3440','박성하'),S('William','1206','지우림'),S('Rosa','1431','박서윤')],
+    '3:00 KEYSTONE 1-2 (A)': [S('Harry','4004','이준규'),S('Jason','6548','탁규민'),S('Lucy','8478','정은휼'),S('Steven','0412','곽도윤')],
+    '3:00 KEYSTONE 1-2 (B)': [S('Andy','4520','우하율'),S('Leo','4220','김재원'),S('Audrey','4404','송채윤'),S('Amber','6691','서예인')],
+    '4:00 IB Y1 (23/24)': [S('Celina','0091','박채연')],
+    '4:00 KEYSTONE 3-1': [S('Daniel','5874','조민성'),S('Sunny','2337','조민서'),S('Yuncw','4359','윤채원'),S('Jude','0911','오예준')],
+    '5:00 Pathways 2': [S('John','8607','유길태'),S('Crystal','2546','황수정'),S('Sophia','4003','김나연'),S('Ethan','5978','서승우')],
+    '5:00 IB Y2 (1/2)': [S('Amy','1220','차서은'),S('Isabel','1220','차서연'),S('Jun','2503','박도준'),S('Henry','3309','송주환'),S('Evan','1891','이로운'),S('Selena','8479','김유솔')],
+    '6:30 PATHWAYS 1': [S('Mateo','9987','지효준'),S('Aiden','1206','지이룸')],
+    '6:30 PATHWAYS 4': [S('Olivia','5818','송지윤'),S('David','2013','황승준')]
+  }
 };
+let TEACHER = Object.keys(ROSTER)[0];
+let DEMO = ROSTER[TEACHER];
 
 let LANG = localStorage.getItem('klai_tea_lang') || 'ko';
 const $ = s => document.querySelector(s);
@@ -232,7 +239,7 @@ function applyLang(){
   $('#upw').placeholder = LANG==='ko'?'비밀번호':'Password';
   $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
   document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
-  if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=s.demoName; $('#teaClasses').textContent=s.classesLabel; }
+  if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=TEACHER; $('#teaClasses').textContent=`${Object.keys(DEMO).length}${LANG==='ko'?'개 반':' classes'}`; }
   renderRows($('#classSel').value || Object.keys(DEMO)[0]);
 }
 function setLang(l){ LANG=l; localStorage.setItem('klai_tea_lang',l); applyLang(); }
@@ -271,6 +278,9 @@ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
 });
 
 function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
+  $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
+  $('#teaSel').value = TEACHER;
+  $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); applyLang(); };
   fillClasses(); $('#classSel').onchange=()=>renderRows($('#classSel').value); applyLang(); }
 function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden', x!==v)); }
 
