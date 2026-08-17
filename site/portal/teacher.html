@@ -62,8 +62,7 @@
   .memogrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
   @media(max-width:720px){.memogrid{grid-template-columns:1fr}}
   .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column}
-  .clsmemo textarea{flex:1}
-  .clsmemo .memoact{margin-top:auto}
+  .clsmemo .memoact{margin-top:auto;padding-top:12px}
   .clsmemo.tealog{background:#faf7ff;border-color:#e3d8f5;border-left-color:#7b3fe4}
   .clsmemo textarea{width:100%;border:1.5px solid #c3d4ea;border-radius:10px;background:#fff;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
   .clsmemo textarea:focus{outline:none;border-color:var(--blue)}
@@ -153,7 +152,7 @@
         <div class="clsmemo">
           <label data-t="clsMemo" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
           <div data-t="clsMemoDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
-          <textarea id="clsMemo" rows="3" oninput="memoStore()"></textarea>
+          <textarea id="clsMemo" rows="2" oninput="memoStore()"></textarea>
           <div class="memoact">
             <button id="memoEditBtn" class="mbtn ghost" onclick="memoEdit()"></button>
             <button id="memoPubBtn" class="mbtn pri" onclick="memoPublish()"></button>
@@ -163,7 +162,7 @@
         <div class="clsmemo tealog">
           <label data-t="teaLog" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
           <div data-t="teaLogDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
-          <textarea id="teaLog" rows="3" oninput="teaDirty()"></textarea>
+          <textarea id="teaLog" rows="2" oninput="teaDirty()"></textarea>
           <div class="memoact">
             <button id="teaEditBtn" class="mbtn ghost" onclick="teaEdit()"></button>
             <button id="teaSaveBtn" class="mbtn pri" onclick="teaSave()"></button>
