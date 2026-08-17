@@ -114,6 +114,7 @@
       <a class="tool" href="../write/index.html"><div class="ic">✍️</div><div><h3>Writing Lab</h3><p>주제 내기 · 워크시트 · 1:1 첨삭</p></div></a>
       <a class="tool" href="#" onclick="toast('원서반 리포트 연결 준비중 (자동화 앱)');return false"><div class="ic">📄</div><div><h3>원서반 리포트 <span class="soon">연결예정</span></h3><p>월말 리포트 생성·게시</p></div></a>
       <a class="tool" href="#" onclick="toast('IB 워크북 제작 연결 준비중');return false"><div class="ic">📚</div><div><h3>IB 워크북 제작 <span class="soon">연결예정</span></h3><p>레벨별 IB 워크북·평가지</p></div></a>
+      <a class="tool" id="notionCard" href="#" target="_blank" rel="noopener" onclick="if(this.getAttribute('href')==='#'){toast('노션 자료실 주소 넣으면 연결돼요');return false}"><div class="ic">📒</div><div><h3>자료실 (노션) <span class="soon" id="notionSoon">주소 필요</span></h3><p>수업 자료·양식 찾아 쓰기</p></div></a>
     </div>
 
     <div class="eyebrow" style="margin-top:24px">반 기록 입력</div>
@@ -169,7 +170,9 @@
 const SUPABASE_URL  = "";   // 학생 포털과 같은 값
 const SUPABASE_ANON = "";
 const ID_DOMAIN = "@klai.kr";
+const NOTION_URL = "https://app.notion.com/p/0316540571/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8";   // 선생님 자료실
 // =================================================
+
 
 // 데모용 반·학생 (Supabase 연결 전)
 const DEMO = {
@@ -230,6 +233,7 @@ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
 
 function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden', x!==v)); }
 function boot(){
+  if(NOTION_URL){ $('#notionCard').href=NOTION_URL; $('#notionSoon').remove(); }
   $('#dateSel').value = '2026-08-17';
   fillClasses(Object.keys(DEMO));
   $('#classSel').onchange = ()=>renderRows($('#classSel').value);
