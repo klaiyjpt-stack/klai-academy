@@ -65,6 +65,11 @@
   .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px;margin:4px 0 14px}
   .clsmemo textarea{width:100%;border:1.5px solid #c3d4ea;border-radius:10px;background:#fff;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
   .clsmemo textarea:focus{outline:none;border-color:var(--blue)}
+  .clsmemo textarea.locked{background:#eef2f8;color:#333}
+  .memoact{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .memostat{font-size:12px;font-weight:700;flex:1}
+  .mbtn{border:none;border-radius:9px;padding:7px 15px;font-weight:800;font-size:13px;cursor:pointer}
+  .mbtn.pri{background:var(--blue);color:#fff}.mbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--sub)}
   .modal{position:fixed;inset:0;background:rgba(20,30,60,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
   .modal.on{display:flex}
   .modal .box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(20,30,60,.3)}
@@ -150,6 +155,11 @@
         <label data-t="clsMemo" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
         <div data-t="clsMemoDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
         <textarea id="clsMemo" rows="2"></textarea>
+        <div class="memoact">
+          <span id="memoStatus" class="memostat"></span>
+          <button id="memoPubBtn" class="mbtn pri" onclick="memoPublish()"></button>
+          <button id="memoEditBtn" class="mbtn ghost hidden" onclick="memoEdit()"></button>
+        </div>
       </div>
       <div class="tblwrap"><table class="grid">
         <thead><tr>
@@ -282,7 +292,7 @@ function applyLang(){
   $('#uid').placeholder = LANG==='ko'?'예: anna':'e.g. anna';
   $('#upw').placeholder = LANG==='ko'?'비밀번호':'Password';
   $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
-  $('#clsMemo').placeholder = s.clsMemoPh;
+  $('#clsMemo').placeholder = s.clsMemoPh; memoSync();
   document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
   if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=TEACHER; $('#teaClasses').textContent=`${Object.keys(DEMO).length}${LANG==='ko'?'개 반':' classes'}`; }
   renderRows($('#classSel').value || Object.keys(DEMO)[0]);
@@ -325,8 +335,33 @@ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
 function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
   $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
   $('#teaSel').value = TEACHER;
-  $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); applyLang(); };
-  fillClasses(); $('#classSel').onchange=()=>renderRows($('#classSel').value); applyLang(); }
+  $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); memoReset(); applyLang(); };
+  fillClasses(); $('#classSel').onchange=()=>{ memoReset(); renderRows($('#classSel').value); }; memoReset(); applyLang(); }
+// ── 반 전체 메모: 초안→발행(잠금)→수정→재발행 (데모) ──────
+let memoEver=false, memoLocked=false;
+function memoSync(){
+  const ko=LANG==='ko', ta=$('#clsMemo');
+  ta.readOnly=memoLocked; ta.classList.toggle('locked',memoLocked);
+  $('#memoPubBtn').classList.toggle('hidden',memoLocked);
+  $('#memoEditBtn').classList.toggle('hidden',!memoLocked);
+  $('#memoPubBtn').textContent = memoEver ? (ko?'🔄 재발행':'🔄 Re-publish') : (ko?'발행하기':'Publish');
+  $('#memoEditBtn').textContent = ko?'✏️ 수정':'✏️ Edit';
+  const st=$('#memoStatus');
+  st.textContent = memoLocked ? (ko?'✅ 학생·학부모에게 발행됨':'✅ Published to students & parents')
+    : memoEver ? (ko?'✏️ 수정 중 — 재발행하면 반영돼요':'✏️ Editing — re-publish to apply')
+    : (ko?'초안 (아직 발행 안 됨)':'Draft (not published)');
+  st.style.color = memoLocked?'var(--green-d)':'var(--sub)';
+}
+function memoPublish(){
+  if(!$('#clsMemo').value.trim()){ toast(LANG==='ko'?'내용을 입력하세요':'Enter a note'); return; }
+  const re=memoEver; memoEver=true; memoLocked=true; memoSync();
+  // TODO(Phase2): class_note upsert (status=posted)
+  toast(LANG==='ko'?(re?'반 전체 메모 재발행됨':'반 전체 메모 발행됨'):(re?'Re-published':'Published'));
+}
+function memoEdit(){ memoLocked=false; memoSync(); }
+function memoReset(){ $('#clsMemo').value=''; memoEver=false; memoLocked=false; memoSync(); }
+window.memoPublish=memoPublish; window.memoEdit=memoEdit;
+
 // ── 영상/개별메모 셀 (데모: 행에 임시 저장) ──────────────
 let CELL=null;
 function openCell(btn,kind){
