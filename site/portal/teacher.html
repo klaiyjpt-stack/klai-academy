@@ -172,6 +172,7 @@
           <div class="memoact">
             <span id="teaStatus" class="memostat" style="color:var(--sub);font-weight:700"></span>
             <button id="teaSaveBtn" class="mbtn pri" onclick="teaSave()"></button>
+            <button id="teaEditBtn" class="mbtn ghost hidden" onclick="teaEdit()"></button>
           </div>
         </div>
       </div>
@@ -359,16 +360,16 @@ function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').
   fillClasses(); $('#classSel').onchange=()=>{ memoLoad(); renderRows($('#classSel').value); }; memoLoad(); applyLang(); }
 // ── 메모(날짜별 저장): 왼쪽=반전체 발행 / 오른쪽=강사 일지 ──────
 // ponytail: localStorage 저장(데모). Phase2에서 Supabase로 교체.
-let memoEver=false, memoLocked=false, teaSaved=true;
+let memoEver=false, memoLocked=false, teaLocked=false;
 function memoKey(){ return `klai_memo::${TEACHER}::${$('#classSel').value}::${$('#dateSel').value}`; }
 function memoStore(){
   localStorage.setItem(memoKey(), JSON.stringify({
-    cls:$('#clsMemo').value, clsLocked:memoLocked, clsEver:memoEver, tea:$('#teaLog').value }));
+    cls:$('#clsMemo').value, clsLocked:memoLocked, clsEver:memoEver, tea:$('#teaLog').value, teaLocked }));
 }
 function memoLoad(){
   let d={}; try{ d=JSON.parse(localStorage.getItem(memoKey())||'{}'); }catch(e){}
   $('#clsMemo').value=d.cls||''; memoLocked=!!d.clsLocked; memoEver=!!d.clsEver;
-  $('#teaLog').value=d.tea||''; teaSaved=true; memoSync();
+  $('#teaLog').value=d.tea||''; teaLocked = d.teaLocked ?? !!d.tea; memoSync();
 }
 function memoSync(){
   const ko=LANG==='ko', ta=$('#clsMemo');
@@ -382,12 +383,16 @@ function memoSync(){
     : memoEver ? (ko?'✏️ 수정 중 — 재발행하면 반영돼요':'✏️ Editing — re-publish to apply')
     : (ko?'초안 (아직 발행 안 됨)':'Draft (not published)');
   st.style.color = memoLocked?'var(--green-d)':'var(--sub)';
-  // 오른쪽 일지
+  // 오른쪽 일지 (수정→저장 잠금→수정)
+  const t2=$('#teaLog'); t2.readOnly=teaLocked; t2.classList.toggle('locked',teaLocked);
+  $('#teaSaveBtn').classList.toggle('hidden',teaLocked);
+  $('#teaEditBtn').classList.toggle('hidden',!teaLocked);
   $('#teaSaveBtn').textContent = ko?'💾 저장':'💾 Save';
+  $('#teaEditBtn').textContent = ko?'✏️ 수정':'✏️ Edit';
   const ts=$('#teaStatus');
-  ts.textContent = teaSaved ? (ko?'🔒 나만 봄 · 저장됨':'🔒 Private · saved')
-                            : (ko?'● 저장 안 됨 — 저장 눌러요':'● Unsaved — click Save');
-  ts.style.color = teaSaved?'var(--sub)':'#c0392b';
+  ts.textContent = teaLocked ? (ko?'🔒 나만 봄 · 저장됨':'🔒 Private · saved')
+                             : (ko?'✏️ 수정 중 — 저장 누르면 보관':'✏️ Editing — click Save');
+  ts.style.color = teaLocked?'var(--sub)':'#c0392b';
 }
 function memoPublish(){
   if(!$('#clsMemo').value.trim()){ toast(LANG==='ko'?'내용을 입력하세요':'Enter a note'); return; }
@@ -395,10 +400,11 @@ function memoPublish(){
   toast(LANG==='ko'?(re?'반 전체 메모 재발행됨':'반 전체 메모 발행됨'):(re?'Re-published':'Published'));
 }
 function memoEdit(){ memoLocked=false; memoStore(); memoSync(); }
-function teaDirty(){ teaSaved=false; memoStore(); memoSync(); }   // 초안은 계속 보관, 상태만 '미저장'
-function teaSave(){ teaSaved=true; memoStore(); memoSync(); toast(LANG==='ko'?'강사 일지 저장됨':'Log saved'); }
+function teaDirty(){ memoStore(); }   // 초안 자동 보관(잠금 전), 상태는 '수정 중'
+function teaSave(){ teaLocked=true; memoStore(); memoSync(); toast(LANG==='ko'?'강사 일지 저장됨':'Log saved'); }
+function teaEdit(){ teaLocked=false; memoStore(); memoSync(); }
 window.memoPublish=memoPublish; window.memoEdit=memoEdit; window.memoStore=memoStore;
-window.teaDirty=teaDirty; window.teaSave=teaSave;
+window.teaDirty=teaDirty; window.teaSave=teaSave; window.teaEdit=teaEdit;
 
 // ── 영상/개별메모 셀 (데모: 행에 임시 저장) ──────────────
 let CELL=null;
