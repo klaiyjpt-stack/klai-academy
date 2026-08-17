@@ -51,6 +51,8 @@
   table.grid{width:100%;border-collapse:collapse;min-width:720px}
   table.grid th,table.grid td{padding:11px 8px;text-align:center;border-bottom:1px solid var(--line);font-size:13.5px}
   table.grid thead th{background:var(--soft);color:var(--sub);font-weight:800;font-size:12px}
+  .allck{display:flex;align-items:center;justify-content:center;gap:3px;font-weight:600;font-size:10px;color:var(--sub);margin-top:3px;cursor:pointer}
+  .allck input{width:15px;height:15px;cursor:pointer;accent-color:var(--green)}
   table.grid td.name{text-align:left;font-weight:700;color:var(--navy)}
   table.grid td.name small{display:block;color:var(--sub);font-weight:500;font-size:11.5px}
   table.grid select{padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff}
@@ -172,8 +174,10 @@
       </div>
       <div class="tblwrap"><table class="grid">
         <thead><tr>
-          <th style="text-align:left" data-t="cStudent"></th><th data-t="cAtt"></th><th data-t="cHw"></th>
-          <th data-t="cScore"></th><th data-t="cAttitude"></th><th data-t="cVideo"></th><th data-t="cNote"></th><th data-t="cPub"></th>
+          <th style="text-align:left" data-t="cStudent"></th><th data-t="cAtt"></th>
+          <th><span data-t="cHw"></span><label class="allck"><input type="checkbox" onchange="toggleCol('hw',this.checked)"><span data-t="allLbl"></span></label></th>
+          <th data-t="cScore"></th><th data-t="cAttitude"></th><th data-t="cVideo"></th><th data-t="cNote"></th>
+          <th><span data-t="cPub"></span><label class="allck"><input type="checkbox" onchange="toggleCol('pub',this.checked)"><span data-t="allLbl"></span></label></th>
         </tr></thead>
         <tbody id="rows"></tbody>
       </table></div>
@@ -234,7 +238,7 @@ const STR = {
     gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
     clsMemo:'📋 오늘 반 전체 메모 (학생·학부모 공개)',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 발행하면 반 학생·학부모 페이지에 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
     teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',
-    cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',
+    cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',allLbl:'전체',
     saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
     att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
     evals:['단어시험','월말평가','레벨테스트'],
@@ -252,7 +256,7 @@ const STR = {
     gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
     clsMemo:'📋 Today · class note (shared)',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When published, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
     teaLog:'🗒️ Teacher log · work report (private)',teaLogDesc:'Private to you — class reflections, handoffs, work report. Not shown to students or parents. Change the date to see past logs.',teaLogPh:'e.g. Class 3 finished Unit 5 · Jihoon needs parent call · low textbook stock — report to director',
-    cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',
+    cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',allLbl:'All',
     saveNote:'✅ After entering, saving publishes only students with Publish ON.',saveDraft:'Save draft',savePublish:'Save & publish class',
     att:['Present','Late','Absent','Excused'],tae:['Excellent','Good','Needs work'],
     evals:['Vocab Test','Monthly Test','Level Test'],
@@ -313,6 +317,8 @@ function applyLang(){
 function setLang(l){ LANG=l; localStorage.setItem('klai_tea_lang',l); applyLang(); }
 document.querySelectorAll('.langseg button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 
+function toggleCol(cls,on){ document.querySelectorAll('#rows .'+cls).forEach(c=>c.checked=on); }
+window.toggleCol=toggleCol;
 function fillClasses(){ $('#classSel').innerHTML = Object.keys(DEMO).map(n=>`<option>${n}</option>`).join(''); }
 const EVALMAX=[6,25,'']; // evals 순서: 단어시험=6, 월말평가=25, 레벨테스트=빈칸(통과/미달)
 function renderRows(cls){
@@ -406,7 +412,7 @@ function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').
   $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
   $('#teaSel').value = TEACHER;
   $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); memoLoad(); applyLang(); };
-  $('#dateSel').onchange = ()=>memoLoad();
+  $('#dateSel').onchange = ()=>{ memoLoad(); renderRows($('#classSel').value); };
   $('#evalSel').onchange = ()=>renderRows($('#classSel').value);
   fillClasses(); $('#classSel').onchange=()=>{ memoLoad(); renderRows($('#classSel').value); }; memoLoad(); applyLang(); }
 // ── 메모(날짜별 저장): 왼쪽=반전체 발행 / 오른쪽=강사 일지 ──────
