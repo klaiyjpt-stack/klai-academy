@@ -62,7 +62,10 @@
   .scorebox input{width:44px;padding:6px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:14px}
   .iconbtn{background:none;border:none;font-size:16px;cursor:pointer;opacity:.6}.iconbtn:hover{opacity:1}
   .iconbtn.filled{opacity:1}
-  .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px;margin:4px 0 14px}
+  .memogrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
+  @media(max-width:720px){.memogrid{grid-template-columns:1fr}}
+  .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px}
+  .clsmemo.tealog{background:#faf7ff;border-color:#e3d8f5;border-left-color:#7b3fe4}
   .clsmemo textarea{width:100%;border:1.5px solid #c3d4ea;border-radius:10px;background:#fff;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
   .clsmemo textarea:focus{outline:none;border-color:var(--blue)}
   .clsmemo textarea.locked{background:#eef2f8;color:#333}
@@ -151,14 +154,25 @@
         <button class="mini" onclick="toast(T().newTestSoon)" data-t="newTest"></button>
         <span class="hint" data-t="testHint"></span>
       </div>
-      <div class="clsmemo">
-        <label data-t="clsMemo" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
-        <div data-t="clsMemoDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
-        <textarea id="clsMemo" rows="2"></textarea>
-        <div class="memoact">
-          <span id="memoStatus" class="memostat"></span>
-          <button id="memoPubBtn" class="mbtn pri" onclick="memoPublish()"></button>
-          <button id="memoEditBtn" class="mbtn ghost hidden" onclick="memoEdit()"></button>
+      <div class="memogrid">
+        <div class="clsmemo">
+          <label data-t="clsMemo" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
+          <div data-t="clsMemoDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
+          <textarea id="clsMemo" rows="3" oninput="memoStore()"></textarea>
+          <div class="memoact">
+            <span id="memoStatus" class="memostat"></span>
+            <button id="memoPubBtn" class="mbtn pri" onclick="memoPublish()"></button>
+            <button id="memoEditBtn" class="mbtn ghost hidden" onclick="memoEdit()"></button>
+          </div>
+        </div>
+        <div class="clsmemo tealog">
+          <label data-t="teaLog" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
+          <div data-t="teaLogDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
+          <textarea id="teaLog" rows="3" oninput="teaDirty()"></textarea>
+          <div class="memoact">
+            <span id="teaStatus" class="memostat" style="color:var(--sub);font-weight:700"></span>
+            <button id="teaSaveBtn" class="mbtn pri" onclick="teaSave()"></button>
+          </div>
         </div>
       </div>
       <div class="tblwrap"><table class="grid">
@@ -219,13 +233,14 @@ const STR = {
     toolWriting:'주제 내기 · 워크시트 · 1:1 첨삭',toolReport:'원서반 리포트',toolReportSub:'월말 리포트 생성·게시',
     toolWorkbook:'IB PPT & TG',toolWorkbookSub:'수업 슬라이드 · 티칭가이드',toolNotion:'자료실 (노션)',toolNotionSub:'수업 자료·양식 찾아 쓰기',
     indEntry:'👤 개별 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
-    test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'단어시험 6회 기본 · 총 문항은 평가마다 다름',
+    test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항 기본 — 단어시험 6 · 월말평가 25 (필요시 칸에서 조정)',
     gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
-    clsMemo:'📋 오늘 반 전체 메모',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 저장하면 반 학생·학부모 페이지에 함께 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
+    clsMemo:'📋 오늘 반 전체 메모 (학생·학부모 공개)',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 발행하면 반 학생·학부모 페이지에 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
+    teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',
     cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',
     saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
     att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
-    evals:['단어시험 1회 (20문항)','단어시험 2회 (20문항)','단어시험 3회 (20문항)','단어시험 4회 (20문항)','단어시험 5회 (20문항)','단어시험 6회 (20문항)','월말평가','레벨테스트'],
+    evals:['단어시험','월말평가','레벨테스트'],
     students:'명',classesLabel:'담당: A·B반',demoName:'데모 선생님',
     soonReport:'원서반 리포트 연결 준비중 (자동화 앱)',soonWorkbook:'IB PPT & TG 연결 준비중',newTestSoon:'평가 추가는 곧 연결돼요 (데모)',
     savedDraft:'임시 저장 완료 (데모)',savedPub:n=>`반 전체 저장·게시 완료 (데모 · ${n}명)`,needInput:'아이디와 비밀번호를 입력하세요.',badLogin:'아이디 또는 비밀번호가 맞지 않아요.' },
@@ -236,13 +251,14 @@ const STR = {
     toolWriting:'Post topics · worksheet · 1:1 feedback',toolReport:'Reading-class Report',toolReportSub:'Create & publish monthly report',
     toolWorkbook:'IB PPT & TG',toolWorkbookSub:'Lesson slides & teaching guide',toolNotion:'Resources (Notion)',toolNotionSub:'Find class materials & forms',
     indEntry:'👤 Individual Entry',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
-    test:'Test',newTest:'＋ New test',testHint:'6 vocab tests by default · totals vary by test',
+    test:'Test',newTest:'＋ New test',testHint:'Default total — Vocab 6 · Monthly 25 (adjust per cell)',
     gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
-    clsMemo:'📋 Today · class note',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When saved, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
+    clsMemo:'📋 Today · class note (shared)',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When published, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
+    teaLog:'🗒️ Teacher log · work report (private)',teaLogDesc:'Private to you — class reflections, handoffs, work report. Not shown to students or parents. Change the date to see past logs.',teaLogPh:'e.g. Class 3 finished Unit 5 · Jihoon needs parent call · low textbook stock — report to director',
     cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',
     saveNote:'✅ After entering, saving publishes only students with Publish ON.',saveDraft:'Save draft',savePublish:'Save & publish class',
     att:['Present','Late','Absent','Excused'],tae:['Excellent','Good','Needs work'],
-    evals:['Vocab Test 1 (20 items)','Vocab Test 2 (20 items)','Vocab Test 3 (20 items)','Vocab Test 4 (20 items)','Vocab Test 5 (20 items)','Vocab Test 6 (20 items)','Monthly Test','Level Test'],
+    evals:['Vocab Test','Monthly Test','Level Test'],
     students:'students',classesLabel:'Classes: A · B',demoName:'Demo Teacher',
     soonReport:'Reading-class Report — coming soon (automation app)',soonWorkbook:'IB PPT & TG — coming soon',newTestSoon:'Adding tests — coming soon (demo)',
     savedDraft:'Draft saved (demo)',savedPub:n=>`Class saved & published (demo · ${n})`,needInput:'Enter ID and password.',badLogin:'ID or password is incorrect.' }
@@ -292,7 +308,7 @@ function applyLang(){
   $('#uid').placeholder = LANG==='ko'?'예: anna':'e.g. anna';
   $('#upw').placeholder = LANG==='ko'?'비밀번호':'Password';
   $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
-  $('#clsMemo').placeholder = s.clsMemoPh; memoSync();
+  $('#clsMemo').placeholder = s.clsMemoPh; $('#teaLog').placeholder = s.teaLogPh; memoSync();
   document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
   if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=TEACHER; $('#teaClasses').textContent=`${Object.keys(DEMO).length}${LANG==='ko'?'개 반':' classes'}`; }
   renderRows($('#classSel').value || Object.keys(DEMO)[0]);
@@ -301,15 +317,17 @@ function setLang(l){ LANG=l; localStorage.setItem('klai_tea_lang',l); applyLang(
 document.querySelectorAll('.langseg button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 
 function fillClasses(){ $('#classSel').innerHTML = Object.keys(DEMO).map(n=>`<option>${n}</option>`).join(''); }
+const EVALMAX=[6,25,'']; // evals 순서: 단어시험=6, 월말평가=25, 레벨테스트=빈칸(통과/미달)
 function renderRows(cls){
   const s=STR[LANG], list=DEMO[cls]||[];
+  const MX = EVALMAX[$('#evalSel').selectedIndex] ?? '';
   $('#clsPill').textContent = `${cls} · ${list.length}${LANG==='ko'?'명':' '+s.students}`;
   $('#rows').innerHTML = list.map(st=>`
     <tr>
       <td class="name">${LANG==='ko'?st.ko:st.en} <span style="color:var(--sub);font-weight:500;font-size:12px">${st.code}</span><small>${LANG==='ko'?st.en:st.ko}</small></td>
       <td><select class="att">${s.att.map(a=>`<option>${a}</option>`).join('')}</select></td>
       <td><input type="checkbox" class="chk hw"></td>
-      <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="20"></span></td>
+      <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="${MX}"></span></td>
       <td><select class="tae">${s.tae.map(a=>`<option>${a}</option>`).join('')}</select></td>
       <td><button class="iconbtn vidbtn" onclick="openCell(this,'vid')">🎬＋</button></td>
       <td><button class="iconbtn notebtn" onclick="openCell(this,'note')">📝</button></td>
@@ -335,10 +353,23 @@ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
 function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
   $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
   $('#teaSel').value = TEACHER;
-  $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); memoReset(); applyLang(); };
-  fillClasses(); $('#classSel').onchange=()=>{ memoReset(); renderRows($('#classSel').value); }; memoReset(); applyLang(); }
-// ── 반 전체 메모: 초안→발행(잠금)→수정→재발행 (데모) ──────
-let memoEver=false, memoLocked=false;
+  $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); memoLoad(); applyLang(); };
+  $('#dateSel').onchange = ()=>memoLoad();
+  $('#evalSel').onchange = ()=>renderRows($('#classSel').value);
+  fillClasses(); $('#classSel').onchange=()=>{ memoLoad(); renderRows($('#classSel').value); }; memoLoad(); applyLang(); }
+// ── 메모(날짜별 저장): 왼쪽=반전체 발행 / 오른쪽=강사 일지 ──────
+// ponytail: localStorage 저장(데모). Phase2에서 Supabase로 교체.
+let memoEver=false, memoLocked=false, teaSaved=true;
+function memoKey(){ return `klai_memo::${TEACHER}::${$('#classSel').value}::${$('#dateSel').value}`; }
+function memoStore(){
+  localStorage.setItem(memoKey(), JSON.stringify({
+    cls:$('#clsMemo').value, clsLocked:memoLocked, clsEver:memoEver, tea:$('#teaLog').value }));
+}
+function memoLoad(){
+  let d={}; try{ d=JSON.parse(localStorage.getItem(memoKey())||'{}'); }catch(e){}
+  $('#clsMemo').value=d.cls||''; memoLocked=!!d.clsLocked; memoEver=!!d.clsEver;
+  $('#teaLog').value=d.tea||''; teaSaved=true; memoSync();
+}
 function memoSync(){
   const ko=LANG==='ko', ta=$('#clsMemo');
   ta.readOnly=memoLocked; ta.classList.toggle('locked',memoLocked);
@@ -351,16 +382,23 @@ function memoSync(){
     : memoEver ? (ko?'✏️ 수정 중 — 재발행하면 반영돼요':'✏️ Editing — re-publish to apply')
     : (ko?'초안 (아직 발행 안 됨)':'Draft (not published)');
   st.style.color = memoLocked?'var(--green-d)':'var(--sub)';
+  // 오른쪽 일지
+  $('#teaSaveBtn').textContent = ko?'💾 저장':'💾 Save';
+  const ts=$('#teaStatus');
+  ts.textContent = teaSaved ? (ko?'🔒 나만 봄 · 저장됨':'🔒 Private · saved')
+                            : (ko?'● 저장 안 됨 — 저장 눌러요':'● Unsaved — click Save');
+  ts.style.color = teaSaved?'var(--sub)':'#c0392b';
 }
 function memoPublish(){
   if(!$('#clsMemo').value.trim()){ toast(LANG==='ko'?'내용을 입력하세요':'Enter a note'); return; }
-  const re=memoEver; memoEver=true; memoLocked=true; memoSync();
-  // TODO(Phase2): class_note upsert (status=posted)
+  const re=memoEver; memoEver=true; memoLocked=true; memoStore(); memoSync();
   toast(LANG==='ko'?(re?'반 전체 메모 재발행됨':'반 전체 메모 발행됨'):(re?'Re-published':'Published'));
 }
-function memoEdit(){ memoLocked=false; memoSync(); }
-function memoReset(){ $('#clsMemo').value=''; memoEver=false; memoLocked=false; memoSync(); }
-window.memoPublish=memoPublish; window.memoEdit=memoEdit;
+function memoEdit(){ memoLocked=false; memoStore(); memoSync(); }
+function teaDirty(){ teaSaved=false; memoStore(); memoSync(); }   // 초안은 계속 보관, 상태만 '미저장'
+function teaSave(){ teaSaved=true; memoStore(); memoSync(); toast(LANG==='ko'?'강사 일지 저장됨':'Log saved'); }
+window.memoPublish=memoPublish; window.memoEdit=memoEdit; window.memoStore=memoStore;
+window.teaDirty=teaDirty; window.teaSave=teaSave;
 
 // ── 영상/개별메모 셀 (데모: 행에 임시 저장) ──────────────
 let CELL=null;
