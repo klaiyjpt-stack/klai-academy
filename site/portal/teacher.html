@@ -5,12 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>선생님 페이지 · 클라이 어학원</title>
 <style>
-  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc;--ok:#1f9d61;--warn:#c9a227}
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5}
   a{text-decoration:none;color:inherit}
   .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
-  /* header */
   header{background:linear-gradient(120deg,#2b74c4,#3aa76d);color:#fff}
   .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px}
   .hd .ttl{font-weight:800;font-size:18px}
@@ -18,7 +17,6 @@
   .hd .me{text-align:right;font-size:13px;opacity:.95}
   .hd .out{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;margin-left:10px}
   .setup{background:#fff8e1;border-bottom:1px solid #f0e0a8;color:#7a5c00;font-size:12.5px;padding:9px 16px;text-align:center}
-  /* login */
   .login{max-width:360px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 10px 40px rgba(20,30,60,.1)}
   .login .lg{text-align:center;font-weight:800;font-size:20px;color:var(--navy)}
   .login .ls{text-align:center;color:var(--sub);font-size:13px;margin:4px 0 20px}
@@ -26,13 +24,23 @@
   .login input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
   .login .btn{width:100%;margin-top:18px;background:var(--blue);color:#fff;border:none;padding:13px;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer}
   .login .err{color:#c0392b;font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
-  /* controls */
   .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:16px 0}
   .bar select,.bar input[type=date]{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff}
+  .langseg{display:flex;background:#e9eef6;border-radius:10px;padding:3px}
+  .langseg button{border:none;background:none;padding:8px 13px;border-radius:8px;font-weight:800;font-size:13px;color:var(--sub);cursor:pointer}
+  .langseg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
   .seg{margin-left:auto;display:flex;background:#e9eef6;border-radius:10px;padding:3px}
   .seg button{border:none;background:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px;color:var(--sub);cursor:pointer}
   .seg button.on{background:var(--blue);color:#fff}
-  /* card */
+  .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:20px 2px 10px}
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:720px){.tools{grid-template-columns:1fr}}
+  .tool{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;transition:.15s}
+  .tool:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,39,64,.1);border-color:#c7dcc7}
+  .tool .ic{font-size:26px;width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--soft);flex:none}
+  .tool h3{font-size:15px;color:var(--navy);font-weight:800}
+  .tool p{font-size:12px;color:var(--sub);margin-top:2px}
+  .tool .soon{font-size:10px;font-weight:800;color:#8a6d1a;background:#fef6df;border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
   .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}
   .phead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
   .phead h2{font-size:16px;color:var(--navy);font-weight:800}
@@ -42,7 +50,6 @@
   .evalrow select{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff}
   .mini{border:1px dashed #b9c6da;background:#f2f6fc;color:var(--blue-d);font-weight:700;font-size:13px;padding:9px 12px;border-radius:10px;cursor:pointer}
   .hint{font-size:11.5px;color:#8a6d1a;background:#fef6df;border-radius:999px;padding:5px 11px}
-  /* grid table */
   .tblwrap{overflow-x:auto}
   table.grid{width:100%;border-collapse:collapse;min-width:720px}
   table.grid th,table.grid td{padding:11px 8px;text-align:center;border-bottom:1px solid var(--line);font-size:13.5px}
@@ -53,25 +60,13 @@
   .chk{width:22px;height:22px;cursor:pointer;accent-color:var(--green)}
   .scorebox{display:inline-flex;align-items:center;gap:4px}
   .scorebox input{width:44px;padding:6px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:14px}
-  .iconbtn{background:none;border:none;font-size:16px;cursor:pointer;opacity:.6}
-  .iconbtn:hover{opacity:1}
-  /* save */
+  .iconbtn{background:none;border:none;font-size:16px;cursor:pointer;opacity:.6}.iconbtn:hover{opacity:1}
   .saverow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
   .saverow .note{font-size:12.5px;color:var(--sub)}
   .btnsave{display:flex;gap:8px}
   .btn2{padding:11px 18px;border-radius:11px;font-weight:800;font-size:14px;border:none;cursor:pointer}
   .btn2.ghost{background:#fff;border:1px solid var(--line);color:var(--navy)}
   .btn2.pri{background:var(--blue);color:#fff}
-  /* 선생님 도구 */
-  .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:20px 2px 10px}
-  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  @media(max-width:720px){.tools{grid-template-columns:1fr}}
-  .tool{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;transition:.15s}
-  .tool:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,39,64,.1);border-color:#c7dcc7}
-  .tool .ic{font-size:26px;width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--soft);flex:none}
-  .tool h3{font-size:15px;color:var(--navy);font-weight:800}
-  .tool p{font-size:12px;color:var(--sub);margin-top:2px}
-  .tool .soon{font-size:10px;font-weight:800;color:#8a6d1a;background:#fef6df;border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:80}
   .toast.on{opacity:1}
   .hidden{display:none}
@@ -79,84 +74,78 @@
 </head>
 <body>
 
-<div id="setupBanner" class="setup hidden">⚙ 데모 미리보기 — Supabase 값·강사 계정 연결 시 실제 반 명단·저장 작동. 지금은 샘플 데이터.</div>
+<div id="setupBanner" class="setup hidden"></div>
 
-<!-- 로그인 -->
 <div id="loginView" class="hidden">
   <div class="login">
-    <div class="lg">선생님 페이지</div>
-    <div class="ls">강사 아이디로 로그인</div>
-    <label>강사 아이디</label>
-    <input id="uid" type="text" autocomplete="username" placeholder="예: anna" autocapitalize="none">
-    <label>비밀번호</label>
-    <input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
-    <button class="btn" id="loginBtn">로그인</button>
+    <div class="lg" data-t="loginTitle"></div>
+    <div class="ls" data-t="loginSub"></div>
+    <label data-t="idLabel"></label>
+    <input id="uid" type="text" autocomplete="username" autocapitalize="none">
+    <label data-t="pwLabel"></label>
+    <input id="upw" type="password" autocomplete="current-password">
+    <button class="btn" id="loginBtn" data-t="login"></button>
     <div class="err" id="loginErr"></div>
   </div>
 </div>
 
-<!-- 대시보드 -->
 <div id="dashView" class="hidden">
   <header>
     <div class="wrap hd">
-      <div class="ttl">🏫 클라이 어학원 · 선생님 페이지<small>반 전체를 한 번에 입력 → 공개 항목만 학생·학부모 페이지에 자동 반영</small></div>
+      <div class="ttl"><span data-t="headTitle"></span><small data-t="headSub"></small></div>
       <div style="display:flex;align-items:center">
-        <div class="me"><b id="teaName">선생님</b><br><span id="teaClasses">담당 반</span></div>
-        <button class="out" id="logoutBtn">로그아웃</button>
+        <div class="me"><b id="teaName"></b><br><span id="teaClasses"></span></div>
+        <button class="out" id="logoutBtn" data-t="logout"></button>
       </div>
     </div>
   </header>
 
   <div class="wrap">
-
-    <div class="eyebrow">선생님 도구</div>
-    <div class="tools">
-      <a class="tool" href="../write/index.html"><div class="ic">✍️</div><div><h3>Writing Lab</h3><p>주제 내기 · 워크시트 · 1:1 첨삭</p></div></a>
-      <a class="tool" href="#" onclick="toast('원서반 리포트 연결 준비중 (자동화 앱)');return false"><div class="ic">📄</div><div><h3>원서반 리포트 <span class="soon">연결예정</span></h3><p>월말 리포트 생성·게시</p></div></a>
-      <a class="tool" href="#" onclick="toast('IB 워크북 제작 연결 준비중');return false"><div class="ic">📚</div><div><h3>IB 워크북 제작 <span class="soon">연결예정</span></h3><p>레벨별 IB 워크북·평가지</p></div></a>
-      <a class="tool" id="notionCard" href="#" target="_blank" rel="noopener" onclick="if(this.getAttribute('href')==='#'){toast('노션 자료실 주소 넣으면 연결돼요');return false}"><div class="ic">📒</div><div><h3>자료실 (노션) <span class="soon" id="notionSoon">주소 필요</span></h3><p>수업 자료·양식 찾아 쓰기</p></div></a>
-    </div>
-
-    <div class="eyebrow" style="margin-top:24px">반 기록 입력</div>
     <div class="bar">
+      <div class="langseg">
+        <button data-lang="ko">한국어</button>
+        <button data-lang="en">English</button>
+      </div>
       <select id="classSel"></select>
       <input type="date" id="dateSel">
       <div class="seg">
-        <button class="on" data-mode="ind">👤 개별 입력</button>
-        <button data-mode="cls">🏫 반별 입력</button>
+        <button class="on" data-mode="ind" data-t="segInd"></button>
+        <button data-mode="cls" data-t="segCls"></button>
       </div>
     </div>
 
+    <div class="eyebrow" data-t="tools"></div>
+    <div class="tools">
+      <a class="tool" href="../write/index.html"><div class="ic">✍️</div><div><h3>Writing Lab</h3><p data-t="toolWriting"></p></div></a>
+      <a class="tool" href="#" onclick="toast(T().soonReport);return false"><div class="ic">📄</div><div><h3 data-t="toolReport"></h3><p data-t="toolReportSub"></p></div></a>
+      <a class="tool" href="#" onclick="toast(T().soonWorkbook);return false"><div class="ic">📚</div><div><h3 data-t="toolWorkbook"></h3><p data-t="toolWorkbookSub"></p></div></a>
+      <a class="tool" id="notionCard" href="#" target="_blank" rel="noopener"><div class="ic">📒</div><div><h3 data-t="toolNotion"></h3><p data-t="toolNotionSub"></p></div></a>
+    </div>
+
+    <div class="eyebrow" style="margin-top:24px" data-t="records"></div>
     <div class="panel">
-      <div class="phead"><h2>👤 개별 입력</h2><span class="pill" id="clsPill">A반 · 5명</span></div>
-      <div class="desc">학생 한 명씩 페이지를 열지 않고, <b>구글시트처럼 반 전체를 한 화면</b>에서 체크·입력합니다. 점수는 <b>맞은 개수 / 총 문항</b>(예: 18/20).</div>
-
+      <div class="phead"><h2 data-t="indEntry"></h2><span class="pill" id="clsPill"></span></div>
+      <div class="desc" data-t="indDesc"></div>
       <div class="evalrow">
-        <span style="font-size:13px;font-weight:700;color:var(--sub)">평가 회차</span>
-        <select id="evalSel">
-          <option>단어시험 Day5 (20문항)</option>
-          <option>7월 월말평가 (25문항)</option>
-          <option>레벨테스트</option>
-        </select>
-        <button class="mini" onclick="toast('평가 추가는 곧 연결돼요 (데모)')">＋ 새 평가 만들기</button>
-        <span class="hint">총 문항은 평가마다 다름 · 단어시험 여러 개는 회차로 구분</span>
+        <span style="font-size:13px;font-weight:700;color:var(--sub)" data-t="test"></span>
+        <select id="evalSel"></select>
+        <button class="mini" onclick="toast(T().newTestSoon)" data-t="newTest"></button>
+        <span class="hint" data-t="testHint"></span>
       </div>
-
-      <div class="tblwrap">
-        <table class="grid">
-          <thead><tr>
-            <th style="text-align:left">학생</th><th>출결</th><th>숙제</th><th>점수 (맞은/총)</th><th>학습 태도</th><th>영상</th><th>메모🔒</th><th>공개</th>
-          </tr></thead>
-          <tbody id="rows"></tbody>
-        </table>
-      </div>
+      <div class="tblwrap"><table class="grid">
+        <thead><tr>
+          <th style="text-align:left" data-t="cStudent"></th><th data-t="cAtt"></th><th data-t="cHw"></th>
+          <th data-t="cScore"></th><th data-t="cAttitude"></th><th data-t="cVideo"></th><th data-t="cNote"></th><th data-t="cPub"></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
     </div>
 
     <div class="saverow">
-      <div class="note">✅ 체크·입력 후 저장하면 <b>공개 ON</b>인 학생만 학생·학부모 페이지에 반영됩니다.</div>
+      <div class="note" data-t="saveNote"></div>
       <div class="btnsave">
-        <button class="btn2 ghost" onclick="save(false)">임시 저장</button>
-        <button class="btn2 pri" onclick="save(true)">반 전체 저장·게시</button>
+        <button class="btn2 ghost" onclick="save(false)" data-t="saveDraft"></button>
+        <button class="btn2 pri" onclick="save(true)" data-t="savePublish"></button>
       </div>
     </div>
     <div style="height:30px"></div>
@@ -166,103 +155,120 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-// ===== 설정 (원장님: 채우면 실제 로그인·저장) =====
-const SUPABASE_URL  = "";   // 학생 포털과 같은 값
+const SUPABASE_URL  = "";
 const SUPABASE_ANON = "";
 const ID_DOMAIN = "@klai.kr";
-const NOTION_URL = "https://app.notion.com/p/0316540571/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8";   // 선생님 자료실
-// =================================================
+const NOTION_URL = "https://app.notion.com/p/0316540571/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8";
 
-
-// 데모용 반·학생 (Supabase 연결 전)
-const DEMO = {
-  'A반': [
-    {name:'김지민', en:'Jimin1'}, {name:'이서연', en:'Sophia3'},
-    {name:'박도현', en:'David2'}, {name:'최은우', en:'Emma5'}, {name:'정재원', en:'Kevin4'}
-  ],
-  'B반': [ {name:'한지우', en:'Zoe2'}, {name:'오세훈', en:'Leo4'}, {name:'윤아름', en:'Aria1'} ]
+const STR = {
+  ko:{ setup:'⚙ 데모 미리보기 — Supabase 값·강사 계정 연결 시 실제 반 명단·저장 작동. 지금은 샘플 데이터.',
+    loginTitle:'선생님 페이지',loginSub:'강사 아이디로 로그인',idLabel:'강사 아이디',pwLabel:'비밀번호',login:'로그인',logout:'로그아웃',
+    headTitle:'🏫 클라이 어학원 · 선생님 페이지',headSub:'반 전체를 한 번에 입력 → 공개 항목만 학생·학부모 페이지에 자동 반영',
+    segInd:'👤 개별 입력',segCls:'🏫 반별 입력',tools:'선생님 도구',records:'반 기록 입력',
+    toolWriting:'주제 내기 · 워크시트 · 1:1 첨삭',toolReport:'원서반 리포트',toolReportSub:'월말 리포트 생성·게시',
+    toolWorkbook:'IB 워크북 제작',toolWorkbookSub:'레벨별 IB 워크북·평가지',toolNotion:'자료실 (노션)',toolNotionSub:'수업 자료·양식 찾아 쓰기',
+    indEntry:'👤 개별 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
+    test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항은 평가마다 다름 · 단어시험 여러 개는 회차로 구분',
+    cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'메모🔒',cPub:'공개',
+    saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
+    att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
+    evals:['단어시험 Day5 (20문항)','7월 월말평가 (25문항)','레벨테스트'],
+    students:'명',classesLabel:'담당: A·B반',demoName:'데모 선생님',
+    soonReport:'원서반 리포트 연결 준비중 (자동화 앱)',soonWorkbook:'IB 워크북 제작 연결 준비중',newTestSoon:'평가 추가는 곧 연결돼요 (데모)',
+    savedDraft:'임시 저장 완료 (데모)',savedPub:n=>`반 전체 저장·게시 완료 (데모 · ${n}명)`,needInput:'아이디와 비밀번호를 입력하세요.',badLogin:'아이디 또는 비밀번호가 맞지 않아요.' },
+  en:{ setup:'⚙ Demo preview — real class roster & saving work once Supabase and a teacher account are connected. Sample data for now.',
+    loginTitle:'Teacher Page',loginSub:'Sign in with your teacher ID',idLabel:'Teacher ID',pwLabel:'Password',login:'Sign in',logout:'Log out',
+    headTitle:'🏫 KLAI Language Academy · Teacher Page',headSub:'Enter records for the class → only published items appear on student & parent pages',
+    segInd:'👤 Individual Entry',segCls:'🏫 Class Entry',tools:'Teacher Tools',records:'Class Records',
+    toolWriting:'Post topics · worksheet · 1:1 feedback',toolReport:'Reading-class Report',toolReportSub:'Create & publish monthly report',
+    toolWorkbook:'IB Workbook Maker',toolWorkbookSub:'Leveled IB workbooks & assessments',toolNotion:'Resources (Notion)',toolNotionSub:'Find class materials & forms',
+    indEntry:'👤 Individual Entry',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
+    test:'Test',newTest:'＋ New test',testHint:'Totals vary by test · switch tests for multiple vocab quizzes',
+    cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',
+    saveNote:'✅ After entering, saving publishes only students with Publish ON.',saveDraft:'Save draft',savePublish:'Save & publish class',
+    att:['Present','Late','Absent','Excused'],tae:['Excellent','Good','Needs work'],
+    evals:['Vocab Test Day5 (20 items)','July Monthly Test (25 items)','Level Test'],
+    students:'students',classesLabel:'Classes: A · B',demoName:'Demo Teacher',
+    soonReport:'Reading-class Report — coming soon (automation app)',soonWorkbook:'IB Workbook Maker — coming soon',newTestSoon:'Adding tests — coming soon (demo)',
+    savedDraft:'Draft saved (demo)',savedPub:n=>`Class saved & published (demo · ${n})`,needInput:'Enter ID and password.',badLogin:'ID or password is incorrect.' }
 };
-const ATT = ['출석','지각','결석','사유결석'];
-const ATTV = {출석:'present',지각:'late',결석:'absent',사유결석:'excused'};
-const TAE = ['우수','양호','노력요망'];
+const ATTV = {출석:'present',지각:'late',결석:'absent',사유결석:'excused',Present:'present',Late:'late',Absent:'absent',Excused:'excused'};
+const DEMO = { 'A반':[{name:'김지민',en:'Jimin1'},{name:'이서연',en:'Sophia3'},{name:'박도현',en:'David2'},{name:'최은우',en:'Emma5'},{name:'정재원',en:'Kevin4'}],
+               'B반':[{name:'한지우',en:'Zoe2'},{name:'오세훈',en:'Leo4'},{name:'윤아름',en:'Aria1'}] };
 
+let LANG = localStorage.getItem('klai_tea_lang') || 'ko';
 const $ = s => document.querySelector(s);
+window.T = ()=>STR[LANG];
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); }
 window.toast = toast;
 
-function fillClasses(names){ $('#classSel').innerHTML = names.map(n=>`<option>${n}</option>`).join(''); }
+function applyLang(){
+  const s = STR[LANG];
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-t]').forEach(el=>{ const v=s[el.dataset.t]; if(typeof v==='string') el.textContent=v; });
+  $('#setupBanner').textContent = s.setup;
+  $('#uid').placeholder = LANG==='ko'?'예: anna':'e.g. anna';
+  $('#upw').placeholder = LANG==='ko'?'비밀번호':'Password';
+  $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
+  document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
+  if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=s.demoName; $('#teaClasses').textContent=s.classesLabel; }
+  renderRows($('#classSel').value || Object.keys(DEMO)[0]);
+}
+function setLang(l){ LANG=l; localStorage.setItem('klai_tea_lang',l); applyLang(); }
+document.querySelectorAll('.langseg button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+
+function fillClasses(){ $('#classSel').innerHTML = Object.keys(DEMO).map(n=>`<option>${n}</option>`).join(''); }
 function renderRows(cls){
-  const list = DEMO[cls] || [];
-  $('#clsPill').textContent = `${cls} · ${list.length}명`;
-  $('#rows').innerHTML = list.map((s,i)=>`
-    <tr data-i="${i}">
-      <td class="name">${s.name}<small>${s.en}</small></td>
-      <td><select class="att">${ATT.map(a=>`<option>${a}</option>`).join('')}</select></td>
+  const s=STR[LANG], list=DEMO[cls]||[];
+  $('#clsPill').textContent = `${cls} · ${list.length}${LANG==='ko'?'명':' '+s.students}`;
+  $('#rows').innerHTML = list.map(st=>`
+    <tr>
+      <td class="name">${LANG==='ko'?st.name:st.en}<small>${LANG==='ko'?st.en:st.name}</small></td>
+      <td><select class="att">${s.att.map(a=>`<option>${a}</option>`).join('')}</select></td>
       <td><input type="checkbox" class="chk hw"></td>
       <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="20"></span></td>
-      <td><select class="tae">${TAE.map(a=>`<option>${a}</option>`).join('')}</select></td>
-      <td><button class="iconbtn" title="영상 추가" onclick="toast('영상 업로드는 곧 (데모)')">🎬＋</button></td>
-      <td><button class="iconbtn" title="비공개 메모" onclick="toast('메모는 곧 (데모)')">📝</button></td>
+      <td><select class="tae">${s.tae.map(a=>`<option>${a}</option>`).join('')}</select></td>
+      <td><button class="iconbtn" onclick="toast(T().cVideo)">🎬＋</button></td>
+      <td><button class="iconbtn" onclick="toast(T().cNote)">📝</button></td>
       <td><input type="checkbox" class="chk pub" checked></td>
     </tr>`).join('');
 }
-function collect(){
-  return [...document.querySelectorAll('#rows tr')].map(tr=>({
-    att: ATTV[tr.querySelector('.att').value],
-    homework: tr.querySelector('.hw').checked,
-    score: tr.querySelector('.sc').value || null,
-    max: tr.querySelector('.mx').value || null,
-    attitude: tr.querySelector('.tae').value,
-    isPublic: tr.querySelector('.pub').checked
-  }));
-}
+function collect(){ return [...document.querySelectorAll('#rows tr')].map(tr=>({
+  att:ATTV[tr.querySelector('.att').value], homework:tr.querySelector('.hw').checked,
+  score:tr.querySelector('.sc').value||null, max:tr.querySelector('.mx').value||null,
+  attitude:tr.querySelector('.tae').selectedIndex, isPublic:tr.querySelector('.pub').checked })); }
 function save(publish){
-  const data = collect();
-  // TODO(Phase2): Supabase upsert scores/attendance (공개=반영). 지금은 데모 저장.
-  console.log('save', {publish, class: $('#classSel').value, eval: $('#evalSel').value, data});
-  toast(publish ? `반 전체 저장·게시 완료 (데모 · ${data.length}명)` : '임시 저장 완료 (데모)');
+  const data=collect();
+  // TODO(Phase2): Supabase upsert attendance/scores (공개=반영)
+  console.log('save',{publish,class:$('#classSel').value,eval:$('#evalSel').value,data});
+  toast(publish ? STR[LANG].savedPub(data.length) : STR[LANG].savedDraft);
 }
 window.save = save;
-
-// 세그먼트 토글
 document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
-  if(b.dataset.mode==='cls') toast('반별 공통 입력은 곧 (데모)');
+  document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  if(b.dataset.mode==='cls') toast(LANG==='ko'?'반별 공통 입력은 곧 (데모)':'Class-wide entry — coming soon (demo)');
 });
 
+function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
+  fillClasses(); $('#classSel').onchange=()=>renderRows($('#classSel').value); applyLang(); }
 function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden', x!==v)); }
-function boot(){
-  if(NOTION_URL){ $('#notionCard').href=NOTION_URL; $('#notionSoon').remove(); }
-  $('#dateSel').value = '2026-08-17';
-  fillClasses(Object.keys(DEMO));
-  $('#classSel').onchange = ()=>renderRows($('#classSel').value);
-  renderRows(Object.keys(DEMO)[0]);
-}
 
 if(!SUPABASE_URL || !SUPABASE_ANON){
   $('#setupBanner').classList.remove('hidden');
-  $('#teaName').textContent='데모 선생님'; $('#teaClasses').textContent='담당: A·B반';
-  boot(); show('dashView');
+  $('#teaName').dataset.demo='1'; boot(); show('dashView');
 } else {
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
-  async function route(){
-    const { data:{ session } } = await sb.auth.getSession();
-    if(session){ $('#teaName').textContent = session.user.user_metadata?.name || session.user.email?.split('@')[0] || '선생님';
-      boot(); show('dashView'); }   // TODO(Phase2): 실제 담당 반·명단 로드
-    else show('loginView');
-  }
-  $('#loginBtn').onclick = async ()=>{
-    const id=$('#uid').value.trim(), pw=$('#upw').value; $('#loginErr').textContent='';
-    if(!id||!pw){ $('#loginErr').textContent='아이디와 비밀번호를 입력하세요.'; return; }
-    const email = id.includes('@')?id:id+ID_DOMAIN;
-    const { error } = await sb.auth.signInWithPassword({ email, password: pw });
-    if(error) $('#loginErr').textContent='아이디 또는 비밀번호가 맞지 않아요.'; else route();
-  };
-  $('#upw').addEventListener('keydown', e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
+  async function route(){ const { data:{ session } } = await sb.auth.getSession();
+    if(session){ $('#teaName').textContent = session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Teacher';
+      $('#teaClasses').textContent=''; boot(); show('dashView'); } else { applyLang(); show('loginView'); } }
+  $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
+    if(!id||!pw){ $('#loginErr').textContent=STR[LANG].needInput; return; }
+    const email=id.includes('@')?id:id+ID_DOMAIN; const {error}=await sb.auth.signInWithPassword({email,password:pw});
+    if(error) $('#loginErr').textContent=STR[LANG].badLogin; else route(); };
+  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
   $('#logoutBtn').onclick = async ()=>{ await sb.auth.signOut(); route(); };
-  route();
+  applyLang(); route();
 }
 </script>
 </body>
