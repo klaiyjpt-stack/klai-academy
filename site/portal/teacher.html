@@ -62,6 +62,9 @@
   .scorebox input{width:44px;padding:6px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:14px}
   .iconbtn{background:none;border:none;font-size:16px;cursor:pointer;opacity:.6}.iconbtn:hover{opacity:1}
   .iconbtn.filled{opacity:1}
+  .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px;margin:4px 0 14px}
+  .clsmemo textarea{width:100%;border:1.5px solid #c3d4ea;border-radius:10px;background:#fff;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
+  .clsmemo textarea:focus{outline:none;border-color:var(--blue)}
   .modal{position:fixed;inset:0;background:rgba(20,30,60,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
   .modal.on{display:flex}
   .modal .box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(20,30,60,.3)}
@@ -144,8 +147,9 @@
         <span class="hint" data-t="testHint"></span>
       </div>
       <div class="clsmemo">
-        <label data-t="clsMemo" style="display:block;font-size:13px;font-weight:800;color:var(--navy);margin:0 0 6px"></label>
-        <textarea id="clsMemo" rows="2" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical"></textarea>
+        <label data-t="clsMemo" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
+        <div data-t="clsMemoDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
+        <textarea id="clsMemo" rows="2"></textarea>
       </div>
       <div class="tblwrap"><table class="grid">
         <thead><tr>
@@ -206,7 +210,7 @@ const STR = {
     indEntry:'👤 개별 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
     test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'단어시험 6회 기본 · 총 문항은 평가마다 다름',
     gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
-    clsMemo:'📋 오늘 반 전체 메모',clsMemoPh:'오늘 수업 진행·공지 (반 전체 학생·학부모에게 보임)',
+    clsMemo:'📋 오늘 반 전체 메모',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 저장하면 반 학생·학부모 페이지에 함께 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
     cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',
     saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
     att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
@@ -223,7 +227,7 @@ const STR = {
     indEntry:'👤 Individual Entry',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
     test:'Test',newTest:'＋ New test',testHint:'6 vocab tests by default · totals vary by test',
     gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
-    clsMemo:'📋 Today · class note',clsMemoPh:"Today's lesson & notices (visible to the whole class & parents)",
+    clsMemo:'📋 Today · class note',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When saved, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
     cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',
     saveNote:'✅ After entering, saving publishes only students with Publish ON.',saveDraft:'Save draft',savePublish:'Save & publish class',
     att:['Present','Late','Absent','Excused'],tae:['Excellent','Good','Needs work'],
