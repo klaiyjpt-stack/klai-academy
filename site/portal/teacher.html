@@ -61,6 +61,16 @@
   .scorebox{display:inline-flex;align-items:center;gap:4px}
   .scorebox input{width:44px;padding:6px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:14px}
   .iconbtn{background:none;border:none;font-size:16px;cursor:pointer;opacity:.6}.iconbtn:hover{opacity:1}
+  .iconbtn.filled{opacity:1}
+  .modal{position:fixed;inset:0;background:rgba(20,30,60,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
+  .modal.on{display:flex}
+  .modal .box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(20,30,60,.3)}
+  .modal .box h3{font-size:16px;color:var(--navy);font-weight:800;margin-bottom:14px}
+  .modal .box textarea,.modal .box input[type=text],.modal .box select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;margin-bottom:10px}
+  .modal .box label.ck{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--sub);margin:4px 0 14px;cursor:pointer}
+  .modal .box .row{display:flex;gap:10px;justify-content:flex-end}
+  .modal .box .b{border:none;border-radius:10px;padding:10px 18px;font-weight:800;font-size:14px;cursor:pointer}
+  .modal .box .b.pri{background:var(--blue);color:#fff}.modal .box .b.ghost{background:var(--soft);color:var(--sub)}
   .saverow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
   .saverow .note{font-size:12.5px;color:var(--sub)}
   .btnsave{display:flex;gap:8px}
@@ -133,6 +143,10 @@
         <button class="mini" onclick="toast(T().newTestSoon)" data-t="newTest"></button>
         <span class="hint" data-t="testHint"></span>
       </div>
+      <div class="clsmemo">
+        <label data-t="clsMemo" style="display:block;font-size:13px;font-weight:800;color:var(--navy);margin:0 0 6px"></label>
+        <textarea id="clsMemo" rows="2" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;resize:vertical"></textarea>
+      </div>
       <div class="tblwrap"><table class="grid">
         <thead><tr>
           <th style="text-align:left" data-t="cStudent"></th><th data-t="cAtt"></th><th data-t="cHw"></th>
@@ -141,6 +155,8 @@
         <tbody id="rows"></tbody>
       </table></div>
     </div>
+
+    <div class="desc" data-t="gridHelp" style="margin-top:12px;font-size:12.5px;line-height:1.7"></div>
 
     <div class="saverow">
       <div class="note" data-t="saveNote"></div>
@@ -155,6 +171,25 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="modal" id="cellModal">
+  <div class="box">
+    <h3 id="mTitle"></h3>
+    <div id="mVid">
+      <input type="text" id="mVidUrl">
+      <label class="ck"><input type="checkbox" id="mVidPub"><span id="mVidLbl"></span></label>
+    </div>
+    <div id="mNote">
+      <select id="mNoteType"><option value="general"></option><option value="warn"></option><option value="behavior"></option></select>
+      <textarea id="mNoteTxt" rows="3"></textarea>
+      <label class="ck"><input type="checkbox" id="mNotePub"><span id="mNoteLbl"></span></label>
+    </div>
+    <div class="row">
+      <button class="b ghost" id="mCancel" onclick="document.getElementById('cellModal').classList.remove('on')"></button>
+      <button class="b pri" id="mSave" onclick="saveCell()"></button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL  = "";
 const SUPABASE_ANON = "";
@@ -167,30 +202,34 @@ const STR = {
     headTitle:'🏫 클라이 어학원 · 선생님 페이지',headSub:'반 전체를 한 번에 입력 → 공개 항목만 학생·학부모 페이지에 자동 반영',
     segInd:'👤 개별 입력',segCls:'🏫 반별 입력',tools:'선생님 도구',records:'반 기록 입력',
     toolWriting:'주제 내기 · 워크시트 · 1:1 첨삭',toolReport:'원서반 리포트',toolReportSub:'월말 리포트 생성·게시',
-    toolWorkbook:'IB 워크북 제작',toolWorkbookSub:'레벨별 IB 워크북·평가지',toolNotion:'자료실 (노션)',toolNotionSub:'수업 자료·양식 찾아 쓰기',
+    toolWorkbook:'IB PPT & TG',toolWorkbookSub:'수업 슬라이드 · 티칭가이드',toolNotion:'자료실 (노션)',toolNotionSub:'수업 자료·양식 찾아 쓰기',
     indEntry:'👤 개별 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
-    test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항은 평가마다 다름 · 단어시험 여러 개는 회차로 구분',
-    cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'메모🔒',cPub:'공개',
+    test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'단어시험 6회 기본 · 총 문항은 평가마다 다름',
+    gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
+    clsMemo:'📋 오늘 반 전체 메모',clsMemoPh:'오늘 수업 진행·공지 (반 전체 학생·학부모에게 보임)',
+    cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',
     saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
     att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
-    evals:['단어시험 Day5 (20문항)','7월 월말평가 (25문항)','레벨테스트'],
+    evals:['단어시험 1회 (20문항)','단어시험 2회 (20문항)','단어시험 3회 (20문항)','단어시험 4회 (20문항)','단어시험 5회 (20문항)','단어시험 6회 (20문항)','월말평가','레벨테스트'],
     students:'명',classesLabel:'담당: A·B반',demoName:'데모 선생님',
-    soonReport:'원서반 리포트 연결 준비중 (자동화 앱)',soonWorkbook:'IB 워크북 제작 연결 준비중',newTestSoon:'평가 추가는 곧 연결돼요 (데모)',
+    soonReport:'원서반 리포트 연결 준비중 (자동화 앱)',soonWorkbook:'IB PPT & TG 연결 준비중',newTestSoon:'평가 추가는 곧 연결돼요 (데모)',
     savedDraft:'임시 저장 완료 (데모)',savedPub:n=>`반 전체 저장·게시 완료 (데모 · ${n}명)`,needInput:'아이디와 비밀번호를 입력하세요.',badLogin:'아이디 또는 비밀번호가 맞지 않아요.' },
   en:{ setup:'⚙ Demo preview — real class roster & saving work once Supabase and a teacher account are connected. Sample data for now.',
     loginTitle:'Teacher Page',loginSub:'Sign in with your teacher ID',idLabel:'Teacher ID',pwLabel:'Password',login:'Sign in',logout:'Log out',
     headTitle:'🏫 KLAI Language Academy · Teacher Page',headSub:'Enter records for the class → only published items appear on student & parent pages',
     segInd:'👤 Individual Entry',segCls:'🏫 Class Entry',tools:'Teacher Tools',records:'Class Records',
     toolWriting:'Post topics · worksheet · 1:1 feedback',toolReport:'Reading-class Report',toolReportSub:'Create & publish monthly report',
-    toolWorkbook:'IB Workbook Maker',toolWorkbookSub:'Leveled IB workbooks & assessments',toolNotion:'Resources (Notion)',toolNotionSub:'Find class materials & forms',
+    toolWorkbook:'IB PPT & TG',toolWorkbookSub:'Lesson slides & teaching guide',toolNotion:'Resources (Notion)',toolNotionSub:'Find class materials & forms',
     indEntry:'👤 Individual Entry',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
-    test:'Test',newTest:'＋ New test',testHint:'Totals vary by test · switch tests for multiple vocab quizzes',
+    test:'Test',newTest:'＋ New test',testHint:'6 vocab tests by default · totals vary by test',
+    gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
+    clsMemo:'📋 Today · class note',clsMemoPh:"Today's lesson & notices (visible to the whole class & parents)",
     cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',
     saveNote:'✅ After entering, saving publishes only students with Publish ON.',saveDraft:'Save draft',savePublish:'Save & publish class',
     att:['Present','Late','Absent','Excused'],tae:['Excellent','Good','Needs work'],
-    evals:['Vocab Test Day5 (20 items)','July Monthly Test (25 items)','Level Test'],
+    evals:['Vocab Test 1 (20 items)','Vocab Test 2 (20 items)','Vocab Test 3 (20 items)','Vocab Test 4 (20 items)','Vocab Test 5 (20 items)','Vocab Test 6 (20 items)','Monthly Test','Level Test'],
     students:'students',classesLabel:'Classes: A · B',demoName:'Demo Teacher',
-    soonReport:'Reading-class Report — coming soon (automation app)',soonWorkbook:'IB Workbook Maker — coming soon',newTestSoon:'Adding tests — coming soon (demo)',
+    soonReport:'Reading-class Report — coming soon (automation app)',soonWorkbook:'IB PPT & TG — coming soon',newTestSoon:'Adding tests — coming soon (demo)',
     savedDraft:'Draft saved (demo)',savedPub:n=>`Class saved & published (demo · ${n})`,needInput:'Enter ID and password.',badLogin:'ID or password is incorrect.' }
 };
 const ATTV = {출석:'present',지각:'late',결석:'absent',사유결석:'excused',Present:'present',Late:'late',Absent:'absent',Excused:'excused'};
@@ -224,7 +263,7 @@ const ROSTER = {
 let TEACHER = Object.keys(ROSTER)[0];
 let DEMO = ROSTER[TEACHER];
 
-let LANG = localStorage.getItem('klai_tea_lang') || 'ko';
+let LANG = localStorage.getItem('klai_tea_lang') || 'en';   // 기본 영어(원어민)
 const $ = s => document.querySelector(s);
 window.T = ()=>STR[LANG];
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); }
@@ -238,6 +277,7 @@ function applyLang(){
   $('#uid').placeholder = LANG==='ko'?'예: anna':'e.g. anna';
   $('#upw').placeholder = LANG==='ko'?'비밀번호':'Password';
   $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
+  $('#clsMemo').placeholder = s.clsMemoPh;
   document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
   if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=TEACHER; $('#teaClasses').textContent=`${Object.keys(DEMO).length}${LANG==='ko'?'개 반':' classes'}`; }
   renderRows($('#classSel').value || Object.keys(DEMO)[0]);
@@ -256,8 +296,8 @@ function renderRows(cls){
       <td><input type="checkbox" class="chk hw"></td>
       <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="20"></span></td>
       <td><select class="tae">${s.tae.map(a=>`<option>${a}</option>`).join('')}</select></td>
-      <td><button class="iconbtn" onclick="toast(T().cVideo)">🎬＋</button></td>
-      <td><button class="iconbtn" onclick="toast(T().cNote)">📝</button></td>
+      <td><button class="iconbtn vidbtn" onclick="openCell(this,'vid')">🎬＋</button></td>
+      <td><button class="iconbtn notebtn" onclick="openCell(this,'note')">📝</button></td>
       <td><input type="checkbox" class="chk pub" checked></td>
     </tr>`).join('');
 }
@@ -282,6 +322,34 @@ function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').
   $('#teaSel').value = TEACHER;
   $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); applyLang(); };
   fillClasses(); $('#classSel').onchange=()=>renderRows($('#classSel').value); applyLang(); }
+// ── 영상/개별메모 셀 (데모: 행에 임시 저장) ──────────────
+let CELL=null;
+function openCell(btn,kind){
+  CELL={btn,kind,tr:btn.closest('tr')};
+  const ko=LANG==='ko', name=CELL.tr.querySelector('.name').firstChild.textContent.trim();
+  $('#mTitle').textContent = (kind==='vid'?'🎬 ':'📝 ')+name;
+  $('#mVid').classList.toggle('hidden', kind!=='vid');
+  $('#mNote').classList.toggle('hidden', kind!=='note');
+  if(kind==='vid'){ $('#mVidUrl').value=CELL.tr.dataset.vid||''; $('#mVidPub').checked=CELL.tr.dataset.vidpub!=='0';
+    $('#mVidUrl').placeholder=ko?'수업 영상 링크 (유튜브·드라이브 등)':'Class video link (YouTube, Drive…)';
+    $('#mVidLbl').textContent=ko?'학생·학부모에게 공개':'Show to student & parent'; }
+  else { $('#mNoteTxt').value=CELL.tr.dataset.note||''; $('#mNoteType').value=CELL.tr.dataset.notetype||'general'; $('#mNotePub').checked=CELL.tr.dataset.notepub==='1';
+    $('#mNoteTxt').placeholder=ko?'문제·주의·특이사항 (예: 숙제 3회 미제출)':'Issue / warning / note';
+    $('#mNoteLbl').textContent=ko?'학부모에게 공개 (기본: 선생님·원장만)':'Show to parent (default: staff only)'; }
+  [...$('#mNoteType').options].forEach((o,i)=>o.textContent=(LANG==='ko'?['일반 메모','⚠️ 주의','🚫 문제행동']:['General','⚠️ Warning','🚫 Behavior'])[i]);
+  $('#mSave').textContent=ko?'저장':'Save'; $('#mCancel').textContent=ko?'취소':'Cancel';
+  $('#cellModal').classList.add('on');
+}
+function saveCell(){
+  const tr=CELL.tr;
+  if(CELL.kind==='vid'){ tr.dataset.vid=$('#mVidUrl').value.trim(); tr.dataset.vidpub=$('#mVidPub').checked?'1':'0';
+    CELL.btn.textContent = tr.dataset.vid ? '🎬✓' : '🎬＋'; CELL.btn.classList.toggle('filled',!!tr.dataset.vid); }
+  else { tr.dataset.note=$('#mNoteTxt').value.trim(); tr.dataset.notetype=$('#mNoteType').value; tr.dataset.notepub=$('#mNotePub').checked?'1':'0';
+    CELL.btn.textContent = tr.dataset.note ? (tr.dataset.notetype==='general'?'📝•':'⚠️•') : '📝'; CELL.btn.classList.toggle('filled',!!tr.dataset.note); }
+  $('#cellModal').classList.remove('on'); CELL=null;
+}
+window.openCell=openCell;
+
 function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden', x!==v)); }
 
 if(!SUPABASE_URL || !SUPABASE_ANON){
