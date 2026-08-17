@@ -29,9 +29,6 @@
   .langseg{display:flex;background:#e9eef6;border-radius:10px;padding:3px}
   .langseg button{border:none;background:none;padding:8px 13px;border-radius:8px;font-weight:800;font-size:13px;color:var(--sub);cursor:pointer}
   .langseg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-  .seg{margin-left:auto;display:flex;background:#e9eef6;border-radius:10px;padding:3px}
-  .seg button{border:none;background:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px;color:var(--sub);cursor:pointer}
-  .seg button.on{background:var(--blue);color:#fff}
   .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:20px 2px 10px}
   .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media(max-width:720px){.tools{grid-template-columns:1fr}}
@@ -130,10 +127,6 @@
       <select id="teaSel" title="선생님 (데모)"></select>
       <select id="classSel"></select>
       <input type="date" id="dateSel">
-      <div class="seg">
-        <button class="on" data-mode="ind" data-t="segInd"></button>
-        <button data-mode="cls" data-t="segCls"></button>
-      </div>
     </div>
 
     <div class="eyebrow" data-t="tools"></div>
@@ -230,10 +223,10 @@ const STR = {
   ko:{ setup:'⚙ 데모 미리보기 — Supabase 값·강사 계정 연결 시 실제 반 명단·저장 작동. 지금은 샘플 데이터.',
     loginTitle:'선생님 페이지',loginSub:'강사 아이디로 로그인',idLabel:'강사 아이디',pwLabel:'비밀번호',login:'로그인',logout:'로그아웃',
     headTitle:'🏫 클라이 어학원 · 선생님 페이지',headSub:'반 전체를 한 번에 입력 → 공개 항목만 학생·학부모 페이지에 자동 반영',
-    segInd:'👤 개별 입력',segCls:'🏫 반별 입력',tools:'선생님 도구',records:'반 기록 입력',
+    tools:'선생님 도구',records:'반 기록 입력',
     toolWriting:'주제 내기 · 워크시트 · 1:1 첨삭',toolReport:'원서반 리포트',toolReportSub:'월말 리포트 생성·게시',
     toolWorkbook:'IB PPT & TG',toolWorkbookSub:'수업 슬라이드 · 티칭가이드',toolNotion:'자료실 (노션)',toolNotionSub:'수업 자료·양식 찾아 쓰기',
-    indEntry:'👤 개별 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
+    indEntry:'📝 성적·출결 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
     test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항 기본 — 단어시험 6 · 월말평가 25 (필요시 칸에서 조정)',
     gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
     clsMemo:'📋 오늘 반 전체 메모 (학생·학부모 공개)',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 발행하면 반 학생·학부모 페이지에 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
@@ -248,10 +241,10 @@ const STR = {
   en:{ setup:'⚙ Demo preview — real class roster & saving work once Supabase and a teacher account are connected. Sample data for now.',
     loginTitle:'Teacher Page',loginSub:'Sign in with your teacher ID',idLabel:'Teacher ID',pwLabel:'Password',login:'Sign in',logout:'Log out',
     headTitle:'🏫 KLAI Language Academy · Teacher Page',headSub:'Enter records for the class → only published items appear on student & parent pages',
-    segInd:'👤 Individual Entry',segCls:'🏫 Class Entry',tools:'Teacher Tools',records:'Class Records',
+    tools:'Teacher Tools',records:'Class Records',
     toolWriting:'Post topics · worksheet · 1:1 feedback',toolReport:'Reading-class Report',toolReportSub:'Create & publish monthly report',
     toolWorkbook:'IB PPT & TG',toolWorkbookSub:'Lesson slides & teaching guide',toolNotion:'Resources (Notion)',toolNotionSub:'Find class materials & forms',
-    indEntry:'👤 Individual Entry',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
+    indEntry:'📝 Scores & Attendance',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
     test:'Test',newTest:'＋ New test',testHint:'Default total — Vocab 6 · Monthly 25 (adjust per cell)',
     gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
     clsMemo:'📋 Today · class note (shared)',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When published, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
@@ -346,10 +339,6 @@ function save(publish){
   toast(publish ? STR[LANG].savedPub(data.length) : STR[LANG].savedDraft);
 }
 window.save = save;
-document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
-  if(b.dataset.mode==='cls') toast(LANG==='ko'?'반별 공통 입력은 곧 (데모)':'Class-wide entry — coming soon (demo)');
-});
 
 function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
   $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
