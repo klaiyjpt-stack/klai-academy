@@ -36,6 +36,15 @@
   .link{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 15px;font-weight:700;font-size:13px;color:var(--navy)}
   .link:hover{border-color:#7b3fe4;color:#7b3fe4}
   .foot{text-align:center;color:var(--sub);font-size:11.5px;margin-top:30px}
+  .metrics{margin-top:6px}
+  .metrics .row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .metrics .row:last-child{border-bottom:none}
+  .metrics .row .v{font-weight:800;color:var(--sub)}
+  .paybtn{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;transition:.15s}
+  .paybtn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,39,64,.1);border-color:#c9b3f5}
+  .paybtn .ic{font-size:28px;width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#f3eeff;flex:none}
+  .paybtn h3{font-size:15.5px;color:var(--navy);font-weight:800}
+  .paybtn p{font-size:12.5px;color:var(--sub)}
   .hidden{display:none}
 </style>
 </head>
@@ -66,13 +75,17 @@
   </header>
   <div class="wrap content">
 
-    <div class="eyebrow">자녀 학습</div>
-    <div class="card"><div class="t">📊 자녀 학습 현황 <span class="soon">준비 중</span></div>
-      <p>성적·출결·진도·리포트를 여기서 한눈에 볼 수 있게 준비하고 있어요. (다음 업데이트)</p></div>
+    <div class="eyebrow">자녀 학습 현황</div>
+    <div class="card"><div class="t">📊 학습 요약</div>
+      <div class="metrics">
+        <div class="row"><span>시험·평가 (단어·월말·레벨)</span><span class="v">준비중</span></div>
+        <div class="row"><span>출결 · 이번 달</span><span class="v">준비중</span></div>
+        <div class="row"><span>수업 진도</span><span class="v">준비중</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--sub);margin-top:10px">성적·출결·진도가 곧 여기에 자동으로 표시됩니다.</p></div>
 
-    <div class="eyebrow">납부</div>
-    <div class="card"><div class="t">💳 수강료·교재비 납부 현황 <span class="soon">준비 중</span></div>
-      <p>월별 납부·미납 현황을 여기서 확인하게 됩니다. 지금은 카카오로 문의해 주세요.</p></div>
+    <div class="eyebrow">교육비·교재비 결제</div>
+    <a class="paybtn" id="payBtn" href="#" target="_blank" rel="noopener"><div class="ic">💳</div><div><h3>교육비·교재비 결제</h3><p>이코딩에서 안전하게 결제하기 →</p></div></a>
 
     <div class="eyebrow">상담</div>
     <div class="card"><div class="t">💬 카카오톡 상담</div>
@@ -95,8 +108,10 @@
 const SUPABASE_URL  = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
 const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
 const ID_DOMAIN = "@klai.kr";
+const ECODING_URL = "";   // ← 이코딩 학부모 결제 페이지/앱 주소 넣기 (비면 카카오 문의로 연결)
 
 const $ = s => document.querySelector(s);
+$('#payBtn').href = ECODING_URL || "https://pf.kakao.com/_ZxnMxdn/chat";
 function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden', x!==v)); }
 
 if(!SUPABASE_URL || !SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'); show('dashView'); }
