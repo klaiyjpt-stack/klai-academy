@@ -61,7 +61,9 @@
   .iconbtn.filled{opacity:1}
   .memogrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
   @media(max-width:720px){.memogrid{grid-template-columns:1fr}}
-  .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px}
+  .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column}
+  .clsmemo textarea{flex:1}
+  .clsmemo .memoact{margin-top:auto}
   .clsmemo.tealog{background:#faf7ff;border-color:#e3d8f5;border-left-color:#7b3fe4}
   .clsmemo textarea{width:100%;border:1.5px solid #c3d4ea;border-radius:10px;background:#fff;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
   .clsmemo textarea:focus{outline:none;border-color:var(--blue)}
