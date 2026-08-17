@@ -67,8 +67,8 @@
   .clsmemo textarea:focus{outline:none;border-color:var(--blue)}
   .clsmemo textarea.locked{background:#eef2f8;color:#333}
   .memoact{display:flex;align-items:center;gap:8px;margin-top:8px}
-  .memostat{font-size:12px;font-weight:700;flex:1}
-  .mbtn{border:none;border-radius:9px;padding:7px 15px;font-weight:800;font-size:13px;cursor:pointer}
+  .memostat{font-size:12px;font-weight:700;flex:1;text-align:right}
+  .mbtn{border:none;border-radius:9px;padding:8px 12px;font-weight:800;font-size:13px;cursor:pointer;min-width:92px;text-align:center;white-space:nowrap}
   .mbtn.pri{background:var(--blue);color:#fff}.mbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--sub)}
   .modal{position:fixed;inset:0;background:rgba(20,30,60,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
   .modal.on{display:flex}
@@ -153,9 +153,9 @@
           <div data-t="clsMemoDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
           <textarea id="clsMemo" rows="3" oninput="memoStore()"></textarea>
           <div class="memoact">
-            <span id="memoStatus" class="memostat"></span>
+            <button id="memoEditBtn" class="mbtn ghost" onclick="memoEdit()"></button>
             <button id="memoPubBtn" class="mbtn pri" onclick="memoPublish()"></button>
-            <button id="memoEditBtn" class="mbtn ghost hidden" onclick="memoEdit()"></button>
+            <span id="memoStatus" class="memostat"></span>
           </div>
         </div>
         <div class="clsmemo tealog">
@@ -163,9 +163,9 @@
           <div data-t="teaLogDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
           <textarea id="teaLog" rows="3" oninput="teaDirty()"></textarea>
           <div class="memoact">
-            <span id="teaStatus" class="memostat" style="color:var(--sub);font-weight:700"></span>
+            <button id="teaEditBtn" class="mbtn ghost" onclick="teaEdit()"></button>
             <button id="teaSaveBtn" class="mbtn pri" onclick="teaSave()"></button>
-            <button id="teaEditBtn" class="mbtn ghost hidden" onclick="teaEdit()"></button>
+            <span id="teaStatus" class="memostat" style="color:var(--sub);font-weight:700"></span>
           </div>
         </div>
       </div>
@@ -363,8 +363,6 @@ function memoLoad(){
 function memoSync(){
   const ko=LANG==='ko', ta=$('#clsMemo');
   ta.readOnly=memoLocked; ta.classList.toggle('locked',memoLocked);
-  $('#memoPubBtn').classList.toggle('hidden',memoLocked);
-  $('#memoEditBtn').classList.toggle('hidden',!memoLocked);
   $('#memoPubBtn').textContent = memoEver ? (ko?'🔄 재발행':'🔄 Re-publish') : (ko?'발행하기':'Publish');
   $('#memoEditBtn').textContent = ko?'✏️ 수정':'✏️ Edit';
   const st=$('#memoStatus');
@@ -374,8 +372,6 @@ function memoSync(){
   st.style.color = memoLocked?'var(--green-d)':'var(--sub)';
   // 오른쪽 일지 (수정→저장 잠금→수정)
   const t2=$('#teaLog'); t2.readOnly=teaLocked; t2.classList.toggle('locked',teaLocked);
-  $('#teaSaveBtn').classList.toggle('hidden',teaLocked);
-  $('#teaEditBtn').classList.toggle('hidden',!teaLocked);
   $('#teaSaveBtn').textContent = ko?'💾 저장':'💾 Save';
   $('#teaEditBtn').textContent = ko?'✏️ 수정':'✏️ Edit';
   const ts=$('#teaStatus');
