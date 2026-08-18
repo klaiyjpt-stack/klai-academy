@@ -96,6 +96,16 @@
       <datalist id="dlTeacher"></datalist><datalist id="dlClass"></datalist>
     </div>
 
+    <div class="panel">
+      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:9px">👤 강사 계정 관리 <span class="cnt" id="teaCnt"></span></div>
+      <div class="addrow" style="margin-bottom:10px">
+        <input id="tEmail" placeholder="강사 이메일 예: nez@klai.kr" style="width:220px" autocapitalize="none">
+        <input id="tPw" type="text" placeholder="비밀번호(6자 이상)" style="width:160px">
+        <button class="add" id="tAdd">강사 추가</button>
+      </div>
+      <div id="teaList" style="font-size:13.5px"></div>
+    </div>
+
     <div id="list"></div>
     <div class="foot">클라이 어학원 · 명단은 여기서 관리 → 선생님·학생·학부모 페이지에 반영</div>
   </div>
@@ -188,6 +198,37 @@ async function addStudent(){
 }
 window.upd=upd; window.toggleActive=toggleActive; window.del=del;
 
+// ── 강사 계정 관리 (서버함수 /api/teachers, service_role 숨김) ──
+async function authHdr(){ const { data:{ session } } = await SB.auth.getSession(); return { Authorization:'Bearer '+(session?session.access_token:''), 'Content-Type':'application/json' }; }
+async function loadTeachers(){
+  try{
+    const r = await fetch('/api/teachers',{ headers: await authHdr() });
+    const d = await r.json();
+    if(!r.ok){ $('#teaList').innerHTML='<span style="color:var(--red)">'+esc(d.error||'불러오기 실패')+'</span>'; return; }
+    const us=d.users||[]; $('#teaCnt').textContent=`총 ${us.length}명`;
+    $('#teaList').innerHTML = us.map(x=>
+      '<div style="display:flex;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid var(--line)">'+
+      '<b>'+esc(x.email)+'</b>'+(x.admin?'<span class="actbtn on">원장</span>':'<span class="actbtn">강사</span>')+
+      '<span style="flex:1"></span>'+
+      (x.admin?'':'<button class="del" onclick="delTeacher(\''+x.id+'\',\''+esc(x.email)+'\')" title="삭제">🗑</button>')+
+      '</div>').join('');
+  }catch(e){ $('#teaList').innerHTML='<span style="color:var(--red)">서버함수 미배포? '+esc(String(e))+'</span>'; }
+}
+async function addTeacher(){
+  const email=$('#tEmail').value.trim(), password=$('#tPw').value;
+  if(!email||!password){ toast('이메일·비번 입력'); return; }
+  const r=await fetch('/api/teachers',{ method:'POST', headers: await authHdr(), body:JSON.stringify({email,password}) });
+  const d=await r.json(); if(!r.ok){ toast('추가 실패: '+(d.error||'')); return; }
+  $('#tEmail').value=''; $('#tPw').value=''; toast('강사 계정 생성됨'); loadTeachers();
+}
+async function delTeacher(id,email){
+  if(!confirm('강사 "'+email+'" 계정을 삭제할까요?')) return;
+  const r=await fetch('/api/teachers?id='+encodeURIComponent(id),{ method:'DELETE', headers: await authHdr() });
+  const d=await r.json(); if(!r.ok){ toast('삭제 실패: '+(d.error||'')); return; }
+  toast('삭제됨'); loadTeachers();
+}
+window.delTeacher=delTeacher;
+
 if(!SUPABASE_URL||!SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'); show('dashView'); }
 else { (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
@@ -199,7 +240,7 @@ else { (async()=>{
       if(!ADMINS.includes((USER.email||'').toLowerCase())){   // 강사 계정 차단
         await SB.auth.signOut(); USER=null; show('loginView');
         $('#loginErr').textContent='🔒 원장 전용 페이지입니다. (강사 계정은 접근 불가)'; return; }
-      show('dashView'); loadData();
+      show('dashView'); loadData(); loadTeachers();
     } else { USER=null; show('loginView'); } }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
@@ -211,6 +252,7 @@ else { (async()=>{
   $('#fClass').onchange = render;
   $('#fActive').onchange = render;
   $('#addBtn').onclick = addStudent;
+  $('#tAdd').onclick = addTeacher;
   route();
 })(); }
 </script>
