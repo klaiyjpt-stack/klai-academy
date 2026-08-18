@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>선생님 페이지 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+  header{background:linear-gradient(120deg,#2b74c4,#3aa76d);color:#fff}
+  .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px}
+  .hd .ttl{font-weight:800;font-size:18px}
+  .hd .ttl small{display:block;font-weight:500;font-size:12px;opacity:.9;margin-top:2px}
+  .hd .me{text-align:right;font-size:13px;opacity:.95}
+  .hd .out{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;margin-left:10px}
+  .setup{background:#fff8e1;border-bottom:1px solid #f0e0a8;color:#7a5c00;font-size:12.5px;padding:9px 16px;text-align:center}
+  .login{max-width:360px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 10px 40px rgba(20,30,60,.1)}
+  .login .lg{text-align:center;font-weight:800;font-size:20px;color:var(--navy)}
+  .login .ls{text-align:center;color:var(--sub);font-size:13px;margin:4px 0 20px}
+  .login label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px}
+  .login input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  .login .btn{width:100%;margin-top:18px;background:var(--blue);color:#fff;border:none;padding:13px;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer}
+  .login .err{color:#c0392b;font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:16px 0}
+  .bar select,.bar input[type=date]{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff}
+  .langseg{display:flex;background:#e9eef6;border-radius:10px;padding:3px}
+  .langseg button{border:none;background:none;padding:8px 13px;border-radius:8px;font-weight:800;font-size:13px;color:var(--sub);cursor:pointer}
+  .langseg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:20px 2px 10px}
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:720px){.tools{grid-template-columns:1fr}}
+  .tool{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;transition:.15s}
+  .tool:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,39,64,.1);border-color:#c7dcc7}
+  .tool .ic{font-size:26px;width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--soft);flex:none}
+  .tool h3{font-size:15px;color:var(--navy);font-weight:800}
+  .tool p{font-size:12px;color:var(--sub);margin-top:2px}
+  .tool .soon{font-size:10px;font-weight:800;color:#8a6d1a;background:#fef6df;border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}
+  .phead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .phead h2{font-size:16px;color:var(--navy);font-weight:800}
+  .phead .pill{font-size:11px;font-weight:800;color:var(--blue-d);background:#eaf2fc;border-radius:999px;padding:3px 9px}
+  .desc{color:var(--sub);font-size:12.5px;margin-bottom:14px}
+  .evalrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  .evalrow select{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff}
+  .mini{border:1px dashed #b9c6da;background:#f2f6fc;color:var(--blue-d);font-weight:700;font-size:13px;padding:9px 12px;border-radius:10px;cursor:pointer}
+  .hint{font-size:11.5px;color:#8a6d1a;background:#fef6df;border-radius:999px;padding:5px 11px}
+  .tblwrap{overflow-x:auto}
+  table.grid{width:100%;border-collapse:collapse;min-width:720px}
+  table.grid th,table.grid td{padding:11px 8px;text-align:center;border-bottom:1px solid var(--line);font-size:13.5px}
+  table.grid thead th{background:var(--soft);color:var(--sub);font-weight:800;font-size:12px}
+  .allck{display:flex;align-items:center;justify-content:center;gap:3px;font-weight:600;font-size:10px;color:var(--sub);margin-top:3px;cursor:pointer}
+  .allck input{width:15px;height:15px;cursor:pointer;accent-color:var(--green)}
+  table.grid td.name{text-align:left;font-weight:700;color:var(--navy)}
+  table.grid td.name small{display:block;color:var(--sub);font-weight:500;font-size:11.5px}
+  table.grid select{padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff}
+  .chk{width:22px;height:22px;cursor:pointer;accent-color:var(--green)}
+  .scorebox{display:inline-flex;align-items:center;gap:4px}
+  .scorebox input{width:44px;padding:6px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:14px}
+  .iconbtn{background:none;border:none;font-size:16px;cursor:pointer;opacity:.6}.iconbtn:hover{opacity:1}
+  .iconbtn.filled{opacity:1}
+  .memogrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
+  @media(max-width:720px){.memogrid{grid-template-columns:1fr}}
+  .clsmemo{background:#f4f8ff;border:1px solid #d6e2f2;border-left:4px solid var(--blue);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column}
+  .clsmemo .memoact{margin-top:auto;padding-top:12px}
+  .clsmemo.tealog{background:#faf7ff;border-color:#e3d8f5;border-left-color:#7b3fe4}
+  .clsmemo textarea{width:100%;border:1.5px solid #c3d4ea;border-radius:10px;background:#fff;padding:10px 12px;font:inherit;font-size:14px;resize:vertical}
+  .clsmemo textarea:focus{outline:none;border-color:var(--blue)}
+  .clsmemo textarea.locked{background:#eef2f8;color:#333}
+  .memoact{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .memostat{font-size:12px;font-weight:700;flex:1;text-align:right}
+  .mbtn{border:none;border-radius:9px;padding:8px 12px;font-weight:800;font-size:13px;cursor:pointer;min-width:92px;text-align:center;white-space:nowrap}
+  .mbtn.pri{background:var(--blue);color:#fff}.mbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--sub)}
+  .modal{position:fixed;inset:0;background:rgba(20,30,60,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
+  .modal.on{display:flex}
+  .modal .box{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(20,30,60,.3)}
+  .modal .box h3{font-size:16px;color:var(--navy);font-weight:800;margin-bottom:14px}
+  .modal .box textarea,.modal .box input[type=text],.modal .box select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;margin-bottom:10px}
+  .modal .box label.ck{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--sub);margin:4px 0 14px;cursor:pointer}
+  .modal .box .row{display:flex;gap:10px;justify-content:flex-end}
+  .modal .box .b{border:none;border-radius:10px;padding:10px 18px;font-weight:800;font-size:14px;cursor:pointer}
+  .modal .box .b.pri{background:var(--blue);color:#fff}.modal .box .b.ghost{background:var(--soft);color:var(--sub)}
+  .saverow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .saverow .note{font-size:12.5px;color:var(--sub)}
+  .btnsave{display:flex;gap:8px}
+  .btn2{padding:11px 18px;border-radius:11px;font-weight:800;font-size:14px;border:none;cursor:pointer}
+  .btn2.ghost{background:#fff;border:1px solid var(--line);color:var(--navy)}
+  .btn2.pri{background:var(--blue);color:#fff}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 20px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:80}
+  .toast.on{opacity:1}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+
+<div id="setupBanner" class="setup hidden"></div>
+
+<div id="loginView" class="hidden">
+  <div class="login">
+    <div class="lg" data-t="loginTitle"></div>
+    <div class="ls" data-t="loginSub"></div>
+    <label data-t="idLabel"></label>
+    <input id="uid" type="text" autocomplete="username" autocapitalize="none">
+    <label data-t="pwLabel"></label>
+    <input id="upw" type="password" autocomplete="current-password">
+    <button class="btn" id="loginBtn" data-t="login"></button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="dashView" class="hidden">
+  <header>
+    <div class="wrap hd">
+      <div class="ttl"><span data-t="headTitle"></span><small data-t="headSub"></small></div>
+      <div style="display:flex;align-items:center">
+        <div class="me"><b id="teaName"></b><br><span id="teaClasses"></span></div>
+        <button class="out" id="logoutBtn" data-t="logout"></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="bar">
+      <div class="langseg">
+        <button data-lang="ko">한국어</button>
+        <button data-lang="en">English</button>
+      </div>
+      <select id="teaSel" title="선생님 (데모)"></select>
+      <select id="classSel"></select>
+      <input type="date" id="dateSel">
+    </div>
+
+    <div class="eyebrow" data-t="tools"></div>
+    <div class="tools">
+      <a class="tool" href="../write/index.html"><div class="ic">✍️</div><div><h3>Writing Lab</h3><p data-t="toolWriting"></p></div></a>
+      <a class="tool" href="#" onclick="toast(T().soonReport);return false"><div class="ic">📄</div><div><h3 data-t="toolReport"></h3><p data-t="toolReportSub"></p></div></a>
+      <a class="tool" href="#" onclick="toast(T().soonWorkbook);return false"><div class="ic">📚</div><div><h3 data-t="toolWorkbook"></h3><p data-t="toolWorkbookSub"></p></div></a>
+      <a class="tool" id="notionCard" href="#" target="_blank" rel="noopener"><div class="ic">📒</div><div><h3 data-t="toolNotion"></h3><p data-t="toolNotionSub"></p></div></a>
+    </div>
+
+    <div class="eyebrow" style="margin-top:24px" data-t="records"></div>
+    <div class="panel">
+      <div class="phead"><h2 data-t="indEntry"></h2><span class="pill" id="clsPill"></span></div>
+      <div class="desc" data-t="indDesc"></div>
+      <div class="evalrow">
+        <span style="font-size:13px;font-weight:700;color:var(--sub)" data-t="test"></span>
+        <select id="evalSel"></select>
+        <button class="mini" onclick="toast(T().newTestSoon)" data-t="newTest"></button>
+        <span class="hint" data-t="testHint"></span>
+      </div>
+      <div class="memogrid">
+        <div class="clsmemo">
+          <label data-t="clsMemo" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
+          <div data-t="clsMemoDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
+          <textarea id="clsMemo" rows="2" oninput="memoStore()"></textarea>
+          <div class="memoact">
+            <button id="memoEditBtn" class="mbtn ghost" onclick="memoEdit()"></button>
+            <button id="memoPubBtn" class="mbtn pri" onclick="memoPublish()"></button>
+            <span id="memoStatus" class="memostat"></span>
+          </div>
+        </div>
+        <div class="clsmemo tealog">
+          <label data-t="teaLog" style="display:block;font-size:13.5px;font-weight:800;color:var(--navy);margin:0 0 3px"></label>
+          <div data-t="teaLogDesc" style="font-size:12px;color:var(--sub);margin:0 0 7px"></div>
+          <textarea id="teaLog" rows="2" oninput="teaDirty()"></textarea>
+          <div class="memoact">
+            <button id="teaEditBtn" class="mbtn ghost" onclick="teaEdit()"></button>
+            <button id="teaSaveBtn" class="mbtn pri" onclick="teaSave()"></button>
+            <span id="teaStatus" class="memostat" style="color:var(--sub);font-weight:700"></span>
+          </div>
+        </div>
+      </div>
+      <div class="tblwrap"><table class="grid">
+        <thead><tr>
+          <th style="text-align:left" data-t="cStudent"></th><th data-t="cAtt"></th>
+          <th><span data-t="cHw"></span><label class="allck"><input type="checkbox" onchange="toggleCol('hw',this.checked)"><span data-t="allLbl"></span></label></th>
+          <th data-t="cScore"></th><th data-t="cAttitude"></th><th data-t="cVideo"></th><th data-t="cNote"></th>
+          <th><span data-t="cPub"></span><label class="allck"><input type="checkbox" onchange="toggleCol('pub',this.checked)"><span data-t="allLbl"></span></label></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+    </div>
+
+    <div class="desc" data-t="gridHelp" style="margin-top:12px;font-size:12.5px;line-height:1.7"></div>
+
+    <div class="saverow">
+      <div class="note" data-t="saveNote"></div>
+      <div class="btnsave">
+        <button class="btn2 ghost" onclick="save(false)" data-t="saveDraft"></button>
+        <button class="btn2 pri" onclick="save(true)" data-t="savePublish"></button>
+      </div>
+    </div>
+    <div style="height:30px"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="cellModal">
+  <div class="box">
+    <h3 id="mTitle"></h3>
+    <div id="mVid">
+      <input type="text" id="mVidUrl">
+      <label class="ck"><input type="checkbox" id="mVidPub"><span id="mVidLbl"></span></label>
+    </div>
+    <div id="mNote">
+      <select id="mNoteType" onchange="notePolicy()"><option value="general"></option><option value="repeat"></option><option value="sensitive"></option></select>
+      <div id="mNoteRule" style="font-size:12px;line-height:1.6;background:#f4f8ff;border:1px solid #d6e2f2;border-radius:9px;padding:8px 11px;margin:0 0 10px;color:var(--sub)"></div>
+      <textarea id="mNoteTxt" rows="3"></textarea>
+      <label class="ck"><input type="checkbox" id="mNotePub"><span id="mNoteLbl"></span></label>
+    </div>
+    <div class="row">
+      <button class="b ghost" id="mCancel" onclick="document.getElementById('cellModal').classList.remove('on')"></button>
+      <button class="b pri" id="mSave" onclick="saveCell()"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL  = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+const ID_DOMAIN = "";                 // 이메일 그대로 로그인(도메인 안 붙임)
+let SB=null, USER=null;
+const ATT_CODES=['present','late','absent','excused'];
+const NOTION_URL = "https://app.notion.com/p/0316540571/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8";
+
+const STR = {
+  ko:{ setup:'⚙ 데모 미리보기 — Supabase 값·강사 계정 연결 시 실제 반 명단·저장 작동. 지금은 샘플 데이터.',
+    loginTitle:'선생님 페이지',loginSub:'강사 아이디로 로그인',idLabel:'강사 아이디',pwLabel:'비밀번호',login:'로그인',logout:'로그아웃',
+    headTitle:'🏫 클라이 어학원 · 선생님 페이지',headSub:'반 전체를 한 번에 입력 → 공개 항목만 학생·학부모 페이지에 자동 반영',
+    tools:'선생님 도구',records:'반 기록 입력',
+    toolWriting:'주제 내기 · 워크시트 · 1:1 첨삭',toolReport:'원서반 리포트',toolReportSub:'월말 리포트 생성·게시',
+    toolWorkbook:'IB PPT & TG',toolWorkbookSub:'수업 슬라이드 · 티칭가이드',toolNotion:'자료실 (노션)',toolNotionSub:'수업 자료·양식 찾아 쓰기',
+    indEntry:'📝 성적·출결 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
+    test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항 기본 — 단어시험 6 · 월말평가 25 (필요시 칸에서 조정)',
+    gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
+    clsMemo:'📋 오늘 반 전체 메모 (학생·학부모 공개)',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 발행하면 반 학생·학부모 페이지에 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
+    teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',
+    cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',allLbl:'전체',
+    saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
+    att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
+    evals:['단어시험','월말평가','레벨테스트'],
+    students:'명',classesLabel:'담당: A·B반',demoName:'데모 선생님',
+    soonReport:'원서반 리포트 연결 준비중 (자동화 앱)',soonWorkbook:'IB PPT & TG 연결 준비중',newTestSoon:'평가 추가는 곧 연결돼요 (데모)',
+    savedDraft:'임시 저장 완료 (데모)',savedPub:n=>`반 전체 저장·게시 완료 (데모 · ${n}명)`,needInput:'아이디와 비밀번호를 입력하세요.',badLogin:'아이디 또는 비밀번호가 맞지 않아요.' },
+  en:{ setup:'⚙ Demo preview — real class roster & saving work once Supabase and a teacher account are connected. Sample data for now.',
+    loginTitle:'Teacher Page',loginSub:'Sign in with your teacher ID',idLabel:'Teacher ID',pwLabel:'Password',login:'Sign in',logout:'Log out',
+    headTitle:'🏫 KLAI Language Academy · Teacher Page',headSub:'Enter records for the class → only published items appear on student & parent pages',
+    tools:'Teacher Tools',records:'Class Records',
+    toolWriting:'Post topics · worksheet · 1:1 feedback',toolReport:'Reading-class Report',toolReportSub:'Create & publish monthly report',
+    toolWorkbook:'IB PPT & TG',toolWorkbookSub:'Lesson slides & teaching guide',toolNotion:'Resources (Notion)',toolNotionSub:'Find class materials & forms',
+    indEntry:'📝 Scores & Attendance',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
+    test:'Test',newTest:'＋ New test',testHint:'Default total — Vocab 6 · Monthly 25 (adjust per cell)',
+    gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
+    clsMemo:'📋 Today · class note (shared)',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When published, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
+    teaLog:'🗒️ Teacher log · work report (private)',teaLogDesc:'Private to you — class reflections, handoffs, work report. Not shown to students or parents. Change the date to see past logs.',teaLogPh:'e.g. Class 3 finished Unit 5 · Jihoon needs parent call · low textbook stock — report to director',
+    cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',allLbl:'All',
+    saveNote:'✅ After entering, saving publishes only students with Publish ON.',saveDraft:'Save draft',savePublish:'Save & publish class',
+    att:['Present','Late','Absent','Excused'],tae:['Excellent','Good','Needs work'],
+    evals:['Vocab Test','Monthly Test','Level Test'],
+    students:'students',classesLabel:'Classes: A · B',demoName:'Demo Teacher',
+    soonReport:'Reading-class Report — coming soon (automation app)',soonWorkbook:'IB PPT & TG — coming soon',newTestSoon:'Adding tests — coming soon (demo)',
+    savedDraft:'Draft saved (demo)',savedPub:n=>`Class saved & published (demo · ${n})`,needInput:'Enter ID and password.',badLogin:'ID or password is incorrect.' }
+};
+const ATTV = {출석:'present',지각:'late',결석:'absent',사유결석:'excused',Present:'present',Late:'late',Absent:'absent',Excused:'excused'};
+// 원어민 선생님별 시간표 (영어이름+코드 · 취소선 제외) ⚠️철자/코드 확인 필요
+function S(en,code,ko){ return {en,code,ko}; }
+let ROSTER = {   // DB(roster) 있으면 덮어씀. 없으면 이 데모로 폴백.
+  'NEZ (Class 1)': {
+    '2:00 ZOOM 4-2': [S('Leanna','4217','이연서'),S('Roy','1807','황지우'),S('Ain','1657','김아인'),S('Sarah','8294','이세아'),S('Elly','9949','전다은'),S('Stella','8514','이해인')],
+    '2:00 ZOOM 1-1': [S('Elin','1136','김예린'),S('Luna','7204','이서안'),S('Lucas','9257','박시윤')],
+    '3:00 IB Y1 (21/22)': [S('Bona','1298','정혜인'),S('Ellie','9572','방서현'),S('Chloe','4784','오해솔'),S('Jane','6141','김라율')],
+    '3:00 IB Y1 (27/28)': [S('Sophia','4520','우소율'),S('Elena','5695','김태은'),S('Greg','3862','심근호'),S('Alex','8607','유정현'),S('Emma','5549','차연서'),S('Andy','3309','송태환')],
+    '4:00 IB Y1 (21/22)': [S('Julia','4925','정예은'),S('Liz','8017','임채아'),S('Ella','6155','이채연'),S('Evan','6812','신승현')],
+    '4:00 ZOOM 1-1': [S('Jake','8927','임재윤'),S('Ben','0618','반시후'),S('Ethan','3633','김민성'),S('Cara','6753','최다솜'),S('Lily','0601','허지원')],
+    '5:00 IB Y1 (21/22)': [S('Rickey','7794','노범준'),S('Jayden','8478','정예립'),S('Jayden','3518','장범준'),S('Junho','7765','최준호'),S('Daisy','4270','박정음'),S('Ivy','3760','김윤서'),S('Jennie','4176','연진서'),S('Billy','4574','김승유')],
+    '5:00 IB Y1 (27/28)': [S('Ellie','4004','이규은'),S('June','6155','이준석'),S('Aiden','4404','최지운'),S('Clare','5818','송채윤'),S('Leah','0412','곽설아')],
+    '6:30 PATHWAYS 1': [S('Cindy','4405','최지유'),S('Jenny','8375','최효원'),S('Joseph','5524','조성현'),S('Hero','8017','임채우')],
+    '6:30 PATHWAYS 2': [S('Giwon','0814','이기원'),S('Henry','9893','유지우'),S('Sihoon','4865','이시훈')]
+  },
+  'Rosemary (Class 2)': {
+    '2:00 ZOOM 4-2': [S('Junsoo','7765','최준수'),S('Kenneth','3440','박성하'),S('William','1206','지우림'),S('Rosa','1431','박서윤')],
+    '3:00 KEYSTONE 1-2 (A)': [S('Harry','4004','이준규'),S('Jason','6548','탁규민'),S('Lucy','8478','정은휼'),S('Steven','0412','곽도윤')],
+    '3:00 KEYSTONE 1-2 (B)': [S('Andy','4520','우하율'),S('Leo','4220','김재원'),S('Audrey','4404','송채윤'),S('Amber','6691','서예인')],
+    '4:00 IB Y1 (23/24)': [S('Celina','0091','박채연')],
+    '4:00 KEYSTONE 3-1': [S('Daniel','5874','조민성'),S('Sunny','2337','조민서'),S('Yuncw','4359','윤채원'),S('Jude','0911','오예준')],
+    '5:00 Pathways 2': [S('John','8607','유길태'),S('Crystal','2546','황수정'),S('Sophia','4003','김나연'),S('Ethan','5978','서승우')],
+    '5:00 IB Y2 (1/2)': [S('Amy','1220','차서은'),S('Isabel','1220','차서연'),S('Jun','2503','박도준'),S('Henry','3309','송주환'),S('Evan','1891','이로운'),S('Selena','8479','김유솔')],
+    '6:30 PATHWAYS 1': [S('Mateo','9987','지효준'),S('Aiden','1206','지이룸')],
+    '6:30 PATHWAYS 4': [S('Olivia','5818','송지윤'),S('David','2013','황승준')]
+  }
+};
+let TEACHER = Object.keys(ROSTER)[0];
+let DEMO = ROSTER[TEACHER];
+
+let LANG = localStorage.getItem('klai_tea_lang') || 'en';   // 기본 영어(원어민)
+const $ = s => document.querySelector(s);
+window.T = ()=>STR[LANG];
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); }
+window.toast = toast;
+
+function applyLang(){
+  const s = STR[LANG];
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-t]').forEach(el=>{ const v=s[el.dataset.t]; if(typeof v==='string') el.textContent=v; });
+  $('#setupBanner').textContent = s.setup;
+  $('#uid').placeholder = LANG==='ko'?'예: anna':'e.g. anna';
+  $('#upw').placeholder = LANG==='ko'?'비밀번호':'Password';
+  $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
+  $('#clsMemo').placeholder = s.clsMemoPh; $('#teaLog').placeholder = s.teaLogPh; memoSync();
+  document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
+  if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=TEACHER; $('#teaClasses').textContent=`${Object.keys(DEMO).length}${LANG==='ko'?'개 반':' classes'}`; }
+  renderRows($('#classSel').value || Object.keys(DEMO)[0]);
+}
+function setLang(l){ LANG=l; localStorage.setItem('klai_tea_lang',l); applyLang(); }
+document.querySelectorAll('.langseg button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+
+function toggleCol(cls,on){ document.querySelectorAll('#rows .'+cls).forEach(c=>c.checked=on); }
+window.toggleCol=toggleCol;
+function fillClasses(){ $('#classSel').innerHTML = Object.keys(DEMO).map(n=>`<option>${n}</option>`).join(''); }
+const EVALMAX=[6,25,'']; // evals 순서: 단어시험=6, 월말평가=25, 레벨테스트=빈칸(통과/미달)
+function renderRows(cls){
+  const s=STR[LANG], list=DEMO[cls]||[];
+  const MX = EVALMAX[$('#evalSel').selectedIndex] ?? '';
+  $('#clsPill').textContent = `${cls} · ${list.length}${LANG==='ko'?'명':' '+s.students}`;
+  $('#rows').innerHTML = list.map(st=>`
+    <tr data-code="${st.code}" data-name="${st.ko}">
+      <td class="name">${LANG==='ko'?st.ko:st.en} <span style="color:var(--sub);font-weight:500;font-size:12px">${st.code}</span><small>${LANG==='ko'?st.en:st.ko}</small></td>
+      <td><select class="att">${s.att.map(a=>`<option>${a}</option>`).join('')}</select></td>
+      <td><input type="checkbox" class="chk hw"></td>
+      <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="${MX}"></span></td>
+      <td><select class="tae">${s.tae.map(a=>`<option>${a}</option>`).join('')}</select></td>
+      <td><button class="iconbtn vidbtn" onclick="openCell(this,'vid')">🎬＋</button></td>
+      <td><button class="iconbtn notebtn" onclick="openCell(this,'note')">📝</button></td>
+      <td><input type="checkbox" class="chk pub" checked></td>
+    </tr>`).join('');
+  dbLoadRecords();   // DB 값 있으면 덮어씀
+}
+function collect(){ return [...document.querySelectorAll('#rows tr')].map(tr=>({
+  att:ATTV[tr.querySelector('.att').value], homework:tr.querySelector('.hw').checked,
+  score:tr.querySelector('.sc').value||null, max:tr.querySelector('.mx').value||null,
+  attitude:tr.querySelector('.tae').selectedIndex, isPublic:tr.querySelector('.pub').checked })); }
+async function save(publish){
+  const n=document.querySelectorAll('#rows tr').length;
+  if(SB && USER){ const err=await dbSaveRecords(publish);
+    if(err){ toast((LANG==='ko'?'저장 실패: ':'Save failed: ')+err.message); return; } }
+  toast(publish ? STR[LANG].savedPub(n) : STR[LANG].savedDraft);
+}
+window.save = save;
+
+// ── Supabase: 반 명단 로드 (roster) — 있으면 데모 대체 ──────────
+async function loadRosterDB(){
+  if(!SB || !USER) return;
+  const { data, error } = await SB.from('roster').select('*').eq('active',true)
+    .order('teacher').order('class_name').order('sort');
+  if(error || !data || !data.length) return;   // 비었으면 데모 유지
+  const obj={};
+  data.forEach(r=>{ (obj[r.teacher]=obj[r.teacher]||{});
+    (obj[r.teacher][r.class_name]=obj[r.teacher][r.class_name]||[]).push({en:r.student_en||'',code:r.student_code,ko:r.student_name}); });
+  ROSTER=obj; TEACHER=Object.keys(ROSTER)[0]; DEMO=ROSTER[TEACHER];
+}
+
+// ── Supabase: 성적·출결 저장/로드 (class_records) ──────────────
+async function dbSaveRecords(publish){
+  const teacher=TEACHER, cls=$('#classSel').value, date=$('#dateSel').value, ev=$('#evalSel').value;
+  const rows=[...document.querySelectorAll('#rows tr')].map(tr=>({
+    teacher, class_name:cls, date, eval:ev,
+    student_code:tr.dataset.code, student_name:tr.dataset.name,
+    attendance:ATT_CODES[tr.querySelector('.att').selectedIndex],
+    homework:tr.querySelector('.hw').checked,
+    score:tr.querySelector('.sc').value!==''?parseInt(tr.querySelector('.sc').value):null,
+    max:tr.querySelector('.mx').value!==''?parseInt(tr.querySelector('.mx').value):null,
+    attitude:tr.querySelector('.tae').selectedIndex,
+    note:tr.dataset.note||null, note_type:tr.dataset.notetype||'general',
+    note_public:tr.dataset.notepub==='1',
+    video_url:tr.dataset.vid||null, video_public:!!tr.dataset.vid && tr.dataset.vidpub!=='0',
+    published: publish ? tr.querySelector('.pub').checked : false,
+    updated_at:new Date().toISOString()
+  }));
+  const { error } = await SB.from('class_records').upsert(rows,{onConflict:'teacher,class_name,date,eval,student_code'});
+  return error;
+}
+async function dbLoadRecords(){
+  if(!SB || !USER) return;
+  const { data } = await SB.from('class_records').select('*')
+    .eq('teacher',TEACHER).eq('class_name',$('#classSel').value)
+    .eq('date',$('#dateSel').value).eq('eval',$('#evalSel').value);
+  const by={}; (data||[]).forEach(r=>by[r.student_code]=r);
+  document.querySelectorAll('#rows tr').forEach(tr=>{
+    const r=by[tr.dataset.code]; if(!r) return;
+    if(r.attendance) tr.querySelector('.att').selectedIndex=Math.max(0,ATT_CODES.indexOf(r.attendance));
+    tr.querySelector('.hw').checked=!!r.homework;
+    if(r.score!=null) tr.querySelector('.sc').value=r.score;
+    if(r.max!=null)   tr.querySelector('.mx').value=r.max;
+    if(r.attitude!=null) tr.querySelector('.tae').selectedIndex=r.attitude;
+    tr.querySelector('.pub').checked=!!r.published;
+    if(r.note){ tr.dataset.note=r.note; tr.dataset.notetype=r.note_type||'general'; tr.dataset.notepub=r.note_public?'1':'0';
+      const nb=tr.querySelector('.notebtn'); nb.textContent={general:'📝•',repeat:'⚠️•',sensitive:'🔒•'}[tr.dataset.notetype]||'📝•'; nb.classList.add('filled'); }
+    if(r.video_url){ tr.dataset.vid=r.video_url; tr.dataset.vidpub=r.video_public?'1':'0';
+      const vb=tr.querySelector('.vidbtn'); vb.textContent='🎬✓'; vb.classList.add('filled'); }
+  });
+}
+// ── Supabase: 반메모·강사일지 저장/로드 (class_daily) ──────────
+async function dbSaveDaily(){
+  const { error } = await SB.from('class_daily').upsert({
+    teacher:TEACHER, class_name:$('#classSel').value, date:$('#dateSel').value,
+    class_memo:$('#clsMemo').value, class_memo_published:memoLocked,
+    teacher_log:$('#teaLog').value, updated_at:new Date().toISOString()
+  },{onConflict:'teacher,class_name,date'});
+  return error;
+}
+async function dbLoadDaily(){
+  const { data } = await SB.from('class_daily').select('*')
+    .eq('teacher',TEACHER).eq('class_name',$('#classSel').value).eq('date',$('#dateSel').value).maybeSingle();
+  if(data){ $('#clsMemo').value=data.class_memo||''; memoLocked=!!data.class_memo_published; memoEver=!!data.class_memo;
+    $('#teaLog').value=data.teacher_log||''; teaLocked=!!data.teacher_log; }
+  else { $('#clsMemo').value=''; memoLocked=false; memoEver=false; $('#teaLog').value=''; teaLocked=false; }
+  memoSync();
+}
+
+function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
+  $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
+  $('#teaSel').value = TEACHER;
+  $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); memoLoad(); applyLang(); };
+  $('#dateSel').onchange = ()=>{ memoLoad(); renderRows($('#classSel').value); };
+  $('#evalSel').onchange = ()=>renderRows($('#classSel').value);
+  fillClasses(); $('#classSel').onchange=()=>{ memoLoad(); renderRows($('#classSel').value); }; memoLoad(); applyLang(); }
+// ── 메모(날짜별 저장): 왼쪽=반전체 발행 / 오른쪽=강사 일지 ──────
+// ponytail: localStorage 저장(데모). Phase2에서 Supabase로 교체.
+let memoEver=false, memoLocked=false, teaLocked=false;
+function memoKey(){ return `klai_memo::${TEACHER}::${$('#classSel').value}::${$('#dateSel').value}`; }
+function memoStore(){
+  localStorage.setItem(memoKey(), JSON.stringify({
+    cls:$('#clsMemo').value, clsLocked:memoLocked, clsEver:memoEver, tea:$('#teaLog').value, teaLocked }));
+}
+function memoLoad(){
+  if(SB && USER){ dbLoadDaily(); return; }   // 로그인 시 DB
+  let d={}; try{ d=JSON.parse(localStorage.getItem(memoKey())||'{}'); }catch(e){}
+  $('#clsMemo').value=d.cls||''; memoLocked=!!d.clsLocked; memoEver=!!d.clsEver;
+  $('#teaLog').value=d.tea||''; teaLocked = d.teaLocked ?? !!d.tea; memoSync();
+}
+function memoSync(){
+  const ko=LANG==='ko', ta=$('#clsMemo');
+  ta.readOnly=memoLocked; ta.classList.toggle('locked',memoLocked);
+  $('#memoPubBtn').textContent = memoEver ? (ko?'🔄 재발행':'🔄 Re-publish') : (ko?'발행하기':'Publish');
+  $('#memoEditBtn').textContent = ko?'✏️ 수정':'✏️ Edit';
+  const st=$('#memoStatus');
+  st.textContent = memoLocked ? (ko?'✅ 학생·학부모에게 발행됨':'✅ Published to students & parents')
+    : memoEver ? (ko?'✏️ 수정 중 — 재발행하면 반영돼요':'✏️ Editing — re-publish to apply')
+    : '';
+  st.style.color = memoLocked?'var(--green-d)':'var(--sub)';
+  // 오른쪽 일지 (수정→저장 잠금→수정)
+  const t2=$('#teaLog'); t2.readOnly=teaLocked; t2.classList.toggle('locked',teaLocked);
+  $('#teaSaveBtn').textContent = ko?'💾 저장':'💾 Save';
+  $('#teaEditBtn').textContent = ko?'✏️ 수정':'✏️ Edit';
+  const ts=$('#teaStatus');
+  ts.textContent = teaLocked ? (ko?'🔒 나만 봄 · 저장됨':'🔒 Private · saved') : '';
+  ts.style.color = teaLocked?'var(--sub)':'#c0392b';
+}
+async function memoPublish(){
+  if(!$('#clsMemo').value.trim()){ toast(LANG==='ko'?'내용을 입력하세요':'Enter a note'); return; }
+  const re=memoEver; memoEver=true; memoLocked=true; memoSync();
+  if(SB && USER){ const e=await dbSaveDaily(); if(e){ toast((LANG==='ko'?'발행 실패: ':'Publish failed: ')+e.message); return; } } else memoStore();
+  toast(LANG==='ko'?(re?'반 전체 메모 재발행됨':'반 전체 메모 발행됨'):(re?'Re-published':'Published'));
+}
+function memoEdit(){ memoLocked=false; if(!(SB&&USER)) memoStore(); memoSync(); }
+function teaDirty(){ if(!(SB&&USER)) memoStore(); }   // DB모드: 저장 버튼으로만 기록
+async function teaSave(){ teaLocked=true; memoSync();
+  if(SB && USER){ const e=await dbSaveDaily(); if(e){ toast((LANG==='ko'?'저장 실패: ':'Save failed: ')+e.message); return; } } else memoStore();
+  toast(LANG==='ko'?'강사 일지 저장됨':'Log saved'); }
+function teaEdit(){ teaLocked=false; if(!(SB&&USER)) memoStore(); memoSync(); }
+window.memoPublish=memoPublish; window.memoEdit=memoEdit; window.memoStore=memoStore;
+window.teaDirty=teaDirty; window.teaSave=teaSave; window.teaEdit=teaEdit;
+
+// ── 영상/개별메모 셀 (데모: 행에 임시 저장) ──────────────
+let CELL=null;
+function openCell(btn,kind){
+  CELL={btn,kind,tr:btn.closest('tr')};
+  const ko=LANG==='ko', name=CELL.tr.querySelector('.name').firstChild.textContent.trim();
+  $('#mTitle').textContent = (kind==='vid'?'🎬 ':'📝 ')+name;
+  $('#mVid').classList.toggle('hidden', kind!=='vid');
+  $('#mNote').classList.toggle('hidden', kind!=='note');
+  if(kind==='vid'){ $('#mVidUrl').value=CELL.tr.dataset.vid||''; $('#mVidPub').checked=CELL.tr.dataset.vidpub!=='0';
+    $('#mVidUrl').placeholder=ko?'수업 영상 링크 (유튜브·드라이브 등)':'Class video link (YouTube, Drive…)';
+    $('#mVidLbl').textContent=ko?'학생·학부모에게 공개':'Show to student & parent'; }
+  else { $('#mNoteTxt').value=CELL.tr.dataset.note||''; $('#mNoteType').value=CELL.tr.dataset.notetype||'general'; $('#mNotePub').checked=CELL.tr.dataset.notepub==='1';
+    $('#mNoteTxt').placeholder=ko?'객관적 사실만 (예: 숙제 미제출 3회, 수업 중 이석 반복)':'Objective facts only (e.g. HW missed 3×, repeated out-of-seat)';
+    notePolicy(); }
+  [...$('#mNoteType').options].forEach((o,i)=>o.textContent=(LANG==='ko'
+    ?['일반 메모 (내부 기록)','⚠️ 반복 지도 3회+ (학부모 공개·월말 반영)','🔒 민감 사항 (학부모 공개 금지)']
+    :['General (internal)','⚠️ Repeated 3×+ (shared · affects monthly)','🔒 Sensitive (never shared)'])[i]);
+  $('#mSave').textContent=ko?'저장':'Save'; $('#mCancel').textContent=ko?'취소':'Cancel';
+  $('#cellModal').classList.add('on');
+}
+function notePolicy(){
+  const ko=LANG==='ko', t=$('#mNoteType').value, cb=$('#mNotePub'), lbl=$('#mNoteLbl'), rule=$('#mNoteRule');
+  if(t==='sensitive'){ cb.checked=false; cb.disabled=true;
+    lbl.textContent=ko?'민감 사항은 학부모 공개 불가 (내부 보관만)':'Sensitive — cannot be shared (internal only)';
+    rule.textContent=ko?'🔒 가정사·심리·건강 등 예민한 내용. 원장·선생님만 열람. 학부모 공개·월말 반영 안 함.':'🔒 Family, emotional or health matters. Staff only. Never shared, never in monthly.'; }
+  else if(t==='repeat'){ cb.disabled=false;
+    lbl.textContent=ko?'학부모에게 공개 (권장 · 월말평가 반영)':'Share with parent (recommended · affects monthly)';
+    rule.textContent=ko?'⚠️ 3회 이상 지도에도 고쳐지지 않은 부분만 여기에. 공개 시 월말평가 학습태도에 반영돼요.':'⚠️ Only issues unchanged after 3+ reminders. When shared, it feeds the monthly attitude score.'; }
+  else { cb.disabled=false;
+    lbl.textContent=ko?'학부모에게 공개 (기본: 선생님·원장만)':'Share with parent (default: staff only)';
+    rule.textContent=ko?'일상 기록. 기본 비공개. 지도 횟수 쌓는 용도 — 3회+ 되면 "반복 지도"로 올려 공개.':'Everyday log. Private by default. Track reminders — escalate to "Repeated" once it hits 3+.'; }
+}
+window.notePolicy=notePolicy;
+
+function saveCell(){
+  const tr=CELL.tr;
+  if(CELL.kind==='vid'){ tr.dataset.vid=$('#mVidUrl').value.trim(); tr.dataset.vidpub=$('#mVidPub').checked?'1':'0';
+    CELL.btn.textContent = tr.dataset.vid ? '🎬✓' : '🎬＋'; CELL.btn.classList.toggle('filled',!!tr.dataset.vid); }
+  else { tr.dataset.note=$('#mNoteTxt').value.trim(); tr.dataset.notetype=$('#mNoteType').value; tr.dataset.notepub=$('#mNotePub').checked?'1':'0';
+    CELL.btn.textContent = tr.dataset.note ? ({general:'📝•',repeat:'⚠️•',sensitive:'🔒•'}[tr.dataset.notetype]||'📝•') : '📝'; CELL.btn.classList.toggle('filled',!!tr.dataset.note); }
+  $('#cellModal').classList.remove('on'); CELL=null;
+}
+window.openCell=openCell;
+
+function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden', x!==v)); }
+
+if(!SUPABASE_URL || !SUPABASE_ANON){
+  $('#setupBanner').classList.remove('hidden');
+  $('#teaName').dataset.demo='1'; boot(); show('dashView');
+} else { (async()=>{
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON); SB=sb;
+  async function route(){ const { data:{ session } } = await sb.auth.getSession();
+    if(session){ USER=session.user; $('#teaName').textContent = session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Teacher';
+      $('#teaClasses').textContent=''; await loadRosterDB(); boot(); show('dashView'); } else { USER=null; applyLang(); show('loginView'); } }
+  $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
+    if(!id||!pw){ $('#loginErr').textContent=STR[LANG].needInput; return; }
+    const email=id.includes('@')?id:id+ID_DOMAIN; const {error}=await sb.auth.signInWithPassword({email,password:pw});
+    if(error) $('#loginErr').textContent=STR[LANG].badLogin; else route(); };
+  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
+  $('#logoutBtn').onclick = async ()=>{ await sb.auth.signOut(); route(); };
+  applyLang(); route();
+})(); }
+</script>
+</body>
+</html>
