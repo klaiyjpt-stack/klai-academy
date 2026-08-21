@@ -450,8 +450,19 @@ function detectGenre(t){
 // PIN 은 소스에 없다 — /api/teacher-auth 가 환경변수와 대조한다.
 // ponytail: 화면 전환은 브라우저가 하므로 devtools 우회는 여전히 가능. 진짜 잠금은 Supabase 세션(원래 설계).
 let TEA_OK=false;
+// 포털(선생님/원장) 로그인 세션 있으면 PIN 없이 통과 — 같은 도메인이라 세션 공유됨.
+const _SB_URL="https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const _SB_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+async function hasPortalSession(){
+  try{
+    if(!window.__sbw){ const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'); window.__sbw=createClient(_SB_URL,_SB_ANON); }
+    const { data:{ session } } = await window.__sbw.auth.getSession();
+    return !!session;
+  }catch(e){ return false; }
+}
 async function teaAuth(){
   if(TEA_OK)return true;
+  if(await hasPortalSession()){ TEA_OK=true; return true; }   // 선생님 페이지에서 온 경우
   const p=prompt('관리자 PIN · Admin PIN');
   if(p===null)return false;
   const ok=await fetch('/api/teacher-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({pin:p})})
