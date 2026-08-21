@@ -2,7 +2,7 @@
 // GET=목록 / POST{email,password}=생성 / DELETE?id=삭제.
 const SUPABASE_URL = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
 const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
-const ADMINS = ["klai.yj.pt@gmail.com"];   // 원장 이메일(삭제 불가·관리 권한)
+const ADMINS = ["klai.yj.pt@gmail.com", "klai.yj.pt.1@gmail.com"];   // 원장 이메일(삭제 불가·관리 권한)
 
 async function caller(req) {
   const token = (req.headers.authorization || "").replace(/^Bearer /, "");

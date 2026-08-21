@@ -234,12 +234,12 @@ else { (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   SB = createClient(SUPABASE_URL, SUPABASE_ANON);
   // ponytail: 원장 이메일 허용목록(코드). 원장 추가 시 여기에 넣고 재배포.
-  const ADMINS = ['klai.yj.pt@gmail.com'];
+  const ADMINS = ['klai.yj.pt@gmail.com','klai.yj.pt.1@gmail.com'];
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
     if(session){ USER=session.user;
-      if(!ADMINS.includes((USER.email||'').toLowerCase())){   // 강사 계정 차단
-        await SB.auth.signOut(); USER=null; show('loginView');
-        $('#loginErr').textContent='🔒 원장 전용 페이지입니다. (강사 계정은 접근 불가)'; return; }
+      if(!ADMINS.includes((USER.email||'').toLowerCase())){   // 강사 계정 차단(세션은 유지 — 선생님 페이지 쓰게)
+        USER=null; show('loginView');
+        $('#loginErr').innerHTML='🔒 원장 전용 페이지입니다.<br>강사는 <a href="teacher.html" style="color:var(--blue-d);font-weight:800">선생님 페이지 →</a>'; return; }
       show('dashView'); loadData(); loadTeachers();
     } else { USER=null; show('loginView'); } }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
