@@ -29,7 +29,6 @@ async function solapi(to, name, timeStr, smsText){
     kakaoOptions: { pfId: KAKAO_PFID, templateId: KAKAO_TEMPLATE_ID,
       variables: { "#{학생명}": name, "#{시간}": timeStr }, disableSms: false }
   };
-  if (Buffer.byteLength(smsText, "utf8") > 90) { msg.type = "LMS"; msg.subject = "보강 안내"; }
   const r = await fetch("https://api.solapi.com/messages/v4/send", {
     method: "POST", headers: { Authorization: auth, "Content-Type": "application/json" }, body: JSON.stringify({ message: msg }) });
   return { ok: r.ok, body: await r.text() };
