@@ -50,7 +50,9 @@ export default async function handler(req, res) {
       const at = new Date(row.makeup_at);
       const k = new Date(at.getTime() + 9 * 3600e3);
       const hh = k.getUTCHours(), mm = k.getUTCMinutes();
-      const timeStr = `${hh}시${mm ? mm + "분" : ""}`;
+      const ap = hh < 12 ? "오전" : "오후";
+      const h12 = hh % 12 === 0 ? 12 : hh % 12;
+      const timeStr = `${ap} ${h12}시${mm ? " " + mm + "분" : ""}`;
       const text = `[클라이 어학원] 안녕하세요. 내일 ${timeStr} ${row.student_name} 학생 보충수업이 있습니다. 잊지 마시고 참석 부탁드립니다.`;
       const s = await solapi(row.parent_phone, text);
       if (s.ok) {
