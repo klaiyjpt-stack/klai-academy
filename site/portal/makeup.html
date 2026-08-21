@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보강 관리 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc;--red:#c0392b;--amber:#e08a1a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+  header{background:linear-gradient(120deg,#5a3fb0,#2b74c4);color:#fff}
+  .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px}
+  .hd .ttl{font-weight:800;font-size:18px}.hd .ttl small{display:block;font-weight:500;font-size:12px;opacity:.9;margin-top:2px}
+  .hd a.back,.hd .out{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;text-decoration:none}
+  .login{max-width:360px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 10px 40px rgba(20,30,60,.1)}
+  .login .lg{text-align:center;font-weight:800;font-size:20px;color:var(--navy)}
+  .login .ls{text-align:center;color:var(--sub);font-size:13px;margin:4px 0 20px}
+  .login label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px}
+  .login input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  .login .btn{width:100%;margin-top:18px;background:var(--navy);color:#fff;border:none;padding:13px;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer}
+  .login .err{color:var(--red);font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin:16px 0}
+  .panel h2{font-size:14px;color:var(--navy);font-weight:800;margin-bottom:9px}
+  .addrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .addrow input,.addrow select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13.5px}
+  .add{background:var(--green);color:#fff;border:none;font-weight:800;padding:9px 16px;border-radius:9px;cursor:pointer}
+  .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+  .seg{display:flex;background:#eef0f5;border-radius:9px;padding:3px}
+  .seg button{border:none;background:none;padding:7px 12px;border-radius:7px;font-weight:700;font-size:12.5px;color:var(--sub);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  .tblwrap{overflow-x:auto}
+  table.grid{width:100%;border-collapse:collapse;min-width:820px}
+  table.grid th,table.grid td{padding:8px 7px;border-bottom:1px solid var(--line);font-size:13px;text-align:left;vertical-align:top}
+  table.grid thead th{background:var(--soft);color:var(--sub);font-weight:800;font-size:12px}
+  table.grid input,table.grid select{padding:5px 7px;border:1px solid var(--line);border-radius:7px;font-size:12.5px}
+  .badge{font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;white-space:nowrap}
+  .b-ok{background:#e8f6e0;color:var(--green-d)} .b-no{background:#fdeaea;color:var(--red)} .b-wait{background:#fff3df;color:var(--amber)} .b-done{background:#e7eefc;color:var(--blue-d)}
+  .btn2{border:none;border-radius:8px;padding:6px 11px;font-weight:800;font-size:12px;cursor:pointer}
+  .btn2.pri{background:var(--blue);color:#fff}.btn2.gr{background:var(--green);color:#fff}.btn2.gh{background:#fff;border:1px solid var(--line);color:var(--sub)}
+  .del{background:none;border:none;cursor:pointer;font-size:14px;opacity:.5}.del:hover{opacity:1}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:13.5px;font-weight:700;padding:11px 18px;border-radius:11px;opacity:0;pointer-events:none;transition:.2s;z-index:60}
+  .toast.on{opacity:1}
+  .hidden{display:none}
+  .note{font-size:12px;color:var(--sub);margin-top:4px}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="hidden">
+  <div class="login">
+    <div class="lg">🔁 보강 관리</div>
+    <div class="ls">원장·실장 계정으로 로그인</div>
+    <label>이메일</label><input id="uid" type="text" autocomplete="username" placeholder="이메일" autocapitalize="none">
+    <label>비밀번호</label><input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
+    <button class="btn" id="loginBtn">로그인</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="dashView" class="hidden">
+  <header><div class="wrap hd">
+    <div class="ttl">🔁 보강 관리<small>결석 → 사유 판정 → 보강일정 → 전날 리마인더 → 완료</small></div>
+    <div><a class="back" href="admin.html">← 원장 관리</a> <button class="out" id="logoutBtn">로그아웃</button></div>
+  </div></header>
+
+  <div class="wrap">
+    <div class="panel">
+      <h2>➕ 결석 등록</h2>
+      <div class="addrow">
+        <input id="mName" placeholder="학생 이름" style="width:110px">
+        <input id="mClass" placeholder="반(선택)" style="width:120px">
+        <input id="mPhone" placeholder="학부모 연락처" style="width:140px" inputmode="numeric">
+        <input id="mAbs" type="date" title="결석일" style="width:150px">
+        <select id="mReason">
+          <option value="school">학교일정 (보강O)</option>
+          <option value="sick">병결 (보강O·증빙)</option>
+          <option value="family">초상 (보강O)</option>
+          <option value="personal">개인사정 (보강X)</option>
+        </select>
+        <input id="mProof" placeholder="증빙(약봉투/진료확인서)" style="width:150px">
+        <button class="add" id="mAdd">등록</button>
+      </div>
+      <div class="note">개인사정은 자동으로 <b>보강 불가</b>로 등록돼요. 병결은 증빙 확인 후 진행.</div>
+    </div>
+
+    <div class="bar">
+      <div class="seg" id="segFilter">
+        <button data-f="active" class="on">진행중</button>
+        <button data-f="done">완료</button>
+        <button data-f="na">보강불가</button>
+        <button data-f="all">전체</button>
+      </div>
+      <span style="flex:1"></span>
+      <button class="btn2 gh" onclick="loadMakeup()">🔄 새로고침</button>
+    </div>
+    <div class="panel" style="padding:0;margin-top:0"><div class="tblwrap"><div id="mkList" style="padding:6px">로그인 후 표시됩니다.</div></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL="https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const SUPABASE_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+const ADMINS=["klai.yj.pt@gmail.com","klai.yj.pt.1@gmail.com"];
+const REASON={school:"학교일정",sick:"병결",family:"초상",personal:"개인사정"};
+let SB=null,USER=null,MK=[],FILTER="active";
+const $=s=>document.querySelector(s);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1700);}
+function show(v){['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==v));}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function fmtAt(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return String(iso);
+  const p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+function toLocalInput(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return ''; const p=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`; }
+
+async function loadMakeup(){
+  const { data, error } = await SB.from('makeup').select('*').order('created_at',{ascending:false});
+  if(error){ $('#mkList').innerHTML='<span style="color:var(--red)">'+esc(error.message)+' (makeup 테이블 실행 필요?)</span>'; return; }
+  MK=data||[]; renderMakeup();
+}
+function renderMakeup(){
+  let rows=MK.slice();
+  if(FILTER==='active') rows=rows.filter(x=>x.status==='new'||x.status==='scheduled');
+  else if(FILTER==='done') rows=rows.filter(x=>x.status==='done');
+  else if(FILTER==='na') rows=rows.filter(x=>x.status==='na'||x.status==='cancel');
+  if(!rows.length){ $('#mkList').innerHTML='<div style="color:var(--sub);padding:10px">해당 보강이 없어요.</div>'; return; }
+  $('#mkList').innerHTML='<table class="grid"><thead><tr>'+
+    '<th>학생</th><th>결석일</th><th>사유</th><th>보강 가능</th><th style="width:190px">보강 일시</th><th>리마인더</th><th>상태</th><th style="width:180px">비고 / 수정기록</th><th style="width:150px">처리</th>'+
+    '</tr></thead><tbody>'+rows.map(x=>{
+      const elig=x.reason!=='personal';
+      const st=x.status;
+      let stBadge = st==='done'?'<span class="badge b-done">완료</span>'
+        : st==='na'?'<span class="badge b-no">보강불가</span>'
+        : st==='cancel'?'<span class="badge b-no">취소</span>'
+        : st==='scheduled'?'<span class="badge b-ok">일정확정</span>'
+        : '<span class="badge b-wait">대상확인</span>';
+      let act='';
+      if(st==='na'||st==='cancel'){ act='<button class="del" onclick="delMk(\''+x.id+'\')" title="삭제">🗑</button>'; }
+      else if(st==='done'){ act='<button class="del" onclick="delMk(\''+x.id+'\')" title="삭제">🗑</button>'; }
+      else {
+        act='<button class="btn2 pri" onclick="schedule(\''+x.id+'\')">일정 확정</button> '+
+            (st==='scheduled'?'<button class="btn2 gr" onclick="doneMk(\''+x.id+'\')">완료</button> ':'')+
+            '<button class="del" onclick="cancelMk(\''+x.id+'\')" title="취소">✕</button>';
+      }
+      const dateCell = elig
+        ? '<input type="datetime-local" class="mk-at" value="'+esc(toLocalInput(x.makeup_at))+'">'+(x.changed?'<div class="note">✎ 변경됨</div>':'')
+        : '<span class="badge b-no">보강 불가</span>';
+      return '<tr data-id="'+x.id+'">'+
+        '<td><b>'+esc(x.student_name)+'</b>'+(x.klass?'<div class="note">'+esc(x.klass)+'</div>':'')+(x.parent_phone?'<div class="note">'+esc(x.parent_phone)+'</div>':'')+'</td>'+
+        '<td>'+esc(x.abs_date||'-')+'</td>'+
+        '<td>'+esc(REASON[x.reason]||x.reason||'-')+(x.proof?'<div class="note">'+esc(x.proof)+'</div>':'')+'</td>'+
+        '<td>'+(elig?'<span class="badge b-ok">가능</span>':'<span class="badge b-no">불가</span>')+'</td>'+
+        '<td>'+dateCell+'</td>'+
+        '<td>'+(x.reminded?'<span class="badge b-done">발송됨</span>':(st==='scheduled'?'<span class="badge b-wait">전날 17시 예약</span>':'-'))+'</td>'+
+        '<td>'+stBadge+'</td>'+
+        '<td><input class="mk-note" value="'+esc(x.note||'')+'" placeholder="메모" onchange="saveNote(\''+x.id+'\',this.value)" style="width:100%">'+(x.history?'<div class="note" style="white-space:pre-line;margin-top:3px;font-size:11px">'+esc(x.history)+'</div>':'')+'</td>'+
+        '<td>'+act+'</td>'+
+        '</tr>';
+    }).join('')+'</tbody></table>';
+}
+async function addMk(){
+  const name=$('#mName').value.trim();
+  if(!name){ toast('학생 이름을 입력하세요'); return; }
+  const reason=$('#mReason').value;
+  const row={ student_name:name, klass:$('#mClass').value.trim()||null, parent_phone:$('#mPhone').value.trim()||null,
+    abs_date:$('#mAbs').value||null, reason, proof:$('#mProof').value.trim()||null,
+    status: reason==='personal'?'na':'new' };
+  const { error } = await SB.from('makeup').insert(row);
+  if(error){ toast('등록 실패: '+error.message); return; }
+  ['mName','mClass','mPhone','mProof'].forEach(i=>$('#'+i).value=''); $('#mAbs').value='';
+  toast(reason==='personal'?'등록(보강 불가)':'결석 등록됨'); loadMakeup();
+}
+function nowStamp(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return `${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+async function schedule(id){
+  const tr=document.querySelector('#mkList tr[data-id="'+id+'"]');
+  const inp=tr.querySelector('.mk-at'); const val=inp?inp.value:'';
+  if(!val){ toast('보강 일시를 입력하세요'); return; }
+  const rec=MK.find(x=>x.id===id);
+  const wasScheduled=rec && rec.status==='scheduled' && rec.makeup_at;
+  const iso=new Date(val).toISOString();
+  const patch={ makeup_at:iso, status:'scheduled', reminded:false };
+  if(wasScheduled && rec.makeup_at!==iso){   // 일정 변경 → 이력 남김
+    patch.changed=true;
+    const line=`${nowStamp()} 일시 변경 → ${fmtAt(iso)}`;
+    patch.history=(rec.history?rec.history+'\n':'')+line;
+  } else if(!wasScheduled){
+    patch.history=(rec.history?rec.history+'\n':'')+`${nowStamp()} 일정 확정 → ${fmtAt(iso)}`;
+  }
+  const { error } = await SB.from('makeup').update(patch).eq('id',id);
+  if(error){ toast('실패: '+error.message); return; }
+  toast(wasScheduled?'일정 변경됨(이력 기록)':'일정 확정 — 전날 17시 리마인더 예약'); loadMakeup();
+}
+async function saveNote(id,val){
+  const { error } = await SB.from('makeup').update({ note:val.trim()||null }).eq('id',id);
+  if(error){ toast('비고 저장 실패: '+error.message); return; }
+  const r=MK.find(x=>x.id===id); if(r) r.note=val; toast('비고 저장됨');
+}
+window.saveNote=saveNote;
+async function doneMk(id){ const {error}=await SB.from('makeup').update({status:'done'}).eq('id',id);
+  if(error){toast('실패: '+error.message);return;} toast('보강 완료'); loadMakeup(); }
+async function cancelMk(id){ if(!confirm('이 보강을 취소할까요?'))return; const {error}=await SB.from('makeup').update({status:'cancel'}).eq('id',id);
+  if(error){toast('실패: '+error.message);return;} toast('취소됨'); loadMakeup(); }
+async function delMk(id){ if(!confirm('이 기록을 완전히 삭제할까요?'))return; const {error}=await SB.from('makeup').delete().eq('id',id);
+  if(error){toast('실패: '+error.message);return;} toast('삭제됨'); loadMakeup(); }
+window.schedule=schedule; window.doneMk=doneMk; window.cancelMk=cancelMk; window.delMk=delMk;
+
+(async()=>{
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  SB=createClient(SUPABASE_URL,SUPABASE_ANON);
+  async function route(){ const { data:{ session } } = await SB.auth.getSession();
+    if(session){ USER=session.user;
+      if(!ADMINS.includes((USER.email||'').toLowerCase())){ await SB.auth.signOut(); USER=null; show('loginView'); $('#loginErr').textContent='🔒 원장·실장 전용 페이지입니다.'; return; }
+      show('dashView'); loadMakeup();
+    } else { USER=null; show('loginView'); } }
+  $('#loginBtn').onclick=async()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
+    if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
+    const {error}=await SB.auth.signInWithPassword({email:id,password:pw});
+    if(error) $('#loginErr').textContent='이메일 또는 비밀번호가 맞지 않아요.'; else route(); };
+  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter')$('#loginBtn').click(); });
+  $('#logoutBtn').onclick=async()=>{ await SB.auth.signOut(); route(); };
+  $('#mAdd').onclick=addMk;
+  document.querySelectorAll('#segFilter button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('#segFilter button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); FILTER=b.dataset.f; renderMakeup(); });
+  route();
+})();
+</script>
+</body>
+</html>
