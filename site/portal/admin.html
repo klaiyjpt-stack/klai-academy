@@ -86,7 +86,7 @@
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0">
           <label class="chk2"><input type="checkbox" id="csPending" checked> 미처리만</label>
           <select id="csLimit" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;background:#fff">
-            <option value="5">5개</option><option value="10" selected>10개</option><option value="20">20개</option><option value="50">50개</option><option value="99999">전체</option>
+            <option value="5" selected>5개</option><option value="10">10개</option><option value="20">20개</option><option value="50">50개</option><option value="99999">전체</option>
           </select>
           <button class="actbtn on" onclick="loadConsult()">🔄 최신 불러오기</button>
           <a href="https://docs.google.com/spreadsheets/d/1H4Hm9g7_1FgH9O6lBBpRTvJb01tqeTYauDFL6fiL7Jc/edit" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">시트 열기 ↗</a>
@@ -252,8 +252,11 @@ window.delTeacher=delTeacher;
 
 // ── 상담 신청 관리 (서버함수 /api/consult → Apps Script 웹앱) ──
 let CONSULT=[];
+// 시스템 도입(2026-08-22) 이전 접수 = 지난 접수. 미처리에서 제외(문자 안 감·시트 안 건드림).
+const CS_CUTOFF_ROW=483;
 function shortTs(t){ return String(t||'').replace(/\s*(오전|오후)?\s*\d{1,2}:\d{2}:\d{2}.*$/,''); }
 function isDone(s){ return s==='확정'||s==='취소'; }
+function isPending(x){ return !isDone(x.status) && x.row>CS_CUTOFF_ROW; }
 async function loadConsult(){
   $('#csList').innerHTML='불러오는 중…';
   try{
@@ -266,10 +269,10 @@ async function loadConsult(){
 }
 function renderConsult(){
   const pend=$('#csPending').checked;
-  const pendingN=CONSULT.filter(x=>!isDone(x.status)).length;
+  const pendingN=CONSULT.filter(isPending).length;
   $('#csCnt').textContent=`(미처리 ${pendingN} · 전체 ${CONSULT.length})`;
-  const lim=parseInt($('#csLimit').value,10)||10;
-  let rows=CONSULT.filter(x=>!pend || !isDone(x.status)).slice(0,lim);
+  const lim=parseInt($('#csLimit').value,10)||5;
+  let rows=CONSULT.filter(x=>!pend || isPending(x)).slice(0,lim);
   if(!rows.length){ $('#csList').innerHTML='<div style="color:var(--sub);padding:8px">표시할 상담이 없어요.</div>'; return; }
   const opt=(st)=>['','대기','확정','취소'].map(o=>`<option value="${o}"${o===st?' selected':''}>${o||'(상태)'}</option>`).join('');
   $('#csList').innerHTML='<table class="grid" style="min-width:740px"><thead><tr>'+
