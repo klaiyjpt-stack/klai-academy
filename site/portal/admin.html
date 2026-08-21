@@ -81,7 +81,10 @@
           <div style="font-size:12px;color:var(--sub);margin-top:2px">상담일시 정하고 상태를 <b>확정</b>하면 → 신청자에게 확정 문자 자동 발송</div>
         </div>
         <label class="chk2"><input type="checkbox" id="csPending" checked> 미처리만</label>
-        <button class="actbtn" onclick="loadConsult()">↻ 새로고침</button>
+        <select id="csLimit" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;background:#fff">
+          <option value="5">5개</option><option value="10" selected>10개</option><option value="20">20개</option><option value="50">50개</option><option value="99999">전체</option>
+        </select>
+        <button class="actbtn on" onclick="loadConsult()">🔄 최신 불러오기</button>
         <a href="https://docs.google.com/spreadsheets/d/1H4Hm9g7_1FgH9O6lBBpRTvJb01tqeTYauDFL6fiL7Jc/edit" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">시트 열기 ↗</a>
       </div>
       <div class="tblwrap"><div id="csList" style="font-size:13px">로그인 후 표시됩니다.</div></div>
@@ -260,7 +263,8 @@ function renderConsult(){
   const pend=$('#csPending').checked;
   const pendingN=CONSULT.filter(x=>!isDone(x.status)).length;
   $('#csCnt').textContent=`(미처리 ${pendingN} · 전체 ${CONSULT.length})`;
-  let rows=CONSULT.filter(x=>!pend || !isDone(x.status)).slice(0,60);
+  const lim=parseInt($('#csLimit').value,10)||10;
+  let rows=CONSULT.filter(x=>!pend || !isDone(x.status)).slice(0,lim);
   if(!rows.length){ $('#csList').innerHTML='<div style="color:var(--sub);padding:8px">표시할 상담이 없어요.</div>'; return; }
   const opt=(st)=>['','대기','확정','취소'].map(o=>`<option value="${o}"${o===st?' selected':''}>${o||'(상태)'}</option>`).join('');
   $('#csList').innerHTML='<table class="grid" style="min-width:740px"><thead><tr>'+
@@ -315,6 +319,7 @@ else { (async()=>{
   $('#addBtn').onclick = addStudent;
   $('#tAdd').onclick = addTeacher;
   $('#csPending').onchange = renderConsult;
+  $('#csLimit').onchange = renderConsult;
   route();
 })(); }
 </script>
