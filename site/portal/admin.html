@@ -118,10 +118,10 @@
     </div>
 
     <div class="panel">
-      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:9px">👤 강사 계정 관리 <span class="cnt" id="teaCnt"></span></div>
+      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:3px">👩‍🏫 강사 명단 <span class="cnt" id="teaCnt"></span></div>
+      <div style="font-size:12px;color:var(--sub);margin-bottom:9px">이름만 등록(자주 변동). 로그인은 학원 공용 계정 · 여기 이름은 반 배정·기록용.</div>
       <div class="addrow" style="margin-bottom:10px">
-        <input id="tEmail" placeholder="강사 이메일 예: nez@klai.kr" style="width:220px" autocapitalize="none">
-        <input id="tPw" type="text" placeholder="비밀번호(6자 이상)" style="width:160px">
+        <input id="tName" placeholder="강사 이름 예: NEZ (Class 1)" style="width:240px">
         <button class="add" id="tAdd">강사 추가</button>
       </div>
       <div id="teaList" style="font-size:13.5px"></div>
@@ -219,36 +219,36 @@ async function addStudent(){
 }
 window.upd=upd; window.toggleActive=toggleActive; window.del=del;
 
-// ── 강사 계정 관리 (서버함수 /api/teachers, service_role 숨김) ──
+// ── 강사 명단 (이름만, staff 테이블 CRUD) ──
 async function authHdr(){ const { data:{ session } } = await SB.auth.getSession(); return { Authorization:'Bearer '+(session?session.access_token:''), 'Content-Type':'application/json' }; }
 async function loadTeachers(){
-  try{
-    const r = await fetch('/api/teachers',{ headers: await authHdr() });
-    const d = await r.json();
-    if(!r.ok){ $('#teaList').innerHTML='<span style="color:var(--red)">'+esc(d.error||'불러오기 실패')+'</span>'; return; }
-    const us=d.users||[]; $('#teaCnt').textContent=`총 ${us.length}명`;
-    $('#teaList').innerHTML = us.map(x=>
-      '<div style="display:flex;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid var(--line)">'+
-      '<b>'+esc(x.email)+'</b>'+(x.admin?'<span class="actbtn on">원장</span>':'<span class="actbtn">강사</span>')+
-      '<span style="flex:1"></span>'+
-      (x.admin?'':'<button class="del" onclick="delTeacher(\''+x.id+'\',\''+esc(x.email)+'\')" title="삭제">🗑</button>')+
-      '</div>').join('');
-  }catch(e){ $('#teaList').innerHTML='<span style="color:var(--red)">서버함수 미배포? '+esc(String(e))+'</span>'; }
+  const { data, error } = await SB.from('staff').select('*').order('sort').order('name');
+  if(error){ $('#teaList').innerHTML='<span style="color:var(--red)">'+esc(error.message)+' (staff 테이블 실행 필요?)</span>'; return; }
+  const us=data||[]; $('#teaCnt').textContent=`총 ${us.length}명`;
+  $('#teaList').innerHTML = us.map(x=>
+    '<div style="display:flex;align-items:center;gap:8px;padding:6px 2px;border-bottom:1px solid var(--line)">'+
+    '<input value="'+esc(x.name)+'" onchange="renameStaff(\''+x.id+'\',this.value)" style="flex:1;border:1px solid transparent;border-radius:6px;padding:5px 7px;font:inherit;font-size:13.5px">'+
+    '<button class="del" onclick="delStaff(\''+x.id+'\',\''+esc(x.name)+'\')" title="삭제">🗑</button>'+
+    '</div>').join('') || '<div style="color:var(--sub);padding:6px">강사를 추가하세요.</div>';
 }
 async function addTeacher(){
-  const email=$('#tEmail').value.trim(), password=$('#tPw').value;
-  if(!email||!password){ toast('이메일·비번 입력'); return; }
-  const r=await fetch('/api/teachers',{ method:'POST', headers: await authHdr(), body:JSON.stringify({email,password}) });
-  const d=await r.json(); if(!r.ok){ toast('추가 실패: '+(d.error||'')); return; }
-  $('#tEmail').value=''; $('#tPw').value=''; toast('강사 계정 생성됨'); loadTeachers();
+  const name=$('#tName').value.trim();
+  if(!name){ toast('강사 이름을 입력하세요'); return; }
+  const { error } = await SB.from('staff').insert({ name });
+  if(error){ toast(/duplicate|unique/i.test(error.message)?'이미 있는 이름':'추가 실패: '+error.message); return; }
+  $('#tName').value=''; toast('강사 추가됨'); loadTeachers();
 }
-async function delTeacher(id,email){
-  if(!confirm('강사 "'+email+'" 계정을 삭제할까요?')) return;
-  const r=await fetch('/api/teachers?id='+encodeURIComponent(id),{ method:'DELETE', headers: await authHdr() });
-  const d=await r.json(); if(!r.ok){ toast('삭제 실패: '+(d.error||'')); return; }
-  toast('삭제됨'); loadTeachers();
+async function renameStaff(id,name){
+  name=(name||'').trim(); if(!name) return;
+  const { error } = await SB.from('staff').update({ name }).eq('id',id);
+  if(error){ toast('변경 실패: '+error.message); return; } toast('변경됨');
 }
-window.delTeacher=delTeacher;
+async function delStaff(id,name){
+  if(!confirm('강사 "'+name+'"을(를) 명단에서 삭제할까요?')) return;
+  const { error } = await SB.from('staff').delete().eq('id',id);
+  if(error){ toast('삭제 실패: '+error.message); return; } toast('삭제됨'); loadTeachers();
+}
+window.renameStaff=renameStaff; window.delStaff=delStaff;
 
 // ── 상담 신청 관리 (서버함수 /api/consult → Apps Script 웹앱) ──
 let CONSULT=[];

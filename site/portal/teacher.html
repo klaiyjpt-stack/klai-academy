@@ -355,10 +355,13 @@ async function loadRosterDB(){
   if(!SB || !USER) return;
   const { data, error } = await SB.from('roster').select('*').eq('active',true)
     .order('teacher').order('class_name').order('sort');
-  if(error || !data || !data.length) return;   // 비었으면 데모 유지
   const obj={};
-  data.forEach(r=>{ (obj[r.teacher]=obj[r.teacher]||{});
+  if(!error && data) data.forEach(r=>{ (obj[r.teacher]=obj[r.teacher]||{});
     (obj[r.teacher][r.class_name]=obj[r.teacher][r.class_name]||[]).push({en:r.student_en||'',code:r.student_code,ko:r.student_name}); });
+  // 강사 명단(staff)도 반영 — 학생 없어도 드롭다운에 뜨게
+  try{ const s=await SB.from('staff').select('name').eq('active',true).order('sort').order('name');
+    if(!s.error && s.data) s.data.forEach(x=>{ if(!obj[x.name]) obj[x.name]={}; }); }catch(e){}
+  if(!Object.keys(obj).length) return;   // 아무것도 없으면 데모 유지
   ROSTER=obj; TEACHER=Object.keys(ROSTER)[0]; DEMO=ROSTER[TEACHER];
 }
 
