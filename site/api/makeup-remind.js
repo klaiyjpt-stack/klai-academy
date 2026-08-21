@@ -2,13 +2,15 @@
 // Vercel Cron이 호출. 수동 테스트: /api/makeup-remind?token=klai_cron_7k2p
 import crypto from "crypto";
 const SUPABASE_URL = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
 const TOKEN = "klai_cron_7k2p";
 
 function normPhone(p){ return String(p||"").replace(/[^0-9]/g,""); }
 async function sb(path, opts){
   const KEY = process.env.SUPABASE_SERVICE_ROLE;
+  // apikey=공개키(항상 유효), Authorization=서비스키 → 신/구 키 형식 모두 호환
   return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    ...opts, headers: { apikey: KEY, Authorization: `Bearer ${KEY}`, "Content-Type": "application/json", ...(opts&&opts.headers||{}) }
+    ...opts, headers: { apikey: ANON, Authorization: `Bearer ${KEY}`, "Content-Type": "application/json", ...(opts&&opts.headers||{}) }
   });
 }
 async function solapi(to, text){
