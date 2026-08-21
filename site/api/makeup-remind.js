@@ -16,7 +16,14 @@ async function sb(path, opts){
   });
 }
 const KAKAO_PFID = "KA01PF260817180947577udzkuFcQP6K";        // 평택클라이어학원 채널
-const KAKAO_TEMPLATE_ID = "KA01TP260821195022548I06grn1Hz3X"; // 보강_안내_v2 (승인 후 자동 알림톡)
+// 메시지 종류 → 알림톡 템플릿 (승인 후 자동 알림톡, 미승인 시 문자대체)
+const TEMPLATES = {
+  "보강": "KA01TP260821195022548I06grn1Hz3X",
+  "결석 보강": "KA01TP2608211955248424PEIwhN3HI2",
+  "주말 보강": "KA01TP260821195525856zucWqdkD7CO",
+  "시험 보충": "KA01TP260821195527762DzF0Df9Xwpw",
+  "주말 보충": "KA01TP260821195528682aJrtwqXpEef"
+};
 function solapiAuth(){
   const KEY = process.env.SOLAPI_API_KEY, SECRET = process.env.SOLAPI_API_SECRET;
   const date = new Date().toISOString();
@@ -29,11 +36,11 @@ async function sendMsg(msg){
     method: "POST", headers: { Authorization: solapiAuth(), "Content-Type": "application/json" }, body: JSON.stringify({ message: msg }) });
   return { ok: r.ok, body: await r.text() };
 }
-async function solapi(to, name, timeStr, smsText){
+async function solapi(to, name, timeStr, smsText, templateId){
   const FROM = process.env.SOLAPI_SENDER;
   const base = { to: normPhone(to), from: normPhone(FROM), text: smsText };
   // 1차: 알림톡(템플릿 승인되면 이걸로 발송)
-  const kakao = await sendMsg({ ...base, kakaoOptions: { pfId: KAKAO_PFID, templateId: KAKAO_TEMPLATE_ID,
+  const kakao = await sendMsg({ ...base, kakaoOptions: { pfId: KAKAO_PFID, templateId,
     variables: { "#{학생명}": name, "#{시간}": timeStr } } });
   if (kakao.ok) return { ok: true, via: "alimtalk", body: kakao.body };
   // 2차: 알림톡 실패(미승인 등) → 문자로 대체
@@ -51,7 +58,7 @@ export default async function handler(req, res) {
   const kst = new Date(now.getTime() + 9 * 3600e3);
   const startUTC = new Date(Date.UTC(kst.getUTCFullYear(), kst.getUTCMonth(), kst.getUTCDate() + 1, 0, 0, 0) - 9 * 3600e3);
   const endUTC = new Date(startUTC.getTime() + 24 * 3600e3);
-  const q = `makeup?status=eq.scheduled&reminded=eq.false&makeup_at=gte.${startUTC.toISOString()}&makeup_at=lt.${endUTC.toISOString()}&select=id,student_name,parent_phone,makeup_at`;
+  const q = `makeup?status=eq.scheduled&reminded=eq.false&makeup_at=gte.${startUTC.toISOString()}&makeup_at=lt.${endUTC.toISOString()}&select=id,student_name,parent_phone,makeup_at,msg_type`;
 
   try {
     const r = await sb(q, { method: "GET" });
@@ -66,8 +73,10 @@ export default async function handler(req, res) {
       const ap = hh < 12 ? "오전" : "오후";
       const h12 = hh % 12 === 0 ? 12 : hh % 12;
       const timeStr = `${ap} ${h12}시${mm ? " " + mm + "분" : ""}`;
-      const text = `[클라이 어학원] 보강 안내\n\n안녕하세요. ${row.student_name} 학생의 보강 수업을 안내드립니다.\n\n▪ 일시: 내일 ${timeStr}\n\n잊지 마시고 참석 부탁드립니다.\n문의: 031-654-0571`;
-      const s = await solapi(row.parent_phone, row.student_name, timeStr, text);
+      const label = TEMPLATES[row.msg_type] ? row.msg_type : "보강";
+      const tid = TEMPLATES[label];
+      const text = `[클라이 어학원] ${label} 안내\n\n안녕하세요. ${row.student_name} 학생의 ${label} 일정을 안내드립니다.\n\n▪ 일시: 내일 ${timeStr}\n\n잊지 마시고 참석 부탁드립니다.\n문의: 031-654-0571`;
+      const s = await solapi(row.parent_phone, row.student_name, timeStr, text, tid);
       if (s.ok) {
         await sb(`makeup?id=eq.${row.id}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ reminded: true }) });
         sent++;
