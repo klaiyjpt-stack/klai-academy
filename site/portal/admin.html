@@ -74,12 +74,17 @@
   </div></header>
 
   <div class="wrap">
-    <div class="panel" style="border-left:4px solid #2b74c4;background:#f4f8ff;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px">
-      <div style="flex:1;min-width:200px">
-        <div style="font-weight:800;color:var(--navy);font-size:15px">📋 상담 신청 관리</div>
-        <div style="font-size:12.5px;color:var(--sub);margin-top:3px">새 상담신청 확인 · 상담일시 정하고 상태(확정/취소) → 확정 시 문자 자동 발송</div>
+    <div class="panel" style="border-left:4px solid #2b74c4;background:#f4f8ff;margin-top:16px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:800;color:var(--navy);font-size:15px">📋 상담 신청 관리 <span class="cnt" id="csCnt"></span></div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">상담일시 정하고 상태를 <b>확정</b>하면 → 신청자에게 확정 문자 자동 발송</div>
+        </div>
+        <label class="chk2"><input type="checkbox" id="csPending" checked> 미처리만</label>
+        <button class="actbtn" onclick="loadConsult()">↻ 새로고침</button>
+        <a href="https://docs.google.com/spreadsheets/d/1H4Hm9g7_1FgH9O6lBBpRTvJb01tqeTYauDFL6fiL7Jc/edit" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">시트 열기 ↗</a>
       </div>
-      <a href="https://docs.google.com/spreadsheets/d/1H4Hm9g7_1FgH9O6lBBpRTvJb01tqeTYauDFL6fiL7Jc/edit" target="_blank" rel="noopener" class="add" style="text-decoration:none;background:#2b74c4">상담 시트 열기 ↗</a>
+      <div class="tblwrap"><div id="csList" style="font-size:13px">로그인 후 표시됩니다.</div></div>
     </div>
 
     <div class="bar">
@@ -237,6 +242,54 @@ async function delTeacher(id,email){
 }
 window.delTeacher=delTeacher;
 
+// ── 상담 신청 관리 (서버함수 /api/consult → Apps Script 웹앱) ──
+let CONSULT=[];
+function shortTs(t){ return String(t||'').replace(/\s*(오전|오후)?\s*\d{1,2}:\d{2}:\d{2}.*$/,''); }
+function isDone(s){ return s==='확정'||s==='취소'; }
+async function loadConsult(){
+  $('#csList').innerHTML='불러오는 중…';
+  try{
+    const r=await fetch('/api/consult',{ headers: await authHdr() });
+    const d=await r.json();
+    if(!r.ok){ $('#csList').innerHTML='<span style="color:var(--red)">'+esc(d.error||'불러오기 실패')+'</span>'; return; }
+    CONSULT=(d.rows||[]).filter(x=>x.name||x.phone);
+    renderConsult();
+  }catch(e){ $('#csList').innerHTML='<span style="color:var(--red)">서버함수 미배포? '+esc(String(e))+'</span>'; }
+}
+function renderConsult(){
+  const pend=$('#csPending').checked;
+  const pendingN=CONSULT.filter(x=>!isDone(x.status)).length;
+  $('#csCnt').textContent=`(미처리 ${pendingN} · 전체 ${CONSULT.length})`;
+  let rows=CONSULT.filter(x=>!pend || !isDone(x.status)).slice(0,60);
+  if(!rows.length){ $('#csList').innerHTML='<div style="color:var(--sub);padding:8px">표시할 상담이 없어요.</div>'; return; }
+  const opt=(st)=>['','대기','확정','취소'].map(o=>`<option value="${o}"${o===st?' selected':''}>${o||'(상태)'}</option>`).join('');
+  $('#csList').innerHTML='<table class="grid" style="min-width:740px"><thead><tr>'+
+    '<th>신청일</th><th>이름</th><th>연락처</th><th>희망시간</th><th style="width:160px">상담일시</th><th style="width:100px">상태</th><th style="width:64px"></th><th>발송기록</th>'+
+    '</tr></thead><tbody>'+rows.map(x=>
+      '<tr data-row="'+x.row+'">'+
+      '<td style="font-size:11.5px;color:var(--sub);white-space:nowrap">'+esc(shortTs(x.ts))+'</td>'+
+      '<td><b>'+esc(x.name||'-')+'</b></td>'+
+      '<td style="white-space:nowrap">'+esc(x.phone||'-')+'</td>'+
+      '<td style="font-size:11.5px">'+esc(x.want||'-')+'</td>'+
+      '<td><input class="cs-date" value="'+esc(x.date||'')+'" placeholder="예: 2026.08.25 15:00" style="width:100%;padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12.5px"></td>'+
+      '<td><select class="cs-st" style="width:100%;padding:5px;border:1px solid var(--line);border-radius:6px">'+opt(x.status||'')+'</select></td>'+
+      '<td><button class="actbtn on" onclick="saveConsult('+x.row+')">저장</button></td>'+
+      '<td style="font-size:11px;color:var(--sub)">'+esc(x.log||'')+'</td>'+
+      '</tr>').join('')+'</tbody></table>';
+}
+async function saveConsult(row){
+  const tr=document.querySelector('#csList tr[data-row="'+row+'"]');
+  const date=tr.querySelector('.cs-date').value.trim();
+  const status=tr.querySelector('.cs-st').value;
+  if(status==='확정' && !date){ toast('확정하려면 상담일시를 먼저 입력하세요'); return; }
+  if(status==='확정' && !confirm('확정하면 신청자에게 확정 문자가 발송됩니다.\n상담일시: '+date+'\n진행할까요?')) return;
+  const r=await fetch('/api/consult',{ method:'POST', headers: await authHdr(), body: JSON.stringify({row,date,status}) });
+  const d=await r.json();
+  if(!r.ok){ toast('저장 실패: '+(d.error||'')); return; }
+  toast(status==='확정'?'✅ 확정 + 문자 발송':'저장됨'); loadConsult();
+}
+window.loadConsult=loadConsult; window.saveConsult=saveConsult;
+
 if(!SUPABASE_URL||!SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'); show('dashView'); }
 else { (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
@@ -248,7 +301,7 @@ else { (async()=>{
       if(!ADMINS.includes((USER.email||'').toLowerCase())){   // 강사 계정 차단(세션은 유지 — 선생님 페이지 쓰게)
         USER=null; show('loginView');
         $('#loginErr').innerHTML='🔒 원장 전용 페이지입니다.<br>강사는 <a href="teacher.html" style="color:var(--blue-d);font-weight:800">선생님 페이지 →</a>'; return; }
-      show('dashView'); loadData(); loadTeachers();
+      show('dashView'); loadData(); loadTeachers(); loadConsult();
     } else { USER=null; show('loginView'); } }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
@@ -261,6 +314,7 @@ else { (async()=>{
   $('#fActive').onchange = render;
   $('#addBtn').onclick = addStudent;
   $('#tAdd').onclick = addTeacher;
+  $('#csPending').onchange = renderConsult;
   route();
 })(); }
 </script>
