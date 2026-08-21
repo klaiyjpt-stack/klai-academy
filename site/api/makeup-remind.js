@@ -8,9 +8,11 @@ const TOKEN = "klai_cron_7k2p";
 function normPhone(p){ return String(p||"").replace(/[^0-9]/g,""); }
 async function sb(path, opts){
   const KEY = process.env.SUPABASE_SERVICE_ROLE;
-  // apikey=공개키(항상 유효), Authorization=서비스키 → 신/구 키 형식 모두 호환
+  // 구 키(service_role JWT, 3파트)=apikey+Bearer / 신 키(sb_secret…, JWT아님)=apikey만
+  const isJwt = String(KEY).split(".").length === 3;
+  const auth = isJwt ? { apikey: KEY, Authorization: `Bearer ${KEY}` } : { apikey: KEY };
   return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    ...opts, headers: { apikey: ANON, Authorization: `Bearer ${KEY}`, "Content-Type": "application/json", ...(opts&&opts.headers||{}) }
+    ...opts, headers: { ...auth, "Content-Type": "application/json", ...(opts&&opts.headers||{}) }
   });
 }
 async function solapi(to, text){
