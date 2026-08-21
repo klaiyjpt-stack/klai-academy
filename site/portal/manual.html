@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>포털 사용 설명서 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#26303f;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc;--amber:#e08a1a;--red:#c0392b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.65}
+  .wrap{max-width:900px;margin:0 auto;padding:0 18px}
+  header{background:linear-gradient(120deg,#1a2740,#2b74c4);color:#fff}
+  .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 18px}
+  .hd .ttl{font-weight:800;font-size:20px}.hd .ttl small{display:block;font-weight:500;font-size:12.5px;opacity:.9;margin-top:3px}
+  .hd a.back{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:9px;text-decoration:none}
+  .toc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:20px 0}
+  .toc b{font-size:13px;color:var(--sub);letter-spacing:.05em}
+  .toc ol{margin:8px 0 0 18px;columns:2;gap:20px}
+  @media(max-width:560px){.toc ol{columns:1}}
+  .toc a{color:var(--blue-d);text-decoration:none;font-size:14px;font-weight:600}
+  .toc a:hover{text-decoration:underline}
+  section{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin:16px 0;scroll-margin-top:14px}
+  section h2{font-size:18px;color:var(--navy);font-weight:800;margin-bottom:4px}
+  section .lead{color:var(--sub);font-size:13.5px;margin-bottom:14px}
+  h3{font-size:14.5px;color:var(--navy);font-weight:800;margin:16px 0 6px}
+  p,li{font-size:14px;color:var(--ink)}
+  ul,ol{margin:6px 0 6px 20px}
+  li{margin:3px 0}
+  .step{counter-reset:s;list-style:none;margin-left:0}
+  .step>li{counter-increment:s;position:relative;padding:8px 0 8px 40px;border-bottom:1px dashed var(--line)}
+  .step>li:last-child{border-bottom:none}
+  .step>li::before{content:counter(s);position:absolute;left:0;top:7px;width:26px;height:26px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .note{background:#f4f8ff;border-left:4px solid var(--blue);border-radius:9px;padding:10px 13px;margin:10px 0;font-size:13px;color:var(--sub)}
+  .warn{background:#fde:none;background:#fef4e6;border-left:4px solid var(--amber);border-radius:9px;padding:10px 13px;margin:10px 0;font-size:13px;color:#7a5c00}
+  .danger{background:#fdeaea;border-left:4px solid var(--red);border-radius:9px;padding:10px 13px;margin:10px 0;font-size:13px;color:#8a2020}
+  code{background:#eef2f8;border-radius:5px;padding:1px 6px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
+  .pill{display:inline-block;font-size:11.5px;font-weight:800;border-radius:999px;padding:2px 9px}
+  .p-ok{background:#e8f6e0;color:var(--green-d)} .p-no{background:#fdeaea;color:var(--red)} .p-wait{background:#fef4e6;color:var(--amber)}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+  th{background:var(--soft);color:var(--sub);font-weight:800}
+  a.url{color:var(--blue-d);font-weight:700}
+  .foot{text-align:center;color:var(--sub);font-size:12px;margin:24px 0}
+</style>
+</head>
+<body>
+<header><div class="wrap hd">
+  <div class="ttl">📖 클라이 포털 사용 설명서<small>업무 인수인계용 · 상담 · 보강 · 강사 · 학생 관리</small></div>
+  <a class="back" href="admin.html">← 원장 관리</a>
+</div></header>
+
+<div class="wrap">
+  <div class="toc">
+    <b>목차</b>
+    <ol>
+      <li><a href="#access">접속 · 계정</a></li>
+      <li><a href="#consult">상담 신청 관리</a></li>
+      <li><a href="#makeup">보강 관리</a></li>
+      <li><a href="#staff">강사 명단 관리</a></li>
+      <li><a href="#student">학생 명단 관리</a></li>
+      <li><a href="#teacher">선생님 페이지</a></li>
+      <li><a href="#message">문자 · 알림톡 자동발송</a></li>
+      <li><a href="#account">계정 · 보안</a></li>
+      <li><a href="#trouble">문제 생기면</a></li>
+    </ol>
+  </div>
+
+  <section id="access">
+    <h2>1. 접속 · 계정</h2>
+    <div class="lead">모든 페이지는 로그인 후 사용. 어느 기기(PC·폰·태블릿)에서든 접속돼요.</div>
+    <table>
+      <tr><th>페이지</th><th>주소</th><th>누가</th></tr>
+      <tr><td>원장 관리 (명단·강사·상담)</td><td><span class="url">amyschool.kr/portal/admin.html</span></td><td>원장·실장</td></tr>
+      <tr><td>보강 관리</td><td><span class="url">amyschool.kr/portal/makeup.html</span></td><td>원장·실장</td></tr>
+      <tr><td>선생님 페이지</td><td><span class="url">amyschool.kr/portal/teacher.html</span></td><td>강사</td></tr>
+      <tr><td>학생</td><td><span class="url">amyschool.kr/portal/index.html</span></td><td>재원생</td></tr>
+      <tr><td>학부모</td><td><span class="url">amyschool.kr/portal/parent.html</span></td><td>학부모</td></tr>
+    </table>
+    <div class="note">원장 관리·보강은 <b>원장 이메일 계정</b>으로만 로그인. 강사는 <b>학원 공용 계정</b> 하나로 선생님 페이지 로그인.</div>
+  </section>
+
+  <section id="consult">
+    <h2>📋 2. 상담 신청 관리</h2>
+    <div class="lead">홈페이지 상담 신청서로 들어온 신청을 확인하고, 상담일시를 정해 확정하면 신청자에게 확정 문자가 자동 발송돼요. (원장 관리 페이지 맨 위)</div>
+    <ol class="step">
+      <li><b>새 신청 확인</b> — "미처리만" 체크 시 아직 처리 안 된 새 신청만 보임. 갯수(5/10/20)로 표시량 조절, "🔄 최신 불러오기"로 갱신.</li>
+      <li><b>상담일시 입력</b> — 그 행의 "상담일시" 칸에 날짜·시간 입력 (예: <code>2026.08.25 15:00</code>).</li>
+      <li><b>상태 선택 → 저장</b> — 상태를 <b>확정</b>으로 두고 "저장". 확인창이 뜨고, 확정하면 <b>신청자에게 확정 문자 자동 발송</b>. 취소·대기도 선택 가능.</li>
+      <li><b>발송 확인</b> — "발송기록" 칸에 "확정문자 발송 …" 뜨면 완료.</li>
+    </ol>
+    <div class="note">전체 원본은 "시트 열기 ↗"로 구글시트에서 볼 수 있어요(전화번호 포함 → 외부 공유 금지). 시스템 도입 전 옛 신청은 "미처리"에 안 뜹니다.</div>
+  </section>
+
+  <section id="makeup">
+    <h2>🔁 3. 보강 관리</h2>
+    <div class="lead">결석 → 사유 판정 → 보강 일정 → 전날 자동 안내 → 완료. 재보강은 없고, 일정은 언제든 수정 가능하며 수정 이력이 남아요.</div>
+    <h3>보강 가능 기준</h3>
+    <table>
+      <tr><th>사유</th><th>보강</th></tr>
+      <tr><td>개인사정 (개인일정)</td><td><span class="pill p-no">불가</span></td></tr>
+      <tr><td>학교일정</td><td><span class="pill p-ok">가능</span></td></tr>
+      <tr><td>병결 (약봉투·진료확인서 제출)</td><td><span class="pill p-ok">가능 · 증빙</span></td></tr>
+      <tr><td>초상</td><td><span class="pill p-ok">가능</span></td></tr>
+    </table>
+    <ol class="step">
+      <li><b>결석 등록</b> — 학생 이름·반·학부모 연락처·결석일·사유·(병결이면)증빙 입력 후 "등록". 개인사정은 자동으로 <span class="pill p-no">보강 불가</span>.</li>
+      <li><b>보강 일정 확정</b> — "보강 일시"에 날짜·시간 넣고 "일정 확정". → 전날 <b>오후 5시에 안내 자동 발송 예약</b>됨.</li>
+      <li><b>일정 변경</b> — 언제든 날짜 바꾸고 다시 "일정 확정". <b>수정 기록</b>이 비고 칸에 자동으로 남아요.</li>
+      <li><b>보강 완료</b> — 보강 끝나면 "완료" 클릭. (필터: 진행중·완료·보강불가·전체)</li>
+    </ol>
+    <div class="note">전날 오후 5시 자동 안내: "내일 오후 O시 OOO 학생 보강이 있습니다…" 가 학부모께 발송돼요. 비고 칸에 자유 메모도 가능.</div>
+  </section>
+
+  <section id="staff">
+    <h2>👩‍🏫 4. 강사 명단 관리</h2>
+    <div class="lead">강사는 자주 바뀌므로 <b>이름만</b> 관리해요. 로그인은 학원 공용 계정을 함께 써요. (원장 관리 페이지)</div>
+    <ul>
+      <li><b>추가</b> — "강사 이름"(예: NEZ (Class 1)) 입력 후 "강사 추가".</li>
+      <li><b>변경</b> — 목록의 이름을 바로 고치면 저장돼요.</li>
+      <li><b>삭제</b> — 🗑 로 명단에서 제거.</li>
+    </ul>
+    <div class="note">여기 등록한 강사 이름은 <b>선생님 페이지의 반 선택</b>과 학생 반 배정에 쓰여요.</div>
+  </section>
+
+  <section id="student">
+    <h2>🧑‍🎓 5. 학생 명단 관리</h2>
+    <div class="lead">학생 등록·수정·탈회·반 이동·교재 변경을 여기서 해요. (원장 관리 페이지)</div>
+    <ul>
+      <li><b>학생 추가</b> — 반(선생님)·세부반·이름·English·코드·(교재) 입력 후 "추가".</li>
+      <li><b>수정</b> — 이름·교재·코드를 그 자리에서 고치면 자동 저장.</li>
+      <li><b>탈회 ↔ 재원</b> — 버튼으로 토글. 탈회해도 기록은 남고 화면에서만 숨겨져요.</li>
+      <li><b>반 이동</b> — "세부반" 칸을 다른 반으로 바꾸면 이동.</li>
+      <li><b>삭제</b> — 🗑 (완전 삭제, 복구 불가). 탈회만 하려면 "재원/탈회" 버튼 사용.</li>
+      <li>필터: 반·세부반·재원만 보기.</li>
+    </ul>
+    <div class="note">여기 명단이 원본 → 선생님 페이지에 그대로 반영돼요.</div>
+  </section>
+
+  <section id="teacher">
+    <h2>🏫 6. 선생님 페이지</h2>
+    <div class="lead">강사가 반 전체 기록을 한 화면에서 입력. 공개한 항목만 학생·학부모 페이지에 반영돼요.</div>
+    <ul>
+      <li><b>성적·출결·태도·숙제</b> — 구글시트처럼 반 전체를 한 화면에서 체크·입력. 점수는 맞은/총 문항.</li>
+      <li><b>📋 오늘 반 전체 메모</b> — 반 모두에게 보이는 공지(발행/수정/재발행).</li>
+      <li><b>🗒️ 강사 일지</b> — 나만 보는 비공개 기록(저장). 날짜 바꾸면 지난 일지 확인.</li>
+      <li><b>개별 메모</b> — 학생별 🔒 비공개 메모. 민감=공개 불가, 반복지도 3회+=학부모 공개(월말 반영).</li>
+      <li><b>도구</b> — Writing Lab(PIN 없이 바로), IB PPT&amp;TG, 자료실(노션) 연결.</li>
+    </ul>
+  </section>
+
+  <section id="message">
+    <h2>📨 7. 문자 · 알림톡 자동발송</h2>
+    <div class="lead">상담 확정·보강 안내는 자동 발송돼요. 카카오 알림톡이 승인되면 문자 대신 카톡으로 나가고, 실패 시 문자로 자동 대체돼요.</div>
+    <ul>
+      <li><b>상담 확정 문자</b> — 상태를 "확정"하면 즉시 발송.</li>
+      <li><b>보강 리마인더</b> — 매일 오후 5시, 내일 보강 있는 학생에게 자동 발송.</li>
+      <li><b>알림톡 전환</b> — 카카오 "보강_안내" 템플릿 승인되면 자동으로 알림톡(문자보다 저렴·열람률↑). 승인 전에는 문자로 발송.</li>
+    </ul>
+    <div class="note">비용(대략): 문자(단문) ~10원 / 문자(장문 LMS) ~33원 / <b>카카오 알림톡 ~8원</b>. 긴 안내는 알림톡이 훨씬 저렴.</div>
+  </section>
+
+  <section id="account">
+    <h2>🔐 8. 계정 · 보안</h2>
+    <ul>
+      <li><b>계정은 사람마다 따로</b> — 원장·실장 각각 계정. 공유하면 누가 무엇을 했는지 추적 불가.</li>
+      <li>비밀번호 재설정: Supabase 대시보드 → Authentication → Users (원장만).</li>
+    </ul>
+    <div class="danger"><b>주의 (특히 실장과 공유 시):</b> ① "확정"·"보강 안내"는 실제 학부모에게 문자가 나감(되돌리기 어려움) ② 학생 🗑 삭제는 복구 불가 ③ 상담·명단엔 전화번호 등 개인정보 → 외부 유출 금지.</div>
+  </section>
+
+  <section id="trouble">
+    <h2>🛠 9. 문제 생기면</h2>
+    <ul>
+      <li><b>문자가 안 나감</b> — ① Solapi 잔액 확인 ② 발신번호 상태 ③ API 키/시크릿(카카오 연동·재발급 시 바뀔 수 있음). 상담 문자 자동화(Google Apps Script) 실행 로그에 원인이 한 줄로 떠요.</li>
+      <li><b>페이지가 안 뜸/에러</b> — 정확한 주소(위 표)로 접속했는지, 로그인했는지 확인.</li>
+      <li>그 외 시스템 변경·추가는 개발 담당에게 문의.</li>
+    </ul>
+    <div class="note">이 설명서는 계속 업데이트돼요. 새 기능이 추가되면 여기에 반영합니다.</div>
+  </section>
+
+  <div class="foot">클라이 어학원 · KLAI English Academy · 포털 사용 설명서</div>
+</div>
+</body>
+</html>
