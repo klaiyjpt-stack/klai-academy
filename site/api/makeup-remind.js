@@ -15,14 +15,21 @@ async function sb(path, opts){
     ...opts, headers: { ...auth, "Content-Type": "application/json", ...(opts&&opts.headers||{}) }
   });
 }
-async function solapi(to, text){
+const KAKAO_PFID = "KA01PF260817180947577udzkuFcQP6K";        // 평택클라이어학원 채널
+const KAKAO_TEMPLATE_ID = "KA01TP260821193653023rxv0gKmz6MQ"; // 보강_안내 (승인 후 자동 알림톡)
+async function solapi(to, name, timeStr, smsText){
   const KEY = process.env.SOLAPI_API_KEY, SECRET = process.env.SOLAPI_API_SECRET, FROM = process.env.SOLAPI_SENDER;
   const date = new Date().toISOString();
   const salt = crypto.randomBytes(32).toString("hex");
   const sig = crypto.createHmac("sha256", SECRET).update(date + salt).digest("hex");
   const auth = `HMAC-SHA256 apiKey=${KEY}, date=${date}, salt=${salt}, signature=${sig}`;
-  const msg = { to: normPhone(to), from: normPhone(FROM), text };
-  if (Buffer.byteLength(text, "utf8") > 90) { msg.type = "LMS"; msg.subject = "보강 안내"; }
+  // 알림톡 시도 + 실패 시 문자 자동대체(disableSms:false). 승인 전엔 문자로, 승인 후엔 알림톡.
+  const msg = {
+    to: normPhone(to), from: normPhone(FROM), text: smsText,
+    kakaoOptions: { pfId: KAKAO_PFID, templateId: KAKAO_TEMPLATE_ID,
+      variables: { "#{학생명}": name, "#{시간}": timeStr }, disableSms: false }
+  };
+  if (Buffer.byteLength(smsText, "utf8") > 90) { msg.type = "LMS"; msg.subject = "보강 안내"; }
   const r = await fetch("https://api.solapi.com/messages/v4/send", {
     method: "POST", headers: { Authorization: auth, "Content-Type": "application/json" }, body: JSON.stringify({ message: msg }) });
   return { ok: r.ok, body: await r.text() };
@@ -53,8 +60,8 @@ export default async function handler(req, res) {
       const ap = hh < 12 ? "오전" : "오후";
       const h12 = hh % 12 === 0 ? 12 : hh % 12;
       const timeStr = `${ap} ${h12}시${mm ? " " + mm + "분" : ""}`;
-      const text = `[클라이 어학원] 안녕하세요. 내일 ${timeStr} ${row.student_name} 학생 보충수업이 있습니다. 잊지 마시고 참석 부탁드립니다.`;
-      const s = await solapi(row.parent_phone, text);
+      const text = `[클라이 어학원] 보충수업 안내\n\n안녕하세요. ${row.student_name} 학생의 보충수업을 안내드립니다.\n\n▪ 일시: 내일 ${timeStr}\n\n잊지 마시고 참석 부탁드립니다.\n문의: 031-654-0571`;
+      const s = await solapi(row.parent_phone, row.student_name, timeStr, text);
       if (s.ok) {
         await sb(`makeup?id=eq.${row.id}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ reminded: true }) });
         sent++;
