@@ -17,21 +17,28 @@ async function sb(path, opts){
 }
 const KAKAO_PFID = "KA01PF260817180947577udzkuFcQP6K";        // 평택클라이어학원 채널
 const KAKAO_TEMPLATE_ID = "KA01TP260821193653023rxv0gKmz6MQ"; // 보강_안내 (승인 후 자동 알림톡)
-async function solapi(to, name, timeStr, smsText){
-  const KEY = process.env.SOLAPI_API_KEY, SECRET = process.env.SOLAPI_API_SECRET, FROM = process.env.SOLAPI_SENDER;
+function solapiAuth(){
+  const KEY = process.env.SOLAPI_API_KEY, SECRET = process.env.SOLAPI_API_SECRET;
   const date = new Date().toISOString();
   const salt = crypto.randomBytes(32).toString("hex");
   const sig = crypto.createHmac("sha256", SECRET).update(date + salt).digest("hex");
-  const auth = `HMAC-SHA256 apiKey=${KEY}, date=${date}, salt=${salt}, signature=${sig}`;
-  // 알림톡 시도 + 실패 시 문자 자동대체(disableSms:false). 승인 전엔 문자로, 승인 후엔 알림톡.
-  const msg = {
-    to: normPhone(to), from: normPhone(FROM), text: smsText,
-    kakaoOptions: { pfId: KAKAO_PFID, templateId: KAKAO_TEMPLATE_ID,
-      variables: { "#{학생명}": name, "#{시간}": timeStr }, disableSms: false }
-  };
+  return `HMAC-SHA256 apiKey=${KEY}, date=${date}, salt=${salt}, signature=${sig}`;
+}
+async function sendMsg(msg){
   const r = await fetch("https://api.solapi.com/messages/v4/send", {
-    method: "POST", headers: { Authorization: auth, "Content-Type": "application/json" }, body: JSON.stringify({ message: msg }) });
+    method: "POST", headers: { Authorization: solapiAuth(), "Content-Type": "application/json" }, body: JSON.stringify({ message: msg }) });
   return { ok: r.ok, body: await r.text() };
+}
+async function solapi(to, name, timeStr, smsText){
+  const FROM = process.env.SOLAPI_SENDER;
+  const base = { to: normPhone(to), from: normPhone(FROM), text: smsText };
+  // 1차: 알림톡(템플릿 승인되면 이걸로 발송)
+  const kakao = await sendMsg({ ...base, kakaoOptions: { pfId: KAKAO_PFID, templateId: KAKAO_TEMPLATE_ID,
+    variables: { "#{학생명}": name, "#{시간}": timeStr } } });
+  if (kakao.ok) return { ok: true, via: "alimtalk", body: kakao.body };
+  // 2차: 알림톡 실패(미승인 등) → 문자로 대체
+  const sms = await sendMsg(base);
+  return { ok: sms.ok, via: "sms", body: sms.body };
 }
 
 export default async function handler(req, res) {
