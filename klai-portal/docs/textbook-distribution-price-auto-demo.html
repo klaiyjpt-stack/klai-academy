@@ -1,0 +1,57 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>교재 배부 입력 (금액 자동)</title>
+<style>
+:root{font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+body{margin:0;background:#f5f6f8;color:#202124}
+.card{max-width:520px;margin:24px auto;background:#fff;border-radius:14px;padding:28px 26px 32px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+h1{font-size:18px;margin:0 0 4px}
+.sub{font-size:13px;color:#5f6368;margin:0 0 22px}
+label{display:block;font-size:14px;color:#3c4043;margin:18px 0 7px;font-weight:500}
+label .req{color:#1a73e8}
+input,select{width:100%;box-sizing:border-box;font-size:16px;padding:13px 14px;border:1px solid #cfd2d6;border-radius:9px;background:#fff}
+select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%235f6368'><path d='M7 10l5 5 5-5z'/></svg>");background-repeat:no-repeat;background-position:right 10px center}
+.auto{background:#eef4ff;border-color:#c3d6ff;font-weight:600;color:#174ea6}
+.price{font-size:22px;font-weight:700}
+.hint{font-size:12px;color:#1a73e8;margin-top:6px;min-height:16px}
+.badge{display:inline-block;font-size:11px;background:#e8f0fe;color:#1a73e8;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+</style></head><body>
+<div class="card">
+<h1>교재 배부 입력 <span class="badge">금액 자동</span></h1>
+<p class="sub">교재명 고르면 영역·금액이 자동으로 채워집니다 (교재마스터 102권 연동)</p>
+
+<label>날짜 <span class="req">*</span></label>
+<input type="date" id="date">
+
+<label>이름</label>
+<input id="name" placeholder="학생 이름">
+
+<label>교재명 <span class="req">*</span></label>
+<select id="book"><option value="">교재 선택…</option></select>
+
+<label>영역 <span class="badge">자동</span></label>
+<input id="area" class="auto" readonly placeholder="교재 선택 시 자동">
+
+<label>금액 <span class="req">*</span> <span class="badge">자동</span></label>
+<input id="price" class="auto price" readonly value="0">
+<div class="hint" id="hint"></div>
+
+<label>담당교사</label>
+<select id="teacher"><option value="">선택…</option></select>
+</div>
+<script>
+const DB={"books": [{"name": "기출로 때려잡는 중1", "series": "클라이교재", "area": "grammar/영맥", "price": 14000}, {"name": "기출로 때려잡는 중2", "series": "클라이교재", "area": "grammar/영맥", "price": 14000}, {"name": "기출로 때려잡는 중3", "series": "클라이교재", "area": "grammar/영맥", "price": 14000}, {"name": "능률 특급 어법", "series": "클라이교재", "area": "grammar/영맥", "price": 12000}, {"name": "마더텅 어법어휘 고1", "series": "클라이교재", "area": "grammar/영맥", "price": 14900}, {"name": "마더텅 어법어휘 고2", "series": "클라이교재", "area": "grammar/영맥", "price": 14900}, {"name": "영맥)맥디자인", "series": "클라이교재", "area": "grammar/영맥", "price": 22000}, {"name": "영맥)맥보영", "series": "클라이교재", "area": "grammar/영맥", "price": 22000}, {"name": "영맥)영어구문(기본완성)", "series": "클라이교재", "area": "grammar/영맥", "price": 22000}, {"name": "올클 수능어법 완성", "series": "클라이교재", "area": "grammar/영맥", "price": 12000}, {"name": "필통 기본", "series": "클라이교재", "area": "grammar/영맥", "price": 14000}, {"name": "필통 실력", "series": "클라이교재", "area": "grammar/영맥", "price": 14000}, {"name": "해커스 중1", "series": "클라이교재", "area": "grammar/영맥", "price": 13900}, {"name": "해커스 중2", "series": "클라이교재", "area": "grammar/영맥", "price": 14900}, {"name": "해커스 중3", "series": "클라이교재", "area": "grammar/영맥", "price": 14900}, {"name": "구문이 독해다 1", "series": "클라이교재", "area": "reading", "price": 14000}, {"name": "구문이 독해다 2", "series": "클라이교재", "area": "reading", "price": 14000}, {"name": "구문이 독해다 3", "series": "클라이교재", "area": "reading", "price": 14000}, {"name": "리딩 캐치 코어60(1)", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩 캐치 코어60(2)", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩 캐치 코어60(3)", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩 캐치 코어80(1)", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩 캐치 코어80(2)", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩튜터 level1", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩튜터 level2", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩튜터 level3", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩튜터 level4", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "리딩튜터 기본", "series": "클라이교재", "area": "reading", "price": 13000}, {"name": "리딩튜터 실력", "series": "클라이교재", "area": "reading", "price": 13000}, {"name": "리딩튜터 입문", "series": "클라이교재", "area": "reading", "price": 13000}, {"name": "마더텅 고1 독해", "series": "클라이교재", "area": "reading", "price": 18900}, {"name": "마더텅 고2 독해", "series": "클라이교재", "area": "reading", "price": 18900}, {"name": "마더텅 수능독해", "series": "클라이교재", "area": "reading", "price": 19900}, {"name": "미리수능영어(기초독해)", "series": "클라이교재", "area": "reading", "price": 17000}, {"name": "보충추가학습코어80(3)", "series": "클라이교재", "area": "reading", "price": 15000}, {"name": "Build up 1", "series": "알파교재", "area": "알파buildup", "price": 27000}, {"name": "Build up 2상", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 2하", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 3상", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 3하", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 4상", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 4하", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 5상", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 5하", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 6상", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Build up 6하", "series": "알파교재", "area": "알파buildup", "price": 25000}, {"name": "Stand up 1", "series": "알파교재", "area": "알파buildup", "price": 27000}, {"name": "Stand up 2상", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 2하", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 3상", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 3하", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 4상", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 4하", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 5상", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 5하", "series": "알파교재", "area": "알파buildup", "price": 24000}, {"name": "Stand up 6상", "series": "알파교재", "area": "알파buildup", "price": 18000}, {"name": "Stand up 6하", "series": "알파교재", "area": "알파buildup", "price": 18000}, {"name": "알파nuance", "series": "알파교재", "area": "알파buildup", "price": 20000}, {"name": "알파phonics", "series": "알파교재", "area": "알파buildup", "price": 20000}, {"name": "알파struture", "series": "알파교재", "area": "알파buildup", "price": 20000}, {"name": "E1-1", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E1-2", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E1-3", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E1-4", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E1-5", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E1-6", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E2-1", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E2-2", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E2-3", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E2-4", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E2-5", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E2-6", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E3-1", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E3-2", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E3-3", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E3-4", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E3-5", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E3-6", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E4-1", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E4-2", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E4-3", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E4-4", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E4-5", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E4-6", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E5-1", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E5-2", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E5-3", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E5-4", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E5-5", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E5-6", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E6-1", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E6-2", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E6-3", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E6-4", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E6-5", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "E6-6", "series": "알파교재", "area": "AlphaFull", "price": 18000}, {"name": "1학기기말고사3,4과", "series": "자체교재", "area": "시험대비용", "price": 10000}, {"name": "1학기중간고사1,2과", "series": "자체교재", "area": "시험대비용", "price": 10000}, {"name": "2학기기말고사7,8과", "series": "자체교재", "area": "시험대비용", "price": 10000}, {"name": "2학기중간고사5,6과", "series": "자체교재", "area": "시험대비용", "price": 10000}, {"name": "기말통합", "series": "자체교재", "area": "시험대비용", "price": 18000}, {"name": "중간통합", "series": "자체교재", "area": "시험대비용", "price": 18000}], "teachers": ["Jane", "기지윤", "김유진", "노경완", "안지원", "원장", "윤미연", "차은승", "최승경", "최혜련"]};
+const won=n=>n.toLocaleString('ko-KR')+'원';
+const bk=document.getElementById('book'),ar=document.getElementById('area'),
+      pr=document.getElementById('price'),hint=document.getElementById('hint'),
+      te=document.getElementById('teacher');
+DB.books.forEach((b,i)=>{const o=document.createElement('option');o.value=i;o.textContent=b.name+'  ('+won(b.price)+')';bk.appendChild(o)});
+DB.teachers.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;te.appendChild(o)});
+bk.onchange=()=>{
+  const b=DB.books[bk.value];
+  if(!b){ar.value='';pr.value='0';hint.textContent='';return}
+  ar.value=b.area; pr.value=won(b.price);
+  hint.textContent='✓ '+b.series+' · '+b.name+' → '+won(b.price)+' 자동입력됨';
+};
+document.getElementById('date').valueAsDate=new Date();
+</script></body></html>
