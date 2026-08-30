@@ -474,7 +474,7 @@ function kstTodayRange(){
   return {from:startUTC.toISOString(), to:endUTC.toISOString()};
 }
 async function loadMakeup(){
-  if(!SB||!USER){ $('#mkList').innerHTML='<span style="color:var(--sub)">로그인 후 표시됩니다.</span>'; return; }
+  if(!SB){ $('#mkList').innerHTML='<span style="color:var(--sub)">로그인 후 표시됩니다.</span>'; return; }
   const { data, error } = await SB.from('makeup').select('student_name,parent_phone,makeup_at,status,reminded,msg_type').eq('status','scheduled').order('makeup_at');
   if(error){ $('#mkList').innerHTML='<span style="color:var(--red)">로드 실패: '+error.message+'</span>'; return; }
   const rows=data||[];
@@ -504,7 +504,7 @@ const DAYLB={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금'};
 // ── 전체 수업 그리드 (요일×시간, 셀=학생) ──
 const DAYK=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
 async function loadOverview(){
-  if(!SB||!USER) return;
+  if(!SB) return;
   let q=SB.from('timetable').select('*').eq('active',true).neq('status','draft');
   const subj=$('#ovProg').value; if(subj) q=q.eq('subject',subj);
   const { data, error } = await q.order('time_slot').order('sort');
@@ -531,7 +531,7 @@ function weekBounds(){
   return {from:f(mon), to:f(sat)};   // [월, 토) = 월~금
 }
 async function loadAlerts(){
-  if(!SB||!USER) return;
+  if(!SB) return;
   const {from,to}=weekBounds();
   const { data, error } = await SB.from('session_records').select('program,code,name_kor,attend,homework,date').gte('date',from).lt('date',to);
   if(error){ $('#alList').textContent='알림 로드 실패: '+error.message; return; }
@@ -569,7 +569,7 @@ function giSetStatus(html){ $('#giStatus').innerHTML=html; }
 async function giLoad(){
   giBuildGrid(); giBaseline={};
   const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
-  if(!SB||!USER){ toast('로그인 필요'); return; }
+  if(!SB){ toast('로그인 필요'); return; }
   const code=$('#giCode').value.trim();
   // 확정본
   let qc=SB.from('timetable').select('*').eq('active',true).neq('status','draft').eq('name_kor',nm); if(code) qc=qc.eq('code',code);
@@ -604,7 +604,7 @@ function giGridRows(status){
 }
 // 수정안 저장 (확정본 안 건드림)
 async function giSave(){
-  if(!SB||!USER){ toast('로그인 필요'); return; }
+  if(!SB){ toast('로그인 필요'); return; }
   const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
   const code=$('#giCode').value.trim()||null;
   let del=SB.from('timetable').delete().eq('status','draft').eq('name_kor',nm); if(code) del=del.eq('code',code);
@@ -617,7 +617,7 @@ async function giSave(){
 }
 // 확정 (학부모 컨펌 후) — 확정본 교체 + 수정안 제거
 async function giConfirm(){
-  if(!SB||!USER){ toast('로그인 필요'); return; }
+  if(!SB){ toast('로그인 필요'); return; }
   const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
   if(!confirm(`${nm} 학생 시간표를 지금 그리드대로 확정할까요? 확정하면 운영 시간표에 즉시 반영됩니다.`)) return;
   const code=$('#giCode').value.trim()||null;
@@ -650,7 +650,7 @@ function giDiff(){
   const w=window.open('','_blank'); w.document.write('<title>'+nm+' 시간표 변경 안내</title>'+h); w.document.close(); w.focus();
 }
 async function giFillDatalists(){
-  if(!SB||!USER) return;
+  if(!SB) return;
   const { data } = await SB.from('timetable').select('name_kor,level').eq('active',true);
   const names=[...new Set((data||[]).map(r=>r.name_kor).filter(Boolean))].sort();
   const levels=[...new Set((data||[]).map(r=>r.level).filter(Boolean))].sort();
