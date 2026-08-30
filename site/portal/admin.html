@@ -654,8 +654,8 @@ else { (async()=>{
   // ponytail: 원장 이메일 허용목록(코드). 원장 추가 시 여기에 넣고 재배포.
   const ADMINS = ['klai.yj.pt@gmail.com','klai.yj.pt.1@gmail.com'];
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
-    // ponytail: 지금은 비번 게이트 해제(개발용). 세션 있으면 사용, 없어도 anon으로 동작.
-    USER = session ? session.user : null;
+    if(!session){ location.replace('staff-login.html?next=admin.html'); return; }   // 타인 차단: 로그인 1회
+    USER = session.user;
     show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadOverview(); }
   $('#logoutBtn').onclick = async ()=>{ await SB.auth.signOut(); route(); };
   $('#fTeacher').onchange = ()=>{ fillFilters(); render(); };

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>직원 로그인 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--navy:#1a2740;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc;--red:#c0392b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:#233;min-height:100vh}
+  .login{max-width:360px;margin:12vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 10px 40px rgba(20,30,60,.1)}
+  .lg{text-align:center;font-weight:800;font-size:20px;color:var(--navy)}
+  .ls{text-align:center;color:var(--sub);font-size:13px;margin:4px 0 20px}
+  label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px}
+  input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  .btn{width:100%;margin-top:18px;background:var(--navy);color:#fff;border:none;padding:13px;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer}
+  .err{color:var(--red);font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
+  .hint{text-align:center;font-size:12px;color:var(--sub);margin-top:14px}
+</style>
+</head>
+<body>
+  <div class="login">
+    <div class="lg">🔐 직원 로그인</div>
+    <div class="ls">원장·강사 공용 계정 — 한 번만 로그인하면 유지됩니다</div>
+    <label>이메일</label>
+    <input id="uid" type="email" autocomplete="username" placeholder="klai.yj.pt@gmail.com" autocapitalize="none">
+    <label>비밀번호</label>
+    <input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
+    <button class="btn" id="loginBtn">로그인</button>
+    <div class="err" id="err"></div>
+    <div class="hint" id="hint">확인 중…</div>
+  </div>
+<script>
+const SUPABASE_URL="https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const SUPABASE_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+const $=s=>document.querySelector(s);
+const params=new URLSearchParams(location.search);
+const next=params.get('next')||'teacher-hub.html';
+(async()=>{
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  const SB = createClient(SUPABASE_URL, SUPABASE_ANON);
+  const { data:{ session } } = await SB.auth.getSession();
+  if(session){ location.replace(next); return; }   // 이미 로그인 → 바로 이동
+  $('#hint').textContent='';
+  async function go(){ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#err').textContent='';
+    if(!id||!pw){ $('#err').textContent='이메일과 비밀번호를 입력하세요.'; return; }
+    const { error } = await SB.auth.signInWithPassword({ email:id, password:pw });
+    if(error){ $('#err').textContent='이메일 또는 비밀번호가 맞지 않아요.'; return; }
+    location.replace(next); }
+  $('#loginBtn').onclick=go;
+  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') go(); });
+})();
+</script>
+</body>
+</html>

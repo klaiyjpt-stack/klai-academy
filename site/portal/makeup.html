@@ -220,8 +220,8 @@ window.schedule=schedule; window.doneMk=doneMk; window.cancelMk=cancelMk; window
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   SB=createClient(SUPABASE_URL,SUPABASE_ANON);
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
-    // ponytail: 지금은 비번 게이트 해제(개발용). 실서비스 전 ADMINS 체크 복구.
-    USER = session ? session.user : null;
+    if(!session){ location.replace('staff-login.html?next=makeup.html'); return; }
+    USER = session.user;
     show('dashView'); loadMakeup(); }
   $('#loginBtn').onclick=async()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }

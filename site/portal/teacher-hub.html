@@ -67,7 +67,8 @@ function show(v){ ['pickView'].forEach(x=>{const el=$('#'+x); if(el) el.classLis
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const SB = createClient(SUPABASE_URL, SUPABASE_ANON);
   const { data:{ session } } = await SB.auth.getSession();
-  $('#who').textContent = session ? (session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사') : '강사';
+  if(!session){ location.replace('staff-login.html?next=teacher-hub.html'); return; }
+  $('#who').textContent = session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사';
   show('pickView');
   const lo=$('#logoutBtn'); if(lo) lo.onclick=async()=>{ await SB.auth.signOut(); location.reload(); };
 })();
