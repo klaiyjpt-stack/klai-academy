@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로그인 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5;min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  header{background:linear-gradient(120deg,#2b74c4,#3aa76d);color:#fff}
+  .hd{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px}
+  .hd .ttl{font-weight:800;font-size:18px}
+  .hd .ttl small{display:block;font-weight:500;font-size:12px;opacity:.9;margin-top:2px}
+  .hd .home{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px}
+  .wrap{max-width:720px;margin:0 auto;padding:40px 16px}
+  .lead{text-align:center;margin-bottom:28px}
+  .lead h1{font-size:24px;color:var(--navy);font-weight:800}
+  .lead p{color:var(--sub);font-size:14px;margin-top:6px}
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:640px){.roles{grid-template-columns:1fr}}
+  .role{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 18px;transition:.15s}
+  .role:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(26,39,64,.12);border-color:#c7dcc7}
+  .role .ic{font-size:40px;width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:var(--soft);margin-bottom:4px}
+  .role h3{font-size:17px;color:var(--navy);font-weight:800}
+  .role p{font-size:12.5px;color:var(--sub)}
+</style>
+</head>
+<body>
+  <header>
+    <div class="hd">
+      <div class="ttl">클라이 어학원 학습포털<small>로그인</small></div>
+      <a class="home" href="../index.html">← 홈</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="lead">
+      <h1>어떤 계정으로 로그인할까요?</h1>
+      <p>학원에서 받은 아이디로 로그인하세요</p>
+    </div>
+    <div class="roles">
+      <a class="role" href="index.html"><div class="ic">🎒</div><h3>학생</h3><p>나의 학습실 · 성적 · 숙제</p></a>
+      <a class="role" href="parent.html"><div class="ic">👨‍👩‍👧</div><h3>학부모</h3><p>자녀 학습 현황 · 알림</p></a>
+      <a class="role" href="teacher.html"><div class="ic">🧑‍🏫</div><h3>선생님 · 원장</h3><p>반 명단 · 성적 입력 · 관리</p></a>
+    </div>
+  </div>
+</body>
+</html>
