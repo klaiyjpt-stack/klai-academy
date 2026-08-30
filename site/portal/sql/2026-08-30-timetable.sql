@@ -6,17 +6,18 @@
 -- 1) 실시간 시간표 (단일 원본)
 create table if not exists timetable (
   id         uuid primary key default gen_random_uuid(),
-  program    text not null,                 -- '원어민' | '알파' | '문법'
+  subject    text not null,                 -- 정독(=원어민)·독해·단어&Extra·알파·문법·영어도서관
+  level      text,                          -- 반 등급(초등 Advanced2, IB Y1 …) 관리목록
   day        text not null,                 -- 'mon'|'tue'|'wed'|'thu'|'fri'
-  time_slot  text not null,                 -- '2:10' 등
-  group_no   int  not null default 1,       -- 같은 요일·시간 병렬반 구분
+  time_slot  text not null,                 -- '1시'..'8시'
   name_kor   text not null,
-  code       text not null,                 -- 영문이름+숫자 (학생 식별키)
+  code       text,                          -- 영문이름+숫자 (참고용, 형제 공유 가능)
   active     boolean not null default true,
   sort       int not null default 0,
   updated_at timestamptz not null default now()
 );
-create index if not exists idx_timetable_slot on timetable(program, day, time_slot) where active;
+create index if not exists idx_timetable_slot on timetable(subject, day, time_slot) where active;
+create index if not exists idx_timetable_name on timetable(name_kor);
 
 -- 2) 수업 기록 (전 프로그램 공용, 학생×날짜)
 create table if not exists session_records (

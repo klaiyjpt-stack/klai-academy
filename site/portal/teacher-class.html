@@ -209,7 +209,7 @@ function renderRows(){
 // ── Supabase ──
 async function loadTT(){
   if(!(SB&&USER)){ TT=DEMO_TT.map(r=>({...r})); return; }
-  const { data } = await SB.from('timetable').select('*').eq('program',PROGRAM).eq('active',true).order('sort');
+  const { data } = await SB.from('timetable').select('*').eq('subject',PROGRAM).eq('active',true).order('sort');
   TT = data||[];
 }
 async function loadRecords(){
@@ -274,7 +274,7 @@ function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle(
 function subscribeTT(){
   if(!SB) return;
   RTchan = SB.channel('tt-'+PROGRAM)
-    .on('postgres_changes',{event:'*',schema:'public',table:'timetable',filter:`program=eq.${PROGRAM}`},
+    .on('postgres_changes',{event:'*',schema:'public',table:'timetable',filter:`subject=eq.${PROGRAM}`},
       async()=>{ await loadTT(); refreshSlot(); toast('시간표 갱신됨'); })
     .subscribe();
 }

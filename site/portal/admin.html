@@ -170,7 +170,7 @@
           <div style="font-size:12px;color:var(--sub);margin-top:2px">요일 × 시간 그리드. 실시간 시간표 기준.</div>
         </div>
         <select id="ovProg" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;background:#fff">
-          <option value="">전체 프로그램</option><option>원어민</option><option>알파</option><option>문법</option><option>독해</option><option>영어도서관</option>
+          <option value="">전체 과목</option><option>정독</option><option>독해</option><option>단어&Extra</option><option>알파</option><option>문법</option><option>영어도서관</option><option>엘리아G/W</option>
         </select>
         <button class="actbtn on" onclick="loadOverview()">🔄 새로고침</button>
       </div>
@@ -188,25 +188,20 @@
       <div class="addrow"><input id="stq" placeholder="이름 또는 코드 예: 김서준 / Leo1234" style="width:260px"><button class="add" id="stBtn">검색</button></div>
       <div id="stResult" style="font-size:13px;margin-top:10px"></div>
     </div>
-    <!-- 실시간 시간표 편집 -->
+    <!-- 개별 시간표 편집 (학생 중심 그리드) -->
     <div class="panel" id="ttPanel" style="border-left:4px solid var(--green-d)">
-      <div style="font-weight:800;color:var(--navy);font-size:15px">🗓️ 실시간 시간표 <span class="cnt" id="ttCnt"></span></div>
-      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">여기서 배정하면 각 교실 화면에 <b>즉시</b> 반영. 구글시트 대체.</div>
+      <div style="font-weight:800;color:var(--navy);font-size:15px">🗓️ 개별 시간표 편집</div>
+      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">학생 선택 → 요일×시간 칸에 과목 지정 → 저장. 저장하면 각 반 명단·교실 화면에 <b>즉시</b> 반영. 구글시트 대체.</div>
       <div class="addrow" style="flex-wrap:wrap;gap:8px">
-        <select id="ttProg" style="width:110px"><option>알파</option><option>원어민</option><option>문법</option></select>
-        <select id="ttDay" style="width:80px"><option value="mon">월</option><option value="tue">화</option><option value="wed">수</option><option value="thu">목</option><option value="fri">금</option></select>
-        <input id="ttTime" placeholder="시간 예 3:10" style="width:90px">
-        <input id="ttKo" placeholder="이름" style="width:90px">
-        <input id="ttCode" placeholder="코드 예 Leo1234" style="width:120px">
-        <button class="add" id="ttAdd">배정 추가</button>
+        <input id="giName" list="dlNames" placeholder="학생 이름" style="width:120px">
+        <input id="giCode" placeholder="코드(선택)" style="width:110px">
+        <input id="giLevel" list="dlLevels" placeholder="레벨 예 초등 Advanced2" style="width:170px">
+        <button class="actbtn on" id="giLoad">🔄 불러오기</button>
+        <button class="add" id="giSave">💾 저장</button>
+        <button class="actbtn" id="giPrint">🖨 인쇄/안내</button>
       </div>
-      <div class="bar" style="padding:10px 0 0">
-        <span style="font-size:12px;font-weight:800;color:var(--sub)">보기</span>
-        <select id="ttvProg" style="width:110px"><option>알파</option><option>원어민</option><option>문법</option></select>
-        <select id="ttvDay" style="width:80px"><option value="mon">월</option><option value="tue">화</option><option value="wed">수</option><option value="thu">목</option><option value="fri">금</option></select>
-        <button class="actbtn on" onclick="loadTT()">🔄 불러오기</button>
-      </div>
-      <div id="ttList" style="font-size:13px;margin-top:8px"></div>
+      <datalist id="dlNames"></datalist><datalist id="dlLevels"></datalist>
+      <div id="giGrid" class="tblwrap" style="margin-top:10px"></div>
     </div>
 
     <div class="bar">
@@ -520,7 +515,7 @@ async function searchStudent(){
     const [nm,code]=k.split('|'); rows.sort((a,b)=>(DAYORD[a.day]-DAYORD[b.day])||a.time_slot.localeCompare(b.time_slot));
     return `<div style="margin:8px 0;padding:10px;border:1px solid var(--line);border-radius:10px">
       <div style="font-weight:800;color:var(--navy)">${nm} <span style="color:var(--sub);font-weight:500">${code}</span></div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${rows.map(r=>`<span style="background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12.5px"><b>${DAYLB[r.day]}</b> ${r.time_slot} · ${r.program}</span>`).join('')}</div></div>`;
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${rows.map(r=>`<span style="background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12.5px"><b>${DAYLB[r.day]}</b> ${r.time_slot} · ${r.subject}</span>`).join('')}</div></div>`;
   }).join('');
 }
 window.searchStudent=searchStudent;
@@ -530,16 +525,16 @@ const DAYK=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금'
 async function loadOverview(){
   if(!SB||!USER) return;
   let q=SB.from('timetable').select('*').eq('active',true);
-  const prog=$('#ovProg').value; if(prog) q=q.eq('program',prog);
+  const subj=$('#ovProg').value; if(subj) q=q.eq('subject',subj);
   const { data, error } = await q.order('time_slot').order('sort');
   if(error){ $('#ovBody').textContent='로드 실패: '+error.message; return; }
-  if(!data||!data.length){ $('#ovBody').innerHTML='<span style="color:var(--sub)">시간표 없음 — 아래 🗓️ 실시간 시간표에서 배정하세요.</span>'; return; }
+  if(!data||!data.length){ $('#ovBody').innerHTML='<span style="color:var(--sub)">시간표 없음 — 학생관리 🗓️ 개별 시간표에서 입력하세요.</span>'; return; }
   const times=[...new Set(data.map(r=>r.time_slot))].sort();
   const cell={}; data.forEach(r=>{ const k=r.time_slot+'|'+r.day; (cell[k]=cell[k]||[]).push(r); });
   let h='<table class="grid" style="min-width:820px"><thead><tr><th>시간</th>'+DAYK.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>';
   times.forEach(t=>{ h+=`<tr><td style="font-weight:800;background:var(--soft)">${t}</td>`;
     DAYK.forEach(([d])=>{ const list=cell[t+'|'+d]||[];
-      h+=`<td style="text-align:left;vertical-align:top;padding:6px">${list.map(r=>`<div>${prog?'':'<b style=color:var(--blue-d)>['+r.program+']</b> '}${r.name_kor} <span style="color:var(--sub)">${r.code}</span></div>`).join('')||'<span style="color:#cbd3e0">-</span>'}</td>`; });
+      h+=`<td style="text-align:left;vertical-align:top;padding:6px">${list.map(r=>`<div>${subj?'':'<b style=color:var(--blue-d)>['+r.subject+']</b> '}${r.name_kor}</div>`).join('')||'<span style="color:#cbd3e0">-</span>'}</td>`; });
     h+='</tr>'; });
   h+='</tbody></table>';
   $('#ovBody').innerHTML=h;
@@ -574,35 +569,63 @@ async function loadAlerts(){
 }
 window.loadAlerts=loadAlerts;
 
-// ── 실시간 시간표 편집 ──
-async function loadTT(){
-  if(!SB||!USER) return;
-  const prog=$('#ttvProg').value, day=$('#ttvDay').value;
-  const { data, error } = await SB.from('timetable').select('*').eq('program',prog).eq('day',day).eq('active',true).order('time_slot').order('sort');
-  if(error){ $('#ttList').textContent='로드 실패: '+error.message; return; }
-  $('#ttCnt').textContent=`(${(data||[]).length}명)`;
-  if(!data||!data.length){ $('#ttList').innerHTML='<span style="color:var(--sub)">이 요일 배정 없음</span>'; return; }
-  const byT={}; data.forEach(r=>(byT[r.time_slot]=byT[r.time_slot]||[]).push(r));
-  $('#ttList').innerHTML=Object.keys(byT).sort().map(t=>
-    `<div style="margin:8px 0"><div style="font-weight:800;color:var(--navy);font-size:12.5px">${t}</div>`+
-    byT[t].map(r=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span style="flex:1">${r.name_kor} <span style="color:var(--sub)">${r.code}</span></span><button class="actbtn off" onclick="ttDel('${r.id}')">삭제</button></div>`).join('')+
-    '</div>').join('');
+// ── 개별 시간표 편집 (학생 중심 그리드) ──
+const SUBJECTS=['정독','독해','단어&Extra','알파','문법','영어도서관','엘리아G/W'];
+const GTIMES=['1시','2시','3시','4시','5시','6시','6시30분','8시'];
+const GDAYS=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
+function giBuildGrid(){
+  let h='<table class="grid" style="min-width:640px"><thead><tr><th style="width:70px">시간</th>'+GDAYS.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>';
+  GTIMES.forEach(t=>{ h+=`<tr><td style="font-weight:800;background:var(--soft);text-align:center">${t}</td>`;
+    GDAYS.forEach(([d])=>{ h+=`<td style="padding:3px"><select class="gicell" data-day="${d}" data-time="${t}" style="width:100%;border:1px solid var(--line);border-radius:7px;padding:5px"><option value="">-</option>${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select></td>`; });
+    h+='</tr>'; });
+  h+='</tbody></table>';
+  $('#giGrid').innerHTML=h;
 }
-async function ttAdd(){
+function giClear(){ document.querySelectorAll('.gicell').forEach(s=>s.value=''); }
+async function giLoad(){
+  giBuildGrid();
+  const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
   if(!SB||!USER){ toast('로그인 필요'); return; }
-  const row={program:$('#ttProg').value,day:$('#ttDay').value,time_slot:$('#ttTime').value.trim(),name_kor:$('#ttKo').value.trim(),code:$('#ttCode').value.trim()};
-  if(!row.time_slot||!row.name_kor||!row.code){ toast('시간·이름·코드 입력'); return; }
-  const { error } = await SB.from('timetable').insert(row);
-  if(error){ toast('추가 실패: '+error.message); return; }
-  $('#ttKo').value='';$('#ttCode').value=''; toast('배정 추가됨');
-  $('#ttvProg').value=row.program; $('#ttvDay').value=row.day; loadTT();
+  const code=$('#giCode').value.trim();
+  let q=SB.from('timetable').select('*').eq('active',true).eq('name_kor',nm);
+  if(code) q=q.eq('code',code);
+  const { data, error } = await q;
+  if(error){ toast('로드 실패: '+error.message); return; }
+  if(data&&data.length){ if(data[0].code&&!code) $('#giCode').value=data[0].code; const lv=data.find(r=>r.level); if(lv) $('#giLevel').value=lv.level; }
+  (data||[]).forEach(r=>{ const c=document.querySelector(`.gicell[data-day="${r.day}"][data-time="${r.time_slot}"]`); if(c) c.value=r.subject; });
+  toast(data&&data.length?`${nm} 불러옴 (${data.length}칸)`:'배정 없음 — 새로 입력');
 }
-async function ttDel(id){
-  if(!confirm('이 배정을 삭제할까요?')) return;
-  const { error } = await SB.from('timetable').delete().eq('id',id);
-  toast(error?'삭제 실패':'삭제됨'); loadTT();
+async function giSave(){
+  if(!SB||!USER){ toast('로그인 필요'); return; }
+  const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
+  const code=$('#giCode').value.trim()||null, level=$('#giLevel').value.trim()||null;
+  const rows=[...document.querySelectorAll('.gicell')].filter(c=>c.value).map(c=>({
+    subject:c.value, level, day:c.dataset.day, time_slot:c.dataset.time, name_kor:nm, code, updated_at:new Date().toISOString()
+  }));
+  // 이 학생 기존 배정 삭제 후 재삽입 (교체)
+  let del=SB.from('timetable').delete().eq('name_kor',nm); if(code) del=del.eq('code',code);
+  const de=await del; if(de.error){ toast('저장 실패(삭제): '+de.error.message); return; }
+  if(rows.length){ const { error } = await SB.from('timetable').insert(rows); if(error){ toast('저장 실패: '+error.message); return; } }
+  toast(`저장 완료 · ${rows.length}칸 → 각 반 명단 반영`);
+  loadOverview(); giFillDatalists();
 }
-window.loadTT=loadTT; window.ttDel=ttDel;
+function giPrint(){
+  const nm=$('#giName').value.trim()||'학생', lv=$('#giLevel').value.trim();
+  let h=`<h2 style="font-family:sans-serif">${nm} ${lv?'· '+lv:''} 주간 시간표</h2><table border="1" cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:15px"><tr style="background:#eee"><th>시간</th>${GDAYS.map(([,l])=>`<th>${l}</th>`).join('')}</tr>`;
+  GTIMES.forEach(t=>{ h+=`<tr><td style="font-weight:bold;background:#f5f5f5">${t}</td>`;
+    GDAYS.forEach(([d])=>{ const c=document.querySelector(`.gicell[data-day="${d}"][data-time="${t}"]`); h+=`<td>${c&&c.value?t+' '+c.value:''}</td>`; }); h+='</tr>'; });
+  h+='</table>';
+  const w=window.open('','_blank'); w.document.write('<title>'+nm+' 시간표</title>'+h); w.document.close(); w.focus(); w.print();
+}
+async function giFillDatalists(){
+  if(!SB||!USER) return;
+  const { data } = await SB.from('timetable').select('name_kor,level').eq('active',true);
+  const names=[...new Set((data||[]).map(r=>r.name_kor).filter(Boolean))].sort();
+  const levels=[...new Set((data||[]).map(r=>r.level).filter(Boolean))].sort();
+  $('#dlNames').innerHTML=names.map(n=>`<option value="${n}">`).join('');
+  $('#dlLevels').innerHTML=levels.map(l=>`<option value="${l}">`).join('');
+}
+window.giLoad=giLoad; window.giSave=giSave; window.giPrint=giPrint;
 
 if(!SUPABASE_URL||!SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'); show('dashView'); }
 else { (async()=>{
@@ -613,7 +636,7 @@ else { (async()=>{
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
     // ponytail: 지금은 비번 게이트 해제(개발용). 실서비스 전 아래 ADMINS 체크 복구.
     USER = session ? session.user : null;
-    show('dashView'); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadTT(); loadOverview(); }
+    show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadOverview(); }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
     const { error } = await SB.auth.signInWithPassword({ email:id, password:pw });
@@ -625,7 +648,9 @@ else { (async()=>{
   $('#fActive').onchange = render;
   $('#addBtn').onclick = addStudent;
   $('#tAdd').onclick = addTeacher;
-  $('#ttAdd').onclick = ttAdd;
+  $('#giLoad').onclick = giLoad;
+  $('#giSave').onclick = giSave;
+  $('#giPrint').onclick = giPrint;
   $('#ovProg').onchange = loadOverview;
   $('#stBtn').onclick = searchStudent;
   $('#stq').addEventListener('keydown',e=>{ if(e.key==='Enter') searchStudent(); });
