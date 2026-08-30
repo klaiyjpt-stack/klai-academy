@@ -169,6 +169,16 @@
   <!-- ══ 학생관리 ══ -->
   <section class="sec hidden" data-sec="students">
     <div class="sectitle">🎒 학생관리</div>
+    <!-- 원생 명부 (이코딩·학부모전화) -->
+    <div class="panel" id="dirPanel" style="border-left:4px solid #9b59b6">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1;min-width:180px">
+        <div style="font-weight:800;color:var(--navy);font-size:15px">👪 원생 명부 <span class="cnt" id="dirCnt"></span></div>
+        <div style="font-size:12px;color:var(--sub);margin-top:2px">이코딩 명부 · 학부모 연락처. 이름/코드 검색.</div></div>
+        <input id="dirq" placeholder="이름/코드 검색" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px">
+        <button class="actbtn on" onclick="loadDir()">🔄 조회</button>
+      </div>
+      <div id="dirList" class="tblwrap" style="font-size:13px;margin-top:10px"></div>
+    </div>
     <!-- 개별 시간표 편집 (학생 중심 그리드) -->
     <div class="panel" id="ttPanel" style="border-left:4px solid var(--green-d)">
       <div style="font-weight:800;color:var(--navy);font-size:15px">🗓️ 개별 시간표 편집</div>
@@ -538,6 +548,21 @@ async function loadAlerts(){
 }
 window.loadAlerts=loadAlerts;
 
+// ── 원생 명부 (students 테이블 · 학부모전화) ──
+async function loadDir(){
+  if(!SB) return;
+  const q=($('#dirq').value||'').trim();
+  let url=SB.from('students').select('name_kor,code,school,grade,parent_phone').order('name_kor').limit(500);
+  if(q) url=url.or(`name_kor.ilike.%${q}%,code.ilike.%${q}%`);
+  const { data, error } = await url;
+  if(error){ $('#dirList').innerHTML='<span style="color:var(--sub)">원생 명부 테이블(students) 없음 — SQL 실행 필요</span>'; return; }
+  $('#dirCnt').textContent=`(${(data||[]).length}명)`;
+  if(!data||!data.length){ $('#dirList').innerHTML='<span style="color:var(--sub)">결과 없음</span>'; return; }
+  $('#dirList').innerHTML='<table class="grid" style="min-width:560px"><thead><tr><th>이름</th><th>코드</th><th>학교</th><th>학년</th><th>학부모전화</th></tr></thead><tbody>'+
+    data.map(r=>`<tr><td style="font-weight:700">${r.name_kor}</td><td>${r.code||''}</td><td>${r.school||''}</td><td>${r.grade||''}</td><td>${r.parent_phone||''}</td></tr>`).join('')+'</tbody></table>';
+}
+window.loadDir=loadDir;
+
 // ── 개별 시간표 편집 (학생 중심 그리드) ──
 const SUBJECTS=['정독','독해','단어&Extra','알파','문법','영어도서관','엘리아G/W'];
 const GTIMES=['1시','2시','3시','4시','5시','6시','6시30분','8시'];
@@ -657,7 +682,8 @@ else { (async()=>{
     if(!session){ location.replace('staff-login.html?next=admin.html'); return; }   // 타인 차단: 로그인 1회
     if(!ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('teacher-hub.html'); return; }  // 강사는 선생님 페이지로
     USER = session.user;
-    show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadOverview(); }
+    show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadOverview(); loadDir();
+    const dq=$('#dirq'); if(dq) dq.addEventListener('keydown',e=>{ if(e.key==='Enter') loadDir(); }); }
   $('#logoutBtn').onclick = async ()=>{ await SB.auth.signOut(); route(); };
   $('#fTeacher').onchange = ()=>{ fillFilters(); render(); };
   $('#fClass').onchange = render;
