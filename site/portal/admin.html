@@ -67,18 +67,6 @@
 
 <div id="setupBanner" class="setup hidden">⚙ 로그인 미설정 — 데모 미리보기.</div>
 
-<div id="loginView" class="hidden">
-  <div class="login">
-    <div class="lg">🔐 원장 관리</div>
-    <div class="ls">원장 계정으로 로그인</div>
-    <label>이메일</label>
-    <input id="uid" type="text" autocomplete="username" placeholder="klai.yj.pt@gmail.com" autocapitalize="none">
-    <label>비밀번호</label>
-    <input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
-    <button class="btn" id="loginBtn">로그인</button>
-    <div class="err" id="loginErr"></div>
-  </div>
-</div>
 
 <div id="dashView" class="hidden">
   <header><div class="wrap hd">
@@ -666,20 +654,9 @@ else { (async()=>{
   // ponytail: 원장 이메일 허용목록(코드). 원장 추가 시 여기에 넣고 재배포.
   const ADMINS = ['klai.yj.pt@gmail.com','klai.yj.pt.1@gmail.com'];
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
-    const email = session?.user?.email?.toLowerCase();
-    if(session && ADMINS.includes(email)){
-      USER = session.user;
-      show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadOverview();
-    } else {
-      USER = null;
-      if(session){ await SB.auth.signOut(); $('#loginErr').textContent='원장 계정이 아니에요.'; }
-      show('loginView');
-    } }
-  $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
-    if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
-    const { error } = await SB.auth.signInWithPassword({ email:id, password:pw });
-    if(error) $('#loginErr').textContent='이메일 또는 비밀번호가 맞지 않아요.'; else route(); };
-  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
+    // ponytail: 지금은 비번 게이트 해제(개발용). 세션 있으면 사용, 없어도 anon으로 동작.
+    USER = session ? session.user : null;
+    show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadOverview(); }
   $('#logoutBtn').onclick = async ()=>{ await SB.auth.signOut(); route(); };
   $('#fTeacher').onchange = ()=>{ fillFilters(); render(); };
   $('#fClass').onchange = render;
