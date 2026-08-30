@@ -128,15 +128,29 @@
       </div>
     </div>
 
-    <!-- 학생 검색 → 주간 시간표 -->
-    <div class="panel" id="stSearchPanel" style="border-left:4px solid #9b59b6">
-      <div style="font-weight:800;color:var(--navy);font-size:15px">🔎 학생 검색 · 주간 시간표</div>
-      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">이름/코드로 찾으면 그 학생의 일주일 수업(요일·시간·프로그램)이 나와요.</div>
-      <div class="addrow"><input id="stq" placeholder="이름 또는 코드 예: 김서준 / Leo1234" style="width:260px"><button class="add" id="stBtn">검색</button></div>
-      <div id="stResult" style="font-size:13px;margin-top:10px"></div>
+    <!-- 주간 알림 -->
+    <div class="panel" id="alertPanel" style="border-left:4px solid var(--red);background:#fff6f6">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:800;color:var(--navy);font-size:15px">🔔 이번 주 관리 알림 <span class="cnt" id="alCnt"></span></div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">이번 주(월~금) · 숙제 미완료 2회↑ 또는 결석·지각 1회↑ (전 수업)</div>
+        </div>
+        <button class="actbtn on" onclick="loadAlerts()">🔄 새로고침</button>
+      </div>
+      <div id="alList" style="font-size:13px;margin-top:10px">로그인 후 표시됩니다.</div>
     </div>
 
-    <!-- 구글시트 원본 (한 페이지 보기) -->
+    <!-- 보강 리스트 -->
+    <div class="panel" style="border-left:4px solid var(--green)">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+        <div style="flex:1;min-width:180px"><div style="font-weight:800;color:var(--navy);font-size:15px">🔁 보강 리스트</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">보강 신청·일정. 자세한 관리는 왼쪽 보강관리.</div></div>
+        <a href="makeup.html" target="_blank" rel="noopener" class="actbtn on" style="text-decoration:none">새 탭 ↗</a>
+      </div>
+      <iframe src="makeup.html" style="width:100%;height:46vh;border:1px solid var(--line);border-radius:10px"></iframe>
+    </div>
+
+    <!-- 시간표 (구글시트 원본) -->
     <div class="panel" id="sheetPanel">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <div style="flex:1;min-width:180px"><div style="font-weight:800;color:var(--navy);font-size:15px">📄 수업 시간표 원본 (구글시트)</div>
@@ -161,23 +175,18 @@
       </div>
       <div id="ovBody" class="tblwrap" style="font-size:12.5px">로그인 후 표시됩니다.</div>
     </div>
-
-    <!-- 주간 알림 -->
-    <div class="panel" id="alertPanel" style="border-left:4px solid var(--red);background:#fff6f6">
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <div style="flex:1;min-width:180px">
-          <div style="font-weight:800;color:var(--navy);font-size:15px">🔔 이번 주 관리 알림 <span class="cnt" id="alCnt"></span></div>
-          <div style="font-size:12px;color:var(--sub);margin-top:2px">이번 주(월~금) · 숙제 미완료 2회↑ 또는 결석·지각 1회↑ (전 수업)</div>
-        </div>
-        <button class="actbtn on" onclick="loadAlerts()">🔄 새로고침</button>
-      </div>
-      <div id="alList" style="font-size:13px;margin-top:10px">로그인 후 표시됩니다.</div>
-    </div>
   </section>
 
   <!-- ══ 학생관리 ══ -->
   <section class="sec hidden" data-sec="students">
     <div class="sectitle">🎒 학생관리</div>
+    <!-- 학생 검색 → 주간 시간표 -->
+    <div class="panel" id="stSearchPanel" style="border-left:4px solid #9b59b6">
+      <div style="font-weight:800;color:var(--navy);font-size:15px">🔎 학생 검색 · 주간 시간표</div>
+      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">이름/코드로 찾으면 그 학생의 일주일 수업(요일·시간·프로그램)이 나와요.</div>
+      <div class="addrow"><input id="stq" placeholder="이름 또는 코드 예: 김서준 / Leo1234" style="width:260px"><button class="add" id="stBtn">검색</button></div>
+      <div id="stResult" style="font-size:13px;margin-top:10px"></div>
+    </div>
     <!-- 실시간 시간표 편집 -->
     <div class="panel" id="ttPanel" style="border-left:4px solid var(--green-d)">
       <div style="font-weight:800;color:var(--navy);font-size:15px">🗓️ 실시간 시간표 <span class="cnt" id="ttCnt"></span></div>
