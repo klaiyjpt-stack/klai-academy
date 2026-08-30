@@ -652,7 +652,7 @@ else { (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   SB = createClient(SUPABASE_URL, SUPABASE_ANON);
   // ponytail: 원장 이메일 허용목록(코드). 원장 추가 시 여기에 넣고 재배포.
-  const ADMINS = ['klai.yj.pt@gmail.com','klai.yj.pt.1@gmail.com'];
+  const ADMINS = ['klai.yj.pt@gmail.com'];
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
     if(!session){ location.replace('staff-login.html?next=admin.html'); return; }   // 타인 차단: 로그인 1회
     if(!ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('teacher-hub.html'); return; }  // 강사는 선생님 페이지로
