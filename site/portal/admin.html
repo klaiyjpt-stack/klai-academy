@@ -143,8 +143,8 @@
     <!-- 보강 리스트 (오늘) -->
     <div class="panel" style="border-left:4px solid var(--green)">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
-        <div style="flex:1;min-width:180px"><div style="font-weight:800;color:var(--navy);font-size:15px">🔁 오늘 보강 <span class="cnt" id="mkCnt"></span></div>
-          <div style="font-size:12px;color:var(--sub);margin-top:2px">오늘 오는 학생 · 리마인드 문자 발송 여부. 자세한 관리는 왼쪽 보강관리.</div></div>
+        <div style="flex:1;min-width:180px"><div style="font-weight:800;color:var(--navy);font-size:15px">🔁 확정 보강 명단 <span class="cnt" id="mkCnt"></span></div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">보강 확정된 학생 전체 · 날짜·시간·리마인드 문자 발송 여부. (오늘은 초록 강조)</div></div>
         <button class="actbtn on" onclick="loadMakeup()">🔄 새로고침</button>
         <a href="makeup.html" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">보강관리 ↗</a>
       </div>
@@ -483,17 +483,19 @@ function kstTodayRange(){
 }
 async function loadMakeup(){
   if(!SB||!USER){ $('#mkList').innerHTML='<span style="color:var(--sub)">로그인 후 표시됩니다.</span>'; return; }
-  const {from,to}=kstTodayRange();
-  const { data, error } = await SB.from('makeup').select('student_name,parent_phone,makeup_at,status,reminded,msg_type').gte('makeup_at',from).lt('makeup_at',to).order('makeup_at');
+  const { data, error } = await SB.from('makeup').select('student_name,parent_phone,makeup_at,status,reminded,msg_type').eq('status','scheduled').order('makeup_at');
   if(error){ $('#mkList').innerHTML='<span style="color:var(--red)">로드 실패: '+error.message+'</span>'; return; }
-  const rows=(data||[]).filter(r=>r.status!=='cancelled');
+  const rows=data||[];
   $('#mkCnt').textContent=`(${rows.length}명)`;
-  if(!rows.length){ $('#mkList').innerHTML='<span style="color:var(--sub)">오늘 예정된 보강 없음</span>'; return; }
-  $('#mkList').innerHTML='<div class="tblwrap"><table class="grid" style="min-width:520px"><thead><tr><th>시간</th><th>학생</th><th>종류</th><th>리마인드 문자</th></tr></thead><tbody>'+
+  if(!rows.length){ $('#mkList').innerHTML='<span style="color:var(--sub)">확정된 보강 없음</span>'; return; }
+  const {from,to}=kstTodayRange();
+  $('#mkList').innerHTML='<div class="tblwrap"><table class="grid" style="min-width:560px"><thead><tr><th>날짜</th><th>시간</th><th>학생</th><th>종류</th><th>리마인드 문자</th></tr></thead><tbody>'+
     rows.map(r=>{ const k=new Date(new Date(r.makeup_at).getTime()+9*3600e3);
+      const md=`${k.getUTCMonth()+1}/${k.getUTCDate()}`;
       const hm=`${String(k.getUTCHours()).padStart(2,'0')}:${String(k.getUTCMinutes()).padStart(2,'0')}`;
+      const today=(r.makeup_at>=from && r.makeup_at<to);
       const sent=r.reminded?'<span style="color:var(--green-d);font-weight:800">✅ 발송됨</span>':'<span style="color:var(--red);font-weight:800">✖ 미발송</span>';
-      return `<tr><td style="font-weight:700">${hm}</td><td style="font-weight:700">${r.student_name||'-'}</td><td>${r.msg_type||'보강'}</td><td>${sent}</td></tr>`;
+      return `<tr${today?' style="background:#f0fbe8"':''}><td style="font-weight:700">${md}${today?' <span style="color:var(--green-d);font-size:11px">오늘</span>':''}</td><td>${hm}</td><td style="font-weight:700">${r.student_name||'-'}</td><td>${r.msg_type||'보강'}</td><td>${sent}</td></tr>`;
     }).join('')+'</tbody></table></div>';
 }
 window.loadMakeup=loadMakeup;
