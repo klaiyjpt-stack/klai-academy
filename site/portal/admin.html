@@ -655,6 +655,7 @@ else { (async()=>{
   const ADMINS = ['klai.yj.pt@gmail.com','klai.yj.pt.1@gmail.com'];
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
     if(!session){ location.replace('staff-login.html?next=admin.html'); return; }   // 타인 차단: 로그인 1회
+    if(!ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('teacher-hub.html'); return; }  // 강사는 선생님 페이지로
     USER = session.user;
     show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadOverview(); }
   $('#logoutBtn').onclick = async ()=>{ await SB.auth.signOut(); route(); };

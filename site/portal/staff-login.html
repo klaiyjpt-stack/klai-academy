@@ -34,19 +34,26 @@
 const SUPABASE_URL="https://hxlzccwqxamtsjrrtcdq.supabase.co";
 const SUPABASE_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
 const $=s=>document.querySelector(s);
+const ADMINS=['klai.yj.pt@gmail.com','klai.yj.pt.1@gmail.com'];   // 원장 계정
 const params=new URLSearchParams(location.search);
-const next=params.get('next')||'teacher-hub.html';
+const next=params.get('next');
+function dest(email){
+  const isAdmin=ADMINS.includes((email||'').toLowerCase());
+  // next가 있고 그 역할이 접근 가능하면 next로, 아니면 역할 기본 페이지
+  if(next){ if(next.startsWith('admin')&&!isAdmin) {} else return next; }
+  return isAdmin ? 'admin.html' : 'teacher-hub.html';
+}
 (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const SB = createClient(SUPABASE_URL, SUPABASE_ANON);
   const { data:{ session } } = await SB.auth.getSession();
-  if(session){ location.replace(next); return; }   // 이미 로그인 → 바로 이동
-  $('#hint').textContent='';
+  if(session){ location.replace(dest(session.user.email)); return; }   // 이미 로그인 → 역할별 이동
+  $('#hint').textContent='원장 아이디로 로그인 → 원장 페이지 · 강사 아이디 → 선생님 페이지';
   async function go(){ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#err').textContent='';
     if(!id||!pw){ $('#err').textContent='이메일과 비밀번호를 입력하세요.'; return; }
     const { error } = await SB.auth.signInWithPassword({ email:id, password:pw });
     if(error){ $('#err').textContent='이메일 또는 비밀번호가 맞지 않아요.'; return; }
-    location.replace(next); }
+    location.replace(dest(id)); }
   $('#loginBtn').onclick=go;
   $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') go(); });
 })();
