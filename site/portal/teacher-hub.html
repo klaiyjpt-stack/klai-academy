@@ -36,20 +36,6 @@
 </style>
 </head>
 <body>
-<!-- 공용 로그인 -->
-<div id="loginView" class="hidden">
-  <div class="login">
-    <div class="lg">강사 로그인</div>
-    <div class="ls">전 강사 공용 계정으로 로그인</div>
-    <label>아이디</label>
-    <input id="uid" type="text" autocomplete="username" autocapitalize="none" placeholder="학원 공용 아이디">
-    <label>비밀번호</label>
-    <input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
-    <button class="btn" id="loginBtn">로그인</button>
-    <div class="err" id="loginErr"></div>
-    <a href="admin.html" style="display:block;text-align:center;color:var(--blue-d);font-size:12.5px;margin-top:14px;font-weight:700">🔑 원장 로그인은 여기 →</a>
-  </div>
-</div>
 
 <!-- 페이지 선택 -->
 <div id="pickView" class="hidden">
@@ -75,20 +61,15 @@
 const SUPABASE_URL  = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
 const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
 const $=s=>document.querySelector(s);
-function show(v){ ['loginView','pickView'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==v)); }
+function show(v){ ['pickView'].forEach(x=>{const el=$('#'+x); if(el) el.classList.toggle('hidden',x!==v);}); }
 (async()=>{
+  // ponytail: 비번 없이 바로 진입(개발용). 세션 있으면 이름 표시.
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const SB = createClient(SUPABASE_URL, SUPABASE_ANON);
-  async function route(){ const { data:{ session } } = await SB.auth.getSession();
-    if(session){ $('#who').textContent=session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사'; show('pickView'); }
-    else show('loginView'); }
-  $('#loginBtn').onclick=async()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
-    if(!id||!pw){ $('#loginErr').textContent='아이디와 비밀번호를 입력하세요.'; return; }
-    const email=id.includes('@')?id:id; const {error}=await SB.auth.signInWithPassword({email,password:pw});
-    if(error) $('#loginErr').textContent='아이디 또는 비밀번호가 맞지 않아요.'; else route(); };
-  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
-  $('#logoutBtn').onclick=async()=>{ await SB.auth.signOut(); route(); };
-  route();
+  const { data:{ session } } = await SB.auth.getSession();
+  $('#who').textContent = session ? (session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사') : '강사';
+  show('pickView');
+  const lo=$('#logoutBtn'); if(lo) lo.onclick=async()=>{ await SB.auth.signOut(); location.reload(); };
 })();
 </script>
 </body>
