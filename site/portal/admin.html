@@ -101,6 +101,25 @@
       </div>
     </div>
 
+    <!-- 학생 검색 → 주간 시간표 -->
+    <div class="panel" id="stSearchPanel" style="border-left:4px solid #9b59b6">
+      <div style="font-weight:800;color:var(--navy);font-size:15px">🔎 학생 검색 · 주간 시간표</div>
+      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">이름/코드로 찾으면 그 학생의 일주일 수업(요일·시간·프로그램)이 나와요.</div>
+      <div class="addrow"><input id="stq" placeholder="이름 또는 코드 예: 김서준 / Leo1234" style="width:260px"><button class="add" id="stBtn">검색</button></div>
+      <div id="stResult" style="font-size:13px;margin-top:10px"></div>
+    </div>
+
+    <!-- 구글시트 원본 (한 페이지 보기) -->
+    <div class="panel" id="sheetPanel">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:180px"><div style="font-weight:800;color:var(--navy);font-size:15px">📄 수업 시간표 원본 (구글시트)</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">이관 전 임시 보기. 구글 로그인(klai.yj.pt) 필요 · 곧 실시간 시간표로 대체.</div></div>
+        <button class="actbtn" id="sheetToggle" onclick="toggleSheet()">펼치기 ▼</button>
+        <a href="https://docs.google.com/spreadsheets/d/1gM-LpQK84qix7AbhB3kvL4zubCCvhdRaQHVcwptsIiI/edit" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">시트 열기 ↗</a>
+      </div>
+      <div id="sheetBody" style="display:none;margin-top:10px"></div>
+    </div>
+
     <!-- 전체 수업 한눈에 (그리드) -->
     <div class="panel" id="ovPanel" style="border-left:4px solid var(--blue)">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
@@ -357,6 +376,31 @@ async function saveConsult(row){
 function toggleConsult(){ const b=$('#csBody'), t=$('#csToggle'); const open=b.style.display!=='none'; b.style.display=open?'none':''; t.textContent=open?'펼치기 ▼':'닫기 ▲'; }
 window.loadConsult=loadConsult; window.saveConsult=saveConsult; window.toggleConsult=toggleConsult;
 
+// ── 구글시트 임베드 (지연 로드) ──
+function toggleSheet(){ const b=$('#sheetBody'),t=$('#sheetToggle'); const open=b.style.display!=='none';
+  if(open){ b.style.display='none'; t.textContent='펼치기 ▼'; }
+  else { if(!b.dataset.loaded){ b.innerHTML='<iframe src="https://docs.google.com/spreadsheets/d/1gM-LpQK84qix7AbhB3kvL4zubCCvhdRaQHVcwptsIiI/preview" style="width:100%;height:75vh;border:1px solid var(--line);border-radius:10px"></iframe>'; b.dataset.loaded='1'; }
+    b.style.display=''; t.textContent='접기 ▲'; } }
+window.toggleSheet=toggleSheet;
+
+// ── 학생 검색 → 주간 시간표 ──
+const DAYORD={mon:0,tue:1,wed:2,thu:3,fri:4}, DAYLB={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금'};
+async function searchStudent(){
+  if(!SB||!USER) return;
+  const q=$('#stq').value.trim(); if(!q){ $('#stResult').textContent='검색어를 입력하세요'; return; }
+  const { data, error } = await SB.from('timetable').select('*').eq('active',true).or(`name_kor.ilike.%${q}%,code.ilike.%${q}%`);
+  if(error){ $('#stResult').textContent='검색 실패: '+error.message; return; }
+  if(!data||!data.length){ $('#stResult').innerHTML='<span style="color:var(--sub)">일치하는 학생 없음 (시간표에 배정돼 있어야 검색됨)</span>'; return; }
+  const byStu={}; data.forEach(r=>{ const k=r.name_kor+'|'+r.code; (byStu[k]=byStu[k]||[]).push(r); });
+  $('#stResult').innerHTML=Object.entries(byStu).map(([k,rows])=>{
+    const [nm,code]=k.split('|'); rows.sort((a,b)=>(DAYORD[a.day]-DAYORD[b.day])||a.time_slot.localeCompare(b.time_slot));
+    return `<div style="margin:8px 0;padding:10px;border:1px solid var(--line);border-radius:10px">
+      <div style="font-weight:800;color:var(--navy)">${nm} <span style="color:var(--sub);font-weight:500">${code}</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${rows.map(r=>`<span style="background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12.5px"><b>${DAYLB[r.day]}</b> ${r.time_slot} · ${r.program}</span>`).join('')}</div></div>`;
+  }).join('');
+}
+window.searchStudent=searchStudent;
+
 // ── 전체 수업 그리드 (요일×시간, 셀=학생) ──
 const DAYK=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
 async function loadOverview(){
@@ -462,6 +506,8 @@ else { (async()=>{
   $('#tAdd').onclick = addTeacher;
   $('#ttAdd').onclick = ttAdd;
   $('#ovProg').onchange = loadOverview;
+  $('#stBtn').onclick = searchStudent;
+  $('#stq').addEventListener('keydown',e=>{ if(e.key==='Enter') searchStudent(); });
   $('#csPending').onchange = renderConsult;
   $('#csLimit').onchange = renderConsult;
   route();
