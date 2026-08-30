@@ -12,6 +12,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="author" content="배성미 (Amy English)">
+<meta name="description" content="EQ Talk &amp; Game — Extended Learning Question speaking activity. Created by 배성미, Amy English.">
+<meta name="copyright" content="© 2026 배성미 · Amy English">
 <title>EQ Talk &amp; Game</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -50,11 +54,8 @@ h1 span{color:var(--pink)}
 .wrap .full{grid-column:1/-1}
 .sect{font-size:12px;font-weight:800;letter-spacing:.16em;color:var(--sub);margin-bottom:10px;text-transform:uppercase}
 .gm{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.gm .g{position:relative;min-height:92px;display:flex;flex-direction:column;justify-content:center}
+.gm .g{position:relative;min-height:92px;display:flex;flex-direction:column;justify-content:center;padding-right:52px}
 .gm .g b{color:var(--navy)}
-.gm .g.sel{background:var(--purple);border-color:var(--navy);box-shadow:0 4px 0 var(--navy)}
-.gm .g.sel b{color:#fff}
-.gm .g.sel span{color:rgba(255,255,255,.9)}
 .startbar{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(251,250,248,0),var(--bg) 38%);
  padding:18px 44px 24px;display:flex;align-items:center;gap:16px}
 .startbar .note{font-size:14px;color:var(--sub);font-weight:600}
@@ -92,9 +93,14 @@ button{cursor:pointer}
 .go:active{transform:translateY(6px);box-shadow:0 0 0 var(--navy)}
 .card{background:#fff;border:3px solid var(--navy);border-radius:24px;padding:18px 22px;box-shadow:0 5px 0 var(--navy)}
 .gm{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
-.gm .g{border:3px solid var(--navy);border-radius:22px;padding:15px 17px;background:#fff;cursor:pointer;
+.gm .g{border:3px solid var(--navy);border-radius:22px;padding:15px 52px 15px 17px;background:#fff;cursor:pointer;
  text-align:left;box-shadow:0 5px 0 var(--navy);transition:.1s}
-.gm .g.sel{border-color:var(--pink);background:#EFF8F9;box-shadow:0 4px 0 var(--pink);transform:translateY(-2px)}
+.gm .g.sel{background:#F4F2FD;border-color:var(--purple);box-shadow:0 5px 0 var(--purple);transform:translateY(-2px)}
+.gm .g.sel b{color:var(--purple)}
+.gm .g.sel span{color:#5B6076}
+.gm .g.sel:after{content:'✓';position:absolute;top:12px;right:16px;font-size:18px;font-weight:800;color:#fff;
+ background:var(--pink);border:2px solid var(--navy);border-radius:999px;width:30px;height:30px;
+ display:grid;place-items:center;line-height:1}
 .gm .g b{display:block;font-size:19px;font-weight:800;margin-bottom:4px}
 .gm .g span{font-size:13px;color:var(--sub);font-weight:600;line-height:1.45}
 .picker{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
@@ -119,6 +125,7 @@ button{cursor:pointer}
 .mini{font-size:14px;min-height:46px;padding:10px 16px;border-radius:16px;color:var(--navy);
  box-shadow:0 4px 0 var(--navy);font-weight:700}
 .grp{margin-left:0;display:flex;gap:8px;background:rgba(36,29,92,.05);padding:6px;border-radius:22px}
+.mini.home{background:var(--purple);color:#fff;border-color:var(--navy)}
 .mini:active{transform:translateY(3px);box-shadow:0 1px 0 #EDEFF5}
 .stage{flex:1;display:grid;grid-template-columns:1fr 290px;gap:20px;padding:14px 32px;min-height:0}
 .main{display:flex;flex-direction:column;justify-content:center;gap:14px;min-width:0;min-height:0}
@@ -280,6 +287,7 @@ button{cursor:pointer}
 
 <div class="scr on" id="setup">
   <div class="hero">
+    <button class="mini" id="homeBack" onclick="tap();goBack()">← BACK</button>
     <span class="logo big"></span>
     <div><div class="ttl">EQ Talk <span style="color:var(--pink)">&amp; Game</span></div>
       <div class="sub">Extended Learning Question · Let's Talk! · 30 books · 3,809 questions</div></div>
@@ -323,7 +331,7 @@ button{cursor:pointer}
   </div>
   <div class="card rules full">
     <b style="font-size:16px">House rules — read before you play</b>
-    <div style="font-size:15px;line-height:1.7;margin-top:8px;color:rgba(255,255,255,.9)">
+    <div style="font-size:15px;line-height:1.7;margin-top:8px">
       This is <b>not a contest</b>. No points, no winner, no losing team.<br>
       Everyone gets the same number of turns. A miss just passes the question along — it costs nothing.<br>
       Never rush a child. The fuse pops at zero just for fun — the game still waits for you.
@@ -340,14 +348,14 @@ button{cursor:pointer}
 
 <div class="scr" id="play">
   <div class="top">
-    <button class="mini" onclick="tap();back()">← BACK</button>
+    <button class="mini" onclick="tap();back()">↶ UNDO</button>
     <span class="pill" id="unit"></span>
     <span class="pill ghostpill" id="gname"></span>
     <span class="count" id="count"></span>
     <span class="grp">
       <button class="mini" onclick="tap();toggleKo()">KOR</button>
       <button class="mini" onclick="tap();pause()">❚❚ PAUSE</button>
-      <button class="mini" onclick="tap();quit()">END</button>
+      <button class="mini home" onclick="tap();quitAsk()">⌂ HOME</button>
     </span>
   </div>
   <div class="stage">
@@ -364,7 +372,7 @@ button{cursor:pointer}
 
 <div class="scr" id="practice">
   <div class="top">
-    <button class="mini" onclick="tap();show('setup')">← BACK</button>
+    <button class="mini home" onclick="tap();show('setup')">⌂ HOME</button>
     <span class="pill" id="pUnit"></span>
     <span class="pill ghostpill">Practice</span>
     <span class="count" id="pCount"></span>
@@ -387,7 +395,7 @@ button{cursor:pointer}
   <div style="font-size:80px">🎉</div>
   <h1><span>Great job, everyone!</span></h1>
   <div style="font-size:20px;color:var(--muted)">Everybody spoke. Nobody lost. Clap for the whole class. 👏</div>
-  <div class="row"><button class="go" onclick="show('setup')">BACK</button></div>
+  <div class="row"><button class="go" onclick="show('setup')">⌂ HOME</button></div>
   <div class="credit mid">created by Sungmi Bae · Amy English</div>
 </div>
 
@@ -412,6 +420,14 @@ const GAMES=[
  {id:'hang',  n:'Word Builder',i:'🔤',d:'Guess letters to open the word. Misses build a picture, never a hanged man.'},
 ];
 const $=i=>document.getElementById(i);
+const PORTAL='https://amyschool.kr/portal/zoom-keystone.html';   // 선생님 포털
+function goBack(){                                   // 포털로 복귀 (같은 사이트에서 왔으면 뒤로가기)
+  try{
+    if(document.referrer&&new URL(document.referrer).host===location.host&&history.length>1){history.back();return}
+  }catch(e){}
+  if(location.protocol==='file:')return;             // 로컬 파일로 열었을 땐 이동 안 함
+  location.href=PORTAL;
+}
 const show=s=>document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id==s));
 let G={},game='speed',AC;
 
@@ -551,12 +567,20 @@ function pause(){G.paused=1;stopTimer();
   el.innerHTML=`<span class="logo big white"></span><h2>Paused</h2><p>Take a breath. The game is waiting.</p>
     <div class="btns"><button onclick="resume()">▶ RESUME</button>
       <button class="alt" onclick="resume();back()">← ONE TURN BACK</button>
-      <button class="alt" onclick="quit()">END GAME</button></div>`;
+      <button class="alt" onclick="quit()">⌂ HOME</button></div>`;
   document.body.appendChild(el);
 }
 function resume(){G.paused=0;const el=$('pauseBox');if(el)el.remove();
   if(G.mode=='ask'&&G.sec&&G.left>0){G.tid=setInterval(tick,1000)}render()}
 function quit(){stopTimer();popClose();const el=$('pauseBox');if(el)el.remove();show('setup')}
+function quitAsk(){                                  // 진행 중 실수로 나가는 것 방지
+  stopTimer();
+  const el=document.createElement('div');el.className='pause';el.id='pauseBox';
+  el.innerHTML=`<h2>Go back home?</h2><p>This game will end. Turns so far will not be saved.</p>
+    <div class="btns"><button onclick="resume()">▶ KEEP PLAYING</button>
+      <button class="alt" onclick="quit()">⌂ GO HOME</button></div>`;
+  document.body.appendChild(el);G.paused=1;
+}
 function beginTurn(){G.hist.push(snap());resumeTurn()}
 function resumeTurn(){
   G.mode='pick';stopTimer();

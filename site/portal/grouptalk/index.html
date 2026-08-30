@@ -48,42 +48,42 @@ button{font:inherit;cursor:pointer}
 </head>
 <body>
 <header>
-  <button class="back" id="back" style="display:none">← 뒤로</button>
-  <h1>Group Talk</h1><span class="crumb" id="crumb">클라이 어학원</span>
-  <button class="back" id="vidbtn" style="margin-left:auto">🎬 참고영상</button>
+  <button class="back" id="back" style="display:none">← Back</button>
+  <h1>Group Talk</h1><span class="crumb" id="crumb">Klai Language Academy</span>
+  <button class="back" id="vidbtn" style="margin-left:auto">🎬 Reference Videos</button>
 </header>
 <div class="wrap" id="app"></div>
 <script src="data.js"></script>
 <script>
 const app=document.getElementById('app'), crumb=document.getElementById('crumb'), back=document.getElementById('back');
 const VIDEOS=[
- {t:'Group Talk 예시 ①',id:'1FAYD3c7pcewL00OhqKwCj-Rmnmt1X3L3'},
- {t:'Group Talk 예시 ②',id:'1NTs0u-85bEw-cxHrz5Ceq2kHBRu2aEOv'},
- {t:'Interview 예시',id:'1YPy2Y5K_ofksfxnj-oR2McYzrb7pYr3b'},
- {t:'PPT 영상 ①',id:'1n8btPNnY4wQgVylt4cuKBBoadhF7IGCL'},
- {t:'PPT 영상 ②',id:'1QitovVN_aJ8Y2Wf1unGmAKjyjhIm1gwS'},
+ {t:'Group Talk Example ①',id:'1FAYD3c7pcewL00OhqKwCj-Rmnmt1X3L3'},
+ {t:'Group Talk Example ②',id:'1NTs0u-85bEw-cxHrz5Ceq2kHBRu2aEOv'},
+ {t:'Interview Example',id:'1YPy2Y5K_ofksfxnj-oR2McYzrb7pYr3b'},
+ {t:'PPT Video ①',id:'1n8btPNnY4wQgVylt4cuKBBoadhF7IGCL'},
+ {t:'PPT Video ②',id:'1QitovVN_aJ8Y2Wf1unGmAKjyjhIm1gwS'},
 ];
-let stack=[]; // [{view,bi,li}]
+let stack=[{view:'books'}]; // [{view,bi,li}] — books is base so Back shows on every other page
 document.getElementById('vidbtn').onclick=()=>go({view:'videos'});
 function go(state){stack.push(state);render()}
-back.onclick=()=>{stack.pop();render()};
+back.onclick=()=>{ if(stack.length>1){stack.pop();render()} else {location.href='../zoom-keystone.html'} };
 function render(){
   const s=stack[stack.length-1]||{view:'books'};
-  back.style.display=stack.length>1?'':'none';
+  back.style.display='';
   if(s.view==='books')return books();
   if(s.view==='lessons')return lessons(s.bi);
   if(s.view==='talk')return talk(s.bi,s.li);
   if(s.view==='videos')return videos();
 }
 function videos(){
-  crumb.textContent='참고영상 자료';
+  crumb.textContent='Reference Videos';
   app.innerHTML=`<div class="vgrid">`+VIDEOS.map(v=>
     `<div class="vcard"><div class="vt">${v.t}</div>
      <div class="vframe"><iframe src="https://drive.google.com/file/d/${v.id}/preview" allow="autoplay" allowfullscreen></iframe></div></div>`
   ).join('')+`</div>`;
 }
 function books(){
-  crumb.textContent='교재를 고르세요';
+  crumb.textContent='Choose a book';
   const by={};BOOKS.forEach((b,i)=>{(by[b.series]=by[b.series]||[]).push([b,i])});
   app.innerHTML=Object.entries(by).map(([ser,arr])=>
     `<div class="sec">${ser}</div><div class="grid">`+
@@ -107,8 +107,8 @@ function talk(bi,li){
         <div class="n">Q${qi+1}</div><div class="txt">${q}</div></div>`).join('')}
     </div></div>
     <div class="nav">
-      <button ${li===0?'disabled':''} onclick="stack.pop();go({view:'talk',bi:${bi},li:${li-1}})">← 이전 레슨</button>
-      <button ${li===b.lessons.length-1?'disabled':''} onclick="stack.pop();go({view:'talk',bi:${bi},li:${li+1}})">다음 레슨 →</button>
+      <button ${li===0?'disabled':''} onclick="stack.pop();go({view:'talk',bi:${bi},li:${li-1}})">← Previous Lesson</button>
+      <button ${li===b.lessons.length-1?'disabled':''} onclick="stack.pop();go({view:'talk',bi:${bi},li:${li+1}})">Next Lesson →</button>
     </div>`;
 }
 render();
