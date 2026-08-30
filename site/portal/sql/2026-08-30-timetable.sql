@@ -12,10 +12,12 @@ create table if not exists timetable (
   time_slot  text not null,                 -- '1시'..'8시'
   name_kor   text not null,
   code       text,                          -- 영문이름+숫자 (참고용, 형제 공유 가능)
+  status     text not null default 'confirmed',  -- 'confirmed'(운영) | 'draft'(미확정 수정안)
   active     boolean not null default true,
   sort       int not null default 0,
   updated_at timestamptz not null default now()
 );
+-- 이미 timetable 있으면: alter table timetable add column if not exists status text not null default 'confirmed';
 create index if not exists idx_timetable_slot on timetable(subject, day, time_slot) where active;
 create index if not exists idx_timetable_name on timetable(name_kor);
 

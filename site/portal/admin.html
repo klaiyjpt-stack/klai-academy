@@ -197,9 +197,11 @@
         <input id="giCode" placeholder="코드(선택)" style="width:110px">
         <input id="giLevel" list="dlLevels" placeholder="레벨 예 초등 Advanced2" style="width:170px">
         <button class="actbtn on" id="giLoad">🔄 불러오기</button>
-        <button class="add" id="giSave">💾 저장</button>
-        <button class="actbtn" id="giPrint">🖨 인쇄/안내</button>
+        <button class="add" id="giSave">💾 수정안 저장</button>
+        <button class="actbtn" id="giDiff">🖨 학부모 비교표</button>
+        <button class="actbtn on" id="giConfirm" style="background:#eaf2fc;border-color:#b9d3f0;color:var(--blue-d)">✅ 확정(컨펌 후)</button>
       </div>
+      <div id="giStatus" style="font-size:12.5px;margin-top:8px;min-height:16px"></div>
       <datalist id="dlNames"></datalist><datalist id="dlLevels"></datalist>
       <div id="giGrid" class="tblwrap" style="margin-top:10px"></div>
     </div>
@@ -507,17 +509,21 @@ const DAYORD={mon:0,tue:1,wed:2,thu:3,fri:4}, DAYLB={mon:'월',tue:'화',wed:'�
 async function searchStudent(){
   if(!SB||!USER) return;
   const q=$('#stq').value.trim(); if(!q){ $('#stResult').textContent='검색어를 입력하세요'; return; }
-  const { data, error } = await SB.from('timetable').select('*').eq('active',true).or(`name_kor.ilike.%${q}%,code.ilike.%${q}%`);
+  const { data, error } = await SB.from('timetable').select('*').eq('active',true).neq('status','draft').or(`name_kor.ilike.%${q}%,code.ilike.%${q}%`);
   if(error){ $('#stResult').textContent='검색 실패: '+error.message; return; }
   if(!data||!data.length){ $('#stResult').innerHTML='<span style="color:var(--sub)">일치하는 학생 없음 (시간표에 배정돼 있어야 검색됨)</span>'; return; }
   const byStu={}; data.forEach(r=>{ const k=r.name_kor+'|'+(r.code||''); (byStu[k]=byStu[k]||[]).push(r); });
   $('#stResult').innerHTML=Object.entries(byStu).map(([k,rows])=>{
-    const [nm,code]=k.split('|'); rows.sort((a,b)=>(DAYORD[a.day]-DAYORD[b.day])||a.time_slot.localeCompare(b.time_slot));
+    const [nm,code]=k.split('|');
     const lv=(rows.find(r=>r.level)||{}).level||'';
+    const cell={}; rows.forEach(r=>cell[r.day+'|'+r.time_slot]=r.subject);
+    let grid='<table class="grid" style="min-width:520px;margin-top:8px"><thead><tr><th style="width:64px">시간</th>'+GDAYS.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>'+
+      GTIMES.map(t=>`<tr><td style="font-weight:800;background:var(--soft);text-align:center">${t}</td>`+
+        GDAYS.map(([d])=>{ const v=cell[d+'|'+t]; return `<td style="text-align:center">${v?`<span style="background:#eef4ff;border-radius:6px;padding:2px 7px;font-size:12px">${v}</span>`:'<span style="color:#cbd3e0">-</span>'}</td>`; }).join('')+'</tr>').join('')+'</tbody></table>';
     return `<div style="margin:8px 0;padding:10px;border:1px solid var(--line);border-radius:10px">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-weight:800;color:var(--navy);flex:1">${nm} <span style="color:var(--sub);font-weight:500">${code} ${lv?'· '+lv:''}</span></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-weight:800;color:var(--navy);flex:1">${nm} <span style="color:var(--sub);font-weight:500">${code} ${lv?'· '+lv:''}</span> <span style="color:var(--green-d);font-size:11px;font-weight:800">확정 시간표</span></div>
       <button class="add" onclick="giEditFrom('${nm.replace(/'/g,"\\'")}','${(code||'').replace(/'/g,"\\'")}')">📝 이 학생 편집</button></div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${rows.map(r=>`<span style="background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12.5px"><b>${DAYLB[r.day]}</b> ${r.time_slot} · ${r.subject}</span>`).join('')}</div></div>`;
+      <div class="tblwrap">${grid}</div></div>`;
   }).join('');
 }
 window.searchStudent=searchStudent;
@@ -528,7 +534,7 @@ window.giEditFrom=giEditFrom;
 const DAYK=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
 async function loadOverview(){
   if(!SB||!USER) return;
-  let q=SB.from('timetable').select('*').eq('active',true);
+  let q=SB.from('timetable').select('*').eq('active',true).neq('status','draft');
   const subj=$('#ovProg').value; if(subj) q=q.eq('subject',subj);
   const { data, error } = await q.order('time_slot').order('sort');
   if(error){ $('#ovBody').textContent='로드 실패: '+error.message; return; }
@@ -586,40 +592,81 @@ function giBuildGrid(){
   $('#giGrid').innerHTML=h;
 }
 function giClear(){ document.querySelectorAll('.gicell').forEach(s=>s.value=''); }
+let giBaseline={};   // 확정본 {day|time: subject} — 비교 기준
+const gckey=(d,t)=>d+'|'+t;
+function giSetStatus(html){ $('#giStatus').innerHTML=html; }
 async function giLoad(){
-  giBuildGrid();
+  giBuildGrid(); giBaseline={};
   const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
   if(!SB||!USER){ toast('로그인 필요'); return; }
   const code=$('#giCode').value.trim();
-  let q=SB.from('timetable').select('*').eq('active',true).eq('name_kor',nm);
-  if(code) q=q.eq('code',code);
-  const { data, error } = await q;
-  if(error){ toast('로드 실패: '+error.message); return; }
-  if(data&&data.length){ if(data[0].code&&!code) $('#giCode').value=data[0].code; const lv=data.find(r=>r.level); if(lv) $('#giLevel').value=lv.level; }
-  (data||[]).forEach(r=>{ const c=document.querySelector(`.gicell[data-day="${r.day}"][data-time="${r.time_slot}"]`); if(c) c.value=r.subject; });
-  toast(data&&data.length?`${nm} 불러옴 (${data.length}칸)`:'배정 없음 — 새로 입력');
+  // 확정본
+  let qc=SB.from('timetable').select('*').eq('active',true).neq('status','draft').eq('name_kor',nm); if(code) qc=qc.eq('code',code);
+  const conf=await qc; if(conf.error){ toast('로드 실패: '+conf.error.message); return; }
+  (conf.data||[]).forEach(r=>{ giBaseline[gckey(r.day,r.time_slot)]=r.subject; });
+  // 수정안(있으면 그걸 편집, 없으면 확정본 복제)
+  let qd=SB.from('timetable').select('*').eq('active',true).eq('status','draft').eq('name_kor',nm); if(code) qd=qd.eq('code',code);
+  const draft=await qd; const hasDraft=draft.data&&draft.data.length;
+  const src = hasDraft ? draft.data : (conf.data||[]);
+  if(src.length){ const r0=src[0]; if(r0.code&&!code) $('#giCode').value=r0.code; const lv=src.find(r=>r.level); if(lv) $('#giLevel').value=lv.level; }
+  src.forEach(r=>{ const c=document.querySelector(`.gicell[data-day="${r.day}"][data-time="${r.time_slot}"]`); if(c) c.value=r.subject; });
+  giSetStatus(hasDraft
+    ? '<span style="color:#b8860b;font-weight:800">✏️ 미확정 수정안 편집 중</span> — 확정 전까지 운영 시간표는 그대로.'
+    : (conf.data&&conf.data.length ? '<span style="color:var(--green-d);font-weight:800">✅ 확정 시간표</span> — 수정하면 수정안(미확정)이 됩니다.' : '배정 없음 — 새로 입력'));
+  toast(hasDraft?`${nm} 수정안 불러옴`:`${nm} 확정본 불러옴`);
 }
+// 현재 그리드 → 행 배열
+function giGridRows(status){
+  const nm=$('#giName').value.trim(), code=$('#giCode').value.trim()||null, level=$('#giLevel').value.trim()||null;
+  return [...document.querySelectorAll('.gicell')].filter(c=>c.value).map(c=>({
+    subject:c.value, level, day:c.dataset.day, time_slot:c.dataset.time, name_kor:nm, code, status, updated_at:new Date().toISOString() }));
+}
+// 수정안 저장 (확정본 안 건드림)
 async function giSave(){
   if(!SB||!USER){ toast('로그인 필요'); return; }
   const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
-  const code=$('#giCode').value.trim()||null, level=$('#giLevel').value.trim()||null;
-  const rows=[...document.querySelectorAll('.gicell')].filter(c=>c.value).map(c=>({
-    subject:c.value, level, day:c.dataset.day, time_slot:c.dataset.time, name_kor:nm, code, updated_at:new Date().toISOString()
-  }));
-  // 이 학생 기존 배정 삭제 후 재삽입 (교체)
+  const code=$('#giCode').value.trim()||null;
+  let del=SB.from('timetable').delete().eq('status','draft').eq('name_kor',nm); if(code) del=del.eq('code',code);
+  const de=await del; if(de.error){ toast('수정안 저장 실패: '+de.error.message); return; }
+  const rows=giGridRows('draft');
+  if(rows.length){ const { error } = await SB.from('timetable').insert(rows); if(error){ toast('수정안 저장 실패: '+error.message); return; } }
+  toast('✏️ 수정안 저장됨 (미확정 — 운영 시간표 안 바뀜)');
+  giSetStatus('<span style="color:#b8860b;font-weight:800">✏️ 미확정 수정안 저장됨</span> — 학부모 비교표로 컨펌 → 확정.');
+  giFillDatalists();
+}
+// 확정 (학부모 컨펌 후) — 확정본 교체 + 수정안 제거
+async function giConfirm(){
+  if(!SB||!USER){ toast('로그인 필요'); return; }
+  const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
+  if(!confirm(`${nm} 학생 시간표를 지금 그리드대로 확정할까요? 확정하면 운영 시간표에 즉시 반영됩니다.`)) return;
+  const code=$('#giCode').value.trim()||null;
+  // 확정본·수정안 모두 삭제 후 현재 그리드를 확정본으로
   let del=SB.from('timetable').delete().eq('name_kor',nm); if(code) del=del.eq('code',code);
-  const de=await del; if(de.error){ toast('저장 실패(삭제): '+de.error.message); return; }
-  if(rows.length){ const { error } = await SB.from('timetable').insert(rows); if(error){ toast('저장 실패: '+error.message); return; } }
-  toast(`저장 완료 · ${rows.length}칸 → 각 반 명단 반영`);
+  const de=await del; if(de.error){ toast('확정 실패: '+de.error.message); return; }
+  const rows=giGridRows('confirmed');
+  if(rows.length){ const { error } = await SB.from('timetable').insert(rows); if(error){ toast('확정 실패: '+error.message); return; } }
+  toast(`✅ 확정 완료 · ${rows.length}칸 → 운영 시간표 반영`);
+  giSetStatus('<span style="color:var(--green-d);font-weight:800">✅ 확정됨 · 운영 반영</span>');
+  giBaseline={}; document.querySelectorAll('.gicell').forEach(c=>{ if(c.value) giBaseline[gckey(c.dataset.day,c.dataset.time)]=c.value; });
   loadOverview(); giFillDatalists();
 }
-function giPrint(){
+// 학부모 비교표 (기존 확정 vs 수정안) — 변경 강조, 인쇄/캡처
+function giDiff(){
   const nm=$('#giName').value.trim()||'학생', lv=$('#giLevel').value.trim();
-  let h=`<h2 style="font-family:sans-serif">${nm} ${lv?'· '+lv:''} 주간 시간표</h2><table border="1" cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:15px"><tr style="background:#eee"><th>시간</th>${GDAYS.map(([,l])=>`<th>${l}</th>`).join('')}</tr>`;
-  GTIMES.forEach(t=>{ h+=`<tr><td style="font-weight:bold;background:#f5f5f5">${t}</td>`;
-    GDAYS.forEach(([d])=>{ const c=document.querySelector(`.gicell[data-day="${d}"][data-time="${t}"]`); h+=`<td>${c&&c.value?t+' '+c.value:''}</td>`; }); h+='</tr>'; });
-  h+='</table>';
-  const w=window.open('','_blank'); w.document.write('<title>'+nm+' 시간표</title>'+h); w.document.close(); w.focus(); w.print();
+  const cur={}; document.querySelectorAll('.gicell').forEach(c=>{ if(c.value) cur[gckey(c.dataset.day,c.dataset.time)]=c.value; });
+  const changed=(d,t)=>(giBaseline[gckey(d,t)]||'')!==(cur[gckey(d,t)]||'');
+  const cellHtml=(map,d,t,mark)=>{ const v=map[gckey(d,t)]||''; const ch=mark&&changed(d,t);
+    return `<td style="padding:8px;border:1px solid #ccc;${ch?'background:#fff3cd;font-weight:bold':''}">${v?t+' '+v:'<span style=color:#bbb>-</span>'}</td>`; };
+  const tbl=(map,mark,title)=>`<h3 style="font-family:sans-serif;margin:14px 0 6px">${title}</h3><table style="border-collapse:collapse;font-family:sans-serif;font-size:14px"><tr style="background:#eee"><th style="padding:8px;border:1px solid #ccc">시간</th>${GDAYS.map(([,l])=>`<th style="padding:8px;border:1px solid #ccc">${l}</th>`).join('')}</tr>`+
+    GTIMES.map(t=>`<tr><td style="padding:8px;border:1px solid #ccc;font-weight:bold;background:#f5f5f5">${t}</td>${GDAYS.map(([d])=>cellHtml(map,d,t,mark)).join('')}</tr>`).join('')+'</table>';
+  const anyChange=GTIMES.some(t=>GDAYS.some(([d])=>changed(d,t)));
+  const h=`<div style="font-family:sans-serif"><h2>${nm} ${lv?'· '+lv:''} 시간표 변경 안내</h2>
+    <p style="color:#555">아래 <b style="background:#fff3cd;padding:1px 4px">노란색</b> 칸이 변경/추가된 수업입니다. 확인 부탁드립니다.</p>
+    ${tbl(giBaseline,false,'▪ 기존 (현재) 시간표')}
+    ${tbl(cur,true,'▪ 변경 후 시간표')}
+    ${anyChange?'':'<p style="color:#c0392b">※ 변경사항 없음</p>'}
+    <p style="color:#888;font-size:12px;margin-top:14px">클라이 어학원</p></div>`;
+  const w=window.open('','_blank'); w.document.write('<title>'+nm+' 시간표 변경 안내</title>'+h); w.document.close(); w.focus();
 }
 async function giFillDatalists(){
   if(!SB||!USER) return;
@@ -629,7 +676,7 @@ async function giFillDatalists(){
   $('#dlNames').innerHTML=names.map(n=>`<option value="${n}">`).join('');
   $('#dlLevels').innerHTML=levels.map(l=>`<option value="${l}">`).join('');
 }
-window.giLoad=giLoad; window.giSave=giSave; window.giPrint=giPrint;
+window.giLoad=giLoad; window.giSave=giSave; window.giDiff=giDiff; window.giConfirm=giConfirm;
 
 if(!SUPABASE_URL||!SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'); show('dashView'); }
 else { (async()=>{
@@ -660,7 +707,8 @@ else { (async()=>{
   $('#tAdd').onclick = addTeacher;
   $('#giLoad').onclick = giLoad;
   $('#giSave').onclick = giSave;
-  $('#giPrint').onclick = giPrint;
+  $('#giDiff').onclick = giDiff;
+  $('#giConfirm').onclick = giConfirm;
   $('#ovProg').onchange = loadOverview;
   $('#stBtn').onclick = searchStudent;
   $('#stq').addEventListener('keydown',e=>{ if(e.key==='Enter') searchStudent(); });
