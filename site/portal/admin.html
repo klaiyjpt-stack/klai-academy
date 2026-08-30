@@ -181,19 +181,12 @@
   <!-- ══ 학생관리 ══ -->
   <section class="sec hidden" data-sec="students">
     <div class="sectitle">🎒 학생관리</div>
-    <!-- 학생 검색 → 주간 시간표 -->
-    <div class="panel" id="stSearchPanel" style="border-left:4px solid #9b59b6">
-      <div style="font-weight:800;color:var(--navy);font-size:15px">🔎 학생 검색 · 주간 시간표</div>
-      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">이름/코드로 찾으면 그 학생의 일주일 수업(요일·시간·프로그램)이 나와요.</div>
-      <div class="addrow"><input id="stq" placeholder="이름 또는 코드 예: 김서준 / Leo1234" style="width:260px"><button class="add" id="stBtn">검색</button></div>
-      <div id="stResult" style="font-size:13px;margin-top:10px"></div>
-    </div>
     <!-- 개별 시간표 편집 (학생 중심 그리드) -->
     <div class="panel" id="ttPanel" style="border-left:4px solid var(--green-d)">
       <div style="font-weight:800;color:var(--navy);font-size:15px">🗓️ 개별 시간표 편집</div>
-      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">학생 선택 → 요일×시간 칸에 과목 지정 → 저장. 저장하면 각 반 명단·교실 화면에 <b>즉시</b> 반영. 구글시트 대체.</div>
+      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">학생 이름 입력(자동완성) → 불러오기 → <b>기존 확정표</b> 확인 → 아래 그리드에서 수정 → 수정안 저장 → 학부모 비교표 → 확정.</div>
       <div class="addrow" style="flex-wrap:wrap;gap:8px">
-        <input id="giName" list="dlNames" placeholder="학생 이름" style="width:120px">
+        <input id="giName" list="dlNames" placeholder="학생 이름 검색" style="width:150px">
         <input id="giCode" placeholder="코드(선택)" style="width:110px">
         <input id="giLevel" list="dlLevels" placeholder="레벨 예 초등 Advanced2" style="width:170px">
         <button class="actbtn on" id="giLoad">🔄 불러오기</button>
@@ -203,7 +196,9 @@
       </div>
       <div id="giStatus" style="font-size:12.5px;margin-top:8px;min-height:16px"></div>
       <datalist id="dlNames"></datalist><datalist id="dlLevels"></datalist>
-      <div id="giGrid" class="tblwrap" style="margin-top:10px"></div>
+      <div id="giBaseView" style="margin-top:10px"></div>
+      <div style="font-weight:800;color:var(--navy);font-size:13px;margin:14px 0 4px">✏️ 수정 (아래에서 바꾼 뒤 저장)</div>
+      <div id="giGrid" class="tblwrap"></div>
     </div>
 
     <div class="bar">
@@ -504,31 +499,7 @@ function toggleSheet(){ const b=$('#sheetBody'),t=$('#sheetToggle'); const open=
     b.style.display=''; t.textContent='접기 ▲'; } }
 window.toggleSheet=toggleSheet;
 
-// ── 학생 검색 → 주간 시간표 ──
-const DAYORD={mon:0,tue:1,wed:2,thu:3,fri:4}, DAYLB={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금'};
-async function searchStudent(){
-  if(!SB||!USER) return;
-  const q=$('#stq').value.trim(); if(!q){ $('#stResult').textContent='검색어를 입력하세요'; return; }
-  const { data, error } = await SB.from('timetable').select('*').eq('active',true).neq('status','draft').or(`name_kor.ilike.%${q}%,code.ilike.%${q}%`);
-  if(error){ $('#stResult').textContent='검색 실패: '+error.message; return; }
-  if(!data||!data.length){ $('#stResult').innerHTML='<span style="color:var(--sub)">일치하는 학생 없음 (시간표에 배정돼 있어야 검색됨)</span>'; return; }
-  const byStu={}; data.forEach(r=>{ const k=r.name_kor+'|'+(r.code||''); (byStu[k]=byStu[k]||[]).push(r); });
-  $('#stResult').innerHTML=Object.entries(byStu).map(([k,rows])=>{
-    const [nm,code]=k.split('|');
-    const lv=(rows.find(r=>r.level)||{}).level||'';
-    const cell={}; rows.forEach(r=>cell[r.day+'|'+r.time_slot]=r.subject);
-    let grid='<table class="grid" style="min-width:520px;margin-top:8px"><thead><tr><th style="width:64px">시간</th>'+GDAYS.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>'+
-      GTIMES.map(t=>`<tr><td style="font-weight:800;background:var(--soft);text-align:center">${t}</td>`+
-        GDAYS.map(([d])=>{ const v=cell[d+'|'+t]; return `<td style="text-align:center">${v?`<span style="background:#eef4ff;border-radius:6px;padding:2px 7px;font-size:12px">${v}</span>`:'<span style="color:#cbd3e0">-</span>'}</td>`; }).join('')+'</tr>').join('')+'</tbody></table>';
-    return `<div style="margin:8px 0;padding:10px;border:1px solid var(--line);border-radius:10px">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-weight:800;color:var(--navy);flex:1">${nm} <span style="color:var(--sub);font-weight:500">${code} ${lv?'· '+lv:''}</span> <span style="color:var(--green-d);font-size:11px;font-weight:800">확정 시간표</span></div>
-      <button class="add" onclick="giEditFrom('${nm.replace(/'/g,"\\'")}','${(code||'').replace(/'/g,"\\'")}')">📝 이 학생 편집</button></div>
-      <div class="tblwrap">${grid}</div></div>`;
-  }).join('');
-}
-window.searchStudent=searchStudent;
-function giEditFrom(nm,code){ $('#giName').value=nm; $('#giCode').value=code||''; giLoad(); document.getElementById('ttPanel').scrollIntoView({behavior:'smooth',block:'start'}); }
-window.giEditFrom=giEditFrom;
+const DAYLB={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금'};
 
 // ── 전체 수업 그리드 (요일×시간, 셀=학생) ──
 const DAYK=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
@@ -610,10 +581,20 @@ async function giLoad(){
   const src = hasDraft ? draft.data : (conf.data||[]);
   if(src.length){ const r0=src[0]; if(r0.code&&!code) $('#giCode').value=r0.code; const lv=src.find(r=>r.level); if(lv) $('#giLevel').value=lv.level; }
   src.forEach(r=>{ const c=document.querySelector(`.gicell[data-day="${r.day}"][data-time="${r.time_slot}"]`); if(c) c.value=r.subject; });
+  giRenderBase(nm);
   giSetStatus(hasDraft
     ? '<span style="color:#b8860b;font-weight:800">✏️ 미확정 수정안 편집 중</span> — 확정 전까지 운영 시간표는 그대로.'
-    : (conf.data&&conf.data.length ? '<span style="color:var(--green-d);font-weight:800">✅ 확정 시간표</span> — 수정하면 수정안(미확정)이 됩니다.' : '배정 없음 — 새로 입력'));
+    : (conf.data&&conf.data.length ? '<span style="color:var(--green-d);font-weight:800">✅ 확정 시간표</span> — 아래에서 수정하면 수정안(미확정)이 됩니다.' : '배정 없음 — 아래에서 새로 입력'));
   toast(hasDraft?`${nm} 수정안 불러옴`:`${nm} 확정본 불러옴`);
+}
+function giRenderBase(nm){
+  const has=Object.keys(giBaseline).length;
+  if(!has){ $('#giBaseView').innerHTML='<div style="font-size:12.5px;color:var(--sub)">기존 확정 시간표 없음 (신규)</div>'; return; }
+  let h=`<div style="font-weight:800;color:var(--green-d);font-size:13px;margin-bottom:4px">✅ 기존 확정 시간표 (${nm})</div>`+
+    '<div class="tblwrap"><table class="grid" style="min-width:520px"><thead><tr><th style="width:64px">시간</th>'+GDAYS.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>'+
+    GTIMES.map(t=>`<tr><td style="font-weight:800;background:var(--soft);text-align:center">${t}</td>`+
+      GDAYS.map(([d])=>{ const v=giBaseline[gckey(d,t)]; return `<td style="text-align:center">${v?`<span style="background:#eafce0;border-radius:6px;padding:2px 7px;font-size:12px">${v}</span>`:'<span style="color:#cbd3e0">-</span>'}</td>`; }).join('')+'</tr>').join('')+'</tbody></table></div>';
+  $('#giBaseView').innerHTML=h;
 }
 // 현재 그리드 → 행 배열
 function giGridRows(status){
@@ -710,8 +691,6 @@ else { (async()=>{
   $('#giDiff').onclick = giDiff;
   $('#giConfirm').onclick = giConfirm;
   $('#ovProg').onchange = loadOverview;
-  $('#stBtn').onclick = searchStudent;
-  $('#stq').addEventListener('keydown',e=>{ if(e.key==='Enter') searchStudent(); });
   document.querySelectorAll('.navbtn[data-go]').forEach(b=>b.onclick=()=>gotoSec(b.dataset.go));
   $('#csPending').onchange = renderConsult;
   $('#csLimit').onchange = renderConsult;
