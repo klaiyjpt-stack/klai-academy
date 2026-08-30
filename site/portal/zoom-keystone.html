@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoom & Keystone · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+  header{background:linear-gradient(120deg,#2b74c4,#3aa76d);color:#fff}
+  .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px}
+  .hd .ttl{font-weight:800;font-size:18px}
+  .hd .ttl small{display:block;font-weight:500;font-size:12px;opacity:.9;margin-top:2px}
+  .hd .back{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px}
+  .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:22px 2px 12px}
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:720px){.tools{grid-template-columns:1fr}}
+  .tool{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;transition:.15s}
+  .tool:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(26,39,64,.1);border-color:#c7dcc7}
+  .tool .ic{font-size:26px;width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--soft);flex:none}
+  .tool h3{font-size:15px;color:var(--navy);font-weight:800}
+  .tool p{font-size:12px;color:var(--sub);margin-top:2px}
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap hd">
+      <div class="ttl">Zoom &amp; Keystone<small>엘리아영어 스피킹 프로그램</small></div>
+      <a class="back" href="teacher.html">← 선생님 페이지</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="eyebrow">바로가기</div>
+    <div class="tools">
+      <a class="tool" href="https://lms.e-cloud.ai/login" target="_blank" rel="noopener"><div class="ic">🌐</div><div><h3>엘리아영어 홈페이지</h3><p>엘라버스 · 강사용 학습자료실</p></div></a>
+      <a class="tool" href="eqtalk.html"><div class="ic">💬</div><div><h3>EQ Talk</h3><p>확장 질문 · 스피킹 게임</p></div></a>
+      <a class="tool" href="grouptalk/index.html"><div class="ic">🗣️</div><div><h3>Group Talk</h3><p>그룹 토킹 수업 자료</p></div></a>
+    </div>
+  </div>
+</body>
+</html>
