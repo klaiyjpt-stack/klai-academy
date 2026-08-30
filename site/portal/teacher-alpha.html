@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>알파 선생님 페이지 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc;--red:#c0392b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+  header{background:linear-gradient(120deg,#7cc242,#2b74c4);color:#fff}
+  .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px}
+  .hd .ttl{font-weight:800;font-size:18px}
+  .hd .ttl small{display:block;font-weight:500;font-size:12px;opacity:.9;margin-top:2px}
+  .hd .me{text-align:right;font-size:13px;opacity:.95}
+  .hd .out{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;margin-left:10px}
+  .setup{background:#fff8e1;border-bottom:1px solid #f0e0a8;color:#7a5c00;font-size:12.5px;padding:9px 16px;text-align:center}
+  .live{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:var(--green-d);background:#eafce0;border-radius:999px;padding:3px 9px;margin-left:8px}
+  .live .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .login{max-width:360px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 10px 40px rgba(20,30,60,.1)}
+  .login .lg{text-align:center;font-weight:800;font-size:20px;color:var(--navy)}
+  .login .ls{text-align:center;color:var(--sub);font-size:13px;margin:4px 0 20px}
+  .login label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px}
+  .login input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  .login .btn{width:100%;margin-top:18px;background:var(--green-d);color:#fff;border:none;padding:13px;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer}
+  .login .err{color:var(--red);font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:16px 0}
+  .bar select,.bar input[type=date]{padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff}
+  .bar .lb{font-size:12px;font-weight:800;color:var(--sub)}
+  .eyebrow{color:var(--green-d);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin:18px 2px 10px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px}
+  .phead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .phead h2{font-size:16px;color:var(--navy);font-weight:800}
+  .phead .pill{font-size:11px;font-weight:800;color:var(--blue-d);background:#eaf2fc;border-radius:999px;padding:3px 9px}
+  .tblwrap{overflow-x:auto}
+  table.grid{width:100%;border-collapse:collapse;min-width:900px}
+  table.grid th,table.grid td{padding:9px 7px;text-align:center;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+  table.grid thead th{background:var(--soft);color:var(--sub);font-weight:800;font-size:11.5px;position:sticky;top:0}
+  table.grid td.name{text-align:left;font-weight:700;color:var(--navy);white-space:nowrap}
+  table.grid td.name small{display:block;color:var(--sub);font-weight:500;font-size:11px}
+  table.grid select,table.grid input{padding:6px 7px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff}
+  table.grid input.txt{width:100%;min-width:90px}
+  .hwbtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-weight:800;font-size:12px;cursor:pointer;color:var(--sub)}
+  .hwbtn.done{background:#eafce0;border-color:#bfe6a0;color:var(--green-d)}
+  .hwbtn.none{background:#fdeaea;border-color:#f0b8b8;color:var(--red)}
+  .att-absent,.att-late{color:var(--red);font-weight:700}
+  .actbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .save{background:var(--green-d);color:#fff;border:none;padding:11px 20px;border-radius:11px;font-weight:800;font-size:14px;cursor:pointer}
+  .empty{color:var(--sub);font-size:14px;padding:24px;text-align:center}
+  textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;font-family:inherit}
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:720px){.tools{grid-template-columns:1fr}}
+  .tool{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;transition:.15s}
+  .tool:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,39,64,.1)}
+  .tool .ic{font-size:22px;width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--soft);flex:none}
+  .tool h3{font-size:14px;color:var(--navy);font-weight:800}
+  .tool p{font-size:11.5px;color:var(--sub);margin-top:2px}
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 18px;border-radius:12px;font-size:13.5px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:99}
+  #toast.on{opacity:1}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div id="setupBanner" class="setup hidden"></div>
+
+<!-- 로그인 -->
+<div id="loginView" class="hidden">
+  <div class="login">
+    <div class="lg">알파 선생님 페이지</div>
+    <div class="ls">강사 아이디로 로그인</div>
+    <label>강사 아이디</label>
+    <input id="uid" type="text" autocomplete="username" autocapitalize="none" placeholder="예: anna">
+    <label>비밀번호</label>
+    <input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
+    <button class="btn" id="loginBtn">로그인</button>
+    <div class="err" id="loginErr"></div>
+    <a href="teacher.html" style="display:block;text-align:center;color:var(--blue-d);font-size:12.5px;margin-top:14px;font-weight:700">🌐 원어민 선생님 페이지 →</a>
+  </div>
+</div>
+
+<!-- 대시보드 -->
+<div id="dashView" class="hidden">
+  <header>
+    <div class="wrap hd">
+      <div class="ttl">🅰️ 클라이 어학원 · 알파 선생님<small>실시간 시간표 · 반 기록</small></div>
+      <div><span class="me" id="meName">선생님</span><button class="out" id="logoutBtn">로그아웃</button></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="bar">
+      <span class="lb">요일</span>
+      <select id="daySel"></select>
+      <span class="lb">시간</span>
+      <select id="timeSel"></select>
+      <span class="lb">날짜</span>
+      <input type="date" id="dateSel">
+      <span class="live"><span class="dot"></span>실시간</span>
+    </div>
+
+    <div class="eyebrow">반 기록 입력</div>
+    <div class="panel">
+      <div class="phead"><h2>📝 출결 · 숙제 · 진도 · 결과</h2><span class="pill" id="slotPill"></span></div>
+      <div class="tblwrap">
+        <table class="grid">
+          <thead><tr>
+            <th style="text-align:left">학생</th><th>출결</th><th>숙제</th>
+            <th>학습교재</th><th>진도(Unit·p)</th><th>결과</th><th>특이사항</th><th>교재배부</th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div id="emptyMsg" class="empty hidden">이 시간에 배정된 학생이 없어요. 원장 페이지에서 시간표를 세팅하세요.</div>
+      <div class="actbar"><button class="save" id="saveBtn">💾 저장</button></div>
+    </div>
+
+    <div class="eyebrow">강사 일지 (비공개)</div>
+    <div class="panel">
+      <textarea id="teaLog" rows="3" placeholder="나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고"></textarea>
+      <div class="actbar"><button class="save" id="logBtn" style="background:var(--navy)">💾 일지 저장</button></div>
+    </div>
+
+    <div class="eyebrow">도구</div>
+    <div class="tools">
+      <a class="tool" href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>교재배부·재고</h3><p>배부 입력 · 청구 · 재고 (앱)</p></div></a>
+      <a class="tool" href="zoom-keystone.html"><div class="ic">🗣️</div><div><h3>학습 자료</h3><p>엘리아 · EQ Talk · Group Talk</p></div></a>
+      <a class="tool" href="manual.html"><div class="ic">📖</div><div><h3>사용법</h3><p>페이지 사용 안내</p></div></a>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SUPABASE_URL  = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+const PROGRAM = '알파';
+const ATT = [['present','출석'],['late','지각'],['absent','결석'],['makeup','보강']];
+const DAYS = [['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
+let SB=null, USER=null, TT=[], RTchan=null;
+const $ = s=>document.querySelector(s);
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); }
+
+// 데모 폴백 (로그인·DB 없을 때 화면 확인용)
+const DEMO_TT = [
+  {day:'mon',time_slot:'3:10',name_kor:'김서준',code:'Leo1234'},
+  {day:'mon',time_slot:'3:10',name_kor:'이하은',code:'Ella5678'},
+  {day:'mon',time_slot:'3:10',name_kor:'박도윤',code:'Steven0412'},
+  {day:'mon',time_slot:'4:10',name_kor:'최지안',code:'Aaron3451'},
+  {day:'tue',time_slot:'3:10',name_kor:'정예은',code:'Julia4925'},
+];
+
+function fillDays(){ $('#daySel').innerHTML = DAYS.map(([v,l])=>`<option value="${v}">${l}</option>`).join(''); }
+function fillTimes(){
+  const day=$('#daySel').value;
+  const times=[...new Set(TT.filter(r=>r.day===day).map(r=>r.time_slot))].sort();
+  $('#timeSel').innerHTML = times.length? times.map(t=>`<option>${t}</option>`).join('') : '<option value="">-</option>';
+}
+function slotRows(){
+  const day=$('#daySel').value, t=$('#timeSel').value;
+  return TT.filter(r=>r.day===day && r.time_slot===t).sort((a,b)=>(a.sort||0)-(b.sort||0));
+}
+
+function renderRows(){
+  const list=slotRows();
+  $('#slotPill').textContent = `${list.length}명`;
+  $('#emptyMsg').classList.toggle('hidden', list.length>0);
+  $('#rows').innerHTML = list.map(st=>`
+    <tr data-code="${st.code}" data-name="${st.name_kor}">
+      <td class="name">${st.name_kor} <small>${st.code}</small></td>
+      <td><select class="att">${ATT.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></td>
+      <td><button class="hwbtn" data-hw="">숙제</button></td>
+      <td><input class="txt book" placeholder="교재"></td>
+      <td><input class="txt prog" placeholder="Unit·p"></td>
+      <td><input class="txt result" placeholder="결과"></td>
+      <td><input class="txt remark" placeholder="특이사항"></td>
+      <td><input class="txt dist" placeholder="배부 교재"></td>
+    </tr>`).join('');
+  // 숙제 토글
+  document.querySelectorAll('.hwbtn').forEach(b=>b.onclick=()=>{
+    const cur=b.dataset.hw; const nx = cur===''?'done':cur==='done'?'none':'';
+    b.dataset.hw=nx; b.className='hwbtn'+(nx?' '+nx:''); b.textContent = nx==='done'?'완료':nx==='none'?'미완료':'숙제';
+  });
+  // 출결 색
+  document.querySelectorAll('.att').forEach(s=>{ const paint=()=>{ s.className='att'+(['absent','late'].includes(s.value)?' att-'+s.value:''); }; s.onchange=paint; paint(); });
+  if(SB&&USER) loadRecords();
+}
+
+// ── Supabase ──
+async function loadTT(){
+  if(!(SB&&USER)){ TT=DEMO_TT.map(r=>({...r})); return; }
+  const { data } = await SB.from('timetable').select('*').eq('program',PROGRAM).eq('active',true).order('sort');
+  TT = data||[];
+}
+async function loadRecords(){
+  const date=$('#dateSel').value, codes=slotRows().map(r=>r.code);
+  if(!codes.length) return;
+  const { data } = await SB.from('session_records').select('*').eq('program',PROGRAM).eq('date',date).in('code',codes);
+  const by={}; (data||[]).forEach(r=>by[r.code]=r);
+  document.querySelectorAll('#rows tr').forEach(tr=>{
+    const r=by[tr.dataset.code]; if(!r) return;
+    if(r.attend){ const s=tr.querySelector('.att'); s.value=r.attend; s.dispatchEvent(new Event('change')); }
+    if(r.homework){ const b=tr.querySelector('.hwbtn'); b.dataset.hw=r.homework; b.className='hwbtn '+r.homework; b.textContent=r.homework==='done'?'완료':'미완료'; }
+    if(r.book) tr.querySelector('.book').value=r.book;
+    if(r.progress) tr.querySelector('.prog').value=r.progress;
+    if(r.result) tr.querySelector('.result').value=r.result;
+    if(r.remark) tr.querySelector('.remark').value=r.remark;
+    if(r.distributed) tr.querySelector('.dist').value=r.distributed;
+  });
+}
+async function saveRecords(){
+  const date=$('#dateSel').value;
+  const rows=[...document.querySelectorAll('#rows tr')].map(tr=>({
+    program:PROGRAM, code:tr.dataset.code, name_kor:tr.dataset.name, date,
+    attend:tr.querySelector('.att').value,
+    homework:tr.querySelector('.hwbtn').dataset.hw||null,
+    book:tr.querySelector('.book').value||null,
+    progress:tr.querySelector('.prog').value||null,
+    result:tr.querySelector('.result').value||null,
+    remark:tr.querySelector('.remark').value||null,
+    distributed:tr.querySelector('.dist').value||null,
+    created_by:USER?.id||null, updated_at:new Date().toISOString()
+  }));
+  if(!rows.length){ toast('학생이 없어요'); return; }
+  if(!(SB&&USER)){ toast('데모 모드 — 저장 안 됨 (로그인 필요)'); return; }
+  const { error } = await SB.from('session_records').upsert(rows,{onConflict:'program,code,date'});
+  toast(error? '저장 실패: '+error.message : `저장 완료 · ${rows.length}명`);
+}
+async function saveLog(){
+  const date=$('#dateSel').value, day=$('#daySel').value, t=$('#timeSel').value;
+  if(!(SB&&USER)){ toast('데모 모드 — 저장 안 됨'); return; }
+  const { error } = await SB.from('class_daily').upsert({
+    teacher:USER.email, class_name:`알파 ${day} ${t}`, date, teacher_log:$('#teaLog').value, updated_at:new Date().toISOString()
+  },{onConflict:'teacher,class_name,date'});
+  toast(error? '저장 실패: '+error.message : '강사 일지 저장됨');
+}
+
+function refreshSlot(){ fillTimes(); renderRows(); }
+
+function boot(){
+  const today=new Date().toISOString().slice(0,10);
+  $('#dateSel').value=today;
+  fillDays(); fillTimes(); renderRows();
+  $('#daySel').onchange=refreshSlot;
+  $('#timeSel').onchange=renderRows;
+  $('#dateSel').onchange=()=>{ if(SB&&USER) loadRecords(); };
+  $('#saveBtn').onclick=saveRecords;
+  $('#logBtn').onclick=saveLog;
+}
+function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden', x!==v)); }
+
+// 실시간 구독 — 원장이 시간표 바꾸면 즉시 갱신
+function subscribeTT(){
+  if(!SB) return;
+  RTchan = SB.channel('tt-alpha')
+    .on('postgres_changes',{event:'*',schema:'public',table:'timetable',filter:`program=eq.${PROGRAM}`},
+      async()=>{ await loadTT(); refreshSlot(); toast('시간표 갱신됨'); })
+    .subscribe();
+}
+
+if(!SUPABASE_URL || !SUPABASE_ANON){
+  $('#setupBanner').textContent='⚙ 데모 미리보기 — Supabase 연결 시 실제 명단·저장 작동'; $('#setupBanner').classList.remove('hidden');
+  loadTT().then(()=>{ boot(); show('dashView'); });
+} else { (async()=>{
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  SB = createClient(SUPABASE_URL, SUPABASE_ANON);
+  async function route(){ const { data:{ session } } = await SB.auth.getSession();
+    if(session){ USER=session.user; $('#meName').textContent=session.user.user_metadata?.name||session.user.email?.split('@')[0]||'선생님';
+      await loadTT(); boot(); subscribeTT(); show('dashView'); }
+    else { USER=null; if(RTchan){ SB.removeChannel(RTchan); RTchan=null; } TT=DEMO_TT.map(r=>({...r})); show('loginView'); } }
+  $('#loginBtn').onclick=async()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
+    if(!id||!pw){ $('#loginErr').textContent='아이디와 비밀번호를 입력하세요.'; return; }
+    const email=id.includes('@')?id:id; const {error}=await SB.auth.signInWithPassword({email,password:pw});
+    if(error) $('#loginErr').textContent='아이디 또는 비밀번호가 맞지 않아요.'; else route(); };
+  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
+  $('#logoutBtn').onclick=async()=>{ await SB.auth.signOut(); route(); };
+  route();
+})(); }
+</script>
+</body>
+</html>

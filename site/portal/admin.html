@@ -101,6 +101,39 @@
       </div>
     </div>
 
+    <!-- 주간 알림 -->
+    <div class="panel" id="alertPanel" style="border-left:4px solid var(--red);background:#fff6f6">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:800;color:var(--navy);font-size:15px">🔔 이번 주 관리 알림 <span class="cnt" id="alCnt"></span></div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">이번 주(월~금) · 숙제 미완료 2회↑ 또는 결석·지각 1회↑ (전 수업)</div>
+        </div>
+        <button class="actbtn on" onclick="loadAlerts()">🔄 새로고침</button>
+      </div>
+      <div id="alList" style="font-size:13px;margin-top:10px">로그인 후 표시됩니다.</div>
+    </div>
+
+    <!-- 실시간 시간표 편집 -->
+    <div class="panel" id="ttPanel" style="border-left:4px solid var(--green-d)">
+      <div style="font-weight:800;color:var(--navy);font-size:15px">🗓️ 실시간 시간표 <span class="cnt" id="ttCnt"></span></div>
+      <div style="font-size:12px;color:var(--sub);margin:2px 0 10px">여기서 배정하면 각 교실 화면에 <b>즉시</b> 반영. 구글시트 대체.</div>
+      <div class="addrow" style="flex-wrap:wrap;gap:8px">
+        <select id="ttProg" style="width:110px"><option>알파</option><option>원어민</option><option>문법</option></select>
+        <select id="ttDay" style="width:80px"><option value="mon">월</option><option value="tue">화</option><option value="wed">수</option><option value="thu">목</option><option value="fri">금</option></select>
+        <input id="ttTime" placeholder="시간 예 3:10" style="width:90px">
+        <input id="ttKo" placeholder="이름" style="width:90px">
+        <input id="ttCode" placeholder="코드 예 Leo1234" style="width:120px">
+        <button class="add" id="ttAdd">배정 추가</button>
+      </div>
+      <div class="bar" style="padding:10px 0 0">
+        <span style="font-size:12px;font-weight:800;color:var(--sub)">보기</span>
+        <select id="ttvProg" style="width:110px"><option>알파</option><option>원어민</option><option>문법</option></select>
+        <select id="ttvDay" style="width:80px"><option value="mon">월</option><option value="tue">화</option><option value="wed">수</option><option value="thu">목</option><option value="fri">금</option></select>
+        <button class="actbtn on" onclick="loadTT()">🔄 불러오기</button>
+      </div>
+      <div id="ttList" style="font-size:13px;margin-top:8px"></div>
+    </div>
+
     <div class="bar">
       <select id="fTeacher"></select>
       <select id="fClass"></select>
@@ -309,6 +342,64 @@ async function saveConsult(row){
 function toggleConsult(){ const b=$('#csBody'), t=$('#csToggle'); const open=b.style.display!=='none'; b.style.display=open?'none':''; t.textContent=open?'펼치기 ▼':'닫기 ▲'; }
 window.loadConsult=loadConsult; window.saveConsult=saveConsult; window.toggleConsult=toggleConsult;
 
+// ── 주간 알림 (월~금 · 숙제미완료≥2 or 결석+지각≥1 · 전 프로그램) ──
+function weekBounds(){
+  const d=new Date(); const wd=(d.getDay()+6)%7; // 월=0
+  const mon=new Date(d); mon.setDate(d.getDate()-wd);
+  const sat=new Date(mon); sat.setDate(mon.getDate()+5);
+  const f=x=>x.toISOString().slice(0,10);
+  return {from:f(mon), to:f(sat)};   // [월, 토) = 월~금
+}
+async function loadAlerts(){
+  if(!SB||!USER) return;
+  const {from,to}=weekBounds();
+  const { data, error } = await SB.from('session_records').select('program,code,name_kor,attend,homework,date').gte('date',from).lt('date',to);
+  if(error){ $('#alList').textContent='알림 로드 실패: '+error.message; return; }
+  const agg={};
+  (data||[]).forEach(r=>{ const k=r.program+'|'+r.code;
+    (agg[k]=agg[k]||{program:r.program,code:r.code,name:r.name_kor||r.code,hw:0,al:0});
+    if(r.homework==='none') agg[k].hw++;
+    if(r.attend==='absent'||r.attend==='late') agg[k].al++;
+  });
+  const hit=Object.values(agg).filter(a=>a.hw>=2||a.al>=1).sort((a,b)=>(b.hw+b.al)-(a.hw+a.al));
+  $('#alCnt').textContent = hit.length?`(${hit.length}명)`:'(0)';
+  if(!hit.length){ $('#alList').innerHTML='<span style="color:var(--green-d);font-weight:700">이번 주 알림 없음 👍</span>'; return; }
+  $('#alList').innerHTML='<div class="tblwrap"><table class="grid"><thead><tr><th style="text-align:left">학생</th><th>프로그램</th><th>숙제 미완료</th><th>결석+지각</th></tr></thead><tbody>'+
+    hit.map(a=>`<tr><td style="text-align:left;font-weight:700">${a.name} <span style="color:var(--sub);font-weight:500">${a.code}</span></td><td>${a.program}</td><td style="${a.hw>=2?'color:var(--red);font-weight:800':''}">${a.hw}회</td><td style="${a.al>=1?'color:var(--red);font-weight:800':''}">${a.al}회</td></tr>`).join('')+
+    '</tbody></table></div>';
+}
+window.loadAlerts=loadAlerts;
+
+// ── 실시간 시간표 편집 ──
+async function loadTT(){
+  if(!SB||!USER) return;
+  const prog=$('#ttvProg').value, day=$('#ttvDay').value;
+  const { data, error } = await SB.from('timetable').select('*').eq('program',prog).eq('day',day).eq('active',true).order('time_slot').order('sort');
+  if(error){ $('#ttList').textContent='로드 실패: '+error.message; return; }
+  $('#ttCnt').textContent=`(${(data||[]).length}명)`;
+  if(!data||!data.length){ $('#ttList').innerHTML='<span style="color:var(--sub)">이 요일 배정 없음</span>'; return; }
+  const byT={}; data.forEach(r=>(byT[r.time_slot]=byT[r.time_slot]||[]).push(r));
+  $('#ttList').innerHTML=Object.keys(byT).sort().map(t=>
+    `<div style="margin:8px 0"><div style="font-weight:800;color:var(--navy);font-size:12.5px">${t}</div>`+
+    byT[t].map(r=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span style="flex:1">${r.name_kor} <span style="color:var(--sub)">${r.code}</span></span><button class="actbtn off" onclick="ttDel('${r.id}')">삭제</button></div>`).join('')+
+    '</div>').join('');
+}
+async function ttAdd(){
+  if(!SB||!USER){ toast('로그인 필요'); return; }
+  const row={program:$('#ttProg').value,day:$('#ttDay').value,time_slot:$('#ttTime').value.trim(),name_kor:$('#ttKo').value.trim(),code:$('#ttCode').value.trim()};
+  if(!row.time_slot||!row.name_kor||!row.code){ toast('시간·이름·코드 입력'); return; }
+  const { error } = await SB.from('timetable').insert(row);
+  if(error){ toast('추가 실패: '+error.message); return; }
+  $('#ttKo').value='';$('#ttCode').value=''; toast('배정 추가됨');
+  $('#ttvProg').value=row.program; $('#ttvDay').value=row.day; loadTT();
+}
+async function ttDel(id){
+  if(!confirm('이 배정을 삭제할까요?')) return;
+  const { error } = await SB.from('timetable').delete().eq('id',id);
+  toast(error?'삭제 실패':'삭제됨'); loadTT();
+}
+window.loadTT=loadTT; window.ttDel=ttDel;
+
 if(!SUPABASE_URL||!SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'); show('dashView'); }
 else { (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
@@ -320,7 +411,7 @@ else { (async()=>{
       if(!ADMINS.includes((USER.email||'').toLowerCase())){   // 강사 계정 차단(세션은 유지 — 선생님 페이지 쓰게)
         USER=null; show('loginView');
         $('#loginErr').innerHTML='🔒 원장 전용 페이지입니다.<br>강사는 <a href="teacher.html" style="color:var(--blue-d);font-weight:800">선생님 페이지 →</a>'; return; }
-      show('dashView'); loadData(); loadTeachers(); loadConsult();
+      show('dashView'); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadTT();
     } else { USER=null; show('loginView'); } }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
@@ -333,6 +424,7 @@ else { (async()=>{
   $('#fActive').onchange = render;
   $('#addBtn').onclick = addStudent;
   $('#tAdd').onclick = addTeacher;
+  $('#ttAdd').onclick = ttAdd;
   $('#csPending').onchange = renderConsult;
   $('#csLimit').onchange = renderConsult;
   route();
