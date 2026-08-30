@@ -140,14 +140,15 @@
       <div id="alList" style="font-size:13px;margin-top:10px">로그인 후 표시됩니다.</div>
     </div>
 
-    <!-- 보강 리스트 -->
+    <!-- 보강 리스트 (오늘) -->
     <div class="panel" style="border-left:4px solid var(--green)">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
-        <div style="flex:1;min-width:180px"><div style="font-weight:800;color:var(--navy);font-size:15px">🔁 보강 리스트</div>
-          <div style="font-size:12px;color:var(--sub);margin-top:2px">보강 신청·일정. 자세한 관리는 왼쪽 보강관리.</div></div>
-        <a href="makeup.html" target="_blank" rel="noopener" class="actbtn on" style="text-decoration:none">새 탭 ↗</a>
+        <div style="flex:1;min-width:180px"><div style="font-weight:800;color:var(--navy);font-size:15px">🔁 오늘 보강 <span class="cnt" id="mkCnt"></span></div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">오늘 오는 학생 · 리마인드 문자 발송 여부. 자세한 관리는 왼쪽 보강관리.</div></div>
+        <button class="actbtn on" onclick="loadMakeup()">🔄 새로고침</button>
+        <a href="makeup.html" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">보강관리 ↗</a>
       </div>
-      <iframe src="makeup.html" style="width:100%;height:46vh;border:1px solid var(--line);border-radius:10px"></iframe>
+      <div id="mkList" style="font-size:13px">로그인 후 표시됩니다.</div>
     </div>
 
     <!-- 시간표 (구글시트 원본) -->
@@ -473,6 +474,30 @@ async function saveConsult(row){
 function toggleConsult(){ const b=$('#csBody'), t=$('#csToggle'); const open=b.style.display!=='none'; b.style.display=open?'none':''; t.textContent=open?'펼치기 ▼':'닫기 ▲'; }
 window.loadConsult=loadConsult; window.saveConsult=saveConsult; window.toggleConsult=toggleConsult;
 
+// ── 오늘 보강 리스트 (makeup 테이블) ──
+function kstTodayRange(){
+  const now=new Date(); const kst=new Date(now.getTime()+9*3600e3);
+  const startUTC=new Date(Date.UTC(kst.getUTCFullYear(),kst.getUTCMonth(),kst.getUTCDate(),0,0,0)-9*3600e3);
+  const endUTC=new Date(startUTC.getTime()+24*3600e3);
+  return {from:startUTC.toISOString(), to:endUTC.toISOString()};
+}
+async function loadMakeup(){
+  if(!SB||!USER){ $('#mkList').innerHTML='<span style="color:var(--sub)">로그인 후 표시됩니다.</span>'; return; }
+  const {from,to}=kstTodayRange();
+  const { data, error } = await SB.from('makeup').select('student_name,parent_phone,makeup_at,status,reminded,msg_type').gte('makeup_at',from).lt('makeup_at',to).order('makeup_at');
+  if(error){ $('#mkList').innerHTML='<span style="color:var(--red)">로드 실패: '+error.message+'</span>'; return; }
+  const rows=(data||[]).filter(r=>r.status!=='cancelled');
+  $('#mkCnt').textContent=`(${rows.length}명)`;
+  if(!rows.length){ $('#mkList').innerHTML='<span style="color:var(--sub)">오늘 예정된 보강 없음</span>'; return; }
+  $('#mkList').innerHTML='<div class="tblwrap"><table class="grid" style="min-width:520px"><thead><tr><th>시간</th><th>학생</th><th>종류</th><th>리마인드 문자</th></tr></thead><tbody>'+
+    rows.map(r=>{ const k=new Date(new Date(r.makeup_at).getTime()+9*3600e3);
+      const hm=`${String(k.getUTCHours()).padStart(2,'0')}:${String(k.getUTCMinutes()).padStart(2,'0')}`;
+      const sent=r.reminded?'<span style="color:var(--green-d);font-weight:800">✅ 발송됨</span>':'<span style="color:var(--red);font-weight:800">✖ 미발송</span>';
+      return `<tr><td style="font-weight:700">${hm}</td><td style="font-weight:700">${r.student_name||'-'}</td><td>${r.msg_type||'보강'}</td><td>${sent}</td></tr>`;
+    }).join('')+'</tbody></table></div>';
+}
+window.loadMakeup=loadMakeup;
+
 // ── 구글시트 임베드 (지연 로드) ──
 function toggleSheet(){ const b=$('#sheetBody'),t=$('#sheetToggle'); const open=b.style.display!=='none';
   if(open){ b.style.display='none'; t.textContent='펼치기 ▼'; }
@@ -586,7 +611,7 @@ else { (async()=>{
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
     // ponytail: 지금은 비번 게이트 해제(개발용). 실서비스 전 아래 ADMINS 체크 복구.
     USER = session ? session.user : null;
-    show('dashView'); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadTT(); loadOverview(); }
+    show('dashView'); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadTT(); loadOverview(); }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
     const { error } = await SB.auth.signInWithPassword({ email:id, password:pw });
