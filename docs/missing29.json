@@ -1,0 +1,1378 @@
+[
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "thu",
+  "time_slot": "3시",
+  "name_kor": "오예준",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "오예준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "3시",
+  "name_kor": "오예준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "오예준",
+  "code": "0911"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "오예준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "오예준",
+  "code": "0911"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "오예준",
+  "code": null
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "mon",
+  "time_slot": "2시",
+  "name_kor": "우하율",
+  "code": "4520"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "우하율",
+  "code": "4520"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "우하율",
+  "code": "4520"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "3시",
+  "name_kor": "우하율",
+  "code": "4520"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "3시",
+  "name_kor": "우하율",
+  "code": "4520"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "fri",
+  "time_slot": "3시",
+  "name_kor": "우하율",
+  "code": "4520"
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "유서윤",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "유서윤",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "유서윤",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "유서윤",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "유서윤",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "유서윤",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "3시",
+  "name_kor": "윤채원",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "wed",
+  "time_slot": "3시",
+  "name_kor": "윤채원",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "윤채원",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "3시",
+  "name_kor": "윤채원",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "윤채원",
+  "code": "4359"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "3시",
+  "name_kor": "윤채원",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "윤채원",
+  "code": "4359"
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "이기원",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "이기원",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "이기원",
+  "code": "0814"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "이기원",
+  "code": "0814"
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "3시",
+  "name_kor": "이로운",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "이로운",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "이로운",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "이로운",
+  "code": "1891"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "이로운",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "이로운",
+  "code": "1891"
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "2시",
+  "name_kor": "이서안",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "이서안",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "2시",
+  "name_kor": "이서안",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "2시",
+  "name_kor": "이서안",
+  "code": "7204"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "2시",
+  "name_kor": "이서안",
+  "code": "7204"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "fri",
+  "time_slot": "1시",
+  "name_kor": "이서안",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "이시훈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "이시훈",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "이시훈",
+  "code": "4865"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "이시훈",
+  "code": "4865"
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "이준석",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "이준석",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "이준석",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "이준석",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "wed",
+  "time_slot": "4시",
+  "name_kor": "이준석",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "이준석",
+  "code": "6155"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "이준석",
+  "code": "6155"
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "이하준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "mon",
+  "time_slot": "5시",
+  "name_kor": "이하준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "이하준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "wed",
+  "time_slot": "5시",
+  "name_kor": "이하준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "이하준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "이하준",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "임채아",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "임채아",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "임채아",
+  "code": "8017"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "임채아",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "wed",
+  "time_slot": "4시",
+  "name_kor": "임채아",
+  "code": "8017"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "wed",
+  "time_slot": "5시",
+  "name_kor": "임채아",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "임채아",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "전호영",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "전호영",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "전호영",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "전호영",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "전호영",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "전호영",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "정예립",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "정예립",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "정예립",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "wed",
+  "time_slot": "4시",
+  "name_kor": "정예립",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "mon",
+  "time_slot": "5시",
+  "name_kor": "정예립",
+  "code": "8478"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "wed",
+  "time_slot": "5시",
+  "name_kor": "정예립",
+  "code": "8478"
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "정율립",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "wed",
+  "time_slot": "5시",
+  "name_kor": "정율립",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "wed",
+  "time_slot": "6시30분",
+  "name_kor": "정율립",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "정율립",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "3시",
+  "name_kor": "조민서",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "thu",
+  "time_slot": "3시",
+  "name_kor": "조민서",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "조민서",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "3시",
+  "name_kor": "조민서",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "조민서",
+  "code": "2337"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "조민서",
+  "code": "2337"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "조민서",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "조민성",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "wed",
+  "time_slot": "4시",
+  "name_kor": "조민성",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "mon",
+  "time_slot": "3시",
+  "name_kor": "조민성",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "3시",
+  "name_kor": "조민성",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "조민성",
+  "code": "5874"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "3시",
+  "name_kor": "조민성",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "조민성",
+  "code": "5874"
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "조서희",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "조서희",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "조서희",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "조서희",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "조은수",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "조은수",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "wed",
+  "time_slot": "4시",
+  "name_kor": "조은수",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "조은수",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "mon",
+  "time_slot": "5시",
+  "name_kor": "조은수",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "wed",
+  "time_slot": "5시",
+  "name_kor": "조은수",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "조은수",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "3시",
+  "name_kor": "지우림",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "wed",
+  "time_slot": "3시",
+  "name_kor": "지우림",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "3시",
+  "name_kor": "지우림",
+  "code": null
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "fri",
+  "time_slot": "3시",
+  "name_kor": "지우림",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "mon",
+  "time_slot": "2시",
+  "name_kor": "지우림",
+  "code": "1206"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "지우림",
+  "code": "1206"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "fri",
+  "time_slot": "2시",
+  "name_kor": "지우림",
+  "code": "1206"
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "차서연",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "차서연",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "차서연",
+  "code": "1220"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "차서연",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "차서연",
+  "code": "1220"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "차서연",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "차서은",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "차서은",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "차서은",
+  "code": "1220"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "차서은",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "차서은",
+  "code": "1220"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "차서은",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "채지훈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "wed",
+  "time_slot": "6시30분",
+  "name_kor": "채지훈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "채지훈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "채지훈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "채지훈",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "3시",
+  "name_kor": "최다솜",
+  "code": null
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "wed",
+  "time_slot": "4시",
+  "name_kor": "최다솜",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "최다솜",
+  "code": "6753"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "최다솜",
+  "code": "6753"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "최다솜",
+  "code": "6753"
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "최종빈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "최종빈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "최종빈",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "최종빈",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "wed",
+  "time_slot": "3시",
+  "name_kor": "최지운",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "fri",
+  "time_slot": "5시",
+  "name_kor": "최지운",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "최지운",
+  "code": "4404"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "최지운",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "최지운",
+  "code": "4404"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "최지운",
+  "code": null
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "mon",
+  "time_slot": "4시",
+  "name_kor": "탁규민",
+  "code": "6548"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "wed",
+  "time_slot": "4시",
+  "name_kor": "탁규민",
+  "code": "6548"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "fri",
+  "time_slot": "3시",
+  "name_kor": "탁규민",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "mon",
+  "time_slot": "3시",
+  "name_kor": "탁규민",
+  "code": "6548"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "wed",
+  "time_slot": "3시",
+  "name_kor": "탁규민",
+  "code": "6548"
+ },
+ {
+  "subject": "정독",
+  "level": "class2 (Rosemary)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "탁규민",
+  "code": "6548"
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "mon",
+  "time_slot": "2시",
+  "name_kor": "허지원",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "허지원",
+  "code": null
+ },
+ {
+  "subject": "독해",
+  "level": "class6 (Tina T 독해교실)",
+  "day": "fri",
+  "time_slot": "2시",
+  "name_kor": "허지원",
+  "code": null
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "mon",
+  "time_slot": "2시",
+  "name_kor": "허지원",
+  "code": "0601"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "허지원",
+  "code": "0601"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "4시",
+  "name_kor": "허지원",
+  "code": "0601"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "4시",
+  "name_kor": "허지원",
+  "code": "0601"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "fri",
+  "time_slot": "4시",
+  "name_kor": "허지원",
+  "code": "0601"
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "tue",
+  "time_slot": "5시",
+  "name_kor": "황승준",
+  "code": null
+ },
+ {
+  "subject": "문법",
+  "level": "class4-T (문법교실)",
+  "day": "thu",
+  "time_slot": "5시",
+  "name_kor": "황승준",
+  "code": null
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "tue",
+  "time_slot": "6시30분",
+  "name_kor": "황승준",
+  "code": "2013"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "thu",
+  "time_slot": "6시30분",
+  "name_kor": "황승준",
+  "code": "2013"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "tue",
+  "time_slot": "2시",
+  "name_kor": "황지우",
+  "code": "1807"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "thu",
+  "time_slot": "2시",
+  "name_kor": "황지우",
+  "code": "1807"
+ },
+ {
+  "subject": "엘리아G/W",
+  "level": "",
+  "day": "fri",
+  "time_slot": "3시",
+  "name_kor": "황지우",
+  "code": "1807"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "mon",
+  "time_slot": "2시",
+  "name_kor": "황지우",
+  "code": "1807"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "tue",
+  "time_slot": "2시",
+  "name_kor": "황지우",
+  "code": "1807"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "wed",
+  "time_slot": "2시",
+  "name_kor": "황지우",
+  "code": "1807"
+ },
+ {
+  "subject": "정독",
+  "level": "class5 (Grace)",
+  "day": "thu",
+  "time_slot": "2시",
+  "name_kor": "황지우",
+  "code": "1807"
+ },
+ {
+  "subject": "정독",
+  "level": "class1 (Nez)",
+  "day": "fri",
+  "time_slot": "2시",
+  "name_kor": "황지우",
+  "code": "1807"
+ }
+]
