@@ -51,10 +51,9 @@
   .wrapA{max-width:1280px;margin:0 auto;padding:16px}
   .adminlayout{display:grid;grid-template-columns:216px 1fr;gap:18px;align-items:start}
   @media(max-width:820px){.adminlayout{grid-template-columns:1fr}}
-  .sidebar{grid-column:1;position:sticky;top:16px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 8px;display:flex;flex-direction:column;gap:2px}
-  @media(max-width:820px){.sidebar{position:sticky;top:0;order:-1;z-index:30;flex-direction:row;flex-wrap:wrap;overflow-x:auto}}
-  @media(max-width:820px){.navgrp{display:none}}
-  .acol{grid-column:2;min-width:0}
+  .sidebar{position:sticky;top:12px;align-self:start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 8px;display:flex;flex-direction:column;gap:2px}
+  @media(max-width:820px){.sidebar{position:sticky;top:0;z-index:30;flex-direction:row;flex-wrap:wrap;overflow-x:auto}.navgrp{display:none}}
+  .acol{min-width:0}
   .navgrp{font-size:10.5px;font-weight:800;color:#9aa5b5;letter-spacing:.08em;text-transform:uppercase;padding:12px 12px 5px}
   .navbtn{display:flex;align-items:center;gap:9px;background:none;border:none;border-radius:10px;padding:10px 12px;font-weight:700;font-size:14px;color:var(--ink);cursor:pointer;text-align:left;transition:.12s;width:100%}
   .navbtn:hover{background:var(--soft)}
@@ -89,6 +88,20 @@
 
   <div class="wrapA">
   <div class="adminlayout">
+  <!-- 사이드바 (왼쪽) -->
+  <aside class="sidebar">
+    <div class="navgrp">관리</div>
+    <button class="navbtn on" data-go="home">🏠 대시보드</button>
+    <button class="navbtn" data-go="students">🎒 학생관리</button>
+    <button class="navbtn" data-go="staff">👩‍🏫 직원관리</button>
+    <div class="navgrp">운영</div>
+    <button class="navbtn" data-go="makeup">🔁 보강관리</button>
+    <button class="navbtn" data-go="books">📚 교재관리</button>
+    <button class="navbtn" data-go="learning">📈 학습관리</button>
+    <div class="navgrp">바로가기</div>
+    <a class="navbtn" href="teacher-hub.html">🧑‍🏫 선생님 페이지</a>
+    <a class="navbtn" href="manual.html">📖 사용법</a>
+  </aside>
   <main class="acol">
 
   <!-- ══ 대시보드(홈) ══ -->
@@ -264,21 +277,6 @@
 
   <div class="foot">클라이 어학원 · 원장/관리자</div>
   </main>
-
-  <!-- 사이드바 (왼쪽) -->
-  <aside class="sidebar">
-    <div class="navgrp">관리</div>
-    <button class="navbtn on" data-go="home">🏠 대시보드</button>
-    <button class="navbtn" data-go="students">🎒 학생관리</button>
-    <button class="navbtn" data-go="staff">👩‍🏫 직원관리</button>
-    <div class="navgrp">운영</div>
-    <button class="navbtn" data-go="makeup">🔁 보강관리</button>
-    <button class="navbtn" data-go="books">📚 교재관리</button>
-    <button class="navbtn" data-go="learning">📈 학습관리</button>
-    <div class="navgrp">바로가기</div>
-    <a class="navbtn" href="teacher-hub.html">🧑‍🏫 선생님 페이지</a>
-    <a class="navbtn" href="manual.html">📖 사용법</a>
-  </aside>
 
   </div><!-- adminlayout -->
   </div><!-- wrapA -->
