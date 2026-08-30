@@ -69,7 +69,7 @@
 <!-- 로그인 -->
 <div id="loginView" class="hidden">
   <div class="login">
-    <div class="lg">알파 선생님 페이지</div>
+    <div class="lg" id="loginTtl">알파 선생님 페이지</div>
     <div class="ls">강사 아이디로 로그인</div>
     <label>강사 아이디</label>
     <input id="uid" type="text" autocomplete="username" autocapitalize="none" placeholder="예: anna">
@@ -85,7 +85,7 @@
 <div id="dashView" class="hidden">
   <header>
     <div class="wrap hd">
-      <div class="ttl">🅰️ 클라이 어학원 · 알파 선생님<small>실시간 시간표 · 반 기록</small></div>
+      <div class="ttl" id="hubTtl">🅰️ 클라이 어학원 · 알파 선생님<small>실시간 시간표 · 반 기록</small></div>
       <div><span class="me" id="meName">선생님</span><button class="out" id="logoutBtn">로그아웃</button></div>
     </div>
   </header>
@@ -137,12 +137,24 @@
 <script>
 const SUPABASE_URL  = "https://hxlzccwqxamtsjrrtcdq.supabase.co";
 const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
-const PROGRAM = '알파';
+const PROG_META = {
+  '알파':{emoji:'🅰️',sub:'알파영어 반 기록'},
+  '문법':{emoji:'📝',sub:'영어도서관 문법 반 기록'},
+  '독해':{emoji:'📖',sub:'독해 반 기록'},
+  '영어도서관':{emoji:'📚',sub:'영어도서관 반 기록'}
+};
+const PROGRAM = (new URLSearchParams(location.search).get('program')) || '알파';
+const META = PROG_META[PROGRAM] || {emoji:'🏫',sub:'반 기록'};
 const ATT = [['present','출석'],['late','지각'],['absent','결석'],['makeup','보강']];
 const DAYS = [['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
 let SB=null, USER=null, TT=[], RTchan=null;
 const $ = s=>document.querySelector(s);
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); }
+function applyMeta(){
+  document.title = `${PROGRAM} 선생님 페이지 · 클라이 어학원`;
+  $('#hubTtl').innerHTML = `${META.emoji} 클라이 어학원 · ${PROGRAM} 선생님<small>실시간 시간표 · 반 기록</small>`;
+  $('#loginTtl').textContent = `${PROGRAM} 선생님 페이지`;
+}
 
 // 데모 폴백 (로그인·DB 없을 때 화면 확인용)
 const DEMO_TT = [
@@ -241,6 +253,7 @@ async function saveLog(){
 function refreshSlot(){ fillTimes(); renderRows(); }
 
 function boot(){
+  applyMeta();
   const today=new Date().toISOString().slice(0,10);
   $('#dateSel').value=today;
   fillDays(); fillTimes(); renderRows();
@@ -255,12 +268,13 @@ function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle(
 // 실시간 구독 — 원장이 시간표 바꾸면 즉시 갱신
 function subscribeTT(){
   if(!SB) return;
-  RTchan = SB.channel('tt-alpha')
+  RTchan = SB.channel('tt-'+PROGRAM)
     .on('postgres_changes',{event:'*',schema:'public',table:'timetable',filter:`program=eq.${PROGRAM}`},
       async()=>{ await loadTT(); refreshSlot(); toast('시간표 갱신됨'); })
     .subscribe();
 }
 
+applyMeta();
 if(!SUPABASE_URL || !SUPABASE_ANON){
   $('#setupBanner').textContent='⚙ 데모 미리보기 — Supabase 연결 시 실제 명단·저장 작동'; $('#setupBanner').classList.remove('hidden');
   loadTT().then(()=>{ boot(); show('dashView'); });

@@ -101,6 +101,21 @@
       </div>
     </div>
 
+    <!-- 전체 수업 한눈에 (그리드) -->
+    <div class="panel" id="ovPanel" style="border-left:4px solid var(--blue)">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:800;color:var(--navy);font-size:15px">🗂️ 전체 수업 · 학생 한눈에</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px">요일 × 시간 그리드. 실시간 시간표 기준.</div>
+        </div>
+        <select id="ovProg" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;background:#fff">
+          <option value="">전체 프로그램</option><option>원어민</option><option>알파</option><option>문법</option><option>독해</option><option>영어도서관</option>
+        </select>
+        <button class="actbtn on" onclick="loadOverview()">🔄 새로고침</button>
+      </div>
+      <div id="ovBody" class="tblwrap" style="font-size:12.5px">로그인 후 표시됩니다.</div>
+    </div>
+
     <!-- 주간 알림 -->
     <div class="panel" id="alertPanel" style="border-left:4px solid var(--red);background:#fff6f6">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -342,6 +357,27 @@ async function saveConsult(row){
 function toggleConsult(){ const b=$('#csBody'), t=$('#csToggle'); const open=b.style.display!=='none'; b.style.display=open?'none':''; t.textContent=open?'펼치기 ▼':'닫기 ▲'; }
 window.loadConsult=loadConsult; window.saveConsult=saveConsult; window.toggleConsult=toggleConsult;
 
+// ── 전체 수업 그리드 (요일×시간, 셀=학생) ──
+const DAYK=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
+async function loadOverview(){
+  if(!SB||!USER) return;
+  let q=SB.from('timetable').select('*').eq('active',true);
+  const prog=$('#ovProg').value; if(prog) q=q.eq('program',prog);
+  const { data, error } = await q.order('time_slot').order('sort');
+  if(error){ $('#ovBody').textContent='로드 실패: '+error.message; return; }
+  if(!data||!data.length){ $('#ovBody').innerHTML='<span style="color:var(--sub)">시간표 없음 — 아래 🗓️ 실시간 시간표에서 배정하세요.</span>'; return; }
+  const times=[...new Set(data.map(r=>r.time_slot))].sort();
+  const cell={}; data.forEach(r=>{ const k=r.time_slot+'|'+r.day; (cell[k]=cell[k]||[]).push(r); });
+  let h='<table class="grid" style="min-width:820px"><thead><tr><th>시간</th>'+DAYK.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>';
+  times.forEach(t=>{ h+=`<tr><td style="font-weight:800;background:var(--soft)">${t}</td>`;
+    DAYK.forEach(([d])=>{ const list=cell[t+'|'+d]||[];
+      h+=`<td style="text-align:left;vertical-align:top;padding:6px">${list.map(r=>`<div>${prog?'':'<b style=color:var(--blue-d)>['+r.program+']</b> '}${r.name_kor} <span style="color:var(--sub)">${r.code}</span></div>`).join('')||'<span style="color:#cbd3e0">-</span>'}</td>`; });
+    h+='</tr>'; });
+  h+='</tbody></table>';
+  $('#ovBody').innerHTML=h;
+}
+window.loadOverview=loadOverview;
+
 // ── 주간 알림 (월~금 · 숙제미완료≥2 or 결석+지각≥1 · 전 프로그램) ──
 function weekBounds(){
   const d=new Date(); const wd=(d.getDay()+6)%7; // 월=0
@@ -411,7 +447,7 @@ else { (async()=>{
       if(!ADMINS.includes((USER.email||'').toLowerCase())){   // 강사 계정 차단(세션은 유지 — 선생님 페이지 쓰게)
         USER=null; show('loginView');
         $('#loginErr').innerHTML='🔒 원장 전용 페이지입니다.<br>강사는 <a href="teacher.html" style="color:var(--blue-d);font-weight:800">선생님 페이지 →</a>'; return; }
-      show('dashView'); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadTT();
+      show('dashView'); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadTT(); loadOverview();
     } else { USER=null; show('loginView'); } }
   $('#loginBtn').onclick = async ()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
@@ -425,6 +461,7 @@ else { (async()=>{
   $('#addBtn').onclick = addStudent;
   $('#tAdd').onclick = addTeacher;
   $('#ttAdd').onclick = ttAdd;
+  $('#ovProg').onchange = loadOverview;
   $('#csPending').onchange = renderConsult;
   $('#csLimit').onchange = renderConsult;
   route();
