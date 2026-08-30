@@ -285,7 +285,7 @@ const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 let SB=null, USER=null, DATA=[];
 const $=s=>document.querySelector(s);
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1600); }
-function show(v){ ['loginView','dashView'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==v)); }
+function show(v){ ['loginView','dashView'].forEach(x=>{ const el=$('#'+x); if(el) el.classList.toggle('hidden',x!==v); }); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 function gotoSec(name){
   document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('hidden', s.dataset.sec!==name));
