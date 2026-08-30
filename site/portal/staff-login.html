@@ -21,12 +21,14 @@
 <body>
   <div class="login">
     <div class="lg">🔐 직원 로그인</div>
-    <div class="ls">원장·강사 공용 계정 — 한 번만 로그인하면 유지됩니다</div>
-    <label>이메일</label>
-    <input id="uid" type="email" autocomplete="username" placeholder="klai.yj.pt@gmail.com" autocapitalize="none">
-    <label>비밀번호</label>
-    <input id="upw" type="password" autocomplete="current-password" placeholder="비밀번호">
-    <button class="btn" id="loginBtn">로그인</button>
+    <div class="ls">원장·강사 계정 — 역할에 맞는 페이지로 이동</div>
+    <form id="lf" action="#" method="post">
+      <label>이메일</label>
+      <input id="uid" name="username" type="email" autocomplete="username" placeholder="klai.yj.pt@gmail.com" autocapitalize="none">
+      <label>비밀번호</label>
+      <input id="upw" name="password" type="password" autocomplete="current-password" placeholder="비밀번호">
+      <button class="btn" id="loginBtn" type="submit">로그인</button>
+    </form>
     <div class="err" id="err"></div>
     <div class="hint" id="hint">확인 중…</div>
   </div>
@@ -54,8 +56,7 @@ function dest(email){
     const { error } = await SB.auth.signInWithPassword({ email:id, password:pw });
     if(error){ $('#err').textContent='이메일 또는 비밀번호가 맞지 않아요.'; return; }
     location.replace(dest(id)); }
-  $('#loginBtn').onclick=go;
-  $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') go(); });
+  $('#lf').addEventListener('submit',e=>{ e.preventDefault(); go(); });
 })();
 </script>
 </body>
