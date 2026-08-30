@@ -1,0 +1,6114 @@
+[
+  {
+    "name_kor": "강승산",
+    "name_en": "Jacob",
+    "code": "9242",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "강승산",
+    "name_en": "Jacob",
+    "code": "9242",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "강승산",
+    "name_en": "Jacob",
+    "code": "9242",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "강승산",
+    "name_en": "Jacob",
+    "code": "9242",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "강하율",
+    "name_en": "Olivia",
+    "code": "8600",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "고경민",
+    "name_en": "Oliver",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "고경민",
+    "name_en": "Oliver",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "고경민",
+    "name_en": "Oliver",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "고다현",
+    "name_en": "Anna",
+    "code": "0839",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원어민(정독/원서)",
+    "day": "tue",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "곽도윤",
+    "name_en": "Steven",
+    "code": "0412",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "곽설아",
+    "name_en": "Leah",
+    "code": "0412",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "곽설아",
+    "name_en": "Leah",
+    "code": "0412",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "곽설아",
+    "name_en": "Leah",
+    "code": "0412",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "곽설아",
+    "name_en": "Leah",
+    "code": "0412",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "곽설아",
+    "name_en": "Leah",
+    "code": "0412",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "곽설아",
+    "name_en": "Leah",
+    "code": "0412",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "구교현",
+    "name_en": "Tommy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "구교현",
+    "name_en": "Tommy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "구교현",
+    "name_en": "Tommy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "구혜진",
+    "name_en": "Anna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "구혜진",
+    "name_en": "Anna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "구혜진",
+    "name_en": "Anna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "구희원",
+    "name_en": "Lily.K",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "구희원",
+    "name_en": "Lily.K",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "구희원",
+    "name_en": "Lily.K",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "권나경",
+    "name_en": "Clara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "권나경",
+    "name_en": "Clara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "권나은",
+    "name_en": "Nadia",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "권나은",
+    "name_en": "Nadia",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "권나은",
+    "name_en": "Nadia",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "권아윤",
+    "name_en": "aylah",
+    "code": "0246",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "권아윤",
+    "name_en": "aylah",
+    "code": "0246",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "권아윤",
+    "name_en": "aylah",
+    "code": "0246",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김가윤",
+    "name_en": "Rosa",
+    "code": "7908",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "김가윤",
+    "name_en": "Rosa",
+    "code": "7908",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "김가윤",
+    "name_en": "Rosa",
+    "code": "7908",
+    "program": "엘리아",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김경현",
+    "name_en": "Lucy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김경현",
+    "name_en": "Lucy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김경현",
+    "name_en": "Lucy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김규림",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김규림",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김규림",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김나빈",
+    "name_en": "Jenny",
+    "code": "70070",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김나연",
+    "name_en": "Sophia",
+    "code": "4003",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김나연",
+    "name_en": "Sophia",
+    "code": "4003",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "김나연",
+    "name_en": "Sophia",
+    "code": "4003",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김나연",
+    "name_en": "Sophia",
+    "code": "4003",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "김나연",
+    "name_en": "Sophia",
+    "code": "4003",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김다희",
+    "name_en": "Dahee",
+    "code": "0671",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김단유",
+    "name_en": "Danyu",
+    "code": "5064",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "김단유",
+    "name_en": "Danyu",
+    "code": "5064",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "김도아",
+    "name_en": "Hera",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김도아",
+    "name_en": "Hera",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김도아",
+    "name_en": "Hera",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김도현",
+    "name_en": "Adrian",
+    "code": "6427",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김도현",
+    "name_en": "Dylan",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김도현",
+    "name_en": "Dylan",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김도현",
+    "name_en": "Dylan",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김도훈",
+    "name_en": "Tony",
+    "code": "8824",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김도희",
+    "name_en": "Ember",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김도희",
+    "name_en": "Ember",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김도희",
+    "name_en": "Ember",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Mason",
+    "code": "1690",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Mason",
+    "code": "1690",
+    "program": "원서(Jinna)",
+    "day": "tue",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Mason",
+    "code": "1690",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Mason",
+    "code": "1690",
+    "program": "원서(Jinna)",
+    "day": "thu",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Mason",
+    "code": "1690",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Mason",
+    "code": "1690",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Eric",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Eric",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김동현",
+    "name_en": "Eric",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김라율",
+    "name_en": "Jane",
+    "code": "6141",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "김라율",
+    "name_en": "Jane",
+    "code": "6141",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김라율",
+    "name_en": "Jane",
+    "code": "6141",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "김라율",
+    "name_en": "Jane",
+    "code": "6141",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김라율",
+    "name_en": "Jane",
+    "code": "6141",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김륜형",
+    "name_en": "Loan",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김륜형",
+    "name_en": "Loan",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김륜형",
+    "name_en": "Loan",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김명준",
+    "name_en": "Jayden",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "김명준",
+    "name_en": "Jayden",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "김명준",
+    "name_en": "Jayden",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "김민겸",
+    "name_en": "Joke",
+    "code": "7908",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "김민겸",
+    "name_en": "Joke",
+    "code": "7908",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "김민성",
+    "name_en": "Ethan",
+    "code": "3633",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "김민성",
+    "name_en": "Ethan",
+    "code": "3633",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "김민성",
+    "name_en": "Ethan",
+    "code": "3633",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "김범준",
+    "name_en": "Jason",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김범준",
+    "name_en": "Jason",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김범준",
+    "name_en": "Jason",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김새이",
+    "name_en": "Lisa",
+    "code": "2454",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "김서우",
+    "name_en": "Seowoo",
+    "code": "5431",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "김서우",
+    "name_en": "Seowoo",
+    "code": "5431",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "김서우",
+    "name_en": "Seowoo",
+    "code": "5431",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "김승유",
+    "name_en": "Billy",
+    "code": "4574",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김승유",
+    "name_en": "Billy",
+    "code": "4574",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김승유",
+    "name_en": "Billy",
+    "code": "4574",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김승유",
+    "name_en": "Billy",
+    "code": "4574",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김승유",
+    "name_en": "Billy",
+    "code": "4574",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김시우",
+    "name_en": "Kao",
+    "code": "",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김아인",
+    "name_en": "Ain",
+    "code": "1657",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "김아인",
+    "name_en": "Ain",
+    "code": "1657",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김아인",
+    "name_en": "Ain",
+    "code": "1657",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "김아인",
+    "name_en": "Ain",
+    "code": "1657",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김아인",
+    "name_en": "Ain",
+    "code": "1657",
+    "program": "엘리아",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김아인",
+    "name_en": "Ain",
+    "code": "1657",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "김예린",
+    "name_en": "Elin",
+    "code": "1136",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "김예린",
+    "name_en": "Elin",
+    "code": "1136",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "김예린",
+    "name_en": "Elin",
+    "code": "1136",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "1:00 ~1:50"
+  },
+  {
+    "name_kor": "김요셉",
+    "name_en": "Joseph",
+    "code": "0626",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김요셉",
+    "name_en": "Joseph",
+    "code": "0626",
+    "program": "엘리아",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김유빈",
+    "name_en": "Cathy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김유빈",
+    "name_en": "Cathy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김유솔",
+    "name_en": "Selena",
+    "code": "8479",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김유솔",
+    "name_en": "Selena",
+    "code": "8479",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김유현",
+    "name_en": "Stella",
+    "code": "6933",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김윤서",
+    "name_en": "Ivy",
+    "code": "3760",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김윤서",
+    "name_en": "Ivy",
+    "code": "3760",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김윤서",
+    "name_en": "Ivy",
+    "code": "3760",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "김윤서",
+    "name_en": "Ivy",
+    "code": "3760",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김윤서",
+    "name_en": "Ivy",
+    "code": "3760",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "김윤서",
+    "name_en": "Ivy",
+    "code": "3760",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김윤우",
+    "name_en": "yoonwoo",
+    "code": "1260",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "김윤우",
+    "name_en": "yoonwoo",
+    "code": "1260",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "김은지",
+    "name_en": "Elena",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "tue",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "김은지",
+    "name_en": "Elena",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "thu",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "김재원",
+    "name_en": "Leo",
+    "code": "4220",
+    "program": "원서(요일반)",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김재원",
+    "name_en": "Leo",
+    "code": "4220",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "김재원",
+    "name_en": "Leo",
+    "code": "4220",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김재원",
+    "name_en": "Leo",
+    "code": "4220",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "김재원",
+    "name_en": "Leo",
+    "code": "4220",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김재원",
+    "name_en": "Leo",
+    "code": "4220",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김재원",
+    "name_en": "Leo",
+    "code": "4220",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "김조이",
+    "name_en": "Zoe",
+    "code": "3734",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김조이",
+    "name_en": "Zoe",
+    "code": "3734",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "김조이",
+    "name_en": "Zoe",
+    "code": "3734",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김지유",
+    "name_en": "Lily",
+    "code": "5719",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "김지유",
+    "name_en": "Joy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김지유",
+    "name_en": "Joy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "김태은",
+    "name_en": "Elena",
+    "code": "5695",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "김태은",
+    "name_en": "Elena",
+    "code": "5695",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "김태은",
+    "name_en": "Elena",
+    "code": "5695",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "김태은",
+    "name_en": "Elena",
+    "code": "5695",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "김태은",
+    "name_en": "Elena",
+    "code": "5695",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김태은",
+    "name_en": "Elena",
+    "code": "5695",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김하율",
+    "name_en": "Jessi",
+    "code": "6141",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김하율",
+    "name_en": "Jessi",
+    "code": "6141",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "김하율",
+    "name_en": "Jessi",
+    "code": "6141",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "김호윤",
+    "name_en": "Bellamy",
+    "code": "7054",
+    "program": "원어민(정독/원서)",
+    "day": "tue",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김호윤",
+    "name_en": "Bellamy",
+    "code": "7054",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김효재",
+    "name_en": "Olivia",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김효재",
+    "name_en": "Olivia",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "김효재",
+    "name_en": "Olivia",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "나이림",
+    "name_en": "Ellie",
+    "code": "0804",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "나이림",
+    "name_en": "Ellie",
+    "code": "0804",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "나이림",
+    "name_en": "Ellie",
+    "code": "0804",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "나이림",
+    "name_en": "Ellie",
+    "code": "0804",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "남수호",
+    "name_en": "Felix",
+    "code": "4827",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "남현호",
+    "name_en": "Andrew",
+    "code": "4827",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "남현호",
+    "name_en": "Andrew",
+    "code": "4827",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "남현호",
+    "name_en": "Andrew",
+    "code": "4827",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "노범준",
+    "name_en": "Rickey",
+    "code": "7794",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "노영주",
+    "name_en": "Anna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "노영주",
+    "name_en": "Anna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "류가현",
+    "name_en": "Sara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "류가현",
+    "name_en": "Sara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "류가현",
+    "name_en": "Sara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박건하",
+    "name_en": "Henry",
+    "code": "4770",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "박건하",
+    "name_en": "Henry",
+    "code": "4770",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "박건하",
+    "name_en": "Henry",
+    "code": "4770",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "박건하",
+    "name_en": "Henry",
+    "code": "4770",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "박건하",
+    "name_en": "Henry",
+    "code": "4770",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "박건하",
+    "name_en": "Henry",
+    "code": "4770",
+    "program": "원서(요일반)",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "박다솜",
+    "name_en": "Elena",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "박다솜",
+    "name_en": "Elena",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "박다솜",
+    "name_en": "Elena",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "박도준",
+    "name_en": "Jun",
+    "code": "2503",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "박도준",
+    "name_en": "Jun",
+    "code": "2503",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "박도준",
+    "name_en": "Jun",
+    "code": "2503",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "박도준",
+    "name_en": "Jun",
+    "code": "2503",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "박도준",
+    "name_en": "Jun",
+    "code": "2503",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박도준",
+    "name_en": "Jun",
+    "code": "2503",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "박서윤",
+    "name_en": "Rosa",
+    "code": "1431",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박서윤",
+    "name_en": "Rosa",
+    "code": "1431",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박서윤",
+    "name_en": "Rosa",
+    "code": "1431",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박서현",
+    "name_en": "Lily",
+    "code": "3834",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박선주",
+    "name_en": "Olivia",
+    "code": "3759",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박성하",
+    "name_en": "Kenneth",
+    "code": "3440",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박성하",
+    "name_en": "Kenneth",
+    "code": "3440",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박성하",
+    "name_en": "Kenneth",
+    "code": "3440",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박소정",
+    "name_en": "Emily",
+    "code": "3759",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박시우",
+    "name_en": "Sydney",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "박시우",
+    "name_en": "Sydney",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "박시우",
+    "name_en": "Sydney",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "박시윤",
+    "name_en": "Lucas",
+    "code": "9257",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박시윤",
+    "name_en": "Lucas",
+    "code": "9257",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "박시윤",
+    "name_en": "Lucas",
+    "code": "9257",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "1:00 ~1:50"
+  },
+  {
+    "name_kor": "박정음",
+    "name_en": "Daisy",
+    "code": "4270",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "박정음",
+    "name_en": "Daisy",
+    "code": "4270",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "박정음",
+    "name_en": "Daisy",
+    "code": "4270",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "박정음",
+    "name_en": "Daisy",
+    "code": "4270",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "박정음",
+    "name_en": "Daisy",
+    "code": "4270",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박정음",
+    "name_en": "Daisy",
+    "code": "4270",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "박지오",
+    "name_en": "Tyler",
+    "code": "1114",
+    "program": "원서(요일반)",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "박지오",
+    "name_en": "Tyler",
+    "code": "1114",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박지오",
+    "name_en": "Tyler",
+    "code": "1114",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박지인",
+    "name_en": "Amy",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박지인",
+    "name_en": "Amy",
+    "code": "",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "박지인",
+    "name_en": "Amy",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박지인",
+    "name_en": "Amy",
+    "code": "",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "박지현",
+    "name_en": "Rachel",
+    "code": "1114",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박지현",
+    "name_en": "Rachel",
+    "code": "1114",
+    "program": "원서(요일반)",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "박찬비",
+    "name_en": "Lora",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박찬비",
+    "name_en": "Lora",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박찬비",
+    "name_en": "Lora",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박채연",
+    "name_en": "Celina",
+    "code": "0091",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "박채연",
+    "name_en": "Celina",
+    "code": "0091",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "박하연",
+    "name_en": "Lily.p",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박하연",
+    "name_en": "Lily.p",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박하연",
+    "name_en": "Lily.p",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "박하율",
+    "name_en": "Lisa",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "박하율",
+    "name_en": "Lisa",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "반시후",
+    "name_en": "Ben",
+    "code": "0618",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "반시후",
+    "name_en": "Ben",
+    "code": "0618",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "반시후",
+    "name_en": "Ben",
+    "code": "0618",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "방서현",
+    "name_en": "Ellie",
+    "code": "9572",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "방서현",
+    "name_en": "Ellie",
+    "code": "9572",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "방서현",
+    "name_en": "Ellie",
+    "code": "9572",
+    "program": "원어민(정독/원서)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "방서현",
+    "name_en": "Ellie",
+    "code": "9572",
+    "program": "원서(요일반)",
+    "day": "tue",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "방서현",
+    "name_en": "Ellie",
+    "code": "9572",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "방서현",
+    "name_en": "Ellie",
+    "code": "9572",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "방성준",
+    "name_en": "aiden",
+    "code": "9572",
+    "program": "원어민(정독/원서)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "배우리",
+    "name_en": "Billy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "배우리",
+    "name_en": "Billy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "배우리",
+    "name_en": "Billy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "백서현",
+    "name_en": "Shawn",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "백서현",
+    "name_en": "Shawn",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "백서현",
+    "name_en": "Shawn",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원서(요일반)",
+    "day": "wed",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "서승우",
+    "name_en": "Ethan",
+    "code": "5978",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "서예인",
+    "name_en": "Amber",
+    "code": "6691",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "서예인",
+    "name_en": "Amber",
+    "code": "6691",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "서예인",
+    "name_en": "Amber",
+    "code": "6691",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "서윤아",
+    "name_en": "Yoona",
+    "code": "4040",
+    "program": "원어민(정독/원서)",
+    "day": "tue",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "서지우",
+    "name_en": "Lucas",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "서지우",
+    "name_en": "Lucas",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "서지율",
+    "name_en": "Jiyul",
+    "code": "7859",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "서지율",
+    "name_en": "Jiyul",
+    "code": "7859",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "서하린",
+    "name_en": "Ruby",
+    "code": "2810",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "서하린",
+    "name_en": "Ruby",
+    "code": "2810",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "서하린",
+    "name_en": "Ruby",
+    "code": "2810",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "서하린",
+    "name_en": "Ruby",
+    "code": "2810",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "서하린",
+    "name_en": "Ruby",
+    "code": "2810",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "성유나",
+    "name_en": "Ella",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "성유나",
+    "name_en": "Ella",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "성유나",
+    "name_en": "Ella",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "성혜은",
+    "name_en": "Judy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "성혜은",
+    "name_en": "Judy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "성혜은",
+    "name_en": "Judy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "송율건",
+    "name_en": "Noah",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "송율건",
+    "name_en": "Noah",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "송율건",
+    "name_en": "Noah",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "송주환",
+    "name_en": "Henry",
+    "code": "3309",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "송주환",
+    "name_en": "Henry",
+    "code": "3309",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "송주환",
+    "name_en": "Henry",
+    "code": "3309",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "송주환",
+    "name_en": "Henry",
+    "code": "3309",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "송주환",
+    "name_en": "Henry",
+    "code": "3309",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "송지윤",
+    "name_en": "Olivia",
+    "code": "5818",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "송지윤",
+    "name_en": "Olivia",
+    "code": "5818",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "송지윤",
+    "name_en": "Olivia",
+    "code": "5818",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "송지윤",
+    "name_en": "Olivia",
+    "code": "5818",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Audrey",
+    "code": "4404",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Audrey",
+    "code": "4404",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Audrey",
+    "code": "4404",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Audrey",
+    "code": "4404",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Audrey",
+    "code": "4404",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Audrey",
+    "code": "4404",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Audrey",
+    "code": "4404",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Clare",
+    "code": "5818",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Clare",
+    "code": "5818",
+    "program": "원서(요일반)",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Clare",
+    "code": "5818",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Clare",
+    "code": "5818",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Clare",
+    "code": "5818",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "송채윤",
+    "name_en": "Clare",
+    "code": "5818",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "송태환",
+    "name_en": "Andy",
+    "code": "3309",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "송태환",
+    "name_en": "Andy",
+    "code": "3309",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "송태환",
+    "name_en": "Andy",
+    "code": "3309",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "송태환",
+    "name_en": "Andy",
+    "code": "3309",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "송태환",
+    "name_en": "Andy",
+    "code": "3309",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "송하율",
+    "name_en": "Luke",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "송하율",
+    "name_en": "Luke",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "송하율",
+    "name_en": "Luke",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "신가은",
+    "name_en": "Lucy",
+    "code": "2769",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "신가은",
+    "name_en": "Lucy",
+    "code": "2769",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "신가은",
+    "name_en": "Lucy",
+    "code": "2769",
+    "program": "원서(요일반)",
+    "day": "wed",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "신승현",
+    "name_en": "Evan",
+    "code": "6812",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "신승현",
+    "name_en": "Evan",
+    "code": "6812",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "신승현",
+    "name_en": "Evan",
+    "code": "6812",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "신승현",
+    "name_en": "Evan",
+    "code": "6812",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "신승현",
+    "name_en": "Evan",
+    "code": "6812",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "신승현",
+    "name_en": "Evan",
+    "code": "6812",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "심근호",
+    "name_en": "Greg",
+    "code": "3862",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "심근호",
+    "name_en": "Greg",
+    "code": "3862",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "심근호",
+    "name_en": "Greg",
+    "code": "3862",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "심근호",
+    "name_en": "Greg",
+    "code": "3862",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "심근호",
+    "name_en": "Greg",
+    "code": "3862",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "심근호",
+    "name_en": "Greg",
+    "code": "3862",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "심수연",
+    "name_en": "Jenny",
+    "code": "3862",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "심수연",
+    "name_en": "Jenny",
+    "code": "3862",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "심수연",
+    "name_en": "Jenny",
+    "code": "3862",
+    "program": "원서(요일반)",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "심수연",
+    "name_en": "Jenny",
+    "code": "3862",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "안은노",
+    "name_en": "Noah",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "안은노",
+    "name_en": "Noah",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "안은노",
+    "name_en": "Noah",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "연진서",
+    "name_en": "Jennie",
+    "code": "4176",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "연진서",
+    "name_en": "Jennie",
+    "code": "4176",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "오서연",
+    "name_en": "Lucy",
+    "code": "7857",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "오서연",
+    "name_en": "Lucy",
+    "code": "7857",
+    "program": "원서(요일반)",
+    "day": "tue",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "오서연",
+    "name_en": "Lucy",
+    "code": "7857",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "오서연",
+    "name_en": "Lucy",
+    "code": "7857",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "오예준",
+    "name_en": "Jude",
+    "code": "0911",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "오예준",
+    "name_en": "Jude",
+    "code": "0911",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "오해솔",
+    "name_en": "Chloe",
+    "code": "4784",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "오해솔",
+    "name_en": "Chloe",
+    "code": "4784",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "오해솔",
+    "name_en": "Chloe",
+    "code": "4784",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "오해솔",
+    "name_en": "Chloe",
+    "code": "4784",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "오해솔",
+    "name_en": "Chloe",
+    "code": "4784",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "오해솔",
+    "name_en": "Chloe",
+    "code": "4784",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "우다은",
+    "name_en": "Daisy",
+    "code": "0714",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "우다은",
+    "name_en": "Daisy",
+    "code": "0714",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "우다은",
+    "name_en": "Daisy",
+    "code": "0714",
+    "program": "엘리아",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "우상은",
+    "name_en": "Sophia",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "우상은",
+    "name_en": "Sophia",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "우상은",
+    "name_en": "Sophia",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "우소율",
+    "name_en": "Sophia",
+    "code": "4520",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "우소율",
+    "name_en": "Sophia",
+    "code": "4520",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "우소율",
+    "name_en": "Sophia",
+    "code": "4520",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "우소율",
+    "name_en": "Sophia",
+    "code": "4520",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "우소율",
+    "name_en": "Sophia",
+    "code": "4520",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "우소율",
+    "name_en": "Sophia",
+    "code": "4520",
+    "program": "원서(요일반)",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "우하율",
+    "name_en": "Andy",
+    "code": "4520",
+    "program": "원서(요일반)",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "우하율",
+    "name_en": "Andy",
+    "code": "4520",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "우하율",
+    "name_en": "Andy",
+    "code": "4520",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "우하율",
+    "name_en": "Andy",
+    "code": "4520",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "우하율",
+    "name_en": "Andy",
+    "code": "4520",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "우하율",
+    "name_en": "Andy",
+    "code": "4520",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "우하율",
+    "name_en": "Andy",
+    "code": "4520",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "유길태",
+    "name_en": "John",
+    "code": "8607",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "유나린",
+    "name_en": "Kaylee",
+    "code": "3976",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "유정현",
+    "name_en": "Alex",
+    "code": "8607",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "유정현",
+    "name_en": "Alex",
+    "code": "8607",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "유정현",
+    "name_en": "Alex",
+    "code": "8607",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "유정현",
+    "name_en": "Alex",
+    "code": "8607",
+    "program": "원서(요일반)",
+    "day": "wed",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "유정현",
+    "name_en": "Alex",
+    "code": "8607",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "유정현",
+    "name_en": "Alex",
+    "code": "8607",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "유지우",
+    "name_en": "Henry",
+    "code": "9893",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "유지우",
+    "name_en": "Henry",
+    "code": "9893",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "유지우",
+    "name_en": "Henry",
+    "code": "9893",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "유지우",
+    "name_en": "Henry",
+    "code": "9893",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "유태호",
+    "name_en": "Albert",
+    "code": "5617",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "윤성열",
+    "name_en": "Cooper",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "tue",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "윤성열",
+    "name_en": "Cooper",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "thu",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "윤지민",
+    "name_en": "Mia",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "윤지민",
+    "name_en": "Mia",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "윤지민",
+    "name_en": "Mia",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "윤채원",
+    "name_en": "yuncw",
+    "code": "4359",
+    "program": "엘리아",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "윤채원",
+    "name_en": "yuncw",
+    "code": "4359",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "윤채원",
+    "name_en": "yuncw",
+    "code": "4359",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "윤채원",
+    "name_en": "yuncw",
+    "code": "4359",
+    "program": "엘리아",
+    "day": "wed",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "윤채원",
+    "name_en": "yuncw",
+    "code": "4359",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "윤채원",
+    "name_en": "yuncw",
+    "code": "4359",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "윤희경",
+    "name_en": "Crystal",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "윤희경",
+    "name_en": "Crystal",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "윤희경",
+    "name_en": "Crystal",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이가은",
+    "name_en": "Celine",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이가은",
+    "name_en": "Celine",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이규은",
+    "name_en": "Ellie",
+    "code": "4004",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "이규은",
+    "name_en": "Ellie",
+    "code": "4004",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "이규은",
+    "name_en": "Ellie",
+    "code": "4004",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "이규은",
+    "name_en": "Ellie",
+    "code": "4004",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "이규은",
+    "name_en": "Ellie",
+    "code": "4004",
+    "program": "원서(요일반)",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이규은",
+    "name_en": "Ellie",
+    "code": "4004",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이규현",
+    "name_en": "Roy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이규현",
+    "name_en": "Roy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이규현",
+    "name_en": "Roy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이기원",
+    "name_en": "giwon",
+    "code": "0814",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이기원",
+    "name_en": "giwon",
+    "code": "0814",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이나현",
+    "name_en": "Luna",
+    "code": "7572",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이나현",
+    "name_en": "Luna",
+    "code": "7572",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이나현",
+    "name_en": "Luna",
+    "code": "7572",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이나현",
+    "name_en": "Luna",
+    "code": "1179",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이나현",
+    "name_en": "Luna",
+    "code": "1179",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이나현",
+    "name_en": "Luna",
+    "code": "1179",
+    "program": "엘리아",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이다연",
+    "name_en": "Danna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이다연",
+    "name_en": "Danna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이다연",
+    "name_en": "Danna",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이도연",
+    "name_en": "Jenny",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이도연",
+    "name_en": "Jenny",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이도연",
+    "name_en": "Jenny",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이도윤",
+    "name_en": "joy",
+    "code": "8294",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이도윤",
+    "name_en": "joy",
+    "code": "8294",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이동규",
+    "name_en": "Patrick",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이동규",
+    "name_en": "Patrick",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이동규",
+    "name_en": "Patrick",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이동준",
+    "name_en": "John",
+    "code": "7716",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이동준",
+    "name_en": "John",
+    "code": "7716",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이동준",
+    "name_en": "John",
+    "code": "7716",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이동준",
+    "name_en": "John",
+    "code": "7716",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이동준",
+    "name_en": "John",
+    "code": "7716",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이동진",
+    "name_en": "Jack",
+    "code": "7716",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이동진",
+    "name_en": "Jack",
+    "code": "7716",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이동진",
+    "name_en": "Jack",
+    "code": "7716",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이동진",
+    "name_en": "Jack",
+    "code": "7716",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이동진",
+    "name_en": "Jack",
+    "code": "7716",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이레아",
+    "name_en": "Leah",
+    "code": "8831",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이레아",
+    "name_en": "Leah",
+    "code": "8831",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이레아",
+    "name_en": "Leah",
+    "code": "8831",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이로운",
+    "name_en": "Evan",
+    "code": "1891",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "이로운",
+    "name_en": "Evan",
+    "code": "1891",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "이로운",
+    "name_en": "Evan",
+    "code": "1891",
+    "program": "원서(요일반)",
+    "day": "wed",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이로운",
+    "name_en": "Evan",
+    "code": "1891",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "이로운",
+    "name_en": "Evan",
+    "code": "1891",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "이루하",
+    "name_en": "Ella",
+    "code": "1465",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이루하",
+    "name_en": "Ella",
+    "code": "1465",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이루하",
+    "name_en": "Ella",
+    "code": "1465",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이루하",
+    "name_en": "Ella",
+    "code": "1465",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이민수",
+    "name_en": "Daniel.L",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이민수",
+    "name_en": "Daniel.L",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이민수",
+    "name_en": "Daniel.L",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이서안",
+    "name_en": "Luna",
+    "code": "7204",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이서안",
+    "name_en": "Luna",
+    "code": "7204",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이서안",
+    "name_en": "Luna",
+    "code": "7204",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "1:00 ~1:50"
+  },
+  {
+    "name_kor": "이서준",
+    "name_en": "Leo",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이서준",
+    "name_en": "Leo",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이서준",
+    "name_en": "Leo",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "이세아",
+    "name_en": "Sarah",
+    "code": "8294",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이세아",
+    "name_en": "Sarah",
+    "code": "8294",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이세아",
+    "name_en": "Sarah",
+    "code": "8294",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이세아",
+    "name_en": "Sarah",
+    "code": "8294",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이세아",
+    "name_en": "Sarah",
+    "code": "8294",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이세아",
+    "name_en": "Sarah",
+    "code": "8294",
+    "program": "엘리아",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이수아",
+    "name_en": "Stella",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이수아",
+    "name_en": "Stella",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이수호",
+    "name_en": "Owen",
+    "code": "7493",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이수호",
+    "name_en": "Owen",
+    "code": "7493",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이수호",
+    "name_en": "Owen",
+    "code": "7493",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "이승연",
+    "name_en": "Jessica",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이승연",
+    "name_en": "Jessica",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이승연",
+    "name_en": "Jessica",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이승찬",
+    "name_en": "Paul",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이승찬",
+    "name_en": "Paul",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이승찬",
+    "name_en": "Paul",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "이시우",
+    "name_en": "Pete",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이시우",
+    "name_en": "Pete",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이시우",
+    "name_en": "Pete",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이시호",
+    "name_en": "Lydia",
+    "code": "7181",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이시훈",
+    "name_en": "sihoon",
+    "code": "4865",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이시훈",
+    "name_en": "sihoon",
+    "code": "4865",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이연서",
+    "name_en": "Leanna",
+    "code": "4217",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이연서",
+    "name_en": "Leanna",
+    "code": "4217",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이연서",
+    "name_en": "Leanna",
+    "code": "4217",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이연서",
+    "name_en": "Leanna",
+    "code": "4217",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "이연서",
+    "name_en": "Leanna",
+    "code": "4217",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이연서",
+    "name_en": "Leanna",
+    "code": "4217",
+    "program": "엘리아",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이윤송",
+    "name_en": "Jack",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이윤송",
+    "name_en": "Jack",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이윤송",
+    "name_en": "Jack",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이율원",
+    "name_en": "Willian",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이율원",
+    "name_en": "Willian",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이율원",
+    "name_en": "Willian",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이주아",
+    "name_en": "Rosa",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이주아",
+    "name_en": "Rosa",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이주아",
+    "name_en": "Rosa",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이준규",
+    "name_en": "Harry",
+    "code": "4004",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "이준규",
+    "name_en": "Harry",
+    "code": "4004",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "이준규",
+    "name_en": "Harry",
+    "code": "4004",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "이준규",
+    "name_en": "Harry",
+    "code": "4004",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "이준규",
+    "name_en": "Harry",
+    "code": "4004",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "이준규",
+    "name_en": "Harry",
+    "code": "4004",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이준석",
+    "name_en": "June",
+    "code": "6155",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "이준석",
+    "name_en": "June",
+    "code": "6155",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "이준석",
+    "name_en": "June",
+    "code": "6155",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이준석",
+    "name_en": "June",
+    "code": "16155",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "이준석",
+    "name_en": "June",
+    "code": "16155",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "이준석",
+    "name_en": "June",
+    "code": "16155",
+    "program": "원서(요일반)",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이준표",
+    "name_en": "June",
+    "code": "0112",
+    "program": "원어민(정독/원서)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "이진우",
+    "name_en": "Jack",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이진우",
+    "name_en": "Jack",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이진우",
+    "name_en": "Jack",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이채연",
+    "name_en": "Ella",
+    "code": "6155",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "이채연",
+    "name_en": "Ella",
+    "code": "6155",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "이채연",
+    "name_en": "Ella",
+    "code": "6155",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "이채연",
+    "name_en": "Ella",
+    "code": "6155",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "이채연",
+    "name_en": "Ella",
+    "code": "6155",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "이채연",
+    "name_en": "Ella",
+    "code": "6155",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "이해인",
+    "name_en": "Stella",
+    "code": "8514",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이해인",
+    "name_en": "Stella",
+    "code": "8514",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이해인",
+    "name_en": "Stella",
+    "code": "8514",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "이현경",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "이현경",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "이현경",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "이현서",
+    "name_en": "Hailey",
+    "code": "6004",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "이현서",
+    "name_en": "Hailey",
+    "code": "6004",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "임규민",
+    "name_en": "Dave",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "임규민",
+    "name_en": "Dave",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "임우빈",
+    "name_en": "Jaden",
+    "code": "4701",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "임우빈",
+    "name_en": "Jaden",
+    "code": "4701",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "임우빈",
+    "name_en": "Jaden",
+    "code": "4701",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "임재윤",
+    "name_en": "Jake",
+    "code": "8927",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "임재윤",
+    "name_en": "Jake",
+    "code": "8927",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "임재윤",
+    "name_en": "Jake",
+    "code": "8927",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "임채민",
+    "name_en": "Cherry",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "임채민",
+    "name_en": "Cherry",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "임채아",
+    "name_en": "Liz",
+    "code": "8017",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "임채아",
+    "name_en": "Liz",
+    "code": "8017",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "임채아",
+    "name_en": "Liz",
+    "code": "8017",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "임채아",
+    "name_en": "Liz",
+    "code": "8017",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "임채아",
+    "name_en": "Liz",
+    "code": "8017",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "임채아",
+    "name_en": "Liz",
+    "code": "8017",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "임채우",
+    "name_en": "Hero",
+    "code": "8017",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "임채우",
+    "name_en": "Hero",
+    "code": "8017",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "임채우",
+    "name_en": "Hero",
+    "code": "8017",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "임채우",
+    "name_en": "Hero",
+    "code": "8017",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "장범준",
+    "name_en": "Jayden",
+    "code": "3518",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "장범준",
+    "name_en": "Jayden",
+    "code": "3518",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "장범준",
+    "name_en": "Jayden",
+    "code": "3518",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "장범준",
+    "name_en": "Jayden",
+    "code": "3518",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "장범준",
+    "name_en": "Jayden",
+    "code": "3518",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "장범준",
+    "name_en": "Jayden",
+    "code": "3518",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "장서준",
+    "name_en": "Daniel",
+    "code": "6338",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "장서준",
+    "name_en": "Daniel",
+    "code": "6338",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "장시완",
+    "name_en": "David",
+    "code": "5322",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "장시완",
+    "name_en": "David",
+    "code": "5322",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "장시완",
+    "name_en": "David",
+    "code": "5322",
+    "program": "원서(요일반)",
+    "day": "tue",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "장시완",
+    "name_en": "David",
+    "code": "5322",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "장시완",
+    "name_en": "David",
+    "code": "5322",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "장시완",
+    "name_en": "David",
+    "code": "5322",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "장시우",
+    "name_en": "Antony",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "장시우",
+    "name_en": "Antony",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "장시우",
+    "name_en": "Antony",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "장준혁",
+    "name_en": "James",
+    "code": "4260",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "장효우",
+    "name_en": "Cindy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "장효우",
+    "name_en": "Cindy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "장효우",
+    "name_en": "Cindy",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "전다은",
+    "name_en": "Elly",
+    "code": "9949",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "전다은",
+    "name_en": "Elly",
+    "code": "9949",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "전다은",
+    "name_en": "Elly",
+    "code": "9949",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "전다은",
+    "name_en": "Elly",
+    "code": "9949",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "전다은",
+    "name_en": "Elly",
+    "code": "9949",
+    "program": "엘리아",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "전다은",
+    "name_en": "Elly",
+    "code": "9949",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "전승후",
+    "name_en": "Jace",
+    "code": "1966",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "전호영",
+    "name_en": "Kevin",
+    "code": "9949",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "전호영",
+    "name_en": "Kevin",
+    "code": "9949",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "전호영",
+    "name_en": "Kevin",
+    "code": "9949",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "전호영",
+    "name_en": "Kevin",
+    "code": "9949",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "정민준",
+    "name_en": "Matthew",
+    "code": "8825",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정성훈",
+    "name_en": "Leo",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "정성훈",
+    "name_en": "Leo",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "정성훈",
+    "name_en": "Leo",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "정수빈",
+    "name_en": "Becky",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "정수빈",
+    "name_en": "Becky",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "정수빈",
+    "name_en": "Becky",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "6:10"
+  },
+  {
+    "name_kor": "정수현",
+    "name_en": "Sara",
+    "code": "6080",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "정수현",
+    "name_en": "Sara",
+    "code": "6080",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "정승래",
+    "name_en": "Lucas",
+    "code": "5895",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "정승래",
+    "name_en": "Lucas",
+    "code": "5895",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "정승래",
+    "name_en": "Lucas",
+    "code": "5895",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정승래",
+    "name_en": "Lucas",
+    "code": "5895",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "정예립",
+    "name_en": "Jayden",
+    "code": "8478",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "정예립",
+    "name_en": "Jayden",
+    "code": "8478",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "정예립",
+    "name_en": "Jayden",
+    "code": "8478",
+    "program": "원서(요일반)",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "정예립",
+    "name_en": "Jayden",
+    "code": "8478",
+    "program": "원어민(정독/원서)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "정예립",
+    "name_en": "Jayden",
+    "code": "8478",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "정예립",
+    "name_en": "Jayden",
+    "code": "8478",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "정예은",
+    "name_en": "Julia",
+    "code": "4925",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "정예은",
+    "name_en": "Julia",
+    "code": "4925",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "정예은",
+    "name_en": "Julia",
+    "code": "4925",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "정예은",
+    "name_en": "Julia",
+    "code": "4925",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "정예은",
+    "name_en": "Julia",
+    "code": "4925",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "정예은",
+    "name_en": "Julia",
+    "code": "4925",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "정은휼",
+    "name_en": "Lucy",
+    "code": "8478",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "정은휼",
+    "name_en": "Lucy",
+    "code": "8478",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "정은휼",
+    "name_en": "Lucy",
+    "code": "8478",
+    "program": "원어민(정독/원서)",
+    "day": "tue",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "정은휼",
+    "name_en": "Lucy",
+    "code": "8478",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "정은휼",
+    "name_en": "Lucy",
+    "code": "8478",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "정은휼",
+    "name_en": "Lucy",
+    "code": "8478",
+    "program": "원서(요일반)",
+    "day": "wed",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "정은휼",
+    "name_en": "Lucy",
+    "code": "8478",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "정지원",
+    "name_en": "Ella",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정지원",
+    "name_en": "Ella",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정지원",
+    "name_en": "Ella",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정채원",
+    "name_en": "Emily",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정채원",
+    "name_en": "Emily",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정채원",
+    "name_en": "Emily",
+    "code": "",
+    "program": "원서(Jinna)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원서(요일반)",
+    "day": "thu",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "정혜인",
+    "name_en": "Bona",
+    "code": "1298",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "조민서",
+    "name_en": "Sunny",
+    "code": "2337",
+    "program": "엘리아",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "조민서",
+    "name_en": "Sunny",
+    "code": "2337",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "조민서",
+    "name_en": "Sunny",
+    "code": "2337",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "조민서",
+    "name_en": "Sunny",
+    "code": "2337",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "조민서",
+    "name_en": "Sunny",
+    "code": "2337",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "조민서",
+    "name_en": "Sunny",
+    "code": "2337",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "조민성",
+    "name_en": "Daniel",
+    "code": "5874",
+    "program": "엘리아",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "조민성",
+    "name_en": "Daniel",
+    "code": "5874",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "조민성",
+    "name_en": "Daniel",
+    "code": "5874",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "조민성",
+    "name_en": "Daniel",
+    "code": "5874",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "조민성",
+    "name_en": "Daniel",
+    "code": "5874",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "조서희",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "조서희",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "조서희",
+    "name_en": "Daisy",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "조성원",
+    "name_en": "Zayden",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "tue",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "조성원",
+    "name_en": "Zayden",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "thu",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "조성현",
+    "name_en": "Joseph",
+    "code": "5524",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "조성현",
+    "name_en": "Joseph",
+    "code": "5524",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "조성현",
+    "name_en": "Joseph",
+    "code": "5524",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "조성현",
+    "name_en": "Joseph",
+    "code": "5524",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "조정우",
+    "name_en": "Alex",
+    "code": "90401",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "조정우",
+    "name_en": "Alex",
+    "code": "90401",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "지우림",
+    "name_en": "William",
+    "code": "1206",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "지우림",
+    "name_en": "William",
+    "code": "1206",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "지우림",
+    "name_en": "William",
+    "code": "1206",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "지이룸",
+    "name_en": "Aiden",
+    "code": "1206",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "지이룸",
+    "name_en": "Aiden",
+    "code": "1206",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "지이룸",
+    "name_en": "Aiden",
+    "code": "1206",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "지이룸",
+    "name_en": "Aiden",
+    "code": "1206",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "지이룸",
+    "name_en": "Aiden",
+    "code": "1206",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "지효린",
+    "name_en": "Sophia",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "지효린",
+    "name_en": "Sophia",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "지효준",
+    "name_en": "Mateo",
+    "code": "9987",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "지효준",
+    "name_en": "Mateo",
+    "code": "9987",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "지효준",
+    "name_en": "Mateo",
+    "code": "9987",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "지효준",
+    "name_en": "Mateo",
+    "code": "9987",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "지효준",
+    "name_en": "Mateo",
+    "code": "9987",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "진수현",
+    "name_en": "Ryan",
+    "code": "1400",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "차서연",
+    "name_en": "Isabel",
+    "code": "1220",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "차서연",
+    "name_en": "Isabel",
+    "code": "1220",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "차서연",
+    "name_en": "Isabel",
+    "code": "1220",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "차서연",
+    "name_en": "Isabel",
+    "code": "1220",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "차서연",
+    "name_en": "Isabel",
+    "code": "1220",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "차서은",
+    "name_en": "Amy",
+    "code": "1220",
+    "program": "원어민 class2(Rosemary)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "차서은",
+    "name_en": "Amy",
+    "code": "1220",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "차서은",
+    "name_en": "Amy",
+    "code": "1220",
+    "program": "원어민 class2(Rosemary)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "차서은",
+    "name_en": "Amy",
+    "code": "1220",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "차서은",
+    "name_en": "Amy",
+    "code": "1220",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "차연서",
+    "name_en": "Emma",
+    "code": "5549",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "차연서",
+    "name_en": "Emma",
+    "code": "5549",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "15:10-16:00"
+  },
+  {
+    "name_kor": "차연서",
+    "name_en": "Emma",
+    "code": "5549",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "차연서",
+    "name_en": "Emma",
+    "code": "5549",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "최다솜",
+    "name_en": "Cara",
+    "code": "6753",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "최다솜",
+    "name_en": "Cara",
+    "code": "6753",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "최다솜",
+    "name_en": "Cara",
+    "code": "6753",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "최서우",
+    "name_en": "Sara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "최서우",
+    "name_en": "Sara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "최서우",
+    "name_en": "Sara",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "최유준",
+    "name_en": "Joshua",
+    "code": "4235",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최준수",
+    "name_en": "Junsoo",
+    "code": "7765",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "최준수",
+    "name_en": "Junsoo",
+    "code": "7765",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "최준수",
+    "name_en": "Junsoo",
+    "code": "7765",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "최준수",
+    "name_en": "Junsoo",
+    "code": "7765",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "최준수",
+    "name_en": "Junsoo",
+    "code": "7765",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "최준수",
+    "name_en": "Junsoo",
+    "code": "7765",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "최준호",
+    "name_en": "Junho",
+    "code": "7765",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "최준호",
+    "name_en": "Junho",
+    "code": "7765",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "최준호",
+    "name_en": "Junho",
+    "code": "7765",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "최준호",
+    "name_en": "Junho",
+    "code": "7765",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "최준호",
+    "name_en": "Junho",
+    "code": "7765",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최준호",
+    "name_en": "Junho",
+    "code": "7765",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "최지안",
+    "name_en": "Aaron",
+    "code": "3451",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "최지운",
+    "name_en": "Aiden",
+    "code": "4404",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "최지운",
+    "name_en": "Aiden",
+    "code": "4404",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "최지운",
+    "name_en": "Aiden",
+    "code": "4404",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "최지운",
+    "name_en": "Aiden",
+    "code": "4404",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "최지운",
+    "name_en": "Aiden",
+    "code": "4404",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "최지운",
+    "name_en": "Aiden",
+    "code": "4404",
+    "program": "원서(요일반)",
+    "day": "fri",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "최지유",
+    "name_en": "Cindy",
+    "code": "4405",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최지유",
+    "name_en": "Cindy",
+    "code": "4405",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최지유",
+    "name_en": "Cindy",
+    "code": "4405",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최지유",
+    "name_en": "Cindy",
+    "code": "4405",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최지유",
+    "name_en": "Cindy",
+    "code": "4405",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최지유",
+    "name_en": "Cindy",
+    "code": "4405",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최지유",
+    "name_en": "Cindy",
+    "code": "4405",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최지윤",
+    "name_en": "Jessi",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "mon",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "최지윤",
+    "name_en": "Jessi",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "wed",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "최지윤",
+    "name_en": "Jessi",
+    "code": "",
+    "program": "원서(Diana)",
+    "day": "fri",
+    "time_slot": "5:10"
+  },
+  {
+    "name_kor": "최현준",
+    "name_en": "Jay",
+    "code": "3433",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최현준",
+    "name_en": "Jay",
+    "code": "3433",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최현준",
+    "name_en": "Jay",
+    "code": "3433",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최효원",
+    "name_en": "Jenny",
+    "code": "8375",
+    "program": "원서(Nicole)",
+    "day": "mon",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최효원",
+    "name_en": "Jenny",
+    "code": "8375",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최효원",
+    "name_en": "Jenny",
+    "code": "8375",
+    "program": "원어민 class2",
+    "day": "mon",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최효원",
+    "name_en": "Jenny",
+    "code": "8375",
+    "program": "원서(Nicole)",
+    "day": "wed",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "최효원",
+    "name_en": "Jenny",
+    "code": "8375",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최효원",
+    "name_en": "Jenny",
+    "code": "8375",
+    "program": "원어민 class2",
+    "day": "wed",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "최효원",
+    "name_en": "Jenny",
+    "code": "8375",
+    "program": "원서(Nicole)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "탁규민",
+    "name_en": "Jason",
+    "code": "6548",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "탁규민",
+    "name_en": "Jason",
+    "code": "6548",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "3:00~3:50"
+  },
+  {
+    "name_kor": "탁규민",
+    "name_en": "Jason",
+    "code": "6548",
+    "program": "원어민 class2(Rosemary)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "한서아",
+    "name_en": "Jenna",
+    "code": "9828",
+    "program": "원어민(정독/원서)",
+    "day": "mon",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "한인서",
+    "name_en": "Reina",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "tue",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "한인서",
+    "name_en": "Reina",
+    "code": "",
+    "program": "원서(Nicole)",
+    "day": "thu",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "한재희",
+    "name_en": "Jay",
+    "code": "1226",
+    "program": "원서(요일반)",
+    "day": "mon",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "한재희",
+    "name_en": "Jay",
+    "code": "1226",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "한재희",
+    "name_en": "Jay",
+    "code": "1226",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "16:10-17:00"
+  },
+  {
+    "name_kor": "한재희",
+    "name_en": "Jay",
+    "code": "1226",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "허지원",
+    "name_en": "Lily",
+    "code": "0601",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "허지원",
+    "name_en": "Lily",
+    "code": "0601",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "허지원",
+    "name_en": "Lily",
+    "code": "0601",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "4:00~4:50"
+  },
+  {
+    "name_kor": "홍서빈",
+    "name_en": "Sunny",
+    "code": "4066",
+    "program": "원어민 class2",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "홍서빈",
+    "name_en": "Sunny",
+    "code": "4066",
+    "program": "원서(요일반)",
+    "day": "tue",
+    "time_slot": "미상"
+  },
+  {
+    "name_kor": "홍서빈",
+    "name_en": "Sunny",
+    "code": "4066",
+    "program": "원어민 class2",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "홍서우",
+    "name_en": "Lucy",
+    "code": "2348",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "홍서우",
+    "name_en": "Lucy",
+    "code": "2348",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "홍서우",
+    "name_en": "Lucy",
+    "code": "2348",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "1:00 ~1:50"
+  },
+  {
+    "name_kor": "홍윤",
+    "name_en": "Leo",
+    "code": "9975",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "2:10"
+  },
+  {
+    "name_kor": "황상윤",
+    "name_en": "Henry",
+    "code": "5369",
+    "program": "원어민(정독/원서)",
+    "day": "thu",
+    "time_slot": "3:10"
+  },
+  {
+    "name_kor": "황수정",
+    "name_en": "Crystal",
+    "code": "2546",
+    "program": "원어민 class2(Rosemary)",
+    "day": "mon",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "황수정",
+    "name_en": "Crystal",
+    "code": "2546",
+    "program": "원어민 class1",
+    "day": "mon",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "황수정",
+    "name_en": "Crystal",
+    "code": "2546",
+    "program": "원어민 class2(Rosemary)",
+    "day": "wed",
+    "time_slot": "5:00 ~ 6:30"
+  },
+  {
+    "name_kor": "황수정",
+    "name_en": "Crystal",
+    "code": "2546",
+    "program": "원어민 class1",
+    "day": "wed",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "황수정",
+    "name_en": "Crystal",
+    "code": "2546",
+    "program": "원어민(정독/원서)",
+    "day": "fri",
+    "time_slot": "4:10"
+  },
+  {
+    "name_kor": "황승준",
+    "name_en": "David",
+    "code": "2013",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "황승준",
+    "name_en": "David",
+    "code": "2013",
+    "program": "원어민 class1(Nez)",
+    "day": "tue",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "황승준",
+    "name_en": "David",
+    "code": "2013",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "5:10 ~ 6:30"
+  },
+  {
+    "name_kor": "황승준",
+    "name_en": "David",
+    "code": "2013",
+    "program": "원어민 class1(Nez)",
+    "day": "thu",
+    "time_slot": "6:30~ 8:00"
+  },
+  {
+    "name_kor": "황지우",
+    "name_en": "Roy",
+    "code": "1807",
+    "program": "원어민 class1(Nez)",
+    "day": "mon",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "황지우",
+    "name_en": "Roy",
+    "code": "1807",
+    "program": "원어민 class1",
+    "day": "tue",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "황지우",
+    "name_en": "Roy",
+    "code": "1807",
+    "program": "원어민 class1(Nez)",
+    "day": "wed",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "황지우",
+    "name_en": "Roy",
+    "code": "1807",
+    "program": "원어민 class1",
+    "day": "thu",
+    "time_slot": "14:10-15:00"
+  },
+  {
+    "name_kor": "황지우",
+    "name_en": "Roy",
+    "code": "1807",
+    "program": "원어민 class1(Nez)",
+    "day": "fri",
+    "time_slot": "2:00 ~2:50"
+  },
+  {
+    "name_kor": "황지우",
+    "name_en": "Roy",
+    "code": "1807",
+    "program": "엘리아",
+    "day": "fri",
+    "time_slot": "미상"
+  }
+]
