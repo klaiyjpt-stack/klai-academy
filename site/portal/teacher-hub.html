@@ -66,8 +66,10 @@ function show(v){ ['pickView'].forEach(x=>{const el=$('#'+x); if(el) el.classLis
   // ponytail: 비번 없이 바로 진입(개발용). 세션 있으면 이름 표시.
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const SB = createClient(SUPABASE_URL, SUPABASE_ANON);
+  const ADMINS=['klai.yj.pt@gmail.com'];   // 원장 계정
   const { data:{ session } } = await SB.auth.getSession();
   if(!session){ location.replace('staff-login.html?next=teacher-hub.html'); return; }
+  if(ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('admin.html'); return; }  // 원장은 원장 페이지로
   $('#who').textContent = session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사';
   show('pickView');
   const lo=$('#logoutBtn'); if(lo) lo.onclick=async()=>{ await SB.auth.signOut(); location.reload(); };
