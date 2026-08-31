@@ -315,7 +315,11 @@
         <select id="distMonth" style="width:70px"></select>
         <button class="actbtn on" onclick="loadDist()">🔄 조회</button>
         <span class="cnt" id="distCnt"></span>
+        <span class="grow"></span>
+        <button class="actbtn" onclick="copyBill()">📋 청구집계 복사</button>
+        <button class="actbtn on" onclick="printBill()" style="background:#eaf2fc;border-color:#b9d3f0;color:var(--blue-d)">🖨 청구서 인쇄</button>
       </div>
+      <div style="font-weight:800;color:var(--navy);font-size:15px;margin:4px 2px 10px">💰 이 달 총 청구액 <span id="billTotal" style="color:var(--green-d)"></span></div>
       <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">🧾 청구 집계 (학생별)</div>
       <div id="billList" class="tblwrap" style="font-size:13px;margin-bottom:16px"></div>
       <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">📥 배부 목록</div>
@@ -736,12 +740,39 @@ async function loadDist(){
   // 청구 집계: 학생별
   const by={}; DIST.forEach(d=>{ const k=d.name_kor; (by[k]=by[k]||{books:[],sum:0}); by[k].books.push(d.book); by[k].sum+=(d.amount||0); });
   const students=Object.keys(by).sort();
-  $('#billList').innerHTML=students.length?('<table class="grid" style="min-width:600px"><thead><tr><th>학생</th><th>교재</th><th>금액합계</th></tr></thead><tbody>'+
-    students.map(n=>`<tr><td style="font-weight:700">${n}</td><td style="font-size:12px">${by[n].books.join(', ')}</td><td style="font-weight:800">${won(by[n].sum)}</td></tr>`).join('')+'</tbody></table>'):'<span style="color:var(--sub)">이 달 청구 없음</span>';
+  // 학부모 전화 매칭
+  const phones={}; if(students.length){ const pr=await SB.from('students_master').select('name_kor,parent_phone').in('name_kor',students); (pr.data||[]).forEach(s=>phones[s.name_kor]=s.parent_phone); }
+  students.forEach(n=>by[n].phone=phones[n]||'');
+  const total=students.reduce((a,n)=>a+by[n].sum,0);
+  BILL={month:bm, by, students, total};
+  $('#billTotal').textContent = students.length? `${won(total)}원 · ${students.length}명` : '';
+  $('#billList').innerHTML=students.length?('<table class="grid" style="min-width:640px"><thead><tr><th>학생</th><th>학부모전화</th><th>교재</th><th>금액합계</th></tr></thead><tbody>'+
+    students.map(n=>`<tr><td style="font-weight:700">${n}</td><td style="font-size:12px">${by[n].phone}</td><td style="font-size:12px">${by[n].books.join(', ')}</td><td style="font-weight:800">${won(by[n].sum)}</td></tr>`).join('')+'</tbody></table>'):'<span style="color:var(--sub)">이 달 청구 없음</span>';
   $('#distList').innerHTML=DIST.length?('<table class="grid" style="min-width:640px"><thead><tr><th>날짜</th><th>학생</th><th>영역</th><th>교재</th><th>금액</th><th>담당</th></tr></thead><tbody>'+
     DIST.map(d=>`<tr><td>${d.date}</td><td style="font-weight:700">${d.name_kor}</td><td>${d.area||''}</td><td>${d.book}</td><td>${won(d.amount)}</td><td>${d.teacher||''}</td></tr>`).join('')+'</tbody></table>'):'';
 }
 window.loadDist=loadDist;
+let BILL={students:[],by:{},month:'',total:0};
+function copyBill(){
+  if(!BILL.students.length){ toast('청구 내역 없음'); return; }
+  const rows=[['청구월','학생','학부모전화','교재','금액']];
+  BILL.students.forEach(n=>rows.push([BILL.month, n, BILL.by[n].phone||'', BILL.by[n].books.join(' / '), BILL.by[n].sum]));
+  rows.push(['','','','총 청구액', BILL.total]);
+  const tsv=rows.map(r=>r.join('\t')).join('\n');
+  navigator.clipboard.writeText(tsv).then(()=>toast('청구집계 복사됨 (시트·문자에 붙여넣기)'),()=>toast('복사 실패'));
+}
+function printBill(){
+  if(!BILL.students.length){ toast('청구 내역 없음'); return; }
+  let h=`<div style="font-family:sans-serif"><div style="position:sticky;top:0;background:#fff;padding:8px 0;border-bottom:1px solid #eee;margin-bottom:8px"><button onclick="window.print()" style="padding:8px 16px;font-weight:700;background:#1a2740;color:#fff;border:none;border-radius:8px;cursor:pointer">🖨 인쇄</button> <button onclick="window.close()" style="padding:8px 16px;font-weight:700;background:#eee;border:none;border-radius:8px;cursor:pointer">✖ 닫기</button></div>
+    <h2>클라이 어학원 · 교재비 청구 (${BILL.month})</h2>
+    <p style="color:#555">총 청구액 <b>${won(BILL.total)}원</b> · ${BILL.students.length}명</p>
+    <table style="border-collapse:collapse;font-family:sans-serif;font-size:14px;width:100%"><tr style="background:#eee"><th style="border:1px solid #ccc;padding:8px">학생</th><th style="border:1px solid #ccc;padding:8px">학부모전화</th><th style="border:1px solid #ccc;padding:8px">교재</th><th style="border:1px solid #ccc;padding:8px">금액</th></tr>`;
+  BILL.students.forEach(n=>{ h+=`<tr><td style="border:1px solid #ccc;padding:8px;font-weight:bold">${n}</td><td style="border:1px solid #ccc;padding:8px">${BILL.by[n].phone||''}</td><td style="border:1px solid #ccc;padding:8px">${BILL.by[n].books.join(', ')}</td><td style="border:1px solid #ccc;padding:8px;text-align:right">${won(BILL.by[n].sum)}원</td></tr>`; });
+  h+=`<tr style="background:#f5f5f5;font-weight:bold"><td colspan="3" style="border:1px solid #ccc;padding:8px;text-align:right">총 청구액</td><td style="border:1px solid #ccc;padding:8px;text-align:right">${won(BILL.total)}원</td></tr></table>
+    <p style="color:#888;font-size:12px;margin-top:14px">청구월 규칙: 전달 11일~당월 10일 배부분</p></div>`;
+  const w=window.open('','_blank'); w.document.write('<title>교재비 청구 '+BILL.month+'</title>'+h); w.document.close(); w.focus();
+}
+window.copyBill=copyBill; window.printBill=printBill;
 function bindBooks(){
   const a=$('#bkAdd'); if(a) a.onclick=addBook;
   const io=$('#ioAdd'); if(io) io.onclick=addIO;
