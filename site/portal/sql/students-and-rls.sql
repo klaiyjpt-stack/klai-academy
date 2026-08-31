@@ -1,16 +1,16 @@
 -- students 마스터 (이코딩 명부) + 전 테이블 RLS를 authenticated로 (타인 차단)
-create table if not exists students (
+create table if not exists students_master (
   id uuid primary key default gen_random_uuid(),
   name_kor text not null, code text, school text, grade text,
   parent_phone text, active boolean not null default true,
   updated_at timestamptz not null default now()
 );
-alter table students enable row level security;
-drop policy if exists st_all on students;
-drop policy if exists st_auth on students;
-create policy st_auth on students for all to authenticated using (true) with check (true);
-delete from students;
-insert into students (name_kor, code, school, grade, parent_phone) values
+alter table students_master enable row level security;
+drop policy if exists st_all on students_master;
+drop policy if exists st_auth on students_master;
+create policy st_auth on students_master for all to authenticated using (true) with check (true);
+delete from students_master;
+insert into students_master (name_kor, code, school, grade, parent_phone) values
   ('곽도윤','04120','초등','4','01087677444'),
   ('곽설아','0412','초등','6','01087677444'),
   ('김나연','40030','중등','1','01056254003'),

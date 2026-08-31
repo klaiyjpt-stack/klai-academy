@@ -552,7 +552,7 @@ window.loadAlerts=loadAlerts;
 async function loadDir(){
   if(!SB) return;
   const q=($('#dirq').value||'').trim();
-  let url=SB.from('students').select('name_kor,code,school,grade,parent_phone').order('name_kor').limit(500);
+  let url=SB.from('students_master').select('name_kor,code,school,grade,parent_phone').order('name_kor').limit(500);
   if(q) url=url.or(`name_kor.ilike.%${q}%,code.ilike.%${q}%`);
   const { data, error } = await url;
   if(error){ $('#dirList').innerHTML='<span style="color:var(--sub)">원생 명부 테이블(students) 없음 — SQL 실행 필요</span>'; return; }
