@@ -299,7 +299,11 @@
       </div>
       <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">📊 재고 현황 (부족 빨강)</div>
       <div id="stockList" class="tblwrap" style="font-size:13px;margin-bottom:16px"></div>
-      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">📦 입출고 이력</div>
+      <div style="display:flex;gap:8px;align-items:center;margin:4px 2px 8px;flex-wrap:wrap">
+        <span style="font-weight:800;color:var(--navy);font-size:13.5px">📦 입출고 이력</span>
+        <select id="ioYear" style="padding:6px;border:1px solid var(--line);border-radius:8px;font-size:12.5px"></select>
+        <select id="ioMonth" style="padding:6px;border:1px solid var(--line);border-radius:8px;font-size:12.5px"><option value="">전체월</option></select>
+      </div>
       <div id="ioList" class="tblwrap" style="font-size:13px"></div>
     </div>
 
@@ -682,7 +686,7 @@ window.delBook=delBook;
 
 async function loadIO(){
   if(!SB) return;
-  const r=await SB.from('book_io').select('*').order('date',{ascending:false}).limit(300);
+  const r=await SB.from('book_io').select('*').order('date',{ascending:false}).limit(5000);
   IO=r.data||[];
   if(!$('#ioDate').value) $('#ioDate').value=new Date().toISOString().slice(0,10);
   // 재고 계산
@@ -693,9 +697,19 @@ async function loadIO(){
   const low=rows.filter(r=>r.stock<=r.min);
   $('#stockList').innerHTML='<table class="grid" style="min-width:520px"><thead><tr><th>교재</th><th>영역</th><th>현재고</th><th>최소</th></tr></thead><tbody>'+
     rows.sort((a,b)=>(a.stock-a.min)-(b.stock-b.min)).slice(0,200).map(r=>`<tr${r.stock<=r.min?' style="background:#fdeaea"':''}><td style="font-weight:700">${r.name}</td><td>${r.area||''}</td><td style="${r.stock<=r.min?'color:var(--red);font-weight:800':''}">${r.stock}${r.stock<=r.min?' ⚠':''}</td><td>${r.min}</td></tr>`).join('')+'</tbody></table>';
-  $('#ioList').innerHTML=IO.length?('<table class="grid" style="min-width:560px"><thead><tr><th>날짜</th><th>구분</th><th>교재</th><th>수량</th><th>담당</th><th>비고</th></tr></thead><tbody>'+
-    IO.slice(0,100).map(x=>`<tr><td>${x.date}</td><td>${x.io_type}</td><td>${x.book}</td><td>${x.qty}</td><td>${x.staff||''}</td><td>${x.note||''}</td></tr>`).join('')+'</tbody></table>'):'<span style="color:var(--sub)">입출고 기록 없음</span>';
+  // 년/월 셀렉터 채우기
+  const ys=$('#ioYear'); if(ys && !ys.dataset.filled){ const now=new Date(); let o='<option value="">전체년</option>'; for(let y=now.getFullYear();y>=2025;y--) o+=`<option>${y}</option>`; ys.innerHTML=o; ys.dataset.filled='1'; ys.onchange=renderIO; $('#ioMonth').onchange=renderIO; }
+  renderIO();
 }
+function renderIO(){
+  const y=$('#ioYear').value, m=$('#ioMonth').value;
+  let list=IO;
+  if(y) list=list.filter(x=>(x.date||'').slice(0,4)===y);
+  if(m) list=list.filter(x=>(x.date||'').slice(5,7)===m);
+  $('#ioList').innerHTML=list.length?('<table class="grid" style="min-width:560px"><thead><tr><th>날짜</th><th>구분</th><th>교재</th><th>수량</th><th>담당</th><th>비고</th></tr></thead><tbody>'+
+    list.slice(0,300).map(x=>`<tr><td>${x.date}</td><td>${x.io_type}</td><td>${x.book}</td><td>${x.qty}</td><td>${x.staff||''}</td><td>${x.note||''}</td></tr>`).join('')+'</tbody></table>'):'<span style="color:var(--sub)">입출고 기록 없음</span>';
+}
+window.renderIO=renderIO;
 async function addIO(){
   if(!SB){ toast('연결 안됨'); return; }
   const book=$('#ioBook').value.trim(), qty=parseInt($('#ioQty').value);
