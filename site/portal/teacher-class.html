@@ -123,6 +123,16 @@
       <div id="dbList" class="tblwrap" style="font-size:13px"></div>
     </div>
 
+    <div class="eyebrow">🗂️ 전체 시간표</div>
+    <div class="panel">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-size:12.5px;color:var(--sub)">전체 반 시간표(요일×시간). 조회만 — 수정은 원장.</span>
+        <select id="allProg" style="padding:6px;border:1px solid var(--line);border-radius:8px;font-size:12.5px"><option value="">전체 과목</option><option>정독</option><option>독해</option><option>단어&Extra</option><option>알파</option><option>문법</option><option>영어도서관</option><option>엘리아G/W</option></select>
+        <button class="hwbtn" id="allBtn">🗂️ 펼치기</button>
+      </div>
+      <div id="allGrid" class="tblwrap" style="font-size:12px"></div>
+    </div>
+
     <div class="eyebrow">📷 시험지 · 리포트</div>
     <div class="panel">
       <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">시험지 사진 올리고 리포트 종류 고르면 → 원장님께 <b>생성 요청</b> 알림 → 리포트 만들어져 여기서 확인·발송.</div>
@@ -149,6 +159,7 @@
     <div class="eyebrow">도구</div>
     <div class="tools">
       <a class="tool" href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578#view=%EB%B0%B0%EB%B6%80%20%EC%9E%85%EB%A0%A5" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>교재배부 입력</h3><p>배부 입력 화면 바로 열기</p></div></a>
+      <a class="tool" href="https://0316540571.notion.site/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8" target="_blank" rel="noopener"><div class="ic">📒</div><div><h3>자료실 (노션)</h3><p>수업 자료·양식 찾아 쓰기</p></div></a>
       <a class="tool" href="zoom-keystone.html"><div class="ic">🗣️</div><div><h3>학습 자료</h3><p>엘리아 · EQ Talk · Group Talk</p></div></a>
       <a class="tool" href="manual.html"><div class="ic">📖</div><div><h3>사용법</h3><p>페이지 사용 안내</p></div></a>
     </div>
@@ -294,6 +305,27 @@ function boot(){
   $('#logBtn').onclick=saveLog;
   bookInit();
   reportInit();
+  allInit();
+}
+// ── 전체 시간표 (조회) ──
+let allOpen=false;
+const ADAY=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
+function allInit(){ $('#allBtn').onclick=allToggle; $('#allProg').onchange=()=>{ if(allOpen) loadAll(); }; }
+function allToggle(){ allOpen=!allOpen; $('#allBtn').textContent=allOpen?'🗂️ 접기':'🗂️ 펼치기'; if(allOpen) loadAll(); else $('#allGrid').innerHTML=''; }
+async function loadAll(){
+  if(!(SB&&USER)) return;
+  let q=SB.from('timetable').select('subject,day,time_slot,name_kor').eq('active',true).neq('status','draft');
+  const s=$('#allProg').value; if(s) q=q.eq('subject',s);
+  const { data }=await q; const rows=data||[];
+  if(!rows.length){ $('#allGrid').innerHTML='<span style="color:var(--sub)">시간표 없음</span>'; return; }
+  const times=[...new Set(rows.map(r=>r.time_slot))].sort();
+  const cell={}; rows.forEach(r=>{ const k=r.time_slot+'|'+r.day; (cell[k]=cell[k]||[]).push(r); });
+  let h='<table class="grid" style="min-width:760px"><thead><tr><th>시간</th>'+ADAY.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>';
+  times.forEach(t=>{ h+=`<tr><td style="font-weight:800;background:var(--soft)">${t}</td>`;
+    ADAY.forEach(([d])=>{ const list=cell[t+'|'+d]||[];
+      h+=`<td style="text-align:left;vertical-align:top;padding:5px">${list.map(r=>`<div>${s?'':'<b style=color:var(--blue-d)>['+r.subject+']</b> '}${r.name_kor}</div>`).join('')||'<span style="color:#cbd3e0">-</span>'}</td>`; });
+    h+='</tr>'; });
+  $('#allGrid').innerHTML=h+'</tbody></table>';
 }
 // ── 시험지 · 리포트 ──
 function reportInit(){
