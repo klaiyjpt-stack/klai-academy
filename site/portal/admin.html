@@ -256,15 +256,15 @@
   <section class="sec hidden" data-sec="books">
     <div class="sectitle">📚 교재관리</div>
     <div class="bar" style="padding:0 0 10px">
-      <button class="actbtn on" id="bkTabMaster" onclick="bkTab('master')">📖 교재 마스터</button>
-      <button class="actbtn" id="bkTabIO" onclick="bkTab('io')">📦 입출고·재고</button>
+      <button class="actbtn" id="bkTabMaster" onclick="bkTab('master')">📖 교재 마스터</button>
+      <button class="actbtn on" id="bkTabIO" onclick="bkTab('io')">📦 입출고·재고</button>
       <button class="actbtn" id="bkTabDist" onclick="bkTab('dist')">🧾 배부·청구</button>
       <span class="grow"></span>
       <a href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">📱 앱으로 열기 ↗</a>
     </div>
 
     <!-- 교재 마스터 -->
-    <div id="bkMaster">
+    <div id="bkMaster" class="hidden">
       <div class="panel">
         <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:9px">➕ 교재 추가</div>
         <div class="addrow">
@@ -283,7 +283,7 @@
     </div>
 
     <!-- 입출고·재고 -->
-    <div id="bkIO" class="hidden">
+    <div id="bkIO">
       <div class="panel">
         <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:9px">➕ 입출고 기록</div>
         <div class="addrow">
@@ -648,6 +648,7 @@ async function loadBooks(){
   $('#dlBooks').innerHTML=BOOKS.map(b=>`<option value="${b.name}">`).join('');
   $('#dlArea').innerHTML=[...new Set(BOOKS.map(b=>b.area).filter(Boolean))].map(a=>`<option value="${a}">`).join('');
   renderBooks();
+  if(!$('#bkIO').classList.contains('hidden')) loadIO();   // 기본 탭=재고면 자동 로드
 }
 function renderBooks(){
   const q=($('#bkq').value||'').trim();
