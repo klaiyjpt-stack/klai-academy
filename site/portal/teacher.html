@@ -302,9 +302,7 @@ function applyLang(){
   const s = STR[LANG];
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-t]').forEach(el=>{ const v=s[el.dataset.t]; if(typeof v==='string') el.textContent=v; });
-  $('#setupBanner').textContent = s.setup;
-  $('#uid').placeholder = LANG==='ko'?'예: anna':'e.g. anna';
-  $('#upw').placeholder = LANG==='ko'?'비밀번호':'Password';
+  { const sb=$('#setupBanner'); if(sb) sb.textContent = s.setup; }
   $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
   $('#clsMemo').placeholder = s.clsMemoPh; $('#teaLog').placeholder = s.teaLogPh; memoSync();
   document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
