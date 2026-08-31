@@ -656,7 +656,7 @@ function billMonthOf(dateStr){ const d=new Date(dateStr+'T00:00:00'); let y=d.ge
 
 async function loadBooks(){
   if(!SB) return;
-  const { data, error } = await SB.from('books').select('*').eq('active',true).order('area').order('name');
+  const { data, error } = await SB.from('books').select('*').eq('active',true).order('series').order('area').order('name');
   if(error){ $('#bkList').innerHTML='<span style="color:var(--sub)">교재 테이블(books) 없음 — SQL 실행 필요</span>'; return; }
   BOOKS=data||[];
   $('#dlBooks').innerHTML=BOOKS.map(b=>`<option value="${b.name}">`).join('');
@@ -693,10 +693,10 @@ async function loadIO(){
   const dist=(await SB.from('book_dist').select('book').limit(5000)).data||[];
   const distCnt={}; dist.forEach(d=>distCnt[d.book]=(distCnt[d.book]||0)+1);
   const ioSum={}; IO.forEach(x=>{ const s=ioSum[x.book]||{in:0,adj:0,dist:0}; if(x.io_type==='입고')s.in+=x.qty; else if(x.io_type==='조정')s.adj+=x.qty; else if(x.io_type==='배부')s.dist+=x.qty; ioSum[x.book]=s; });
-  const rows=BOOKS.map(b=>{ const s=ioSum[b.name]||{in:0,adj:0,dist:0}; const stock=(b.base_stock||0)+s.in+s.adj-s.dist-(distCnt[b.name]||0); return {name:b.name,area:b.area,min:b.min_stock||0,stock}; });
-  const low=rows.filter(r=>r.stock<=r.min);
-  $('#stockList').innerHTML='<table class="grid" style="min-width:520px"><thead><tr><th>교재</th><th>영역</th><th>현재고</th><th>최소</th></tr></thead><tbody>'+
-    rows.sort((a,b)=>(a.stock-a.min)-(b.stock-b.min)).slice(0,200).map(r=>`<tr${r.stock<=r.min?' style="background:#fdeaea"':''}><td style="font-weight:700">${r.name}</td><td>${r.area||''}</td><td style="${r.stock<=r.min?'color:var(--red);font-weight:800':''}">${r.stock}${r.stock<=r.min?' ⚠':''}</td><td>${r.min}</td></tr>`).join('')+'</tbody></table>';
+  // BOOKS는 이미 시리즈→영역→교재명 순 → 그 순서 유지
+  const rows=BOOKS.map(b=>{ const s=ioSum[b.name]||{in:0,adj:0,dist:0}; const stock=(b.base_stock||0)+s.in+s.adj-s.dist-(distCnt[b.name]||0); return {name:b.name,series:b.series,area:b.area,min:b.min_stock||0,stock}; });
+  $('#stockList').innerHTML='<table class="grid" style="min-width:560px"><thead><tr><th>시리즈</th><th>교재</th><th>영역</th><th>현재고</th><th>최소</th></tr></thead><tbody>'+
+    rows.map(r=>`<tr${r.stock<=r.min?' style="background:#fdeaea"':''}><td style="color:var(--sub)">${r.series||''}</td><td style="font-weight:700">${r.name}</td><td>${r.area||''}</td><td style="${r.stock<=r.min?'color:var(--red);font-weight:800':''}">${r.stock}${r.stock<=r.min?' ⚠':''}</td><td>${r.min}</td></tr>`).join('')+'</tbody></table>';
   // 년/월 셀렉터 채우기
   const ys=$('#ioYear'); if(ys && !ys.dataset.filled){ const now=new Date(); let o='<option value="">전체년</option>'; for(let y=now.getFullYear();y>=2025;y--) o+=`<option>${y}</option>`; ys.innerHTML=o; ys.dataset.filled='1'; ys.onchange=renderIO; $('#ioMonth').onchange=renderIO; }
   renderIO();
