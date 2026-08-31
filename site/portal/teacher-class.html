@@ -292,6 +292,9 @@ async function bookInit(){
   // 학생 datalist = 현재 프로그램 배정 학생
   const stu=[...new Set(TT.map(r=>r.name_kor))].sort();
   $('#dlStu').innerHTML=stu.map(n=>`<option value="${n}">`).join('');
+  // 데이터 있는 최신 청구월로 기본
+  if(SB&&USER){ const r=await SB.from('book_dist').select('bill_month').eq('program',PROGRAM).order('bill_month',{ascending:false}).limit(1);
+    if(r.data&&r.data[0]&&r.data[0].bill_month){ const [y,m]=r.data[0].bill_month.split('-'); if([...$('#dbYear').options].some(o=>o.value===y)) $('#dbYear').value=y; $('#dbMonth').value=m; } }
   loadDist();
 }
 async function distAdd(){

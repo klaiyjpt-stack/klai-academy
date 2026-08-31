@@ -632,7 +632,17 @@ function bkTab(t){
   $('#bkTabIO').classList.toggle('on',t==='io');
   $('#bkTabDist').classList.toggle('on',t==='dist');
   if(t==='io'){ loadIO(); }
-  if(t==='dist'){ loadDist(); }
+  if(t==='dist'){ distDefault(); }
+}
+let distReady=false;
+async function distDefault(){
+  fillDistPeriods();
+  if(!distReady && SB){   // 첫 진입: 데이터 있는 최신 청구월로 맞춤
+    const { data }=await SB.from('book_dist').select('bill_month').order('bill_month',{ascending:false}).limit(1);
+    if(data&&data[0]&&data[0].bill_month){ const [y,m]=data[0].bill_month.split('-'); if([...$('#distYear').options].some(o=>o.value===y)) $('#distYear').value=y; $('#distMonth').value=m; }
+    distReady=true;
+  }
+  loadDist();
 }
 window.bkTab=bkTab;
 function esc2(s){ return String(s==null?'':s).replace(/'/g,"\\'"); }
