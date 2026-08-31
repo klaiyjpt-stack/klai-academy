@@ -255,12 +255,67 @@
   <!-- ══ 교재관리 ══ -->
   <section class="sec hidden" data-sec="books">
     <div class="sectitle">📚 교재관리</div>
-    <div class="panel">
-      <div style="font-size:12.5px;color:var(--sub);margin-bottom:10px">배부 입력 · 청구 집계 · 재고 (AppSheet 앱).</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578#view=%EB%B0%B0%EB%B6%80%20%EC%9E%85%EB%A0%A5" target="_blank" rel="noopener" class="actbtn on" style="text-decoration:none;padding:10px 16px">📥 배부 입력</a>
-        <a href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none;padding:10px 16px">📚 교재 앱 전체</a>
+    <div class="bar" style="padding:0 0 10px">
+      <button class="actbtn on" id="bkTabMaster" onclick="bkTab('master')">📖 교재 마스터</button>
+      <button class="actbtn" id="bkTabIO" onclick="bkTab('io')">📦 입출고·재고</button>
+      <button class="actbtn" id="bkTabDist" onclick="bkTab('dist')">🧾 배부·청구</button>
+      <span class="grow"></span>
+      <a href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578" target="_blank" rel="noopener" class="actbtn" style="text-decoration:none">📱 앱으로 열기 ↗</a>
+    </div>
+
+    <!-- 교재 마스터 -->
+    <div id="bkMaster">
+      <div class="panel">
+        <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:9px">➕ 교재 추가</div>
+        <div class="addrow">
+          <input id="bkName" placeholder="교재명" style="width:200px">
+          <select id="bkSeries" style="width:120px"><option value="">시리즈</option><option>클라이교재</option><option>알파교재</option><option>자체교재</option></select>
+          <input id="bkArea" list="dlArea" placeholder="영역" style="width:140px">
+          <input id="bkPrice" type="number" placeholder="금액" style="width:90px">
+          <input id="bkMin" type="number" placeholder="최소보유" style="width:80px">
+          <input id="bkBase" type="number" placeholder="기초재고" style="width:80px">
+          <button class="add" id="bkAdd">추가</button>
+        </div>
+        <datalist id="dlArea"></datalist>
       </div>
+      <div class="bar" style="padding:0 0 8px"><input id="bkq" placeholder="교재명/영역 검색" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;width:220px"><span class="cnt" id="bkCnt"></span></div>
+      <div id="bkList" class="tblwrap" style="font-size:13px">로그인 후 표시됩니다.</div>
+    </div>
+
+    <!-- 입출고·재고 -->
+    <div id="bkIO" class="hidden">
+      <div class="panel">
+        <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin-bottom:9px">➕ 입출고 기록</div>
+        <div class="addrow">
+          <input id="ioDate" type="date" style="width:150px">
+          <select id="ioType" style="width:100px"><option>입고</option><option>조정</option><option>배부</option></select>
+          <input id="ioBook" list="dlBooks" placeholder="교재명" style="width:200px">
+          <input id="ioQty" type="number" placeholder="수량(+/-)" style="width:100px">
+          <input id="ioStaff" placeholder="담당" style="width:90px">
+          <input id="ioNote" placeholder="비고" style="width:140px">
+          <button class="add" id="ioAdd">기록</button>
+        </div>
+        <datalist id="dlBooks"></datalist>
+      </div>
+      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">📊 재고 현황 (부족 빨강)</div>
+      <div id="stockList" class="tblwrap" style="font-size:13px;margin-bottom:16px"></div>
+      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">📦 입출고 이력</div>
+      <div id="ioList" class="tblwrap" style="font-size:13px"></div>
+    </div>
+
+    <!-- 배부·청구 -->
+    <div id="bkDist" class="hidden">
+      <div class="bar" style="padding:0 0 10px">
+        <span style="font-size:12px;font-weight:800;color:var(--sub)">청구월</span>
+        <select id="distYear" style="width:90px"></select>
+        <select id="distMonth" style="width:70px"></select>
+        <button class="actbtn on" onclick="loadDist()">🔄 조회</button>
+        <span class="cnt" id="distCnt"></span>
+      </div>
+      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">🧾 청구 집계 (학생별)</div>
+      <div id="billList" class="tblwrap" style="font-size:13px;margin-bottom:16px"></div>
+      <div style="font-weight:800;color:var(--navy);font-size:13.5px;margin:4px 2px 8px">📥 배부 목록</div>
+      <div id="distList" class="tblwrap" style="font-size:13px"></div>
     </div>
   </section>
 
@@ -566,6 +621,107 @@ async function loadDir(){
     data.map(r=>`<tr><td style="font-weight:700">${r.name_kor}</td><td>${r.code||''}</td><td>${r.school||''}</td><td>${r.grade||''}</td><td>${r.parent_phone||''}</td></tr>`).join('')+'</tbody></table>';
 }
 window.loadDir=loadDir;
+
+// ══ 교재관리 ══
+let BOOKS=[], IO=[], DIST=[];
+function bkTab(t){
+  $('#bkMaster').classList.toggle('hidden',t!=='master');
+  $('#bkIO').classList.toggle('hidden',t!=='io');
+  $('#bkDist').classList.toggle('hidden',t!=='dist');
+  $('#bkTabMaster').classList.toggle('on',t==='master');
+  $('#bkTabIO').classList.toggle('on',t==='io');
+  $('#bkTabDist').classList.toggle('on',t==='dist');
+  if(t==='io'){ loadIO(); }
+  if(t==='dist'){ loadDist(); }
+}
+window.bkTab=bkTab;
+function esc2(s){ return String(s==null?'':s).replace(/'/g,"\\'"); }
+function won(n){ return (n||0).toLocaleString('ko-KR'); }
+// 청구월: 그 달 11일~다음달 10일 배부 = 다음달 청구. day<=10 → 당월, day>=11 → 다음달
+function billMonthOf(dateStr){ const d=new Date(dateStr+'T00:00:00'); let y=d.getFullYear(),m=d.getMonth()+1; if(d.getDate()>=11){ m++; if(m>12){m=1;y++;} } return `${y}-${String(m).padStart(2,'0')}`; }
+
+async function loadBooks(){
+  if(!SB) return;
+  const { data, error } = await SB.from('books').select('*').eq('active',true).order('area').order('name');
+  if(error){ $('#bkList').innerHTML='<span style="color:var(--sub)">교재 테이블(books) 없음 — SQL 실행 필요</span>'; return; }
+  BOOKS=data||[];
+  $('#dlBooks').innerHTML=BOOKS.map(b=>`<option value="${b.name}">`).join('');
+  $('#dlArea').innerHTML=[...new Set(BOOKS.map(b=>b.area).filter(Boolean))].map(a=>`<option value="${a}">`).join('');
+  renderBooks();
+}
+function renderBooks(){
+  const q=($('#bkq').value||'').trim();
+  let list=BOOKS; if(q) list=BOOKS.filter(b=>(b.name||'').includes(q)||(b.area||'').includes(q));
+  $('#bkCnt').textContent=`(${list.length}종)`;
+  if(!list.length){ $('#bkList').innerHTML='<span style="color:var(--sub)">교재 없음</span>'; return; }
+  $('#bkList').innerHTML='<table class="grid" style="min-width:720px"><thead><tr><th>교재명</th><th>시리즈</th><th>영역</th><th>금액</th><th>최소</th><th>기초</th><th></th></tr></thead><tbody>'+
+    list.map(b=>`<tr><td style="font-weight:700">${b.name}</td><td>${b.series||''}</td><td>${b.area||''}</td><td>${won(b.price)}</td><td>${b.min_stock||0}</td><td>${b.base_stock||0}</td><td><button class="del" onclick="delBook('${b.id}')">🗑</button></td></tr>`).join('')+'</tbody></table>';
+}
+async function addBook(){
+  if(!SB){ toast('연결 안됨'); return; }
+  const name=$('#bkName').value.trim(); if(!name){ toast('교재명 입력'); return; }
+  const row={name, series:$('#bkSeries').value||null, area:$('#bkArea').value.trim()||null, price:parseInt($('#bkPrice').value)||0, min_stock:parseInt($('#bkMin').value)||0, base_stock:parseInt($('#bkBase').value)||0};
+  const { error }=await SB.from('books').insert(row);
+  if(error){ toast('추가 실패: '+error.message); return; }
+  $('#bkName').value='';$('#bkPrice').value='';$('#bkMin').value='';$('#bkBase').value='';
+  toast('교재 추가됨'); loadBooks();
+}
+async function delBook(id){ if(!confirm('이 교재를 삭제할까요?')) return; const {error}=await SB.from('books').update({active:false}).eq('id',id); toast(error?'실패':'삭제됨'); loadBooks(); }
+window.delBook=delBook;
+
+async function loadIO(){
+  if(!SB) return;
+  const r=await SB.from('book_io').select('*').order('date',{ascending:false}).limit(300);
+  IO=r.data||[];
+  if(!$('#ioDate').value) $('#ioDate').value=new Date().toISOString().slice(0,10);
+  // 재고 계산
+  const dist=(await SB.from('book_dist').select('book').limit(5000)).data||[];
+  const distCnt={}; dist.forEach(d=>distCnt[d.book]=(distCnt[d.book]||0)+1);
+  const ioSum={}; IO.forEach(x=>{ const s=ioSum[x.book]||{in:0,adj:0,dist:0}; if(x.io_type==='입고')s.in+=x.qty; else if(x.io_type==='조정')s.adj+=x.qty; else if(x.io_type==='배부')s.dist+=x.qty; ioSum[x.book]=s; });
+  const rows=BOOKS.map(b=>{ const s=ioSum[b.name]||{in:0,adj:0,dist:0}; const stock=(b.base_stock||0)+s.in+s.adj-s.dist-(distCnt[b.name]||0); return {name:b.name,area:b.area,min:b.min_stock||0,stock}; });
+  const low=rows.filter(r=>r.stock<=r.min);
+  $('#stockList').innerHTML='<table class="grid" style="min-width:520px"><thead><tr><th>교재</th><th>영역</th><th>현재고</th><th>최소</th></tr></thead><tbody>'+
+    rows.sort((a,b)=>(a.stock-a.min)-(b.stock-b.min)).slice(0,200).map(r=>`<tr${r.stock<=r.min?' style="background:#fdeaea"':''}><td style="font-weight:700">${r.name}</td><td>${r.area||''}</td><td style="${r.stock<=r.min?'color:var(--red);font-weight:800':''}">${r.stock}${r.stock<=r.min?' ⚠':''}</td><td>${r.min}</td></tr>`).join('')+'</tbody></table>';
+  $('#ioList').innerHTML=IO.length?('<table class="grid" style="min-width:560px"><thead><tr><th>날짜</th><th>구분</th><th>교재</th><th>수량</th><th>담당</th><th>비고</th></tr></thead><tbody>'+
+    IO.slice(0,100).map(x=>`<tr><td>${x.date}</td><td>${x.io_type}</td><td>${x.book}</td><td>${x.qty}</td><td>${x.staff||''}</td><td>${x.note||''}</td></tr>`).join('')+'</tbody></table>'):'<span style="color:var(--sub)">입출고 기록 없음</span>';
+}
+async function addIO(){
+  if(!SB){ toast('연결 안됨'); return; }
+  const book=$('#ioBook').value.trim(), qty=parseInt($('#ioQty').value);
+  if(!book||isNaN(qty)){ toast('교재·수량 입력'); return; }
+  const row={date:$('#ioDate').value||new Date().toISOString().slice(0,10), io_type:$('#ioType').value, book, qty, staff:$('#ioStaff').value||null, note:$('#ioNote').value||null, created_by:USER?.id||null};
+  const { error }=await SB.from('book_io').insert(row);
+  if(error){ toast('기록 실패: '+error.message); return; }
+  $('#ioBook').value='';$('#ioQty').value='';$('#ioNote').value=''; toast('기록됨'); loadIO();
+}
+function fillDistPeriods(){
+  const now=new Date(); const ys=$('#distYear'), ms=$('#distMonth');
+  if(!ys.options.length){ let opts=''; for(let y=now.getFullYear();y>=2025;y--) opts+=`<option>${y}</option>`; ys.innerHTML=opts; }
+  if(!ms.options.length){ ms.innerHTML=Array.from({length:12},(_,i)=>`<option>${String(i+1).padStart(2,'0')}</option>`).join(''); }
+  ys.value=now.getFullYear(); ms.value=String(now.getMonth()+1).padStart(2,'0');
+}
+async function loadDist(){
+  if(!SB) return;
+  fillDistPeriods();
+  const bm=`${$('#distYear').value}-${$('#distMonth').value}`;
+  const { data, error }=await SB.from('book_dist').select('*').eq('bill_month',bm).order('date');
+  if(error){ $('#distList').innerHTML='<span style="color:var(--sub)">배부 테이블 없음 — SQL 실행 필요</span>'; $('#billList').innerHTML=''; return; }
+  DIST=data||[];
+  $('#distCnt').textContent=`(${DIST.length}건)`;
+  // 청구 집계: 학생별
+  const by={}; DIST.forEach(d=>{ const k=d.name_kor; (by[k]=by[k]||{books:[],sum:0}); by[k].books.push(d.book); by[k].sum+=(d.amount||0); });
+  const students=Object.keys(by).sort();
+  $('#billList').innerHTML=students.length?('<table class="grid" style="min-width:600px"><thead><tr><th>학생</th><th>교재</th><th>금액합계</th></tr></thead><tbody>'+
+    students.map(n=>`<tr><td style="font-weight:700">${n}</td><td style="font-size:12px">${by[n].books.join(', ')}</td><td style="font-weight:800">${won(by[n].sum)}</td></tr>`).join('')+'</tbody></table>'):'<span style="color:var(--sub)">이 달 청구 없음</span>';
+  $('#distList').innerHTML=DIST.length?('<table class="grid" style="min-width:640px"><thead><tr><th>날짜</th><th>학생</th><th>영역</th><th>교재</th><th>금액</th><th>담당</th></tr></thead><tbody>'+
+    DIST.map(d=>`<tr><td>${d.date}</td><td style="font-weight:700">${d.name_kor}</td><td>${d.area||''}</td><td>${d.book}</td><td>${won(d.amount)}</td><td>${d.teacher||''}</td></tr>`).join('')+'</tbody></table>'):'';
+}
+window.loadDist=loadDist;
+function bindBooks(){
+  const a=$('#bkAdd'); if(a) a.onclick=addBook;
+  const io=$('#ioAdd'); if(io) io.onclick=addIO;
+  const q=$('#bkq'); if(q) q.oninput=renderBooks;
+}
 // 접기/펼치기 (기본 닫힘, 펼칠 때만 로드)
 let ovLoaded=false, dirLoaded=false;
 function toggleOv(){ const b=$('#ovBody'),t=$('#ovToggle'); const open=b.style.display!=='none'; b.style.display=open?'none':''; t.textContent=open?'펼치기 ▼':'접기 ▲'; if(!open&&!ovLoaded) loadOverview(); }
@@ -691,7 +847,7 @@ else { (async()=>{
     if(!session){ location.replace('staff-login.html?next=admin.html'); return; }   // 타인 차단: 로그인 1회
     if(!ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('teacher-hub.html'); return; }  // 강사는 선생님 페이지로
     USER = session.user;
-    show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup();
+    show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadBooks(); fillDistPeriods(); bindBooks();
     const dq=$('#dirq'); if(dq) dq.addEventListener('keydown',e=>{ if(e.key==='Enter') loadDir(); }); }
   $('#logoutBtn').onclick = async ()=>{ await SB.auth.signOut(); route(); };
   $('#fTeacher').onchange = ()=>{ fillFilters(); render(); };

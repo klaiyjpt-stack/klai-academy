@@ -103,6 +103,26 @@
       <div class="actbar"><button class="save" id="saveBtn">💾 저장</button></div>
     </div>
 
+    <div class="eyebrow">교재 배부</div>
+    <div class="panel">
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">학생·교재 선택 → 배부. 금액·청구월 자동. 앱 대신 여기서 바로.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <input id="dbDate" type="date" style="padding:7px;border:1px solid var(--line);border-radius:8px">
+        <input id="dbName" list="dlStu" placeholder="학생 이름" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:120px">
+        <input id="dbBook" list="dlBk" placeholder="교재명" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:200px">
+        <span id="dbPrice" style="font-size:12.5px;color:var(--sub);min-width:70px"></span>
+        <button class="save" id="dbAdd" style="padding:8px 16px">배부</button>
+      </div>
+      <datalist id="dlStu"></datalist><datalist id="dlBk"></datalist>
+      <div style="display:flex;gap:8px;align-items:center;margin:14px 0 8px">
+        <span style="font-size:12px;font-weight:800;color:var(--sub)">배부 목록 (청구월)</span>
+        <select id="dbYear" style="padding:6px;border:1px solid var(--line);border-radius:8px"></select>
+        <select id="dbMonth" style="padding:6px;border:1px solid var(--line);border-radius:8px"></select>
+        <button class="hwbtn" onclick="loadDist()">🔄 조회</button>
+      </div>
+      <div id="dbList" class="tblwrap" style="font-size:13px"></div>
+    </div>
+
     <div class="eyebrow">강사 일지 (비공개)</div>
     <div class="panel">
       <textarea id="teaLog" rows="3" placeholder="나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고"></textarea>
@@ -254,7 +274,46 @@ function boot(){
   $('#dateSel').onchange=()=>{ if(SB) loadRecords(); };
   $('#saveBtn').onclick=saveRecords;
   $('#logBtn').onclick=saveLog;
+  bookInit();
 }
+// ── 교재 배부 ──
+let BKMAP={};
+function billMonthOf(ds){ const d=new Date(ds+'T00:00:00'); let y=d.getFullYear(),m=d.getMonth()+1; if(d.getDate()>=11){m++; if(m>12){m=1;y++;}} return `${y}-${String(m).padStart(2,'0')}`; }
+async function bookInit(){
+  $('#dbDate').value=new Date().toISOString().slice(0,10);
+  const ys=$('#dbYear'),ms=$('#dbMonth'),now=new Date();
+  let o=''; for(let y=now.getFullYear();y>=2025;y--) o+=`<option>${y}</option>`; ys.innerHTML=o;
+  ms.innerHTML=Array.from({length:12},(_,i)=>`<option>${String(i+1).padStart(2,'0')}</option>`).join('');
+  ys.value=now.getFullYear(); ms.value=String(now.getMonth()+1).padStart(2,'0');
+  $('#dbAdd').onclick=distAdd;
+  $('#dbBook').oninput=()=>{ const b=BKMAP[$('#dbBook').value.trim()]; $('#dbPrice').textContent=b?(b.price||0).toLocaleString()+'원':''; };
+  if(SB&&USER){ const r=await SB.from('books').select('name,area,price').eq('active',true); (r.data||[]).forEach(b=>BKMAP[b.name]=b);
+    $('#dlBk').innerHTML=(r.data||[]).map(b=>`<option value="${b.name}">`).join(''); }
+  // 학생 datalist = 현재 프로그램 배정 학생
+  const stu=[...new Set(TT.map(r=>r.name_kor))].sort();
+  $('#dlStu').innerHTML=stu.map(n=>`<option value="${n}">`).join('');
+  loadDist();
+}
+async function distAdd(){
+  if(!(SB&&USER)){ toast('로그인 필요'); return; }
+  const name=$('#dbName').value.trim(), book=$('#dbBook').value.trim(), date=$('#dbDate').value;
+  if(!name||!book){ toast('학생·교재 입력'); return; }
+  const b=BKMAP[book]||{};
+  const row={date, bill_month:billMonthOf(date), name_kor:name, program:PROGRAM, area:b.area||null, book, amount:b.price||0, teacher:USER.email, created_by:USER.id};
+  const { error }=await SB.from('book_dist').insert(row);
+  if(error){ toast('배부 실패: '+error.message); return; }
+  $('#dbName').value='';$('#dbBook').value='';$('#dbPrice').textContent=''; toast('배부됨'); loadDist();
+}
+async function loadDist(){
+  if(!(SB&&USER)) return;
+  const bm=`${$('#dbYear').value}-${$('#dbMonth').value}`;
+  const { data, error }=await SB.from('book_dist').select('*').eq('program',PROGRAM).eq('bill_month',bm).order('date',{ascending:false});
+  if(error){ $('#dbList').innerHTML='<span style="color:var(--sub)">교재 배부 테이블 없음</span>'; return; }
+  const d=data||[];
+  $('#dbList').innerHTML=d.length?('<table class="grid" style="min-width:520px"><thead><tr><th>날짜</th><th>학생</th><th>교재</th><th>금액</th></tr></thead><tbody>'+
+    d.map(x=>`<tr><td>${x.date}</td><td style="font-weight:700">${x.name_kor}</td><td>${x.book}</td><td>${(x.amount||0).toLocaleString()}</td></tr>`).join('')+'</tbody></table>'):'<span style="color:var(--sub)">이 청구월 배부 없음</span>';
+}
+window.loadDist=loadDist;
 function show(v){ ['loginView','dashView'].forEach(x=>{const el=$('#'+x); if(el) el.classList.toggle('hidden', x!==v);}); }
 
 // 실시간 구독 — 원장이 시간표 바꾸면 즉시 갱신
