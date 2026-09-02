@@ -69,7 +69,8 @@ function show(v){ ['pickView'].forEach(x=>{const el=$('#'+x); if(el) el.classLis
   const ADMINS=['klai.yj.pt@gmail.com'];   // 원장 계정
   const { data:{ session } } = await SB.auth.getSession();
   if(!session){ location.replace('staff-login.html?next=teacher-hub.html'); return; }
-  if(ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('admin.html'); return; }  // 원장은 원장 페이지로
+  const asTeacher = new URLSearchParams(location.search).get('as')==='teacher';
+  if(ADMINS.includes((session.user.email||'').toLowerCase()) && !asTeacher){ location.replace('admin.html'); return; }  // 원장은 원장 페이지로 (단, ?as=teacher면 강사 화면 열람 허용)
   $('#who').textContent = session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사';
   show('pickView');
   const lo=$('#logoutBtn'); if(lo) lo.onclick=async()=>{ await SB.auth.signOut(); location.reload(); };

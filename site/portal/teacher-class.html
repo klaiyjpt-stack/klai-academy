@@ -126,11 +126,11 @@
     <div class="eyebrow">🗂️ 전체 시간표</div>
     <div class="panel">
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
-        <span style="font-size:12.5px;color:var(--sub)">전체 반 시간표(요일×시간). 조회만 — 수정은 원장.</span>
-        <select id="allProg" style="padding:6px;border:1px solid var(--line);border-radius:8px;font-size:12.5px"><option value="">전체 과목</option><option>정독</option><option>독해</option><option>단어&Extra</option><option>알파</option><option>문법</option><option>영어도서관</option><option>엘리아G/W</option></select>
+        <span style="font-size:12.5px;color:var(--sub)">전체 반 시간표(구글시트). 조회만 — 수정은 원장.</span>
         <button class="hwbtn" id="allBtn">🗂️ 펼치기</button>
+        <a href="https://docs.google.com/spreadsheets/d/1gM-LpQK84qix7AbhB3kvL4zubCCvhdRaQHVcwptsIiI/edit" target="_blank" rel="noopener" class="hwbtn" style="text-decoration:none">시트 열기 ↗</a>
       </div>
-      <div id="allGrid" class="tblwrap" style="font-size:12px"></div>
+      <div id="allGrid" style="display:none"></div>
     </div>
 
     <div class="eyebrow">📷 시험지 · 리포트</div>
@@ -150,6 +150,20 @@
       <div id="rpList" class="tblwrap" style="font-size:13px"></div>
     </div>
 
+    <div id="vidSec" style="display:none">
+    <div class="eyebrow">🎬 영어도서관 영상 (월 1회)</div>
+    <div class="panel">
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">영상 올리고 멘트 적으면 → 학부모께 전달(예정). 월 1회.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start">
+        <input id="vidFile" type="file" accept="video/*" style="font-size:12px;margin-top:8px">
+        <button class="save" id="vidAdd" style="padding:10px 18px">📤 영상 올리기</button>
+      </div>
+      <textarea id="vidComment" rows="6" placeholder="멘트 (학부모께 안내) — 길게 작성 가능" style="width:100%;margin-top:10px;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;font-family:inherit"></textarea>
+      <div id="vidStatus" style="font-size:12px;color:var(--sub);margin-top:6px"></div>
+      <div id="vidList" style="font-size:13px;margin-top:10px"></div>
+    </div>
+    </div>
+
     <div class="eyebrow">강사 일지 (비공개)</div>
     <div class="panel">
       <textarea id="teaLog" rows="3" placeholder="나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고"></textarea>
@@ -160,7 +174,6 @@
     <div class="tools">
       <a class="tool" href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578#view=%EB%B0%B0%EB%B6%80%20%EC%9E%85%EB%A0%A5" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>교재배부 입력</h3><p>배부 입력 화면 바로 열기</p></div></a>
       <a class="tool" href="https://0316540571.notion.site/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8" target="_blank" rel="noopener"><div class="ic">📒</div><div><h3>자료실 (노션)</h3><p>수업 자료·양식 찾아 쓰기</p></div></a>
-      <a class="tool" href="zoom-keystone.html"><div class="ic">🗣️</div><div><h3>학습 자료</h3><p>엘리아 · EQ Talk · Group Talk</p></div></a>
       <a class="tool" href="manual.html"><div class="ic">📖</div><div><h3>사용법</h3><p>페이지 사용 안내</p></div></a>
     </div>
   </div>
@@ -223,7 +236,7 @@ function renderRows(){
   $('#emptyMsg').classList.toggle('hidden', list.length>0);
   $('#rows').innerHTML = list.map(st=>`
     <tr data-code="${st.code}" data-name="${st.name_kor}">
-      <td class="name">${st.name_kor} <small>${st.code}</small></td>
+      <td class="name">${st.name_kor} <small>${st.code&&st.code!==st.name_kor?st.code:''}</small></td>
       <td><select class="att">${ATT.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></td>
       <td><button class="hwbtn" data-hw="">숙제</button></td>
       <td><input class="txt book" placeholder="교재"></td>
@@ -245,7 +258,9 @@ function renderRows(){
 // ── Supabase ──
 async function loadTT(){
   if(!SB){ TT=DEMO_TT.map(r=>({...r})); return; }
-  const { data } = await SB.from('timetable').select('*').eq('subject',PROGRAM).eq('active',true).neq('status','draft').order('sort');
+  let q = SB.from('timetable').select('*').eq('active',true).neq('status','draft');
+  q = (PROGRAM==='독해') ? q.in('subject',['독해','단어&Extra']) : q.eq('subject',PROGRAM);  // 독해 페이지엔 단어&Extra도 함께
+  const { data } = await q.order('sort');
   TT = data||[];
 }
 async function loadRecords(){
@@ -297,7 +312,13 @@ function boot(){
   applyMeta();
   const today=new Date().toISOString().slice(0,10);
   $('#dateSel').value=today;
-  fillDays(); fillTimes(); renderRows();
+  fillDays();
+  // 기본 요일: 오늘 요일(수업 있으면), 없으면 이 과목 수업 있는 첫 요일 → 열자마자 명단 보이게
+  const dow=['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()];
+  const daysWith=new Set(TT.map(r=>r.day));
+  const pick = daysWith.has(dow) ? dow : (DAYS.find(([v])=>daysWith.has(v))||[])[0];
+  if(pick) $('#daySel').value=pick;
+  fillTimes(); renderRows();
   $('#daySel').onchange=refreshSlot;
   $('#timeSel').onchange=renderRows;
   $('#dateSel').onchange=()=>{ if(SB) loadRecords(); };
@@ -307,30 +328,51 @@ function boot(){
   reportInit();
   allInit();
 }
-// ── 전체 시간표 (조회) ──
+// ── 전체 시간표 (구글시트, 접힘 기본) ──
 let allOpen=false;
-const ADAY=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
-function allInit(){ $('#allBtn').onclick=allToggle; $('#allProg').onchange=()=>{ if(allOpen) loadAll(); }; }
-function allToggle(){ allOpen=!allOpen; $('#allBtn').textContent=allOpen?'🗂️ 접기':'🗂️ 펼치기'; if(allOpen) loadAll(); else $('#allGrid').innerHTML=''; }
-async function loadAll(){
-  if(!(SB&&USER)) return;
-  let q=SB.from('timetable').select('subject,day,time_slot,name_kor').eq('active',true).neq('status','draft');
-  const s=$('#allProg').value; if(s) q=q.eq('subject',s);
-  const { data }=await q; const rows=data||[];
-  if(!rows.length){ $('#allGrid').innerHTML='<span style="color:var(--sub)">시간표 없음</span>'; return; }
-  const times=[...new Set(rows.map(r=>r.time_slot))].sort();
-  const cell={}; rows.forEach(r=>{ const k=r.time_slot+'|'+r.day; (cell[k]=cell[k]||[]).push(r); });
-  let h='<table class="grid" style="min-width:760px"><thead><tr><th>시간</th>'+ADAY.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>';
-  times.forEach(t=>{ h+=`<tr><td style="font-weight:800;background:var(--soft)">${t}</td>`;
-    ADAY.forEach(([d])=>{ const list=cell[t+'|'+d]||[];
-      h+=`<td style="text-align:left;vertical-align:top;padding:5px">${list.map(r=>`<div>${s?'':'<b style=color:var(--blue-d)>['+r.subject+']</b> '}${r.name_kor}</div>`).join('')||'<span style="color:#cbd3e0">-</span>'}</td>`; });
-    h+='</tr>'; });
-  $('#allGrid').innerHTML=h+'</tbody></table>';
+function allInit(){ $('#allBtn').onclick=allToggle; }
+function allToggle(){
+  allOpen=!allOpen;
+  const g=$('#allGrid');
+  $('#allBtn').textContent=allOpen?'🗂️ 접기':'🗂️ 펼치기';
+  if(allOpen){
+    if(!g.dataset.loaded){ g.innerHTML='<iframe src="https://docs.google.com/spreadsheets/d/1gM-LpQK84qix7AbhB3kvL4zubCCvhdRaQHVcwptsIiI/preview" style="width:100%;height:70vh;border:1px solid var(--line);border-radius:10px"></iframe>'; g.dataset.loaded='1'; }
+    g.style.display='';
+  } else g.style.display='none';
 }
 // ── 시험지 · 리포트 ──
 function reportInit(){
   $('#rpAdd').onclick=rpAdd;
   loadReports();
+  vidInit();
+}
+// ── 영어도서관 영상 (해당 반만) ──
+function vidInit(){
+  if(PROGRAM!=='영어도서관') return;
+  $('#vidSec').style.display='';
+  $('#vidAdd').onclick=vidAdd;
+  loadVideos();
+}
+async function vidAdd(){
+  if(!(SB&&USER)){ toast('로그인 필요'); return; }
+  const f=$('#vidFile').files[0]; if(!f){ toast('영상 선택'); return; }
+  $('#vidStatus').textContent='업로드 중… (영상은 시간이 걸려요)';
+  const path=`영어도서관/${Date.now()}_${f.name.replace(/[^\w.]/g,'_')}`;
+  const up=await SB.storage.from('reports').upload(path,f,{upsert:false});
+  if(up.error){ $('#vidStatus').textContent='업로드 실패: '+up.error.message; return; }
+  const url=SB.storage.from('reports').getPublicUrl(path).data.publicUrl;
+  const { error }=await SB.from('reports').insert({program:'영어도서관',report_type:'영상',media_type:'video',files:[url],comment:$('#vidComment').value||null,status:'대기',teacher:USER.email,created_by:USER.id});
+  if(error){ $('#vidStatus').textContent='기록 실패: '+error.message; return; }
+  $('#vidFile').value='';$('#vidComment').value='';
+  $('#vidStatus').innerHTML='<span style="color:var(--green-d);font-weight:800">✅ 영상 올림 (학부모 전달 예정)</span>';
+  toast('영상 업로드 완료'); loadVideos();
+}
+async function loadVideos(){
+  if(!(SB&&USER)) return;
+  const { data }=await SB.from('reports').select('*').eq('media_type','video').order('created_at',{ascending:false}).limit(20);
+  const d=data||[];
+  $('#vidList').innerHTML=d.length?('<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="background:var(--soft)"><th style="text-align:left;padding:6px">날짜</th><th style="text-align:left;padding:6px">멘트</th><th style="padding:6px">영상</th><th style="padding:6px">상태</th></tr>'+
+    d.map(r=>`<tr><td style="padding:6px;border-top:1px solid var(--line)">${(r.created_at||'').slice(0,10)}</td><td style="padding:6px;border-top:1px solid var(--line)">${r.comment||''}</td><td style="padding:6px;border-top:1px solid var(--line);text-align:center">${(r.files||[]).map(u=>`<a href="${u}" target="_blank">▶</a>`).join('')}</td><td style="padding:6px;border-top:1px solid var(--line);text-align:center">${r.status}</td></tr>`).join('')+'</table>'):'<span style="color:var(--sub)">올린 영상 없음</span>';
 }
 async function rpAdd(){
   if(!(SB&&USER)){ toast('로그인 필요'); return; }
