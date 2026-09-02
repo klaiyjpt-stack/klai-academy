@@ -77,6 +77,13 @@
   </header>
 
   <div class="wrap">
+    <div id="mkTodayWrap" style="display:none">
+      <div class="eyebrow" style="color:var(--green-d)">🔁 오늘 보강 (이 반 학생)</div>
+      <div class="panel" style="border-color:#cde7b8;background:#f6fcef">
+        <div id="mkToday" style="font-size:14px"></div>
+      </div>
+    </div>
+
     <div class="bar">
       <span class="lb">요일</span>
       <select id="daySel"></select>
@@ -327,6 +334,25 @@ function boot(){
   bookInit();
   reportInit();
   allInit();
+  loadMakeupToday();
+}
+// ── 오늘 보강 (이 반 학생만) : 이름+시간만, 하루종일 ──
+async function loadMakeupToday(){
+  if(!(SB&&USER)) return;
+  const names=new Set(TT.map(r=>r.name_kor));
+  const wrap=$('#mkTodayWrap'); if(!wrap) return;
+  if(!names.size){ wrap.style.display='none'; return; }
+  const { data } = await SB.from('makeup').select('student_name,makeup_at,status').eq('status','scheduled');
+  const n=new Date(), y=n.getFullYear(), m=n.getMonth(), d=n.getDate();
+  const isToday=ts=>{ const k=new Date(ts); return k.getFullYear()===y&&k.getMonth()===m&&k.getDate()===d; };
+  const rows=(data||[]).filter(r=>r.makeup_at&&isToday(r.makeup_at)&&names.has(r.student_name))
+    .sort((a,b)=>new Date(a.makeup_at)-new Date(b.makeup_at));
+  if(!rows.length){ wrap.style.display='none'; return; }
+  wrap.style.display='';
+  $('#mkToday').innerHTML='<table style="width:100%;border-collapse:collapse">'+rows.map(r=>{
+    const t=new Date(r.makeup_at), hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+    return `<tr><td style="padding:6px 10px;font-weight:800;color:var(--navy);width:120px">${r.student_name}</td><td style="padding:6px 10px;color:var(--green-d);font-weight:700">${hm} 보강</td></tr>`;
+  }).join('')+'</table>';
 }
 // ── 전체 시간표 (구글시트, 접힘 기본) ──
 let allOpen=false;
