@@ -213,7 +213,7 @@ function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); 
 // 과목별 답지(구글 드라이브) — 있으면 도구의 '교재배부 입력' 카드를 답지로 대체(배부는 위 패널에서 가능)
 const DAPJI = { '알파':'https://drive.google.com/drive/folders/1cLZ-b5n8QxI0fIbCJji2VFWTqfo8qjtH' };
 // 과목별 Extended resource(노션) — 있으면 도구에 버튼 노출
-const EXTRES = { '영어도서관':'https://0316540571.notion.site/3cf8ac3f08858110bdb4de00617c1cce' };
+const EXTRES = { '영어도서관':'https://drive.google.com/drive/folders/1h7dLCa9fsIi0pmxlP9Jj0MlPXgreVLNu' };
 function applyExt(){
   const url=EXTRES[PROGRAM], a=$('#toolExt'); if(!url||!a) return;
   a.href=url; a.style.display='';
