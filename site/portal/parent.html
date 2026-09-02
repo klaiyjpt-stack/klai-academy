@@ -45,6 +45,23 @@
   .paybtn .ic{font-size:28px;width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#f3eeff;flex:none}
   .paybtn h3{font-size:15.5px;color:var(--navy);font-weight:800}
   .paybtn p{font-size:12.5px;color:var(--sub)}
+  .childbar{display:flex;align-items:center;gap:10px;background:#f3eeff;border:1px solid #ddd0f7;border-radius:12px;padding:10px 14px;margin-top:18px;font-size:13.5px}
+  .childbar b{color:#5a2ec4}
+  .childbar .chg{margin-left:auto;color:#7b3fe4;font-weight:800;font-size:12px;cursor:pointer;background:none;border:none}
+  .childform{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .childform input{padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-size:14px}
+  .childform button{background:#7b3fe4;color:#fff;border:none;border-radius:9px;padding:9px 14px;font-weight:800;cursor:pointer}
+  .stack{display:flex;flex-direction:column;gap:10px}
+  .mut{color:var(--sub);font-size:13px}
+  .item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .item .top{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px;align-items:center}
+  .item .h{font-weight:800;color:var(--navy);font-size:13.5px}
+  .item .dt{font-size:12px;color:var(--sub);font-weight:700}
+  .item .txt{font-size:14px;white-space:pre-wrap;line-height:1.55}
+  .item.hw{border-left:4px solid var(--green)}
+  .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .thumbs a{display:block}
+  .thumbs img{width:96px;height:120px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
   .hidden{display:none}
 </style>
 </head>
@@ -75,14 +92,19 @@
   </header>
   <div class="wrap content">
 
-    <div class="eyebrow">자녀 학습 현황</div>
-    <div class="card"><div class="t">📊 학습 요약</div>
-      <div class="metrics">
-        <div class="row"><span>시험·평가 (단어·월말·레벨)</span><span class="v">준비중</span></div>
-        <div class="row"><span>출결 · 이번 달</span><span class="v">준비중</span></div>
-        <div class="row"><span>수업 진도</span><span class="v">준비중</span></div>
-      </div>
-      <p style="font-size:12px;color:var(--sub);margin-top:10px">성적·출결·진도가 곧 여기에 자동으로 표시됩니다.</p></div>
+    <div id="childBar" class="childbar"></div>
+
+    <div class="eyebrow">📋 반 숙제 · 공지</div>
+    <div id="hwBox" class="stack"><div class="mut">불러오는 중…</div></div>
+
+    <div class="eyebrow">📊 성적 · 출결 요약</div>
+    <div class="card"><div class="metrics" id="sumBox"><div class="row"><span class="mut">불러오는 중…</span></div></div></div>
+
+    <div class="eyebrow">📄 리포트</div>
+    <div id="rpBox" class="stack"><div class="mut">불러오는 중…</div></div>
+
+    <div class="eyebrow">🎬 영어도서관 영상</div>
+    <div id="vidBox" class="stack"><div class="mut">불러오는 중…</div></div>
 
     <div class="eyebrow">교육비·교재비 결제</div>
     <a class="paybtn" id="payBtn" href="#" target="_blank" rel="noopener"><div class="ic">💳</div><div><h3>교육비·교재비 결제</h3><p>이코딩에서 안전하게 결제하기 →</p></div></a>
@@ -118,10 +140,92 @@ if(!SUPABASE_URL || !SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'
 else {
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+  const esc = t => (t||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  let SESSION=null;
+  function childCode(){
+    return SESSION?.user?.user_metadata?.child_code || localStorage.getItem('klai_child_code') || '';
+  }
   async function route(){
     const { data:{ session } } = await sb.auth.getSession();
-    if(session){ $('#pName').textContent = session.user.user_metadata?.name || session.user.email?.split('@')[0] || '학부모'; show('dashView'); }
-    else show('loginView');
+    SESSION=session;
+    if(session){
+      $('#pName').textContent = session.user.user_metadata?.name || session.user.email?.split('@')[0] || '학부모';
+      show('dashView');
+      loadChild();
+    } else show('loginView');
+  }
+  async function loadChild(){
+    const code = childCode();
+    const bar = $('#childBar');
+    if(!code){
+      bar.innerHTML = '<span class="mut">자녀의 <b>로그인 아이디</b>(예: Elin1136)를 한 번만 입력하면 학습 현황이 연결돼요.</span>'+
+        '<div class="childform" style="width:100%;margin-top:8px"><input id="childIn" placeholder="자녀 로그인 아이디" autocapitalize="none"><button id="childBtn">연결</button></div>';
+      $('#childBtn').onclick=()=>{ const v=$('#childIn').value.trim(); if(v){ localStorage.setItem('klai_child_code',v); loadChild(); } };
+      ['hwBox','rpBox','vidBox'].forEach(id=>$('#'+id).innerHTML='<div class="mut">자녀 연결 후 표시돼요.</div>');
+      $('#sumBox').innerHTML='<div class="row"><span class="mut">자녀 연결 후 표시돼요.</span></div>';
+      return;
+    }
+    // 자녀 이름 + 반 조회
+    const { data:cr } = await sb.from('class_records').select('teacher,class_name,student_name').eq('student_code',code);
+    const name = (cr&&cr[0]&&cr[0].student_name) || code;
+    const classes = [...new Map((cr||[]).map(r=>[r.teacher+'|'+r.class_name,r])).values()];
+    bar.innerHTML = `<span>👧 <b>${esc(name)}</b> 학생 · <span class="mut">${esc(code)}</span></span><button class="chg" id="childChg">자녀 변경</button>`;
+    $('#childChg').onclick=()=>{ localStorage.removeItem('klai_child_code'); loadChild(); };
+    loadHomework(classes);
+    loadSummary(code);
+    loadReports(name);
+    loadVideos();
+  }
+  async function loadHomework(classes){
+    const box=$('#hwBox');
+    if(!classes.length){ box.innerHTML='<div class="mut">아직 등록된 숙제·공지가 없어요.</div>'; return; }
+    let memos=[];
+    for(const c of classes){
+      const { data:cd } = await sb.from('class_daily').select('date,class_memo,class_name')
+        .eq('teacher',c.teacher).eq('class_name',c.class_name).eq('class_memo_published',true)
+        .order('date',{ascending:false}).limit(3);
+      (cd||[]).forEach(m=>{ if((m.class_memo||'').trim()) memos.push(m); });
+    }
+    memos.sort((a,b)=>a.date<b.date?1:-1); memos=memos.slice(0,6);
+    box.innerHTML = memos.length ? memos.map(m=>`<div class="item hw"><div class="top"><span class="h">${esc(m.class_name)}</span><span class="dt">${(m.date||'').slice(0,10)}</span></div><div class="txt">${esc(m.class_memo)}</div></div>`).join('')
+      : '<div class="mut">아직 등록된 숙제·공지가 없어요.</div>';
+  }
+  async function loadSummary(code){
+    const box=$('#sumBox');
+    const { data } = await sb.from('class_records').select('date,attendance,homework,score,max')
+      .eq('student_code',code).eq('published',true).order('date',{ascending:false}).limit(60);
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<div class="row"><span class="mut">아직 공개된 기록이 없어요.</span></div>'; return; }
+    const ym=(new Date()).toISOString().slice(0,7);
+    const month=rows.filter(r=>(r.date||'').slice(0,7)===ym);
+    const absent=month.filter(r=>['결석','absent','A'].includes(String(r.attendance))).length;
+    const late=month.filter(r=>['지각','late','L'].includes(String(r.attendance))).length;
+    const scored=rows.filter(r=>r.score!=null&&r.max);
+    const lastScore = scored.length? `${scored[0].score}/${scored[0].max}` : '-';
+    box.innerHTML =
+      `<div class="row"><span>이번 달 출결</span><span class="v">결석 ${absent} · 지각 ${late}</span></div>`+
+      `<div class="row"><span>최근 점수</span><span class="v">${lastScore}</span></div>`+
+      `<div class="row"><span>공개된 수업 기록</span><span class="v">${rows.length}건</span></div>`;
+  }
+  async function loadReports(name){
+    const box=$('#rpBox');
+    const { data } = await sb.from('reports').select('report_type,files,comment,created_at,media_type,status')
+      .eq('media_type','sheet').eq('status','발송').eq('name_kor',name).order('created_at',{ascending:false}).limit(12);
+    const rows=data||[];
+    box.innerHTML = rows.length ? rows.map(r=>{
+      const files=(r.files||[]).map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}"></a>`).join('');
+      return `<div class="item"><div class="top"><span class="h">${esc(r.report_type||'리포트')}</span><span class="dt">${(r.created_at||'').slice(0,10)}</span></div>${r.comment?`<div class="txt">${esc(r.comment)}</div>`:''}<div class="thumbs">${files}</div></div>`;
+    }).join('') : '<div class="mut">아직 발송된 리포트가 없어요.</div>';
+  }
+  async function loadVideos(){
+    const box=$('#vidBox');
+    const { data } = await sb.from('reports').select('files,comment,created_at,media_type,status')
+      .eq('media_type','video').eq('status','발송').order('created_at',{ascending:false}).limit(6);
+    const rows=data||[];
+    box.innerHTML = rows.length ? rows.map(r=>{
+      const links=(r.files||[]).map(u=>`<a href="${u}" target="_blank" rel="noopener" class="link">▶ 영상 보기</a>`).join(' ');
+      return `<div class="item"><div class="top"><span class="h">영어도서관 영상</span><span class="dt">${(r.created_at||'').slice(0,10)}</span></div>${r.comment?`<div class="txt">${esc(r.comment)}</div>`:''}<div style="margin-top:8px">${links}</div></div>`;
+    }).join('') : '<div class="mut">아직 등록된 영상이 없어요.</div>';
   }
   $('#loginBtn').onclick = async ()=>{
     const id=$('#uid').value.trim(), pw=$('#upw').value; $('#loginErr').textContent='';
