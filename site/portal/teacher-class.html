@@ -180,6 +180,7 @@
     <div class="eyebrow">도구</div>
     <div class="tools">
       <a class="tool" id="toolBook" href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578#view=%EB%B0%B0%EB%B6%80%20%EC%9E%85%EB%A0%A5" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>교재배부 입력</h3><p>배부 입력 화면 바로 열기</p></div></a>
+      <a class="tool" id="toolExt" style="display:none" target="_blank" rel="noopener"><div class="ic">📦</div><div><h3>Extended resource</h3><p>Zoom · Keystone Let's Talk</p></div></a>
       <a class="tool" href="https://0316540571.notion.site/klai-English-academy-c31527b84f4345fb9aa2748823d9b7c8" target="_blank" rel="noopener"><div class="ic">📒</div><div><h3>자료실 (노션)</h3><p>수업 자료·양식 찾아 쓰기</p></div></a>
       <a class="tool" href="manual.html"><div class="ic">📖</div><div><h3>사용법</h3><p>페이지 사용 안내</p></div></a>
     </div>
@@ -211,6 +212,12 @@ const $ = s=>document.querySelector(s);
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); }
 // 과목별 답지(구글 드라이브) — 있으면 도구의 '교재배부 입력' 카드를 답지로 대체(배부는 위 패널에서 가능)
 const DAPJI = { '알파':'https://drive.google.com/drive/folders/1cLZ-b5n8QxI0fIbCJji2VFWTqfo8qjtH' };
+// 과목별 Extended resource(노션) — 있으면 도구에 버튼 노출
+const EXTRES = { '영어도서관':'https://0316540571.notion.site/3cf8ac3f08858110bdb4de00617c1cce' };
+function applyExt(){
+  const url=EXTRES[PROGRAM], a=$('#toolExt'); if(!url||!a) return;
+  a.href=url; a.style.display='';
+}
 function applyDapji(){
   const url=DAPJI[PROGRAM], a=$('#toolBook'); if(!url||!a) return;
   a.href=url; a.target='_blank'; a.rel='noopener';
@@ -327,6 +334,7 @@ function refreshSlot(){ fillTimes(); renderRows(); }
 function boot(){
   applyMeta();
   applyDapji();
+  applyExt();
   const today=new Date().toISOString().slice(0,10);
   $('#dateSel').value=today;
   fillDays();
