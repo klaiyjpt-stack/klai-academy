@@ -321,8 +321,8 @@ function renderRows(cls){
   const MX = EVALMAX[$('#evalSel').selectedIndex] ?? '';
   $('#clsPill').textContent = `${cls} · ${list.length}${LANG==='ko'?'명':' '+s.students}`;
   $('#rows').innerHTML = list.map(st=>`
-    <tr data-code="${st.code}" data-name="${st.ko}">
-      <td class="name">${LANG==='ko'?st.ko:st.en} <span style="color:var(--sub);font-weight:500;font-size:12px">${st.code}</span><small>${LANG==='ko'?st.en:st.ko}</small></td>
+    <tr data-code="${st.en}${st.code}" data-name="${st.ko}">
+      <td class="name">${LANG==='ko'?st.ko:st.en} <span style="color:var(--sub);font-weight:500;font-size:12px">${st.en}${st.code}</span><small>${LANG==='ko'?st.en:st.ko}</small></td>
       <td><select class="att">${s.att.map(a=>`<option>${a}</option>`).join('')}</select></td>
       <td><input type="checkbox" class="chk hw"></td>
       <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="${MX}"></span></td>

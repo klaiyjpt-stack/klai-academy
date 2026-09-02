@@ -43,6 +43,13 @@
   .link{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 15px;font-weight:700;font-size:13px;color:var(--navy)}
   .link:hover{border-color:var(--blue);color:var(--blue-d)}
   .foot{text-align:center;color:var(--sub);font-size:11.5px;margin-top:30px}
+  .hwbox{display:flex;flex-direction:column;gap:10px}
+  .hw{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:14px;padding:14px 16px}
+  .hw .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px}
+  .hw .cls{font-weight:800;color:var(--navy);font-size:13.5px}
+  .hw .dt{font-size:12px;color:var(--sub);font-weight:700}
+  .hw .txt{font-size:14px;color:var(--ink);white-space:pre-wrap;line-height:1.55}
+  .hw.empty{border-left-color:var(--line);color:var(--sub);font-size:13px}
   .hidden{display:none}
 </style>
 </head>
@@ -77,11 +84,16 @@
   </header>
   <div class="wrap content">
 
+    <div class="eyebrow">📋 우리 반 숙제 · 공지</div>
+    <div id="hwBox" class="hwbox"><span style="color:var(--sub)">불러오는 중…</span></div>
+
     <div class="eyebrow">클라이 학습 앱</div>
     <div class="apps">
       <a class="app" href="../phonics/index.html"><div class="ic">🎧</div><div><h3>파닉스 유창성</h3><p>소리 내어 읽기 훈련</p></div></a>
       <a class="app" href="../sightword/index.html"><div class="ic">🔤</div><div><h3>사이트워드</h3><p>기본 단어 익히기</p></div></a>
       <a class="app" href="../write/index.html"><div class="ic">✍️</div><div><h3>Writing Lab</h3><p>라이팅 첨삭</p></div></a>
+      <a class="app" href="eqtalk.html"><div class="ic">🗣️</div><div><h3>EQ Talk & Game</h3><p>확장 질문 말하기</p></div></a>
+      <a class="app" href="grouptalk/index.html"><div class="ic">💬</div><div><h3>Group Talk</h3><p>그룹 스피킹</p></div></a>
       <a class="app" id="ipsiCard" href="#" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>입시 자료</h3><p>중·고 강의·자료</p></div></a>
     </div>
 
@@ -122,10 +134,33 @@ if(!SUPABASE_URL || !SUPABASE_ANON){
   async function route(){
     const { data:{ session } } = await sb.auth.getSession();
     if(session){
-      const name = session.user.user_metadata?.name || session.user.email?.split('@')[0] || '학생';
+      const code = (session.user.email||'').split('@')[0];   // 로그인 아이디 = 영어이름+숫자 (예: Elin1136)
+      const name = session.user.user_metadata?.name || code || '학생';
       $('#stuName').textContent = name;
       show('dashView');
+      loadHomework(code);
     } else show('loginView');
+  }
+  // 우리 반 숙제·공지 = 원어민 선생님이 발행한 반 메모(class_daily). 내 반은 class_records(student_code)로 찾음.
+  async function loadHomework(code){
+    const box = $('#hwBox'); if(!box) return;
+    try{
+      const { data:cr } = await sb.from('class_records').select('teacher,class_name').eq('student_code', code);
+      const classes = [...new Map((cr||[]).map(r=>[r.teacher+'|'+r.class_name, r])).values()];
+      if(!classes.length){ box.innerHTML = '<div class="hw empty">아직 등록된 숙제·공지가 없어요.</div>'; return; }
+      let memos = [];
+      for(const c of classes){
+        const { data:cd } = await sb.from('class_daily').select('date,class_memo,class_name')
+          .eq('teacher', c.teacher).eq('class_name', c.class_name).eq('class_memo_published', true)
+          .order('date',{ascending:false}).limit(3);
+        (cd||[]).forEach(m=>{ if((m.class_memo||'').trim()) memos.push(m); });
+      }
+      memos.sort((a,b)=> (a.date<b.date?1:-1));
+      memos = memos.slice(0,6);
+      if(!memos.length){ box.innerHTML = '<div class="hw empty">아직 등록된 숙제·공지가 없어요.</div>'; return; }
+      const esc = t => (t||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+      box.innerHTML = memos.map(m=>`<div class="hw"><div class="top"><span class="cls">${esc(m.class_name)}</span><span class="dt">${(m.date||'').slice(0,10)}</span></div><div class="txt">${esc(m.class_memo)}</div></div>`).join('');
+    }catch(e){ box.innerHTML = '<div class="hw empty">숙제를 불러오지 못했어요.</div>'; }
   }
   $('#loginBtn').onclick = async ()=>{
     const id = $('#uid').value.trim(), pw = $('#upw').value;
