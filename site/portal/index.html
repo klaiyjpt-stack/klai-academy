@@ -50,6 +50,15 @@
   .hw .dt{font-size:12px;color:var(--sub);font-weight:700}
   .hw .txt{font-size:14px;color:var(--ink);white-space:pre-wrap;line-height:1.55}
   .hw.empty{border-left-color:var(--line);color:var(--sub);font-size:13px}
+  .mut{color:var(--sub);font-size:13px}
+  .ttbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 6px;overflow-x:auto}
+  .ttbox table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:300px}
+  .ttbox td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+  .ttbox td.d{font-weight:800;color:var(--navy);width:44px;background:var(--soft)}
+  .ttbox .slot{display:inline-block;background:#eef4ff;color:var(--blue-d);border-radius:8px;padding:3px 9px;margin:2px 4px 2px 0;font-weight:700;font-size:12.5px}
+  .mk{background:#fff;border:1px solid var(--line);border-left:4px solid #7b3fe4;border-radius:14px;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .mk .d{font-weight:800;color:var(--navy)}
+  .mk .t{color:#7b3fe4;font-weight:800;font-size:13.5px}
   .hidden{display:none}
 </style>
 </head>
@@ -86,6 +95,12 @@
 
     <div class="eyebrow">📋 우리 반 숙제 · 공지</div>
     <div id="hwBox" class="hwbox"><span style="color:var(--sub)">불러오는 중…</span></div>
+
+    <div class="eyebrow">🗓️ 내 수업 시간표</div>
+    <div id="ttBox" class="ttbox"><span class="mut">불러오는 중…</span></div>
+
+    <div class="eyebrow">🔁 보강 일정</div>
+    <div id="mkBox" class="hwbox"><span class="mut">불러오는 중…</span></div>
 
     <div class="eyebrow">클라이 학습 앱</div>
     <div class="apps">
@@ -133,11 +148,48 @@ if(!SUPABASE_URL || !SUPABASE_ANON){
     const { data:{ session } } = await sb.auth.getSession();
     if(session){
       const code = (session.user.email||'').split('@')[0];   // 로그인 아이디 = 영어이름+숫자 (예: Elin1136)
-      const name = session.user.user_metadata?.name || code || '학생';
-      $('#stuName').textContent = name;
+      let name = session.user.user_metadata?.name || '';
+      if(!/[가-힣]/.test(name)){                              // 한글이름 아니면 반기록에서 조회
+        const { data } = await sb.from('class_records').select('student_name').eq('student_code',code).limit(1);
+        if(data&&data[0]&&data[0].student_name) name = data[0].student_name;
+      }
+      $('#stuName').textContent = name || code || '학생';
       show('dashView');
       loadHomework(code);
+      loadSchedule(name);
+      loadMakeup(name);
     } else show('loginView');
+  }
+  const DAYLBL = {mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'};
+  const DAYORD = ['mon','tue','wed','thu','fri','sat','sun'];
+  async function loadSchedule(name){
+    const box=$('#ttBox'); if(!box) return;
+    if(!name){ box.innerHTML='<span class="mut">이름 확인 후 표시돼요.</span>'; return; }
+    const { data } = await sb.from('timetable').select('subject,day,time_slot')
+      .eq('name_kor',name).eq('active',true).neq('status','draft');
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<span class="mut">등록된 시간표가 없어요.</span>'; return; }
+    const byday={}; rows.forEach(r=>{ (byday[r.day]=byday[r.day]||[]).push(r); });
+    const tkey=t=>parseInt((t||'').replace(/[^0-9]/g,''))||0;
+    let h='<table>';
+    DAYORD.filter(d=>byday[d]).forEach(d=>{
+      const list=byday[d].sort((a,b)=>tkey(a.time_slot)-tkey(b.time_slot));
+      h+=`<tr><td class="d">${DAYLBL[d]}</td><td>${list.map(r=>`<span class="slot">${r.time_slot} ${r.subject}</span>`).join('')}</td></tr>`;
+    });
+    box.innerHTML=h+'</table>';
+  }
+  async function loadMakeup(name){
+    const box=$('#mkBox'); if(!box) return;
+    if(!name){ box.innerHTML='<span class="mut">이름 확인 후 표시돼요.</span>'; return; }
+    const { data } = await sb.from('makeup').select('makeup_at,status')
+      .eq('student_name',name).eq('status','scheduled').order('makeup_at');
+    const today=new Date(); today.setHours(0,0,0,0);
+    const up=(data||[]).filter(r=>r.makeup_at && new Date(r.makeup_at)>=today);
+    if(!up.length){ box.innerHTML='<div class="hw empty">예정된 보강이 없어요.</div>'; return; }
+    box.innerHTML=up.map(r=>{ const t=new Date(r.makeup_at);
+      const md=`${t.getMonth()+1}/${t.getDate()}`, wd='일월화수목금토'[t.getDay()], hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+      return `<div class="mk"><span class="d">${md}(${wd})</span><span class="t">${hm} 보강</span></div>`;
+    }).join('');
   }
   // 우리 반 숙제·공지 = 원어민 선생님이 발행한 반 메모(class_daily). 내 반은 class_records(student_code)로 찾음.
   async function loadHomework(code){
