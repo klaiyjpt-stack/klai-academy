@@ -288,26 +288,27 @@ button{cursor:pointer}
 
 <div class="scr on" id="setup">
   <div class="hero">
-    <button class="mini" id="homeBack" onclick="tap();goBack()">← BACK</button>
+    <button class="mini" id="homeBack" onclick="tap();goBack()" data-t="back">← BACK</button>
     <span class="logo big"></span>
     <div><div class="ttl">EQ Talk <span style="color:var(--pink)">&amp; Game</span></div>
-      <div class="sub">Extended Learning Question · Let's Talk! · 30 books · 3,809 questions</div></div>
+      <div class="sub" data-t="sub">Extended Learning Question · Let's Talk! · 30 books · 3,809 questions</div></div>
+    <button class="mini" id="langBtn" onclick="tap();toggleLang()" style="margin-left:auto">한국어</button>
   </div>
   <div class="wrap">
-  <div class="card full"><div class="sect">Choose a game</div><div class="gm" id="gm"></div></div>
-  <div class="card"><div class="sect">Book</div>
+  <div class="card full"><div class="sect" data-t="chooseGame">Choose a game</div><div class="gm" id="gm"></div></div>
+  <div class="card"><div class="sect" data-t="book">Book</div>
     <div class="picker">
-      <div class="prow"><label>Series</label><span class="chips" id="serRow"></span></div>
-      <div class="prow"><label>Level</label><span class="chips" id="lvRow"></span></div>
-      <div class="prow"><label>Volume</label><span class="chips" id="volRow"></span></div>
-      <div class="prow"><label>Unit</label><select id="unitSel"></select>
-        <label>Lesson</label><select id="lesSel"></select>
+      <div class="prow"><label data-t="series">Series</label><span class="chips" id="serRow"></span></div>
+      <div class="prow"><label data-t="level">Level</label><span class="chips" id="lvRow"></span></div>
+      <div class="prow"><label data-t="volume">Volume</label><span class="chips" id="volRow"></span></div>
+      <div class="prow"><label data-t="unit">Unit</label><select id="unitSel"></select>
+        <label data-t="lesson">Lesson</label><select id="lesSel"></select>
         <span class="bookTag" id="bookTag"></span></div>
     </div>
   </div>
-  <div class="card"><div class="sect">Players & rules</div>
+  <div class="card"><div class="sect" data-t="players">Players & rules</div>
     <div class="row" style="align-items:flex-start">
-      <div><label>Turn order (max 10)</label><br>
+      <div><label data-t="turnOrderL">Turn order (max 10)</label><br>
         <span class="rosterwrap"><textarea id="roster">1
 2
 3
@@ -315,48 +316,48 @@ button{cursor:pointer}
 5
 6</textarea><span class="rcount" id="rcount"></span></span></div>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div><label>Rounds (turns per student)</label><br><select id="rounds"></select></div>
-        <div><label>Countdown</label><br><select id="sec">
-          <option value="0">Off</option><option value="3">3 sec</option>
-          <option value="5" selected>5 sec</option><option value="10">10 sec</option><option value="15">15 sec</option></select></div>
-        <div><label>Hangman picture</label><br><select id="draw">
-          <option value="daily" selected>Today's picture 📅</option>
-          <option value="snowman">Snowman ⛄</option><option value="rocket">Rocket 🚀</option>
-          <option value="cake">Birthday cake 🎂</option><option value="robot">Robot 🤖</option>
-          <option value="random">Surprise me</option></select></div>
-        <div><label>On screen</label><br>
-          <label class="chk"><input type="checkbox" id="cKo" checked> Korean meaning</label><br>
-          <label class="chk"><input type="checkbox" id="cHint"> Hints from the start</label></div>
+        <div><label data-t="rounds">Rounds (turns per student)</label><br><select id="rounds"></select></div>
+        <div><label data-t="countdown">Countdown</label><br><select id="sec">
+          <option value="0" data-t="secOff">Off</option><option value="3" data-t="sec3">3 sec</option>
+          <option value="5" selected data-t="sec5">5 sec</option><option value="10" data-t="sec10">10 sec</option><option value="15" data-t="sec15">15 sec</option></select></div>
+        <div><label data-t="hangmanPic">Hangman picture</label><br><select id="draw">
+          <option value="daily" selected data-t="drawDaily">Today's picture 📅</option>
+          <option value="snowman" data-t="drawSnow">Snowman ⛄</option><option value="rocket" data-t="drawRocket">Rocket 🚀</option>
+          <option value="cake" data-t="drawCake">Birthday cake 🎂</option><option value="robot" data-t="drawRobot">Robot 🤖</option>
+          <option value="random" data-t="drawRandom">Surprise me</option></select></div>
+        <div><label data-t="onScreen">On screen</label><br>
+          <label class="chk"><input type="checkbox" id="cKo" checked> <span data-t="korMeaning">Korean meaning</span></label><br>
+          <label class="chk"><input type="checkbox" id="cHint"> <span data-t="hintsStart">Hints from the start</span></label></div>
       </div>
     </div>
   </div>
   <div class="card rules full">
-    <b style="font-size:16px">House rules — read before you play</b>
+    <b style="font-size:16px" data-t="houseTitle">House rules — read before you play</b>
     <div style="font-size:15px;line-height:1.7;margin-top:8px">
-      This is <b>not a contest</b>. No points, no winner, no losing team.<br>
-      Everyone gets the same number of turns. A miss just passes the question along — it costs nothing.<br>
-      Never rush a child. The fuse pops at zero just for fun — the game still waits for you.
-      An answer after the boom is still a ⭕.<br>
-      Finish every game the same way: <b>“Great job, everyone!”</b> — praise the whole class, name nobody.
+      <span data-t="house1">This is <b>not a contest</b>. No points, no winner, no losing team.</span><br>
+      <span data-t="house2">Everyone gets the same number of turns. A miss just passes the question along — it costs nothing.</span><br>
+      <span data-t="house3">Never rush a child. The fuse pops at zero just for fun — the game still waits for you. An answer after the boom is still a ⭕.</span><br>
+      <span data-t="house4">Finish every game the same way: <b>“Great job, everyone!”</b> — praise the whole class, name nobody.</span>
     </div>
   </div>
   </div>
   <div class="credit">EQ Talk &amp; Game · created by Sungmi Bae · Amy English · 2026</div>
-  <div class="startbar"><button class="go" onclick="start()">START GAME</button>
-    <button class="go alt" onclick="pStart()">PRACTICE FIRST</button>
+  <div class="startbar"><button class="go" onclick="start()" data-t="startGame">START GAME</button>
+    <button class="go alt" onclick="pStart()" data-t="practiceFirst">PRACTICE FIRST</button>
     <span class="note" id="startNote"></span></div>
 </div>
 
 <div class="scr" id="play">
   <div class="top">
-    <button class="mini" onclick="tap();back()">↶ UNDO</button>
+    <button class="mini" onclick="tap();back()" data-t="undo">↶ UNDO</button>
     <span class="pill" id="unit"></span>
     <span class="pill ghostpill" id="gname"></span>
     <span class="count" id="count"></span>
     <span class="grp">
+      <button class="mini" onclick="tap();toggleLang()" id="langBtn2">한국어</button>
       <button class="mini" onclick="tap();toggleKo()">KOR</button>
-      <button class="mini" onclick="tap();pause()">❚❚ PAUSE</button>
-      <button class="mini home" onclick="tap();quitAsk()">⌂ HOME</button>
+      <button class="mini" onclick="tap();pause()" data-t="pauseBtn">❚❚ PAUSE</button>
+      <button class="mini home" onclick="tap();quitAsk()" data-t="homeBtn">⌂ HOME</button>
     </span>
   </div>
   <div class="stage">
@@ -364,7 +365,7 @@ button{cursor:pointer}
     <div class="side">
       <div class="now" id="now"><small id="phase">YOUR TURN</small><div class="nm" id="nowName"></div>
         <div class="timer" id="timer"></div></div>
-      <div class="queue"><h4>TURN ORDER</h4><div id="queue"></div></div>
+      <div class="queue"><h4 data-t="turnOrderS">TURN ORDER</h4><div id="queue"></div></div>
       <span class="logo side"></span>
     </div>
   </div>
@@ -373,30 +374,30 @@ button{cursor:pointer}
 
 <div class="scr" id="practice">
   <div class="top">
-    <button class="mini home" onclick="tap();show('setup')">⌂ HOME</button>
+    <button class="mini home" onclick="tap();show('setup')" data-t="homeBtn">⌂ HOME</button>
     <span class="pill" id="pUnit"></span>
-    <span class="pill ghostpill">Practice</span>
+    <span class="pill ghostpill" data-t="practiceTag">Practice</span>
     <span class="count" id="pCount"></span>
     <span class="grp">
       <button class="mini" onclick="tap();pToggle('ko')">KOR</button>
-      <button class="mini" onclick="tap();pToggle('hint')">HINT</button>
-      <button class="mini" onclick="tap();pStartGame()">GO TO GAME</button>
+      <button class="mini" onclick="tap();pToggle('hint')" data-t="hintBtn">HINT</button>
+      <button class="mini" onclick="tap();pStartGame()" data-t="goToGame">GO TO GAME</button>
     </span>
   </div>
   <div class="stage"><div class="main" id="pMain"></div></div>
   <div class="ticks" id="pTicks"></div>
   <div class="pnav">
-    <button onclick="pGo(-1)">← PREVIOUS</button>
-    <button class="main" onclick="pGo(1)">NEXT →</button>
+    <button onclick="pGo(-1)" data-t="prev">← PREVIOUS</button>
+    <button class="main" onclick="pGo(1)" data-t="next">NEXT →</button>
   </div>
 </div>
 
 <div class="scr" id="done" style="align-items:center;justify-content:center;gap:20px">
   <span class="logo big"></span>
   <div style="font-size:80px">🎉</div>
-  <h1><span>Great job, everyone!</span></h1>
-  <div style="font-size:20px;color:var(--muted)">Everybody spoke. Nobody lost. Clap for the whole class. 👏</div>
-  <div class="row"><button class="go" onclick="show('setup')">⌂ HOME</button></div>
+  <h1><span data-t="doneTitle">Great job, everyone!</span></h1>
+  <div style="font-size:20px;color:var(--muted)" data-t="doneSub">Everybody spoke. Nobody lost. Clap for the whole class. 👏</div>
+  <div class="row"><button class="go" onclick="show('setup')" data-t="homeBtn">⌂ HOME</button></div>
   <div class="credit mid">created by Sungmi Bae · Amy English</div>
 </div>
 
@@ -416,11 +417,61 @@ document.addEventListener('click',e=>{                 // 로고 5번 누르면 
 /* DATA: eq-data.js 에서 로드 (첫 로딩 속도 개선) */
 const UNIT=[null,['#58B0B8','#3F949C'],['#302878','#241D5C'],['#2F8E99','#216E78'],['#5A4BB5','#43349A']];
 const GAMES=[
- {id:'speed', n:'Speed Relay',i:'⚡',d:'3·2·1 — then the question appears. Answer in turn; a miss passes it on.'},
- {id:'flip',  n:'Flip Cards', i:'🃏',d:'Tap a card to flip it open. Two of them are bombs.'},
- {id:'ladder',n:'Ladder Game',i:'🪜',d:'Pick a number and ride the ladder down. Two slots are bombs.'},
- {id:'hang',  n:'Word Builder',i:'🔤',d:'Guess letters to open the word. Misses build a picture, never a hanged man.'},
+ {id:'speed', n:'Speed Relay',i:'⚡',d:'3·2·1 — then the question appears. Answer in turn; a miss passes it on.',nk:'스피드 릴레이',dk:'3·2·1 후 질문 등장. 차례대로 답하고, 못 하면 다음 친구에게.'},
+ {id:'flip',  n:'Flip Cards', i:'🃏',d:'Tap a card to flip it open. Two of them are bombs.',nk:'카드 뒤집기',dk:'카드를 눌러 뒤집어요. 두 장은 폭탄.'},
+ {id:'ladder',n:'Ladder Game',i:'🪜',d:'Pick a number and ride the ladder down. Two slots are bombs.',nk:'사다리 게임',dk:'번호를 골라 사다리를 타요. 두 칸은 폭탄.'},
+ {id:'hang',  n:'Word Builder',i:'🔤',d:'Guess letters to open the word. Misses build a picture, never a hanged man.',nk:'단어 만들기',dk:'글자를 맞혀 단어를 열어요. 틀리면 그림이 그려져요(목매달기 아님).'},
 ];
+/* ── UI 언어(한/영) — 학생 질문 제외 모든 UI ── */
+let LANG = localStorage.getItem('eq_lang') || 'en';
+const T = {
+ back:{en:'← BACK',ko:'← 뒤로'},
+ sub:{en:"Extended Learning Question · Let's Talk! · 30 books · 3,809 questions",ko:"확장 학습 질문 · Let's Talk! · 30권 · 3,809문항"},
+ chooseGame:{en:'Choose a game',ko:'게임 선택'},
+ book:{en:'Book',ko:'교재'}, series:{en:'Series',ko:'시리즈'}, level:{en:'Level',ko:'레벨'},
+ volume:{en:'Volume',ko:'권'}, unit:{en:'Unit',ko:'단원'}, lesson:{en:'Lesson',ko:'레슨'},
+ players:{en:'Players & rules',ko:'학생 & 규칙'},
+ turnOrderL:{en:'Turn order (max 10)',ko:'순서 (최대 10명)'},
+ rounds:{en:'Rounds (turns per student)',ko:'라운드 (학생당 차례)'},
+ countdown:{en:'Countdown',ko:'카운트다운'},
+ hangmanPic:{en:'Hangman picture',ko:'그림 종류'},
+ onScreen:{en:'On screen',ko:'화면 표시'},
+ korMeaning:{en:'Korean meaning',ko:'한국어 뜻'},
+ hintsStart:{en:'Hints from the start',ko:'처음부터 힌트'},
+ secOff:{en:'Off',ko:'없음'}, sec3:{en:'3 sec',ko:'3초'}, sec5:{en:'5 sec',ko:'5초'}, sec10:{en:'10 sec',ko:'10초'}, sec15:{en:'15 sec',ko:'15초'},
+ drawDaily:{en:"Today's picture 📅",ko:'오늘의 그림 📅'}, drawSnow:{en:'Snowman ⛄',ko:'눈사람 ⛄'}, drawRocket:{en:'Rocket 🚀',ko:'로켓 🚀'}, drawCake:{en:'Birthday cake 🎂',ko:'생일 케이크 🎂'}, drawRobot:{en:'Robot 🤖',ko:'로봇 🤖'}, drawRandom:{en:'Surprise me',ko:'랜덤'},
+ houseTitle:{en:'House rules — read before you play',ko:'수업 규칙 — 시작 전에 읽어요'},
+ house1:{en:'This is <b>not a contest</b>. No points, no winner, no losing team.',ko:'<b>시합이 아니에요.</b> 점수도, 승자도, 지는 팀도 없어요.'},
+ house2:{en:'Everyone gets the same number of turns. A miss just passes the question along — it costs nothing.',ko:'모두 같은 횟수의 차례를 가져요. 못 하면 다음 친구에게 넘어갈 뿐, 손해 없어요.'},
+ house3:{en:'Never rush a child. The fuse pops at zero just for fun — the game still waits for you. An answer after the boom is still a ⭕.',ko:'아이를 재촉하지 마세요. 0이 되면 재미로 펑 터질 뿐, 게임은 기다려줘요. 터진 뒤 답해도 ⭕ 예요.'},
+ house4:{en:'Finish every game the same way: <b>“Great job, everyone!”</b> — praise the whole class, name nobody.',ko:'끝날 땐 항상 <b>“모두 잘했어요!”</b> — 반 전체를 칭찬하고, 아무도 콕 집지 않아요.'},
+ startGame:{en:'START GAME',ko:'게임 준비'}, practiceFirst:{en:'PRACTICE FIRST',ko:'먼저 연습하기'},
+ undo:{en:'↶ UNDO',ko:'↶ 되돌리기'}, pauseBtn:{en:'❚❚ PAUSE',ko:'❚❚ 일시정지'}, homeBtn:{en:'⌂ HOME',ko:'⌂ 홈'},
+ turnOrderS:{en:'TURN ORDER',ko:'순서'}, practiceTag:{en:'Practice',ko:'연습'},
+ hintBtn:{en:'HINT',ko:'힌트'}, goToGame:{en:'GO TO GAME',ko:'게임 시작'}, prev:{en:'← PREVIOUS',ko:'← 이전'}, next:{en:'NEXT →',ko:'다음 →'},
+ doneTitle:{en:'Great job, everyone!',ko:'모두 잘했어요!'},
+ doneSub:{en:'Everybody spoke. Nobody lost. Clap for the whole class. 👏',ko:'모두 말했어요. 진 사람 없어요. 반 전체 박수! 👏'},
+ // 동적
+ phaseYour:{en:'YOUR TURN',ko:'네 차례'}, phaseNext:{en:'NEXT FRIEND',ko:'다음 친구'},
+ pickOne:{en:'Pick one!',ko:'하나 골라!'}, pickLetter:{en:'Pick a letter',ko:'글자 골라'},
+ pickCardMsg:{en:', pick a card!',ko:', 카드 골라!'}, pickNumMsg:{en:', pick a number!',ko:', 번호 골라!'}, pickLetterMsg:{en:', pick a letter!',ko:', 글자 골라!'},
+ wordOpen:{en:'THE WORD IS OPEN',ko:'단어가 열렸어요'}, cardN:{en:'CARD',ko:'카드'}, numberN:{en:'NUMBER',ko:'번호'},
+ nextBtn:{en:'NEXT',ko:'다음'}, wellDone:{en:'WELL DONE',ko:'잘했어요'},
+ ready:{en:'Ready 🎮',ko:'준비 완료 🎮'}, readyHint:{en:'When the screen is ready, start.',ko:'화면이 다 뜨면 시작하세요.'}, beginBtn:{en:'▶ START',ko:'▶ 게임 시작'},
+ roundWord:{en:'ROUND',ko:'라운드'}, turnWord:{en:'TURN',ko:'차례'}, ofWord:{en:'of',ko:'/'},
+ langBtn:{en:'한국어',ko:'ENG'},
+};
+const TR=k=>{const o=T[k];return o?(o[LANG]||o.en):k;};
+function applyLang(){
+ document.documentElement.lang=LANG;
+ document.querySelectorAll('[data-t]').forEach(e=>{const v=T[e.dataset.t]; if(v) e.innerHTML=(v[LANG]||v.en);});
+ document.querySelectorAll('#langBtn,#langBtn2').forEach(b=>b.textContent=TR('langBtn'));
+ if(typeof syncPicker==='function') try{syncPicker()}catch(e){}
+ if(typeof renderGames==='function') try{renderGames()}catch(e){}
+ if(typeof fillMeta==='function') try{fillMeta()}catch(e){}
+ if($('play')&&$('play').classList.contains('on')&&typeof render==='function') try{render()}catch(e){}
+}
+function toggleLang(){ LANG=LANG==='en'?'ko':'en'; localStorage.setItem('eq_lang',LANG); applyLang(); }
 const $=i=>document.getElementById(i);
 const PORTAL='https://amyschool.kr/portal/zoom-keystone.html';   // 선생님 포털
 function goBack(){                                   // 포털로 복귀 (같은 사이트에서 왔으면 뒤로가기)
@@ -487,7 +538,8 @@ const beat=n=>tone(n?520+n*90:1046,0,.16,.13,'triangle');   // 3·2·1 카운트
 
 /* ── setup ── */
 function fill(sel,arr,lab){sel.innerHTML=arr.map(v=>`<option value="${v}">${lab(v)}</option>`).join('')}
-$('gm').innerHTML=GAMES.map(g=>`<button class="g ${g.id==game?'sel':''}" data-g="${g.id}"><b>${g.n}</b><span>${g.d}</span></button>`).join('');
+function renderGames(){ $('gm').innerHTML=GAMES.map(g=>`<button class="g ${g.id==game?'sel':''}" data-g="${g.id}"><b>${LANG==='ko'?g.nk:g.n}</b><span>${LANG==='ko'?g.dk:g.d}</span></button>`).join(''); }
+renderGames();
 $('gm').onclick=e=>{const b=e.target.closest('.g');if(!b)return;game=b.dataset.g;
   document.querySelectorAll('.g').forEach(x=>x.classList.toggle('sel',x.dataset.g==game));syncStart()};
 /* ── 교재 고르기: 시리즈 → 레벨 → 볼륨 (긴 목록 대신 3단) ── */
@@ -518,6 +570,7 @@ function syncPicker(){
   if($('startNote'))syncStart();
 }
 fill($('lesSel'),[1,2,3,4],v=>'Lesson '+v);syncPicker();
+applyLang();   // 저장된 UI 언어 적용
 fill($('rounds'),[1,2,3,4,5,6,7,8,9,10],v=>v+' round'+(v>1?'s':''));
 const MAXP=10;
 function names(){return $('roster').value.split('\n').map(x=>x.trim()).filter(Boolean)}
@@ -531,7 +584,8 @@ function syncRounds(){
 }
 function syncStart(){
   const n=names().length,r=+$('rounds').value||1,g=GAMES.find(x=>x.id==game);
-  $('startNote').textContent=n?`${g.n} · ${n} student${n>1?'s':''} × ${r} round${r>1?'s':''} = ${n*r} turns`:'Add at least one name.';
+  const gn=LANG==='ko'?g.nk:g.n;
+  $('startNote').textContent=n?(LANG==='ko'?`${gn} · 학생 ${n}명 × ${r}라운드 = ${n*r}차례`:`${gn} · ${n} student${n>1?'s':''} × ${r} round${r>1?'s':''} = ${n*r} turns`):(LANG==='ko'?'이름을 한 명 이상 넣어요.':'Add at least one name.');
 }
 $('roster').oninput=syncRounds;$('rounds').onchange=syncStart;syncRounds();
 
@@ -555,10 +609,11 @@ function start(){
 function readyGate(){
   const old=$('readyBox'); if(old) old.remove();
   const el=document.createElement('div'); el.className='pause'; el.id='readyBox';
-  el.innerHTML=`<span class="logo big white"></span><h2>준비 완료 🎮</h2>
-    <p>${G.names.length}명 · ${$('gname').textContent} — 화면이 다 뜨면 시작하세요.</p>
-    <div class="btns"><button onclick="beginGame()">▶ 게임 시작</button>
-      <button class="alt" onclick="quit()">⌂ HOME</button></div>`;
+  const who=LANG==='ko'?`${G.names.length}명 · ${$('gname').textContent}`:`${G.names.length} student${G.names.length>1?'s':''} · ${$('gname').textContent}`;
+  el.innerHTML=`<span class="logo big white"></span><h2>${TR("ready")}</h2>
+    <p>${who} — ${TR('readyHint')}</p>
+    <div class="btns"><button onclick="beginGame()">${TR('beginBtn')}</button>
+      <button class="alt" onclick="quit()">${TR('homeBtn')}</button></div>`;
   document.body.appendChild(el);
 }
 function beginGame(){ const el=$('readyBox'); if(el) el.remove(); ctx(); beginTurn(); }
@@ -624,7 +679,7 @@ function toast(t){const d=document.createElement('div');d.className='toast';d.te
 function step(d){const before=Math.floor(G.used/G.names.length);
   G.used++;G.turn=(G.turn+1)%G.names.length;
   const after=Math.floor(G.used/G.names.length);
-  if(after>before&&G.used<G.total)setTimeout(()=>{toast('ROUND '+(after+1)+' — keep going!');tone(880,0,.5,.1,'sine',1320)},d);
+  if(after>before&&G.used<G.total)setTimeout(()=>{toast((LANG==='ko'?'라운드 ':'ROUND ')+(after+1)+(LANG==='ko'?' — 계속!':' — keep going!'));tone(880,0,.5,.1,'sine',1320)},d);
   setTimeout(()=>{popClose();
     if(G.used>=G.total){stopTimer();return show('done')}
     if(G.paused)return;
@@ -784,11 +839,11 @@ function render(){
   const r=G.rows[G.qi];
   $('unit').textContent=(DATA.units[G.book][G.unit]||'').toUpperCase()+' · LESSON '+G.les;
   const rd=Math.floor(G.used/G.names.length)+1,rt=G.total/G.names.length;
-  $('count').textContent=`ROUND ${rd} / ${rt}   ·   TURN ${G.used+1} of ${G.total}`;
+  $('count').textContent=`${TR('roundWord')} ${rd} / ${rt}   ·   ${TR('turnWord')} ${G.used+1} ${TR('ofWord')} ${G.total}`;
   $('nowName').textContent=G.names[G.turn];
-  $('phase').textContent=G.tries?'NEXT FRIEND':'YOUR TURN';
+  $('phase').textContent=G.tries?TR('phaseNext'):TR('phaseYour');
   const t=$('timer');
-  if(G.mode=='pick'){t.className='timer calm';t.textContent=game=='hang'?'Pick a letter':'Pick one!'}
+  if(G.mode=='pick'){t.className='timer calm';t.textContent=game=='hang'?TR('pickLetter'):TR('pickOne')}
   else if(G.mode=='ready'){t.className='timer calm';t.textContent='Get ready…'}
   else if(!G.sec){t.className='timer calm';t.textContent=''}
   else if(G.left>0){const pct=Math.max(0,G.left/G.sec*100);t.className='fusebar';
@@ -815,16 +870,16 @@ function qHTML(r){return r?`<div class="q">${esc(r.en)}</div><div class="ko ${G.
   <div class="hint ${G.hint?'':'hide'}" style="margin-top:16px"><b>START LIKE THIS</b><span>${esc(r.start)}</span>
   <b style="margin-top:12px">SAY MORE →</b><span>${esc(r.more)}</span></div>`:''}
 const actHTML=()=>`<button class="bGhost" onclick="tap();toggleHint()">💡 HINT</button>
-  <button class="bOk" onclick="hit()"><b>⭕</b><span>WELL DONE</span></button>
-  <button class="bNo" onclick="miss()"><b>❌</b><span>NEXT FRIEND</span></button>`;
+  <button class="bOk" onclick="hit()"><b>⭕</b><span>${TR('wellDone')}</span></button>
+  <button class="bNo" onclick="miss()"><b>❌</b><span>${TR('phaseNext')}</span></button>`;
 function popOpen(r){
   $('acts').innerHTML='';
   const inner=G.mode=='blank'
     ?`<div class="blankface"><div class="bomb">💣</div><div class="fuse">s s s s s …</div>
       <div class="sub">Wait for it…</div></div>`
-    :`<div class="no">${game=='flip'?'CARD '+(G.pick+1):game=='ladder'?'NUMBER '+(G.pickCol+1):'THE WORD IS OPEN'}</div>${qHTML(r)}`;
+    :`<div class="no">${game=='flip'?TR('cardN')+' '+(G.pick+1):game=='ladder'?TR('numberN')+' '+(G.pickCol+1):TR('wordOpen')}</div>${qHTML(r)}`;
   const acts=G.mode=='blank'
-    ?`<button class="bOk" style="background:var(--violet);box-shadow:0 4px 0 var(--violetD)" onclick="blankDone()">NEXT</button>`:actHTML();
+    ?`<button class="bOk" style="background:var(--violet);box-shadow:0 4px 0 var(--violetD)" onclick="blankDone()">${TR('nextBtn')}</button>`:actHTML();
   let el=$('popup');
   if(!el){el=document.createElement('div');el.id='popup';el.className='pop';document.body.appendChild(el)}
   const key=[G.mode,G.pick,G.pickCol,G.qi,G.ko,G.hint].join('|');    // 1초마다 다시 그리면 뒤집기가 반복됨
@@ -843,18 +898,18 @@ function drawBoard(){
   const picking=G.mode=='pick';
   if(game=='flip'){
     const n=G.deck.length,cols=n<=8?4:Math.ceil(Math.sqrt(n));
-    $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+', pick a card!':'&nbsp;'}</div>
+    $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+TR('pickCardMsg'):'&nbsp;'}</div>
       <div class="grid" style="grid-template-columns:repeat(${cols},1fr)">`+
       G.deck.map((v,k)=>{const open=G.opened.includes(k);
         const bk=esc(G.book.split('_').join(' '));   // 교재명 (예: ZOOM L3V1)
         return `<button class="fc ${open?'used':''}" onclick="flipPick(${k})">${
           open?(v===null?`💣<span class="bklbl">${bk}</span>`:`<span class="bklbl">${bk}</span>`):k+1}</button>`}).join('')+`</div>`;
   }else if(game=='ladder'){
-    $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+', pick a number!':'&nbsp;'}</div>
+    $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+TR('pickNumMsg'):'&nbsp;'}</div>
       <div class="ladwrap">${ladderSVG()}</div>`;
   }else if(game=='hang'){
     const h=G.hw,left=PARTS-h.bad.length;
-    $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+', pick a letter!':'&nbsp;'}</div>
+    $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+TR('pickLetterMsg'):'&nbsp;'}</div>
       <div class="hgwrap"><div class="hgpic">${snowman(h.bad.length)}</div>
         <div class="hgq"><div class="sent">${masked()}</div>
           <div style="font-size:13px;color:var(--muted);letter-spacing:.06em">
