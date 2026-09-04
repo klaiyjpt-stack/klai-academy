@@ -468,7 +468,7 @@ function applyLang(){
  document.querySelectorAll('#langBtn,#langBtn2').forEach(b=>b.textContent=TR('langBtn'));
  if(typeof syncPicker==='function') try{syncPicker()}catch(e){}
  if(typeof renderGames==='function') try{renderGames()}catch(e){}
- if(typeof fillMeta==='function') try{fillMeta()}catch(e){}
+ if(typeof fillLangSel==='function') try{fillLangSel()}catch(e){}
  if($('play')&&$('play').classList.contains('on')&&typeof render==='function') try{render()}catch(e){}
 }
 function toggleLang(){ LANG=LANG==='en'?'ko':'en'; localStorage.setItem('eq_lang',LANG); applyLang(); }
@@ -565,9 +565,13 @@ function syncPicker(){
   chips('serRow',SERIES,c.s,v=>v,v=>pickBook({s:v}));
   chips('lvRow',lvs,c.lv,v=>'L'+v,v=>pickBook({lv:+v}));
   chips('volRow',[1,2,3],c.v,v=>'Vol '+v,v=>pickBook({v:+v}),v=>vols.includes(+v));
-  const u=DATA.units[BOOK];fill($('unitSel'),[1,2,3,4],v=>'Unit '+v+' · '+(u[v]||''));
-  $('bookTag').textContent=BOOK.replace('_',' ')+' · '+DATA.q[BOOK].length+' questions';
+  const u=DATA.units[BOOK];fill($('unitSel'),[1,2,3,4],v=>(LANG==='ko'?'단원 ':'Unit ')+v+' · '+(u[v]||''));
+  $('bookTag').textContent=BOOK.replace('_',' ')+' · '+DATA.q[BOOK].length+(LANG==='ko'?'문항':' questions');
   if($('startNote'))syncStart();
+}
+function fillLangSel(){
+  const ls=$('lesSel'),lv=ls.value; fill(ls,[1,2,3,4],v=>(LANG==='ko'?'레슨 ':'Lesson ')+v); if(lv)ls.value=lv;
+  const rs=$('rounds'),rv=rs.value; fill(rs,[1,2,3,4,5,6,7,8,9,10],v=>LANG==='ko'?v+'라운드':v+' round'+(v>1?'s':'')); rs.value=rv||6;
 }
 fill($('lesSel'),[1,2,3,4],v=>'Lesson '+v);syncPicker();
 applyLang();   // 저장된 UI 언어 적용
