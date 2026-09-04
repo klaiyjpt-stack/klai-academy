@@ -48,6 +48,7 @@
       <a class="role" href="teacher-class.html?program=문법"><div class="ic">📝</div><h3>문법</h3><p>영어도서관 문법</p></a>
       <a class="role" href="teacher-class.html?program=독해"><div class="ic">📖</div><h3>독해</h3><p>독해 반 기록</p></a>
       <a class="role" href="teacher-class.html?program=영어도서관"><div class="ic">📚</div><h3>영어도서관</h3><p>영어도서관 반 기록</p></a>
+      <a class="role" id="memoCard" href="#"><div class="ic">📖</div><h3>본문 암기</h3><p>교과서 본문 출제·관리</p></a>
     </div>
   </div>
 </div>
@@ -71,6 +72,14 @@ function show(v){ ['pickView'].forEach(x=>{const el=$('#'+x); if(el) el.classLis
   if(!session){ location.replace('staff-login.html?next=teacher-hub.html'); return; }
   const asTeacher = new URLSearchParams(location.search).get('as')==='teacher';
   if(ADMINS.includes((session.user.email||'').toLowerCase()) && !asTeacher){ location.replace('admin.html'); return; }  // 원장은 원장 페이지로 (단, ?as=teacher면 강사 화면 열람 허용)
+
+  // 본문 암기 출제 — 포털 로그인 증표를 넘겨 비밀번호 없이 들어간다.
+  const memo=$('#memoCard');
+  if(memo) memo.addEventListener('click', e=>{
+    e.preventDefault();
+    const t = session && session.access_token;
+    location.href = t ? `https://klai-memo.vercel.app/sso?t=${encodeURIComponent(t)}` : `https://klai-memo.vercel.app/admin`;
+  });
   $('#who').textContent = session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사';
   show('pickView');
   const lo=$('#logoutBtn'); if(lo) lo.onclick=async()=>{ await SB.auth.signOut(); location.reload(); };

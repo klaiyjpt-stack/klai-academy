@@ -88,6 +88,7 @@
     <button class="navbtn" data-go="learning">📈 학습관리</button>
     <div class="navgrp">바로가기</div>
     <a class="navbtn" href="teacher-hub.html?as=teacher">🧑‍🏫 선생님 페이지</a>
+    <a class="navbtn" id="memoBtn" href="#">📖 본문 암기 출제</a>
     <a class="navbtn" href="manual.html">📖 사용법</a>
   </aside>
   <main class="acol">
@@ -458,6 +459,15 @@ window.upd=upd; window.toggleActive=toggleActive; window.del=del;
 
 // ── 강사 명단 (이름만, staff 테이블 CRUD) ──
 async function authHdr(){ const { data:{ session } } = await SB.auth.getSession(); return { Authorization:'Bearer '+(session?session.access_token:''), 'Content-Type':'application/json' }; }
+
+// 본문 암기 출제 — 포털 로그인 증표를 넘겨 비밀번호 없이 들어간다.
+document.getElementById('memoBtn')?.addEventListener('click', async e=>{
+  e.preventDefault();
+  const { data:{ session } } = await SB.auth.getSession();
+  const t = session && session.access_token;
+  location.href = t ? `https://klai-memo.vercel.app/sso?t=${encodeURIComponent(t)}`
+                    : 'https://klai-memo.vercel.app/admin';
+});
 async function loadTeachers(){
   const { data, error } = await SB.from('staff').select('*').order('sort').order('name');
   if(error){ $('#teaList').innerHTML='<span style="color:var(--red)">'+esc(error.message)+' (staff 테이블 실행 필요?)</span>'; return; }
