@@ -219,6 +219,7 @@ button{cursor:pointer}
 .fc:active{transform:translateY(4px) rotate(0);box-shadow:0 1px 0 var(--navy)}
 .fc.used{background:#fff;border:3px solid var(--navy);color:#C9CDDA;box-shadow:0 3px 0 var(--navy)}
 .fc.used:before{display:none}
+.fc .bklbl{position:absolute;top:8px;left:0;right:0;text-align:center;font-size:clamp(11px,1.3vw,15px);font-weight:800;letter-spacing:.02em;color:var(--navy);opacity:.85}
 /* hangman */
 .hgwrap{flex:1;display:grid;grid-template-columns:270px 1fr;gap:16px;min-height:0}
 .hgq{background:#fff;border:3px solid var(--navy);border-radius:26px;padding:22px 24px;box-shadow:0 5px 0 var(--navy);
@@ -845,8 +846,9 @@ function drawBoard(){
     $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+', pick a card!':'&nbsp;'}</div>
       <div class="grid" style="grid-template-columns:repeat(${cols},1fr)">`+
       G.deck.map((v,k)=>{const open=G.opened.includes(k);
+        const bk=esc(G.book.split('_').join(' '));   // 교재명 (예: ZOOM L3V1)
         return `<button class="fc ${open?'used':''}" onclick="flipPick(${k})">${
-          open?(v===null?'💣':'·'):k+1}</button>`}).join('')+`</div>`;
+          open?(v===null?`💣<span class="bklbl">${bk}</span>`:`<span class="bklbl">${bk}</span>`):k+1}</button>`}).join('')+`</div>`;
   }else if(game=='ladder'){
     $('main').innerHTML=`<div class="pickmsg">${picking?esc(G.names[G.turn])+', pick a number!':'&nbsp;'}</div>
       <div class="ladwrap">${ladderSVG()}</div>`;
