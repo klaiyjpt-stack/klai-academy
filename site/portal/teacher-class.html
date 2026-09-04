@@ -268,8 +268,8 @@ function renderRows(){
       <td><input class="txt remark" placeholder="특이사항"></td>
       <td><select class="txt dist">${BOOK_OPTS}</select></td>
     </tr>`).join('');
-  // 숙제 토글
-  document.querySelectorAll('.hwbtn').forEach(b=>b.onclick=()=>{
+  // 숙제 토글 (로스터 행 안의 버튼만 — 조회·펼치기 버튼 제외)
+  document.querySelectorAll('#rows .hwbtn').forEach(b=>b.onclick=()=>{
     const cur=b.dataset.hw; const nx = cur===''?'done':cur==='done'?'none':'';
     b.dataset.hw=nx; b.className='hwbtn'+(nx?' '+nx:''); b.textContent = nx==='done'?'완료':nx==='none'?'미완료':'숙제';
   });
