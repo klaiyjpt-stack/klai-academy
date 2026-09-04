@@ -48,6 +48,9 @@
   .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:13.5px;font-weight:700;padding:11px 18px;border-radius:11px;opacity:0;pointer-events:none;transition:.2s;z-index:60}
   .toast.on{opacity:1}
   .hidden{display:none}
+  .tabs{display:flex;gap:8px;padding:14px 0 2px}
+  .tab{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-weight:800;font-size:13.5px;color:var(--sub);cursor:pointer}
+  .tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 </style>
 </head>
 <body>
@@ -73,7 +76,13 @@
     <button class="out" id="logoutBtn">로그아웃</button>
   </div></header>
 
+  <div class="wrap"><div class="tabs">
+    <button class="tab on" id="tabRoster">반 명단</button>
+    <button class="tab" id="tabAcct">학생 계정</button>
+  </div></div>
+
   <div class="wrap">
+   <div id="rosterView">
     <div class="bar">
       <select id="fTeacher"></select>
       <select id="fClass"></select>
@@ -97,6 +106,30 @@
     </div>
 
     <div id="list"></div>
+   </div>
+
+   <div id="acctView" class="hidden">
+    <div class="panel">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <b style="color:var(--navy);font-size:14px">학생 로그인 계정</b>
+        <span class="cnt" id="acctCnt"></span>
+        <span style="flex:1"></span>
+        <input id="acctSearch" placeholder="이름·아이디 검색" style="padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:13.5px">
+        <button class="add" id="seedBtn" style="background:var(--blue)">108명 일괄 등록</button>
+      </div>
+      <div class="addrow" style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px">
+        <input id="ncName" placeholder="이름" style="width:100px">
+        <input id="ncId" placeholder="아이디(영어+숫자)" style="width:170px">
+        <input id="ncPw" placeholder="초기비번(기본 klai0000)" style="width:170px">
+        <button class="add" id="acctAddBtn">+ 계정 추가</button>
+      </div>
+    </div>
+    <div class="panel" style="padding:0"><div class="tblwrap">
+      <table class="grid"><thead><tr><th style="width:110px">이름</th><th style="width:180px">로그인ID</th><th>과목</th><th style="width:236px">관리</th></tr></thead>
+      <tbody id="acctBody"><tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">‘학생 계정’ 탭에서 자동 로드</td></tr></tbody></table>
+    </div></div>
+   </div>
+
     <div class="foot">클라이 어학원 · 명단은 여기서 관리 → 선생님·학생·학부모 페이지에 반영</div>
   </div>
 </div>
@@ -188,6 +221,62 @@ async function addStudent(){
 }
 window.upd=upd; window.toggleActive=toggleActive; window.del=del;
 
+// ===== 학생 계정 관리 (서버 함수 /api/admin-users) =====
+let ACCT=[];
+async function api(action, extra){
+  const { data:{ session } } = await SB.auth.getSession();
+  if(!session){ toast('로그인 필요'); return {ok:false}; }
+  const r = await fetch('/api/admin-users',{ method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(Object.assign({ action, token:session.access_token }, extra||{})) });
+  return r.json();
+}
+async function loadAcct(){
+  $('#acctBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">불러오는 중…</td></tr>';
+  const j=await api('list');
+  if(!j.ok){ $('#acctBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--red);padding:22px">'+esc(j.error||'실패')+'</td></tr>'; return; }
+  ACCT=j.users||[]; renderAcct();
+}
+function renderAcct(){
+  const q=$('#acctSearch').value.trim().toLowerCase();
+  const rows=ACCT.filter(u=>!q||(u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));
+  $('#acctCnt').textContent='총 '+ACCT.length+'명';
+  $('#acctBody').innerHTML = rows.map(u=>{
+    const idl=(u.email||'').replace('@klai.kr','');
+    return `<tr data-id="${u.id}"><td>${esc(u.name)}</td><td>${esc(idl)}</td>`+
+      `<td style="font-size:12px;color:var(--sub)">${esc(u.subj)}</td>`+
+      `<td><button class="actbtn" onclick="acctReset('${u.id}','${esc(u.name)}')">비번리셋</button> `+
+      `<button class="actbtn" onclick="acctRename('${u.id}','${esc(idl)}')">ID변경</button> `+
+      `<button class="actbtn off" onclick="acctDel('${u.id}','${esc(u.name)}')">삭제</button></td></tr>`;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">해당 없음</td></tr>';
+}
+async function seedAll(){
+  if(!confirm('학생 계정 108명을 일괄 등록할까요?\n이미 있는 계정은 건너뜁니다.')) return;
+  let off=0, tc=0, ts=0; $('#seedBtn').disabled=true;
+  while(true){
+    const j=await api('seed',{offset:off});
+    if(!j.ok){ toast('실패: '+(j.error||'')); break; }
+    tc+=j.created; ts+=j.skipped;
+    toast(`등록 ${j.processed}/${j.total} · 신규 ${tc}·기존 ${ts}`);
+    if(j.done) break; off=j.next;
+  }
+  $('#seedBtn').disabled=false; loadAcct();
+}
+async function acctReset(id,name){ const pw=prompt(name+' 새 비밀번호(6자 이상):','klai0000'); if(!pw)return; const j=await api('resetpw',{id,password:pw}); toast(j.ok?'비번 변경됨':'실패'); }
+async function acctRename(id,cur){ const v=prompt('새 로그인ID (영어+숫자, @klai.kr 자동):',cur); if(!v)return; const j=await api('rename',{id,email:v.replace(/@.*/,'')+'@klai.kr'}); toast(j.ok?'ID 변경됨':(j.error||'실패')); if(j.ok)loadAcct(); }
+async function acctDel(id,name){ if(!confirm('"'+name+'" 계정을 완전 삭제할까요?'))return; const j=await api('delete',{id}); toast(j.ok?'삭제됨':'실패'); if(j.ok)loadAcct(); }
+async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').value.trim().toLowerCase(), pw=$('#ncPw').value.trim()||'klai0000';
+  if(!name||!id){ toast('이름·아이디 필수'); return; }
+  const j=await api('create',{email:id+'@klai.kr',password:pw,name});
+  toast(j.ok?'계정 추가됨':(j.error||'실패')); if(j.ok){ ['ncName','ncId','ncPw'].forEach(i=>$('#'+i).value=''); loadAcct(); } }
+function switchTab(w){
+  $('#rosterView').classList.toggle('hidden',w!=='roster');
+  $('#acctView').classList.toggle('hidden',w!=='acct');
+  $('#tabRoster').classList.toggle('on',w==='roster');
+  $('#tabAcct').classList.toggle('on',w==='acct');
+  if(w==='acct' && !ACCT.length) loadAcct();
+}
+window.acctReset=acctReset; window.acctRename=acctRename; window.acctDel=acctDel;
+
 if(!SUPABASE_URL||!SUPABASE_ANON){ $('#setupBanner').classList.remove('hidden'); show('dashView'); }
 else { (async()=>{
   const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
@@ -204,6 +293,11 @@ else { (async()=>{
   $('#fClass').onchange = render;
   $('#fActive').onchange = render;
   $('#addBtn').onclick = addStudent;
+  $('#tabRoster').onclick = ()=>switchTab('roster');
+  $('#tabAcct').onclick   = ()=>switchTab('acct');
+  $('#seedBtn').onclick   = seedAll;
+  $('#acctAddBtn').onclick= acctAdd;
+  $('#acctSearch').oninput= renderAcct;
   route();
 })(); }
 </script>
