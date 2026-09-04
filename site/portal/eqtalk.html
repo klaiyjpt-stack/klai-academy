@@ -401,6 +401,10 @@ button{cursor:pointer}
 
 <script src="eq-data.js"></script>
 <script>
+/* ── 임시 진단: 화면에 에러/원인 표시 (F12 없이) ── */
+window.showErr=function(t){let b=document.getElementById('__err');if(!b){b=document.createElement('div');b.id='__err';b.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#c0392b;color:#fff;font:12px/1.45 monospace;padding:10px 14px;white-space:pre-wrap;max-height:45vh;overflow:auto';document.body.appendChild(b);}b.textContent='⚠ '+t;};
+window.onerror=(m,s,l,c,e)=>{window.showErr(((e&&e.stack)||m)+' @'+l+':'+c);};
+window.addEventListener('unhandledrejection',e=>window.showErr('promise: '+((e.reason&&e.reason.stack)||e.reason)));
 /* ── 만든 사람 ── */
 const CREDIT="EQ Talk & Game — created by Sungmi Bae · Amy English · 2026";
 console.log('%c'+CREDIT,'font-size:13px;font-weight:700;color:#302878;background:#EFF8F9;padding:6px 12px;border-radius:8px');
@@ -429,7 +433,7 @@ function goBack(){                                   // 포털로 복귀 (같은
   if(location.protocol==='file:')return;             // 로컬 파일로 열었을 땐 이동 안 함
   location.href=PORTAL;
 }
-const show=s=>document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id==s));
+const show=s=>{ if(s==='setup'&&window.__ingame){ window.__ingame=false; window.showErr&&window.showErr('↩ 게임 중 설정화면 복귀! 호출위치:\n'+((new Error()).stack||'')); } document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id==s)); };
 let G={},game='speed',AC;
 
 /* ── sounds (WebAudio, 파일 없음) ── */
@@ -560,7 +564,7 @@ function readyGate(){
       <button class="alt" onclick="quit()">⌂ HOME</button></div>`;
   document.body.appendChild(el);
 }
-function beginGame(){ const el=$('readyBox'); if(el) el.remove(); ctx(); beginTurn(); }
+function beginGame(){ window.__ingame=true; try{ const el=$('readyBox'); if(el) el.remove(); ctx(); beginTurn(); }catch(e){ window.showErr&&window.showErr('게임시작 오류:\n'+(e.stack||e.message)); } }
 function stopTimer(){clearInterval(G.tid);G.tid=null}
 function tick(){G.left--;render();if(G.left<=0){stopTimer();bomb()}}   // 펑 터지되 자동 실패는 없음
 function runTimer(){stopTimer();G.left=G.sec;if(G.sec)G.tid=setInterval(tick,1000);render()}
