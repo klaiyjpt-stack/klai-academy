@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>학습 리포트 · 클라이 어학원</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --brand:#215a99; --brand-ink:#17416e; --brand-soft:#eef4fb;
+    --ink:#1c1e21; --mut:#71767d; --faint:#9aa0a7; --line:#ededec; --line2:#f2f2f1; --soft:#f8f8f7;
+    --font:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",Inter,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:#fff;color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  .top{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(8px);z-index:5}
+  .top .in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px}
+  .top .bm{font-weight:700;font-size:14px;color:var(--ink)}
+  .top .bm small{color:var(--faint);font-weight:500}
+  .top .acts{display:flex;gap:8px}
+  .top button,.top a.btn{background:none;border:1px solid var(--line);color:var(--brand);font-size:12.5px;font-weight:500;padding:8px 15px;border-radius:980px;cursor:pointer}
+  .top button:hover,.top a.btn:hover{border-color:var(--brand)}
+  .sheet{max-width:720px;margin:0 auto;padding:0 22px}
+  .head{padding:64px 0 30px;border-bottom:1px solid var(--line);text-align:center}
+  .head .eyebrow{font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--brand)}
+  .head h1{font-size:clamp(30px,5.5vw,42px);font-weight:700;letter-spacing:-.035em;margin-top:10px;line-height:1.1}
+  .head .meta{margin-top:16px;color:var(--mut);font-size:14.5px;display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center}
+  .head .meta b{color:var(--ink);font-weight:700}
+  .body{padding:8px 0 40px}
+  .rep{padding:30px 0;border-bottom:1px solid var(--line2)}
+  .rep:last-child{border-bottom:none}
+  .rep .rh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .rep .badge{background:var(--brand-soft);color:var(--brand-ink);font-weight:700;font-size:12.5px;padding:5px 12px;border-radius:999px}
+  .rep .date{color:var(--faint);font-size:13px;font-weight:600;margin-left:auto}
+  .rep .cmt{margin-top:14px;background:var(--soft);border-radius:12px;padding:16px 18px;font-size:15px;line-height:1.75;white-space:pre-wrap;color:#33393f}
+  .rep .imgs{margin-top:16px;display:flex;flex-direction:column;gap:14px}
+  .rep .imgs img{width:100%;border:1px solid var(--line);border-radius:10px}
+  .empty{padding:72px 0;text-align:center;color:var(--mut)}
+  .foot{max-width:760px;margin:0 auto;text-align:center;color:var(--faint);font-size:12px;padding:0 22px 44px}
+  .hidden{display:none}
+  @media print{
+    body{background:#fff}
+    .top,.foot,.noprint{display:none!important}
+    .sheet{max-width:none;padding:0}
+    .rep{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <div class="bm">클라이 어학원 <small>· 학습 리포트</small></div>
+  <div class="acts">
+    <button onclick="window.print()">🖨 인쇄 · PDF 저장</button>
+    <a class="btn" href="parent.html">← 학부모 페이지</a>
+  </div>
+</div></div>
+
+<div class="sheet">
+  <div class="head">
+    <div class="eyebrow">Learning Report</div>
+    <h1 id="stuName">학습 리포트</h1>
+    <div class="meta" id="meta"></div>
+  </div>
+  <div class="body" id="body"><div class="empty">불러오는 중…</div></div>
+</div>
+<div class="foot">클라이 어학원 · KLAI English Academy · 학부모 리포트</div>
+
+<script type="module">
+const SUPABASE_URL="https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const SUPABASE_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+const $=s=>document.querySelector(s);
+const esc=t=>(t||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const params=new URLSearchParams(location.search);
+const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+const sb=createClient(SUPABASE_URL,SUPABASE_ANON);
+
+function childCode(){ return params.get('code') || localStorage.getItem('klai_child_code') || ''; }
+
+(async()=>{
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.replace('parent.html'); return; }   // 로그인 필요
+  const code=childCode();
+  if(!code){ $('#body').innerHTML='<div class="empty">자녀가 연결되지 않았어요. 학부모 페이지에서 먼저 자녀를 연결하세요.</div>'; return; }
+  // 자녀 이름
+  const { data:cr } = await sb.from('class_records').select('student_name').eq('student_code',code).limit(1);
+  const name=(cr&&cr[0]&&cr[0].student_name)||code;
+  $('#stuName').textContent=`${name} 학생 학습 리포트`;
+  // 리포트(발송)
+  const { data } = await sb.from('reports').select('report_type,files,comment,created_at')
+    .eq('media_type','sheet').eq('status','발송').eq('name_kor',name).order('created_at',{ascending:false}).limit(50);
+  const rows=data||[];
+  if(!rows.length){ $('#body').innerHTML='<div class="empty">아직 발송된 리포트가 없어요.</div>'; $('#meta').innerHTML=''; return; }
+  const first=(rows[rows.length-1].created_at||'').slice(0,10), last=(rows[0].created_at||'').slice(0,10);
+  $('#meta').innerHTML=`<span><b>학생</b> ${esc(name)}</span><span><b>리포트</b> ${rows.length}건</span><span><b>기간</b> ${first} ~ ${last}</span>`;
+  $('#body').innerHTML=rows.map(r=>{
+    const imgs=(r.files||[]).map(u=>`<img src="${u}" alt="리포트">`).join('');
+    return `<div class="rep"><div class="rh"><span class="badge">${esc(r.report_type||'리포트')}</span><span class="date">${(r.created_at||'').slice(0,10)}</span></div>`+
+      (r.comment?`<div class="cmt">${esc(r.comment)}</div>`:'')+
+      (imgs?`<div class="imgs">${imgs}</div>`:'')+`</div>`;
+  }).join('');
+})();
+</script>
+</body>
+</html>
