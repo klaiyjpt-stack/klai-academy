@@ -549,8 +549,18 @@ function start(){
   document.body.style.setProperty('--ucd',UNIT[unit][1]);
   if(game=='flip')newDeck();
   $('gname').textContent=GAMES.find(g=>g.id==game).n;
-  show('play');beginTurn();
+  show('play');window.scrollTo(0,0);readyGate();     // 화면 먼저 전환 → '게임 시작' 눌러야 실제 시작(소리는 그때부터)
 }
+function readyGate(){
+  const old=$('readyBox'); if(old) old.remove();
+  const el=document.createElement('div'); el.className='pause'; el.id='readyBox';
+  el.innerHTML=`<span class="logo big white"></span><h2>준비 완료 🎮</h2>
+    <p>${G.names.length}명 · ${$('gname').textContent} — 화면이 다 뜨면 시작하세요.</p>
+    <div class="btns"><button onclick="beginGame()">▶ 게임 시작</button>
+      <button class="alt" onclick="quit()">⌂ HOME</button></div>`;
+  document.body.appendChild(el);
+}
+function beginGame(){ const el=$('readyBox'); if(el) el.remove(); ctx(); beginTurn(); }
 function stopTimer(){clearInterval(G.tid);G.tid=null}
 function tick(){G.left--;render();if(G.left<=0){stopTimer();bomb()}}   // 펑 터지되 자동 실패는 없음
 function runTimer(){stopTimer();G.left=G.sec;if(G.sec)G.tid=setInterval(tick,1000);render()}
