@@ -418,7 +418,12 @@ async function loadAcct(){
   $('#acctBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">불러오는 중…</td></tr>';
   const j=await apiU('list');
   if(!j.ok){ $('#acctBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--red);padding:22px">'+esc(j.error||'실패')+'</td></tr>'; return; }
-  ACCT=j.users||[]; renderAcct();
+  ACCT=j.users||[];
+  try{ const { data:tt } = await SB.from('timetable').select('name_kor,subject').eq('active',true);
+    const m={}; (tt||[]).forEach(r=>{ if(!r.name_kor||!r.subject)return; (m[r.name_kor]=m[r.name_kor]||new Set()).add(r.subject); });
+    window.SUBJMAP={}; Object.keys(m).forEach(k=>window.SUBJMAP[k]=[...m[k]].sort().join('·'));
+  }catch(e){}
+  renderAcct();
 }
 function renderAcct(){
   const q=$('#acctSearch').value.trim().toLowerCase();
@@ -427,7 +432,7 @@ function renderAcct(){
   $('#acctBody').innerHTML = rows.map(u=>{
     const idl=(u.email||'').replace('@klai.kr','');
     return '<tr data-id="'+u.id+'"><td>'+esc(u.name)+'</td><td>'+esc(idl)+'</td>'+
-      '<td style="font-size:12px;color:var(--sub)">'+esc(u.subj)+'</td>'+
+      '<td style="font-size:12px;color:var(--sub)">'+esc((window.SUBJMAP&&window.SUBJMAP[u.name])||u.subj||'')+'</td>'+
       '<td><button class="actbtn" onclick="acctReset(\''+u.id+'\',\''+esc(u.name)+'\')">비번리셋</button> '+
       '<button class="actbtn" onclick="acctRename(\''+u.id+'\',\''+esc(idl)+'\')">ID변경</button> '+
       '<button class="actbtn off" onclick="acctDel(\''+u.id+'\',\''+esc(u.name)+'\')">삭제</button></td></tr>';
