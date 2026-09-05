@@ -81,6 +81,7 @@
     <div class="navgrp">관리</div>
     <button class="navbtn on" data-go="home">🏠 대시보드</button>
     <button class="navbtn" data-go="students">🎒 학생관리</button>
+    <button class="navbtn" data-go="accounts">🔑 학생 계정</button>
     <button class="navbtn" data-go="staff">👩‍🏫 직원관리</button>
     <div class="navgrp">운영</div>
     <button class="navbtn" data-go="makeup">🔁 보강관리</button>
@@ -238,6 +239,31 @@
     <div id="list"></div>
   </section>
 
+  <!-- ══ 학생 계정 ══ -->
+  <section class="sec hidden" data-sec="accounts">
+    <div class="sectitle">🔑 학생 로그인 계정</div>
+    <div class="panel">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <span class="cnt" id="acctCnt">계정 목록</span>
+        <span style="flex:1"></span>
+        <input id="acctSearch" placeholder="이름·아이디 검색" style="padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:13.5px">
+        <button class="actbtn on" onclick="loadAcct()">🔄 불러오기</button>
+        <button class="actbtn" id="seedBtn" style="background:var(--navy);color:#fff;border-color:var(--navy)">108명 일괄 등록</button>
+      </div>
+      <div class="addrow" style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px">
+        <input id="ncName" placeholder="이름" style="width:100px">
+        <input id="ncId" placeholder="아이디(영어+숫자)" style="width:170px">
+        <input id="ncPw" placeholder="초기비번(기본 klai0000)" style="width:180px">
+        <button class="add" id="acctAddBtn">+ 계정 추가</button>
+      </div>
+      <div style="font-size:11.5px;color:var(--sub);margin-top:8px">로그인 = 아이디@klai.kr · 초기비번 klai+전화끝4자리. 학생 콘텐츠는 로그인 후 추가 잠금 없이 바로.</div>
+    </div>
+    <div class="panel" style="padding:0"><div class="tblwrap">
+      <table class="grid"><thead><tr><th style="width:110px">이름</th><th style="width:180px">로그인ID</th><th>과목</th><th style="width:236px">관리</th></tr></thead>
+      <tbody id="acctBody"><tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">‘불러오기’를 누르세요</td></tr></tbody></table>
+    </div></div>
+  </section>
+
   <!-- ══ 직원관리 ══ -->
   <section class="sec hidden" data-sec="staff">
     <div class="sectitle">👩‍🏫 직원관리</div>
@@ -380,6 +406,53 @@ function gotoSec(name){
   window.scrollTo(0,0);
 }
 window.gotoSec=gotoSec;
+
+// ===== 학생 계정 관리 (/api/admin-users) =====
+let ACCT=[];
+async function apiU(action, extra){
+  const r = await fetch('/api/admin-users',{ method:'POST', headers: await authHdr(),
+    body: JSON.stringify(Object.assign({ action }, extra||{})) });
+  return r.json();
+}
+async function loadAcct(){
+  $('#acctBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">불러오는 중…</td></tr>';
+  const j=await apiU('list');
+  if(!j.ok){ $('#acctBody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--red);padding:22px">'+esc(j.error||'실패')+'</td></tr>'; return; }
+  ACCT=j.users||[]; renderAcct();
+}
+function renderAcct(){
+  const q=$('#acctSearch').value.trim().toLowerCase();
+  const rows=ACCT.filter(u=>!q||(u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));
+  $('#acctCnt').textContent='총 '+ACCT.length+'명';
+  $('#acctBody').innerHTML = rows.map(u=>{
+    const idl=(u.email||'').replace('@klai.kr','');
+    return '<tr data-id="'+u.id+'"><td>'+esc(u.name)+'</td><td>'+esc(idl)+'</td>'+
+      '<td style="font-size:12px;color:var(--sub)">'+esc(u.subj)+'</td>'+
+      '<td><button class="actbtn" onclick="acctReset(\''+u.id+'\',\''+esc(u.name)+'\')">비번리셋</button> '+
+      '<button class="actbtn" onclick="acctRename(\''+u.id+'\',\''+esc(idl)+'\')">ID변경</button> '+
+      '<button class="actbtn off" onclick="acctDel(\''+u.id+'\',\''+esc(u.name)+'\')">삭제</button></td></tr>';
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">해당 없음</td></tr>';
+}
+async function seedAll(){
+  if(!confirm('학생 계정 108명을 일괄 등록할까요?\n이미 있는 계정은 건너뜁니다.')) return;
+  let off=0, tc=0, ts=0; $('#seedBtn').disabled=true;
+  while(true){
+    const j=await apiU('seed',{offset:off});
+    if(!j.ok){ toast('실패: '+(j.error||'')); break; }
+    tc+=j.created; ts+=j.skipped;
+    toast('등록 '+j.processed+'/'+j.total+' · 신규 '+tc+'·기존 '+ts);
+    if(j.done) break; off=j.next;
+  }
+  $('#seedBtn').disabled=false; loadAcct();
+}
+async function acctReset(id,name){ const pw=prompt(name+' 새 비밀번호(6자 이상):','klai0000'); if(!pw)return; const j=await apiU('resetpw',{id,password:pw}); toast(j.ok?'비번 변경됨':'실패'); }
+async function acctRename(id,cur){ const v=prompt('새 로그인ID (영어+숫자, @klai.kr 자동):',cur); if(!v)return; const j=await apiU('rename',{id,email:v.replace(/@.*/,'')+'@klai.kr'}); toast(j.ok?'ID 변경됨':(j.error||'실패')); if(j.ok)loadAcct(); }
+async function acctDel(id,name){ if(!confirm('"'+name+'" 계정을 완전 삭제할까요?'))return; const j=await apiU('delete',{id}); toast(j.ok?'삭제됨':'실패'); if(j.ok)loadAcct(); }
+async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').value.trim().toLowerCase(), pw=$('#ncPw').value.trim()||'klai0000';
+  if(!name||!id){ toast('이름·아이디 필수'); return; }
+  const j=await apiU('create',{email:id+'@klai.kr',password:pw,name});
+  toast(j.ok?'계정 추가됨':(j.error||'실패')); if(j.ok){ ['ncName','ncId','ncPw'].forEach(i=>$('#'+i).value=''); loadAcct(); } }
+window.loadAcct=loadAcct; window.acctReset=acctReset; window.acctRename=acctRename; window.acctDel=acctDel;
 
 async function loadData(){
   const { data, error } = await SB.from('roster').select('*').order('teacher').order('class_name').order('sort');
@@ -955,6 +1028,9 @@ else { (async()=>{
   document.querySelectorAll('.navbtn[data-go]').forEach(b=>b.onclick=()=>gotoSec(b.dataset.go));
   $('#csPending').onchange = renderConsult;
   $('#csLimit').onchange = renderConsult;
+  $('#seedBtn').onclick = seedAll;
+  $('#acctAddBtn').onclick = acctAdd;
+  $('#acctSearch').oninput = renderAcct;
   route();
 })(); }
 </script>
