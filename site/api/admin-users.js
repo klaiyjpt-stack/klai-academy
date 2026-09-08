@@ -421,7 +421,7 @@ const ACCOUNTS = [
 "name": "유길태",
 "id": "john8607",
 "email": "john8607@klai.kr",
-"phone": "",
+"phone": "01071778607",
 "pw": "klai8607",
 "subj": "독해·문법·정독"
 },
