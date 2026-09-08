@@ -817,7 +817,7 @@ export default async function handler(req, res){
     }
     if(b.action==="create"){
       const r = await fetch(URL+"/auth/v1/admin/users", { method:"POST", headers:H,
-        body: JSON.stringify({ email:String(b.email).toLowerCase(), password:b.password||"klai0000", email_confirm:true, user_metadata:{ name:b.name||"", role:"student" } }) });
+        body: JSON.stringify({ email:String(b.email).toLowerCase(), password:b.password||"klai0000", email_confirm:true, user_metadata:{ name:b.name||"", phone:b.phone||"", role:"student" } }) });
       const j = await r.json();
       return res.status(r.ok?200:400).json({ok:r.ok, error:r.ok?null:(j.msg||j.error_description||"실패")});
     }

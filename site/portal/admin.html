@@ -254,6 +254,7 @@
         <input id="ncName" placeholder="이름" style="width:100px">
         <input id="ncId" placeholder="아이디(영어+숫자)" style="width:170px">
         <input id="ncPw" placeholder="초기비번(기본 klai0000)" style="width:180px">
+        <input id="ncPhone" placeholder="학부모 연락처(선택)" style="width:160px">
         <button class="add" id="acctAddBtn">+ 계정 추가</button>
       </div>
       <div style="font-size:11.5px;color:var(--sub);margin-top:8px">로그인 = 아이디@klai.kr · 초기비번 klai+전화끝4자리. 학생 콘텐츠는 로그인 후 추가 잠금 없이 바로.</div>
@@ -453,10 +454,10 @@ async function seedAll(){
 async function acctReset(id,name){ const pw=prompt(name+' 새 비밀번호(6자 이상):','klai0000'); if(!pw)return; const j=await apiU('resetpw',{id,password:pw}); toast(j.ok?'비번 변경됨':'실패'); }
 async function acctRename(id,cur){ const v=prompt('새 로그인ID (영어+숫자, @klai.kr 자동):',cur); if(!v)return; const j=await apiU('rename',{id,email:v.replace(/@.*/,'')+'@klai.kr'}); toast(j.ok?'ID 변경됨':(j.error||'실패')); if(j.ok)loadAcct(); }
 async function acctDel(id,name){ if(!confirm('"'+name+'" 계정을 완전 삭제할까요?'))return; const j=await apiU('delete',{id}); toast(j.ok?'삭제됨':'실패'); if(j.ok)loadAcct(); }
-async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').value.trim().toLowerCase(), pw=$('#ncPw').value.trim()||'klai0000';
+async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').value.trim().toLowerCase(), pw=$('#ncPw').value.trim()||'klai0000', phone=$('#ncPhone').value.trim();
   if(!name||!id){ toast('이름·아이디 필수'); return; }
-  const j=await apiU('create',{email:id+'@klai.kr',password:pw,name});
-  toast(j.ok?'계정 추가됨':(j.error||'실패')); if(j.ok){ ['ncName','ncId','ncPw'].forEach(i=>$('#'+i).value=''); loadAcct(); } }
+  const j=await apiU('create',{email:id+'@klai.kr',password:pw,name,phone});
+  toast(j.ok?'계정 추가됨':(j.error||'실패')); if(j.ok){ ['ncName','ncId','ncPw','ncPhone'].forEach(i=>$('#'+i).value=''); loadAcct(); } }
 window.loadAcct=loadAcct; window.acctReset=acctReset; window.acctRename=acctRename; window.acctDel=acctDel;
 
 async function loadData(){
