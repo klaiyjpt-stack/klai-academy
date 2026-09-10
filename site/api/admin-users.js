@@ -906,8 +906,13 @@ export default async function handler(req, res){
   const b = req.body || {};
   try{
     if(b.action==="list"){
-      const rows = (await listAll()).map(x=>({ id:x.id, email:x.email, name:(x.user_metadata&&x.user_metadata.name)||"", subj:(x.user_metadata&&x.user_metadata.subj)||"", phone:(x.user_metadata&&x.user_metadata.phone)||"" }))
-        .sort((a,c)=>(a.name||"").localeCompare(c.name||"","ko"));
+      const P_EMAIL={}, P_NAME={};   // 원본 전화 폴백(메타에 없을 때)
+      ACCOUNTS.forEach(a=>{ if(a.phone){ P_EMAIL[a.email]=a.phone; P_NAME[a.name]=a.phone; } });
+      const rows = (await listAll()).map(x=>{
+        const m=x.user_metadata||{};
+        return { id:x.id, email:x.email, name:m.name||"", subj:m.subj||"",
+          phone: m.phone || P_EMAIL[(x.email||"").toLowerCase()] || P_NAME[m.name] || "" };
+      }).sort((a,c)=>(a.name||"").localeCompare(c.name||"","ko"));
       return res.status(200).json({ok:true, users:rows, total:rows.length});
     }
     if(b.action==="seed"){
