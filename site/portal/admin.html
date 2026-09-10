@@ -249,6 +249,7 @@
         <input id="acctSearch" placeholder="이름·아이디 검색" style="padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:13.5px">
         <button class="actbtn on" onclick="loadAcct()">🔄 불러오기</button>
         <button class="actbtn" id="fillPhoneBtn">연락처 채우기</button>
+        <button class="actbtn" id="resetAllBtn">비번=아이디 통일</button>
         <button class="actbtn" id="seedBtn" style="background:var(--navy);color:#fff;border-color:var(--navy)">108명 일괄 등록</button>
       </div>
       <div class="addrow" style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px">
@@ -464,6 +465,18 @@ async function backfillPhones(){
     if(j.done) break; off=j.next;
   }
   $('#fillPhoneBtn').disabled=false; loadAcct();
+}
+async function resetAllIdPw(){
+  if(!confirm('학생 전원 비밀번호를 각자 아이디와 동일하게 초기화할까요?\n(학생은 첫 로그인 후 바꿀 수 있어요)')) return;
+  let off=0, tu=0, ts=0; $('#resetAllBtn').disabled=true;
+  while(true){
+    const j=await apiU('resetall',{offset:off});
+    if(!j.ok){ toast('실패: '+(j.error||'')); break; }
+    tu+=j.updated; ts+=j.skipped;
+    toast('통일 '+j.processed+'/'+j.total+' · 완료 '+tu);
+    if(j.done) break; off=j.next;
+  }
+  $('#resetAllBtn').disabled=false; toast('비번=아이디 통일 완료 ('+tu+'명)');
 }
 async function acctReset(id,name){ const pw=prompt(name+' 새 비밀번호(6자 이상):','klai0000'); if(!pw)return; const j=await apiU('resetpw',{id,password:pw}); toast(j.ok?'비번 변경됨':(j.error||'실패')); }
 async function acctRename(id,cur){ const v=prompt('새 로그인ID (영어+숫자, @klai.kr 자동):',cur); if(!v)return; const j=await apiU('rename',{id,email:v.replace(/@.*/,'')+'@klai.kr'}); toast(j.ok?'ID 변경됨':(j.error||'실패')); if(j.ok)loadAcct(); }
@@ -1050,6 +1063,7 @@ else { (async()=>{
   $('#csLimit').onchange = renderConsult;
   $('#seedBtn').onclick = seedAll;
   $('#fillPhoneBtn').onclick = backfillPhones;
+  $('#resetAllBtn').onclick = resetAllIdPw;
   $('#acctAddBtn').onclick = acctAdd;
   $('#acctSearch').oninput = renderAcct;
   route();

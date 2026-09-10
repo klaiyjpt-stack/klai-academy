@@ -937,6 +937,20 @@ export default async function handler(req, res){
       const next = off+BATCH;
       return res.status(200).json({ok:true, processed:Math.min(next,ACCOUNTS.length), total:ACCOUNTS.length, updated, skipped, errs, done: next>=ACCOUNTS.length, next: next>=ACCOUNTS.length?null:next });
     }
+    if(b.action==="resetall"){   // 학생 전원 비번 = 아이디(이메일 로컬파트)로 통일
+      const off = b.offset|0;
+      const students = (await listAll())
+        .filter(x=>(x.email||"").toLowerCase().endsWith("@klai.kr") && !ADMINS.includes((x.email||"").toLowerCase()));
+      let updated=0, skipped=0, errs=[];
+      await Promise.all(students.slice(off, off+BATCH).map(async x=>{
+        const pw = (x.email||"").split("@")[0];   // = 로그인 아이디
+        if(pw.length<6){ skipped++; errs.push(x.email+":short"); return; }
+        const r = await fetch(URL+"/auth/v1/admin/users/"+x.id, { method:"PUT", headers:H, body: JSON.stringify({ password:pw }) });
+        if(r.ok) updated++; else { skipped++; errs.push((x.email||"")+":"+r.status); }
+      }));
+      const next = off+BATCH;
+      return res.status(200).json({ok:true, processed:Math.min(next,students.length), total:students.length, updated, skipped, errs, done: next>=students.length, next: next>=students.length?null:next });
+    }
     if(b.action==="create"){
       const r = await fetch(URL+"/auth/v1/admin/users", { method:"POST", headers:H,
         body: JSON.stringify({ email:String(b.email).toLowerCase(), password:b.password||"klai0000", email_confirm:true, user_metadata:{ name:b.name||"", phone:b.phone||"", role:"student" } }) });
