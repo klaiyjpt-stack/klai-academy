@@ -438,7 +438,7 @@ function renderAcct(){
     return '<tr data-id="'+u.id+'">'+
       '<td><input class="e-name" value="'+esc(u.name)+'"></td>'+
       '<td><input class="e-id" value="'+esc(idl)+'"></td>'+
-      '<td><input class="e-pw" placeholder="변경 시 입력"></td>'+
+      '<td><input class="e-pw" value="'+esc(idl)+'" data-orig="'+esc(idl)+'"></td>'+
       '<td><input class="e-phone" value="'+esc(u.phone||'')+'" placeholder="-"></td>'+
       '<td style="font-size:12px;color:var(--sub)">'+esc(subj)+'</td>'+
       '<td><button class="actbtn on" onclick="acctSave(\''+u.id+'\')">저장</button> '+
@@ -486,14 +486,16 @@ async function acctSave(id){
   const cur=ACCT.find(u=>u.id===id)||{};
   const name=tr.querySelector('.e-name').value.trim();
   const newid=tr.querySelector('.e-id').value.trim().toLowerCase();
-  const pw=tr.querySelector('.e-pw').value.trim();
+  const pwInput=tr.querySelector('.e-pw');
+  const pw=pwInput.value.trim();
   const phone=tr.querySelector('.e-phone').value.trim();
   if(!name||!newid){ toast('이름·아이디는 필수'); return; }
-  if(pw && pw.length<6){ toast('비밀번호는 6자 이상'); return; }
+  const pwChanged = pw!==pwInput.dataset.orig;
+  if(pwChanged && pw.length<6){ toast('비밀번호는 6자 이상'); return; }
   const body={id, name, phone};
   const curId=(cur.email||'').replace('@klai.kr','');
   if(newid!==curId) body.email=newid+'@klai.kr';
-  if(pw) body.password=pw;
+  if(pwChanged && pw) body.password=pw;
   const j=await apiU('update',body);
   toast(j.ok?'저장됨':(j.error||'실패')); if(j.ok)loadAcct();
 }
