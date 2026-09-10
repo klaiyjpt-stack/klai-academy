@@ -251,7 +251,6 @@
         <input id="acctSearch" placeholder="이름·아이디 검색" style="padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:13.5px">
         <button class="actbtn on" onclick="loadAcct()">🔄 불러오기</button>
         <button class="actbtn" id="resetAllBtn">비번=아이디 통일</button>
-        <button class="actbtn" id="seedBtn" style="background:var(--navy);color:#fff;border-color:var(--navy)">108명 일괄 등록</button>
       </div>
       <div class="addrow" style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px">
         <input id="ncName" placeholder="이름" style="width:100px">
@@ -445,18 +444,6 @@ function renderAcct(){
       '<td><button class="actbtn on" onclick="acctSave(\''+u.id+'\')">저장</button> '+
       '<button class="actbtn off" onclick="acctDel(\''+u.id+'\',\''+esc(u.name)+'\')">삭제</button></td></tr>';
   }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--sub);padding:22px">해당 없음</td></tr>';
-}
-async function seedAll(){
-  if(!confirm('학생 계정 108명을 일괄 등록할까요?\n이미 있는 계정은 건너뜁니다.')) return;
-  let off=0, tc=0, ts=0; $('#seedBtn').disabled=true;
-  while(true){
-    const j=await apiU('seed',{offset:off});
-    if(!j.ok){ toast('실패: '+(j.error||'')); break; }
-    tc+=j.created; ts+=j.skipped;
-    toast('등록 '+j.processed+'/'+j.total+' · 신규 '+tc+'·기존 '+ts);
-    if(j.done) break; off=j.next;
-  }
-  $('#seedBtn').disabled=false; loadAcct();
 }
 async function resetAllIdPw(){
   if(!confirm('학생 전원 비밀번호를 각자 아이디와 동일하게 초기화할까요?\n(학생은 첫 로그인 후 바꿀 수 있어요)')) return;
@@ -1069,7 +1056,6 @@ else { (async()=>{
   document.querySelectorAll('.navbtn[data-go]').forEach(b=>b.onclick=()=>gotoSec(b.dataset.go));
   $('#csPending').onchange = renderConsult;
   $('#csLimit').onchange = renderConsult;
-  $('#seedBtn').onclick = seedAll;
   $('#resetAllBtn').onclick = resetAllIdPw;
   $('#acctAddBtn').onclick = acctAdd;
   $('#acctSearch').oninput = renderAcct;
