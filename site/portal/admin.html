@@ -250,7 +250,6 @@
         <span style="flex:1"></span>
         <input id="acctSearch" placeholder="이름·아이디 검색" style="padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:13.5px">
         <button class="actbtn on" onclick="loadAcct()">🔄 불러오기</button>
-        <button class="actbtn" id="fillPhoneBtn">연락처 채우기</button>
         <button class="actbtn" id="resetAllBtn">비번=아이디 통일</button>
         <button class="actbtn" id="seedBtn" style="background:var(--navy);color:#fff;border-color:var(--navy)">108명 일괄 등록</button>
       </div>
@@ -458,18 +457,6 @@ async function seedAll(){
     if(j.done) break; off=j.next;
   }
   $('#seedBtn').disabled=false; loadAcct();
-}
-async function backfillPhones(){
-  if(!confirm('기존 계정에 학부모 연락처를 채울까요?')) return;
-  let off=0, tu=0, ts=0; $('#fillPhoneBtn').disabled=true;
-  while(true){
-    const j=await apiU('backfill',{offset:off});
-    if(!j.ok){ toast('실패: '+(j.error||'')); break; }
-    tu+=j.updated; ts+=j.skipped;
-    toast('연락처 '+j.processed+'/'+j.total+' · 채움 '+tu);
-    if(j.done) break; off=j.next;
-  }
-  $('#fillPhoneBtn').disabled=false; loadAcct();
 }
 async function resetAllIdPw(){
   if(!confirm('학생 전원 비밀번호를 각자 아이디와 동일하게 초기화할까요?\n(학생은 첫 로그인 후 바꿀 수 있어요)')) return;
@@ -1083,7 +1070,6 @@ else { (async()=>{
   $('#csPending').onchange = renderConsult;
   $('#csLimit').onchange = renderConsult;
   $('#seedBtn').onclick = seedAll;
-  $('#fillPhoneBtn').onclick = backfillPhones;
   $('#resetAllBtn').onclick = resetAllIdPw;
   $('#acctAddBtn').onclick = acctAdd;
   $('#acctSearch').oninput = renderAcct;
