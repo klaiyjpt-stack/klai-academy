@@ -951,6 +951,18 @@ export default async function handler(req, res){
       const next = off+BATCH;
       return res.status(200).json({ok:true, processed:Math.min(next,students.length), total:students.length, updated, skipped, errs, done: next>=students.length, next: next>=students.length?null:next });
     }
+    if(b.action==="update"){   // 한 행 저장: 이메일(아이디)·비번·이름·연락처
+      const cur = await fetch(URL+"/auth/v1/admin/users/"+b.id, { headers:H }).then(r=>r.json()).catch(()=>({}));
+      const meta = Object.assign({}, cur.user_metadata||{});
+      if(b.name!==undefined)  meta.name  = b.name;
+      if(b.phone!==undefined) meta.phone = b.phone;
+      const body = { user_metadata: meta };
+      if(b.email){ body.email = String(b.email).toLowerCase(); body.email_confirm = true; meta.login_id = body.email.split("@")[0]; }
+      if(b.password) body.password = b.password;
+      const r = await fetch(URL+"/auth/v1/admin/users/"+b.id, { method:"PUT", headers:H, body: JSON.stringify(body) });
+      const j = await r.json().catch(()=>({}));
+      return res.status(r.ok?200:400).json({ok:r.ok, error:r.ok?null:(j.msg||j.error_description||j.error||("HTTP "+r.status))});
+    }
     if(b.action==="create"){
       const r = await fetch(URL+"/auth/v1/admin/users", { method:"POST", headers:H,
         body: JSON.stringify({ email:String(b.email).toLowerCase(), password:b.password||"klai0000", email_confirm:true, user_metadata:{ name:b.name||"", phone:b.phone||"", role:"student" } }) });

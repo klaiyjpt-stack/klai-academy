@@ -262,7 +262,7 @@
       <div style="font-size:11.5px;color:var(--sub);margin-top:8px">로그인 = 아이디@klai.kr · 초기비번 klai+전화끝4자리. 학생 콘텐츠는 로그인 후 추가 잠금 없이 바로.</div>
     </div>
     <div class="panel" style="padding:0"><div class="tblwrap">
-      <table class="grid"><thead><tr><th style="width:110px">이름</th><th style="width:180px">로그인ID</th><th>과목</th><th style="width:236px">관리</th></tr></thead>
+      <table class="grid"><thead><tr><th style="width:96px">이름</th><th style="width:150px">로그인ID</th><th style="width:130px">비밀번호</th><th style="width:140px">학부모 연락처</th><th>과목</th><th style="width:120px">관리</th></tr></thead>
       <tbody id="acctBody"><tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">‘불러오기’를 누르세요</td></tr></tbody></table>
     </div></div>
   </section>
@@ -434,13 +434,16 @@ function renderAcct(){
   $('#acctCnt').textContent='총 '+ACCT.length+'명';
   $('#acctBody').innerHTML = rows.map(u=>{
     const idl=(u.email||'').replace('@klai.kr','');
-    return '<tr data-id="'+u.id+'"><td>'+esc(u.name)+'</td>'+
-      '<td>'+esc(idl)+(u.phone?'<div style="font-size:11px;color:var(--sub)">📞 '+esc(u.phone)+'</div>':'')+'</td>'+
-      '<td style="font-size:12px;color:var(--sub)">'+esc((window.SUBJMAP&&window.SUBJMAP[u.name])||u.subj||'')+'</td>'+
-      '<td><button class="actbtn" onclick="acctReset(\''+u.id+'\',\''+esc(u.name)+'\')">비번리셋</button> '+
-      '<button class="actbtn" onclick="acctRename(\''+u.id+'\',\''+esc(idl)+'\')">ID변경</button> '+
+    const subj=(window.SUBJMAP&&window.SUBJMAP[u.name])||u.subj||'';
+    return '<tr data-id="'+u.id+'">'+
+      '<td><input class="e-name" value="'+esc(u.name)+'"></td>'+
+      '<td><input class="e-id" value="'+esc(idl)+'"></td>'+
+      '<td><input class="e-pw" placeholder="변경 시 입력"></td>'+
+      '<td><input class="e-phone" value="'+esc(u.phone||'')+'" placeholder="-"></td>'+
+      '<td style="font-size:12px;color:var(--sub)">'+esc(subj)+'</td>'+
+      '<td><button class="actbtn on" onclick="acctSave(\''+u.id+'\')">저장</button> '+
       '<button class="actbtn off" onclick="acctDel(\''+u.id+'\',\''+esc(u.name)+'\')">삭제</button></td></tr>';
-  }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">해당 없음</td></tr>';
+  }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--sub);padding:22px">해당 없음</td></tr>';
 }
 async function seedAll(){
   if(!confirm('학생 계정 108명을 일괄 등록할까요?\n이미 있는 계정은 건너뜁니다.')) return;
@@ -478,14 +481,28 @@ async function resetAllIdPw(){
   }
   $('#resetAllBtn').disabled=false; toast('비번=아이디 통일 완료 ('+tu+'명)');
 }
-async function acctReset(id,name){ const pw=prompt(name+' 새 비밀번호(6자 이상):','klai0000'); if(!pw)return; const j=await apiU('resetpw',{id,password:pw}); toast(j.ok?'비번 변경됨':(j.error||'실패')); }
-async function acctRename(id,cur){ const v=prompt('새 로그인ID (영어+숫자, @klai.kr 자동):',cur); if(!v)return; const j=await apiU('rename',{id,email:v.replace(/@.*/,'')+'@klai.kr'}); toast(j.ok?'ID 변경됨':(j.error||'실패')); if(j.ok)loadAcct(); }
+async function acctSave(id){
+  const tr=document.querySelector('#acctBody tr[data-id="'+id+'"]'); if(!tr)return;
+  const cur=ACCT.find(u=>u.id===id)||{};
+  const name=tr.querySelector('.e-name').value.trim();
+  const newid=tr.querySelector('.e-id').value.trim().toLowerCase();
+  const pw=tr.querySelector('.e-pw').value.trim();
+  const phone=tr.querySelector('.e-phone').value.trim();
+  if(!name||!newid){ toast('이름·아이디는 필수'); return; }
+  if(pw && pw.length<6){ toast('비밀번호는 6자 이상'); return; }
+  const body={id, name, phone};
+  const curId=(cur.email||'').replace('@klai.kr','');
+  if(newid!==curId) body.email=newid+'@klai.kr';
+  if(pw) body.password=pw;
+  const j=await apiU('update',body);
+  toast(j.ok?'저장됨':(j.error||'실패')); if(j.ok)loadAcct();
+}
 async function acctDel(id,name){ if(!confirm('"'+name+'" 계정을 완전 삭제할까요?'))return; const j=await apiU('delete',{id}); toast(j.ok?'삭제됨':'실패'); if(j.ok)loadAcct(); }
 async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').value.trim().toLowerCase(), pw=$('#ncPw').value.trim()||'klai0000', phone=$('#ncPhone').value.trim();
   if(!name||!id){ toast('이름·아이디 필수'); return; }
   const j=await apiU('create',{email:id+'@klai.kr',password:pw,name,phone});
   toast(j.ok?'계정 추가됨':(j.error||'실패')); if(j.ok){ ['ncName','ncId','ncPw','ncPhone'].forEach(i=>$('#'+i).value=''); loadAcct(); } }
-window.loadAcct=loadAcct; window.acctReset=acctReset; window.acctRename=acctRename; window.acctDel=acctDel;
+window.loadAcct=loadAcct; window.acctSave=acctSave; window.acctDel=acctDel;
 
 async function loadData(){
   const { data, error } = await SB.from('roster').select('*').order('teacher').order('class_name').order('sort');
