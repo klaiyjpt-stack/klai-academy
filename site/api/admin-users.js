@@ -945,7 +945,8 @@ export default async function handler(req, res){
     }
     if(b.action==="resetpw"){
       const r = await fetch(URL+"/auth/v1/admin/users/"+b.id, { method:"PUT", headers:H, body: JSON.stringify({ password:b.password }) });
-      return res.status(r.ok?200:400).json({ok:r.ok});
+      const j = await r.json().catch(()=>({}));
+      return res.status(r.ok?200:400).json({ok:r.ok, error:r.ok?null:(j.msg||j.error_description||j.error||("HTTP "+r.status))});
     }
     if(b.action==="rename"){
       const r = await fetch(URL+"/auth/v1/admin/users/"+b.id, { method:"PUT", headers:H, body: JSON.stringify({ email:String(b.email).toLowerCase(), email_confirm:true }) });

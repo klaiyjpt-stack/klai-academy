@@ -465,7 +465,7 @@ async function backfillPhones(){
   }
   $('#fillPhoneBtn').disabled=false; loadAcct();
 }
-async function acctReset(id,name){ const pw=prompt(name+' 새 비밀번호(6자 이상):','klai0000'); if(!pw)return; const j=await apiU('resetpw',{id,password:pw}); toast(j.ok?'비번 변경됨':'실패'); }
+async function acctReset(id,name){ const pw=prompt(name+' 새 비밀번호(6자 이상):','klai0000'); if(!pw)return; const j=await apiU('resetpw',{id,password:pw}); toast(j.ok?'비번 변경됨':(j.error||'실패')); }
 async function acctRename(id,cur){ const v=prompt('새 로그인ID (영어+숫자, @klai.kr 자동):',cur); if(!v)return; const j=await apiU('rename',{id,email:v.replace(/@.*/,'')+'@klai.kr'}); toast(j.ok?'ID 변경됨':(j.error||'실패')); if(j.ok)loadAcct(); }
 async function acctDel(id,name){ if(!confirm('"'+name+'" 계정을 완전 삭제할까요?'))return; const j=await apiU('delete',{id}); toast(j.ok?'삭제됨':'실패'); if(j.ok)loadAcct(); }
 async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').value.trim().toLowerCase(), pw=$('#ncPw').value.trim()||'klai0000', phone=$('#ncPhone').value.trim();
