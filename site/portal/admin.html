@@ -84,6 +84,7 @@
     <button class="navbtn on" data-go="home">🏠 대시보드</button>
     <button class="navbtn" data-go="students">🎒 학생관리</button>
     <button class="navbtn" data-go="accounts">🔑 학생 계정</button>
+    <button class="navbtn" data-go="logs">📒 강사일지</button>
     <button class="navbtn" data-go="staff">👩‍🏫 직원관리</button>
     <div class="navgrp">운영</div>
     <button class="navbtn" data-go="makeup">🔁 보강관리</button>
@@ -265,6 +266,22 @@
       <table class="grid"><thead><tr><th style="width:96px">이름</th><th style="width:150px">로그인ID</th><th style="width:130px">비밀번호</th><th style="width:140px">학부모 연락처</th><th>과목</th><th style="width:120px">관리</th></tr></thead>
       <tbody id="acctBody"><tr><td colspan="4" style="text-align:center;color:var(--sub);padding:22px">‘불러오기’를 누르세요</td></tr></tbody></table>
     </div></div>
+  </section>
+
+  <!-- ══ 강사일지 ══ -->
+  <section class="sec hidden" data-sec="logs">
+    <div class="sectitle">📒 강사일지 · 오늘 전 교실 현황</div>
+    <div class="panel">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <label style="font-weight:700;color:var(--sub);font-size:13px">날짜</label>
+        <input type="date" id="logDate" style="padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:13.5px">
+        <button class="actbtn on" id="logLoad">🔄 불러오기</button>
+        <span class="cnt" id="logCnt"></span>
+        <span style="flex:1"></span>
+        <span style="font-size:11.5px;color:var(--sub)">선생님이 저장한 일지·수업기록을 한눈에</span>
+      </div>
+    </div>
+    <div id="logsBox"><div class="panel" style="text-align:center;color:var(--sub)">날짜 선택 후 불러오기</div></div>
   </section>
 
   <!-- ══ 직원관리 ══ -->
@@ -481,6 +498,48 @@ async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').va
   const j=await apiU('create',{email:id+'@klai.kr',password:pw,name,phone});
   toast(j.ok?'계정 추가됨':(j.error||'실패')); if(j.ok){ ['ncName','ncId','ncPw','ncPhone'].forEach(i=>$('#'+i).value=''); loadAcct(); } }
 window.loadAcct=loadAcct; window.acctSave=acctSave; window.acctDel=acctDel;
+
+// ===== 강사일지 · 전 교실 현황 =====
+function kstToday(){ const d=new Date(Date.now()+9*3600e3); return d.toISOString().slice(0,10); }
+async function loadLogs(){
+  const date=$('#logDate').value||kstToday();
+  $('#logsBox').innerHTML='<div class="panel" style="text-align:center;color:var(--sub)">불러오는 중…</div>';
+  const [{data:sr},{data:cd}] = await Promise.all([
+    SB.from('session_records').select('program,name_kor,attend,homework,book,progress,result,remark').eq('date',date),
+    SB.from('class_daily').select('teacher,class_name,teacher_log,class_memo').eq('date',date)
+  ]);
+  const recs=sr||[], logs=(cd||[]);
+  // 강사일지(비공개)
+  const logRows=logs.filter(l=>(l.teacher_log||'').trim());
+  let html='';
+  html+='<div class="panel"><div style="font-weight:800;color:var(--navy);margin-bottom:8px">📝 강사 일지 <span class="cnt">'+logRows.length+'건</span></div>';
+  html+= logRows.length ? '<div class="tblwrap"><table class="grid" style="min-width:640px"><thead><tr><th style="width:150px">반</th><th style="width:150px">선생님</th><th>일지</th></tr></thead><tbody>'+
+    logRows.map(l=>'<tr><td>'+esc(l.class_name)+'</td><td style="font-size:12px;color:var(--sub)">'+esc(l.teacher)+'</td><td style="white-space:pre-wrap">'+esc(l.teacher_log)+'</td></tr>').join('')+'</tbody></table></div>'
+    : '<div style="color:var(--sub);font-size:13px">저장된 일지 없음</div>';
+  html+='</div>';
+  // 과목별 수업기록
+  const byProg={}; recs.forEach(r=>{ (byProg[r.program]=byProg[r.program]||[]).push(r); });
+  const progs=Object.keys(byProg).sort();
+  $('#logCnt').textContent=date+' · 기록 '+recs.length+'건 · 일지 '+logRows.length+'건';
+  if(!progs.length && !logRows.length){ $('#logsBox').innerHTML='<div class="panel" style="text-align:center;color:var(--sub)">이 날짜 기록 없음</div>'; return; }
+  for(const p of progs){
+    const list=byProg[p];
+    const done=list.filter(r=>r.homework==='done').length;
+    const absent=list.filter(r=>r.attend && /결석|결/.test(r.attend)).length;
+    html+='<div class="panel" style="padding:0"><div style="padding:12px 14px;font-weight:800;color:var(--navy);border-bottom:1px solid var(--line)">'+esc(p)+
+      ' <span class="cnt">'+list.length+'명 · 숙제완료 '+done+' · 결석 '+absent+'</span></div>';
+    html+='<div class="tblwrap"><table class="grid" style="min-width:720px"><thead><tr>'+
+      '<th style="width:90px">학생</th><th style="width:64px">출결</th><th style="width:72px">숙제</th><th>교재/진도</th><th>결과</th><th>비고</th></tr></thead><tbody>'+
+      list.map(r=>'<tr><td>'+esc(r.name_kor)+'</td><td>'+esc(r.attend||'')+'</td>'+
+        '<td>'+(r.homework==='done'?'완료':r.homework==='none'?'미완료':'')+'</td>'+
+        '<td style="font-size:12px">'+esc([r.book,r.progress].filter(Boolean).join(' · '))+'</td>'+
+        '<td style="font-size:12px">'+esc(r.result||'')+'</td>'+
+        '<td style="font-size:12px;color:var(--sub)">'+esc(r.remark||'')+'</td></tr>').join('')+
+      '</tbody></table></div></div>';
+  }
+  $('#logsBox').innerHTML=html;
+}
+window.loadLogs=loadLogs;
 
 async function loadData(){
   const { data, error } = await SB.from('roster').select('*').order('teacher').order('class_name').order('sort');
@@ -1059,6 +1118,8 @@ else { (async()=>{
   $('#resetAllBtn').onclick = resetAllIdPw;
   $('#acctAddBtn').onclick = acctAdd;
   $('#acctSearch').oninput = renderAcct;
+  $('#logDate').value = kstToday();
+  $('#logLoad').onclick = loadLogs;
   route();
 })(); }
 </script>

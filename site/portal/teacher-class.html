@@ -331,7 +331,7 @@ async function saveLog(){
   const date=$('#dateSel').value, day=$('#daySel').value, t=$('#timeSel').value;
   if(!SB){ toast('데모 모드 — 저장 안 됨'); return; }
   const { error } = await SB.from('class_daily').upsert({
-    teacher:USER.email, class_name:`알파 ${day} ${t}`, date, teacher_log:$('#teaLog').value, updated_at:new Date().toISOString()
+    teacher:USER.email, class_name:`${PROGRAM} ${day} ${t}`, date, teacher_log:$('#teaLog').value, updated_at:new Date().toISOString()
   },{onConflict:'teacher,class_name,date'});
   toast(error? '저장 실패: '+error.message : '강사 일지 저장됨');
 }
