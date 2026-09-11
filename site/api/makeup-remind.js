@@ -39,11 +39,11 @@ async function sendMsg(msg){
 async function solapi(to, name, timeStr, smsText, templateId){
   const FROM = process.env.SOLAPI_SENDER;
   const base = { to: normPhone(to), from: normPhone(FROM), text: smsText };
-  // 1차: 알림톡(템플릿 승인되면 이걸로 발송)
+  // 1차: 알림톡. disableSms:false = 카톡 미가입·차단 등 개별 전달실패는 Solapi가 base.text로 자동 SMS 대체.
   const kakao = await sendMsg({ ...base, kakaoOptions: { pfId: KAKAO_PFID, templateId,
-    variables: { "#{학생명}": name, "#{시간}": timeStr } } });
+    variables: { "#{학생명}": name, "#{시간}": timeStr }, disableSms: false } });
   if (kakao.ok) return { ok: true, via: "alimtalk", body: kakao.body };
-  // 2차: 알림톡 실패(미승인 등) → 문자로 대체
+  // 2차: 요청 자체 실패(템플릿 미승인 등) → 문자로 대체
   const sms = await sendMsg(base);
   return { ok: sms.ok, via: "sms", body: sms.body };
 }
