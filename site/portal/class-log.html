@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>강사일지 · 전 교실 현황 · 클라이 어학원</title>
+<style>
+  :root{--blue:#2b74c4;--blue-d:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc;--red:#c0392b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5}
+  a{text-decoration:none;color:inherit}
+  header{background:linear-gradient(120deg,#1a2740,#2b74c4);color:#fff;position:sticky;top:0;z-index:20}
+  .hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}
+  .hd .ttl{font-weight:800;font-size:17px}.hd .ttl small{display:block;font-weight:500;font-size:11.5px;opacity:.9;margin-top:2px}
+  .hd .btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer}
+  .wrap{max-width:1180px;margin:0 auto;padding:16px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px}
+  .bar input[type=date]{padding:8px 11px;border:1px solid var(--line);border-radius:9px;font-size:14px}
+  .navb{background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 13px;font-weight:800;cursor:pointer;font-size:14px}
+  .navb:hover{border-color:var(--blue)}
+  .cnt{color:var(--sub);font-size:12.5px;font-weight:600}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+  .grp{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+  .grp>.gh{padding:12px 15px;font-weight:800;color:var(--navy);border-bottom:1px solid var(--line);background:var(--soft)}
+  .grp .cnt{margin-left:6px}
+  .tblwrap{overflow-x:auto}
+  table.grid{width:100%;border-collapse:collapse;min-width:700px}
+  table.grid th,table.grid td{padding:8px 9px;border-bottom:1px solid var(--line);font-size:13px;text-align:left;vertical-align:top}
+  table.grid thead th{background:var(--soft);color:var(--sub);font-weight:800;font-size:12px}
+  .login{max-width:360px;margin:10vh auto;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:0 10px 40px rgba(20,30,60,.1)}
+  .login .lg{text-align:center;font-weight:800;font-size:20px;color:var(--navy)}
+  .login label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px}
+  .login input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+  .login .go{width:100%;margin-top:18px;background:var(--navy);color:#fff;border:none;padding:13px;border-radius:11px;font-weight:800;font-size:15px;cursor:pointer}
+  .login .err{color:var(--red);font-size:12.5px;margin-top:10px;text-align:center;min-height:16px}
+  .hidden{display:none}
+  .empty{color:var(--sub);font-size:13px}
+  @media print{ header,.bar,.noprint{display:none!important} body{background:#fff} .grp,.panel{break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<div id="loginView" class="hidden">
+  <div class="login">
+    <div class="lg">🔐 강사일지</div>
+    <label>원장 이메일</label>
+    <input id="uid" type="text" autocomplete="username" placeholder="klai.yj.pt@gmail.com" autocapitalize="none">
+    <label>비밀번호</label>
+    <input id="upw" type="password" autocomplete="current-password">
+    <button class="go" id="loginBtn">로그인</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="mainView" class="hidden">
+  <header><div class="hd">
+    <div class="ttl">📒 강사일지 · 전 교실 현황<small>클라이 어학원 · 원장</small></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="window.print()">🖨 인쇄</button>
+      <a class="btn" href="admin.html">원장 관리 →</a>
+      <button class="btn" id="logoutBtn">로그아웃</button>
+    </div>
+  </div></header>
+  <div class="wrap">
+    <div class="bar">
+      <button class="navb" id="prevD">◀ 어제</button>
+      <input type="date" id="logDate">
+      <button class="navb" id="nextD">내일 ▶</button>
+      <button class="navb" id="today">오늘</button>
+      <span style="flex:1"></span>
+      <span class="cnt" id="logCnt"></span>
+    </div>
+    <div id="logsBox"><div class="panel empty" style="text-align:center">불러오는 중…</div></div>
+  </div>
+</div>
+
+<script type="module">
+const SUPABASE_URL="https://hxlzccwqxamtsjrrtcdq.supabase.co";
+const SUPABASE_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+const ADMINS=["klai.yj.pt@gmail.com","klai.yj.pt.1@gmail.com"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+const SB=createClient(SUPABASE_URL,SUPABASE_ANON);
+const show=v=>{ $('#loginView').classList.toggle('hidden',v!=='login'); $('#mainView').classList.toggle('hidden',v!=='main'); };
+const kstToday=()=>new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
+const shiftDay=(d,n)=>{ const t=new Date(d+'T00:00:00Z'); t.setUTCDate(t.getUTCDate()+n); return t.toISOString().slice(0,10); };
+
+async function loadLogs(){
+  const date=$('#logDate').value||kstToday();
+  $('#logsBox').innerHTML='<div class="panel empty" style="text-align:center">불러오는 중…</div>';
+  const [{data:sr},{data:cd}]=await Promise.all([
+    SB.from('session_records').select('program,name_kor,attend,homework,book,progress,result,remark').eq('date',date),
+    SB.from('class_daily').select('teacher,class_name,teacher_log').eq('date',date)
+  ]);
+  const recs=sr||[], logRows=(cd||[]).filter(l=>(l.teacher_log||'').trim());
+  const byProg={}; recs.forEach(r=>{ (byProg[r.program]=byProg[r.program]||[]).push(r); });
+  const progs=Object.keys(byProg).sort();
+  $('#logCnt').textContent=`${date} · 기록 ${recs.length}건 · 일지 ${logRows.length}건`;
+  if(!progs.length && !logRows.length){ $('#logsBox').innerHTML='<div class="panel empty" style="text-align:center">이 날짜 기록 없음</div>'; return; }
+  let html='';
+  html+='<div class="panel"><div style="font-weight:800;color:var(--navy);margin-bottom:8px">📝 강사 일지 <span class="cnt">'+logRows.length+'건</span></div>';
+  html+= logRows.length ? '<div class="tblwrap"><table class="grid" style="min-width:620px"><thead><tr><th style="width:160px">반</th><th style="width:160px">선생님</th><th>일지</th></tr></thead><tbody>'+
+    logRows.map(l=>'<tr><td>'+esc(l.class_name)+'</td><td style="font-size:12px;color:var(--sub)">'+esc(l.teacher)+'</td><td style="white-space:pre-wrap">'+esc(l.teacher_log)+'</td></tr>').join('')+'</tbody></table></div>'
+    : '<div class="empty">저장된 일지 없음</div>';
+  html+='</div>';
+  for(const p of progs){
+    const list=byProg[p];
+    const done=list.filter(r=>r.homework==='done').length;
+    const absent=list.filter(r=>r.attend && /결/.test(r.attend)).length;
+    html+='<div class="grp"><div class="gh">'+esc(p)+'<span class="cnt">'+list.length+'명 · 숙제완료 '+done+' · 결석 '+absent+'</span></div>';
+    html+='<div class="tblwrap"><table class="grid"><thead><tr><th style="width:90px">학생</th><th style="width:64px">출결</th><th style="width:72px">숙제</th><th>교재/진도</th><th>결과</th><th>비고</th></tr></thead><tbody>'+
+      list.map(r=>'<tr><td>'+esc(r.name_kor)+'</td><td>'+esc(r.attend||'')+'</td>'+
+        '<td>'+(r.homework==='done'?'완료':r.homework==='none'?'미완료':'')+'</td>'+
+        '<td style="font-size:12px">'+esc([r.book,r.progress].filter(Boolean).join(' · '))+'</td>'+
+        '<td style="font-size:12px">'+esc(r.result||'')+'</td>'+
+        '<td style="font-size:12px;color:var(--sub)">'+esc(r.remark||'')+'</td></tr>').join('')+
+      '</tbody></table></div></div>';
+  }
+  $('#logsBox').innerHTML=html;
+}
+window.loadLogs=loadLogs;
+
+async function route(){
+  const { data:{ session } }=await SB.auth.getSession();
+  if(session && ADMINS.includes((session.user.email||'').toLowerCase())){
+    show('main');
+    if(!$('#logDate').value) $('#logDate').value=kstToday();
+    loadLogs();
+  } else { show('login'); }
+}
+$('#loginBtn').onclick=async()=>{
+  const id=$('#uid').value.trim(), pw=$('#upw').value; $('#loginErr').textContent='';
+  if(!id||!pw){ $('#loginErr').textContent='이메일·비밀번호 입력'; return; }
+  const { error }=await SB.auth.signInWithPassword({ email:id, password:pw });
+  if(error){ $('#loginErr').textContent='로그인 실패'; return; }
+  const { data:{ session } }=await SB.auth.getSession();
+  if(!session || !ADMINS.includes((session.user.email||'').toLowerCase())){ await SB.auth.signOut(); $('#loginErr').textContent='원장 전용입니다'; return; }
+  route();
+};
+$('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#loginBtn').click(); });
+$('#logoutBtn').onclick=async()=>{ await SB.auth.signOut(); route(); };
+$('#logLoad')&&($('#logLoad').onclick=loadLogs);
+$('#logDate').onchange=loadLogs;
+$('#prevD').onclick=()=>{ $('#logDate').value=shiftDay($('#logDate').value||kstToday(),-1); loadLogs(); };
+$('#nextD').onclick=()=>{ $('#logDate').value=shiftDay($('#logDate').value||kstToday(),1); loadLogs(); };
+$('#today').onclick=()=>{ $('#logDate').value=kstToday(); loadLogs(); };
+route();
+</script>
+</body>
+</html>
