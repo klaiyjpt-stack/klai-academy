@@ -361,6 +361,17 @@ function boot(){
   reportInit();
   allInit();
   loadMakeupToday();
+  // 창을 다시 보면(탭 전환·복귀) 시간표 변경분 자동 반영 — 단, 명단이 실제로 바뀐 경우에만
+  // 다시 그려서 입력 중이던 출결·숙제가 날아가지 않게 한다.
+  let _visT=0;
+  document.addEventListener('visibilitychange', async ()=>{
+    if(document.visibilityState!=='visible' || !SB) return;
+    if(Date.now()-_visT < 2000) return; _visT=Date.now();
+    const before=slotRows().map(r=>r.code).join(',');
+    await loadTT();
+    const after=slotRows().map(r=>r.code).join(',');
+    if(before!==after){ fillTimes(); renderRows(); loadRecords(); loadMakeupToday(); toast('시간표 변경 반영됨'); }
+  });
 }
 // ── 오늘 보강 (이 반 학생만) : 이름+시간만, 하루종일 ──
 async function loadMakeupToday(){
