@@ -238,11 +238,11 @@ async function loadReqs(){
 }
 window.pickReq=i=>{
   const x=REQS[i]; if(!x) return;
-  if(!$('#f_student').value) $('#f_student').value=x.name||'';
-  if(!$('#f_parent').value) $('#f_parent').value=x.name||'';
-  if(!$('#f_phone').value) $('#f_phone').value=x.phone||'';
-  const head=`[홈페이지 상담신청]\n신청자: ${x.name||''} / 연락처: ${x.phone||''}${x.want?' / 희망시간: '+x.want:''}${x.ts?' / 신청일: '+String(x.ts).slice(0,16):''}\n\n`;
-  if(!$('#f_note').value.startsWith('[홈페이지 상담신청]')) $('#f_note').value = head + $('#f_note').value;
+  clearForm();                       // 다른 신청 선택 = 새 상담 시작(이전 입력 초기화)
+  $('#f_student').value=x.name||'';
+  $('#f_parent').value=x.name||'';
+  $('#f_phone').value=x.phone||'';
+  $('#f_note').value=`[홈페이지 상담신청]\n신청자: ${x.name||''} / 연락처: ${x.phone||''}${x.want?' / 희망시간: '+x.want:''}${x.date?' / 상담일: '+x.date:''}\n\n`;
   window.scrollTo(0,0); toast('상담신청 불러옴 — 학생명 확인 후 상담내용 채우기');
 };
 
