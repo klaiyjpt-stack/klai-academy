@@ -77,8 +77,8 @@
     <!-- 입력 -->
     <div>
       <div class="card" style="border-left:4px solid var(--blue)">
-        <h2>📋 상담신청 접수 <span id="reqCnt" style="font-size:12px;color:var(--sub);font-weight:600"></span></h2>
-        <div style="font-size:11.5px;color:var(--sub);margin-bottom:8px">홈페이지로 들어온 신청 — 누르면 이름·연락처·희망시간이 자동 입력돼요.</div>
+        <h2>📋 확정된 상담 <span id="reqCnt" style="font-size:12px;color:var(--sub);font-weight:600"></span></h2>
+        <div style="font-size:11.5px;color:var(--sub);margin-bottom:8px">대시보드에서 확정한 상담만 — 누르면 이름·연락처·상담일이 자동 입력돼요.</div>
         <div id="reqList" style="max-height:200px;overflow:auto">불러오는 중…</div>
       </div>
       <div class="card">
@@ -227,12 +227,13 @@ async function loadReqs(){
     const r=await fetch('/api/consult',{ headers:{ Authorization:'Bearer '+(session?session.access_token:'') } });
     const j=await r.json();
     const rows=(j&&j.rows||[]).filter(x=>x.name||x.phone);
-    REQS=rows.filter(x=>!['확정','취소'].includes(x.status));   // 미처리 우선
-    $('#reqCnt').textContent='(미처리 '+REQS.length+')';
+    // 확정된 상담만(과거 전체 X) — 최근 20건, 최신순
+    REQS=rows.filter(x=>x.status==='확정').slice(-20).reverse();
+    $('#reqCnt').textContent='(확정 '+REQS.length+')';
     $('#reqList').innerHTML = REQS.length ? REQS.map((x,i)=>
       `<div class="listitem" onclick="window.pickReq(${i})"><div class="nm">${esc(x.name||'-')}</div>`+
-      `<div class="meta">${esc(x.phone||'')} ${x.want?'· 희망 '+esc(x.want):''} ${x.ts?'· '+esc(String(x.ts).slice(0,16)):''}</div></div>`
-    ).join('') : '<div style="font-size:12.5px;color:var(--sub)">대기 중인 신청 없음</div>';
+      `<div class="meta">${esc(x.phone||'')} ${x.date?'· 상담 '+esc(x.date):(x.want?'· 희망 '+esc(x.want):'')}</div></div>`
+    ).join('') : '<div style="font-size:12.5px;color:var(--sub)">확정된 상담 없음</div>';
   }catch(e){ $('#reqList').innerHTML='<div style="font-size:12px;color:var(--sub)">신청 목록을 못 불러왔어요</div>'; }
 }
 window.pickReq=i=>{
