@@ -102,8 +102,9 @@
   .link{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 20px;font-weight:700;font-size:14px;color:var(--navy)}
   .link:hover{border-color:var(--blue);color:var(--blue)}
   /* contact */
-  .contact{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center}
-  @media(max-width:760px){.contact{grid-template-columns:1fr}}
+  .contact{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:24px;align-items:stretch}
+  @media(max-width:960px){.contact{grid-template-columns:1fr 1fr}}
+  @media(max-width:640px){.contact{grid-template-columns:1fr}}
   .contact .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px}
   .contact h3{font-size:20px;color:var(--navy);margin-bottom:6px}
   .contact .row{display:flex;gap:10px;padding:9px 0;font-size:14.5px;border-bottom:1px dashed var(--line)}
