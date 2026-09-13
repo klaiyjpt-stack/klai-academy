@@ -76,6 +76,11 @@
   <div class="wrap"><div class="grid2">
     <!-- 입력 -->
     <div>
+      <div class="card" style="border-left:4px solid var(--blue)">
+        <h2>📋 상담신청 접수 <span id="reqCnt" style="font-size:12px;color:var(--sub);font-weight:600"></span></h2>
+        <div style="font-size:11.5px;color:var(--sub);margin-bottom:8px">홈페이지로 들어온 신청 — 누르면 이름·연락처·희망시간이 자동 입력돼요.</div>
+        <div id="reqList" style="max-height:200px;overflow:auto">불러오는 중…</div>
+      </div>
       <div class="card">
         <h2>학생·학부모</h2>
         <div class="row3">
@@ -214,6 +219,32 @@ $('#saveBtn').onclick=async()=>{
   toast(EDIT_ID?'수정됨':'저장됨'); clearForm(); loadList();
 };
 
+// 상담신청 접수(홈페이지 → /api/consult, 구글시트) 목록 → 클릭 시 폼 자동채움
+let REQS=[];
+async function loadReqs(){
+  try{
+    const { data:{ session } }=await SB.auth.getSession();
+    const r=await fetch('/api/consult',{ headers:{ Authorization:'Bearer '+(session?session.access_token:'') } });
+    const j=await r.json();
+    const rows=(j&&j.rows||[]).filter(x=>x.name||x.phone);
+    REQS=rows.filter(x=>!['확정','취소'].includes(x.status));   // 미처리 우선
+    $('#reqCnt').textContent='(미처리 '+REQS.length+')';
+    $('#reqList').innerHTML = REQS.length ? REQS.map((x,i)=>
+      `<div class="listitem" onclick="window.pickReq(${i})"><div class="nm">${esc(x.name||'-')}</div>`+
+      `<div class="meta">${esc(x.phone||'')} ${x.want?'· 희망 '+esc(x.want):''} ${x.ts?'· '+esc(String(x.ts).slice(0,16)):''}</div></div>`
+    ).join('') : '<div style="font-size:12.5px;color:var(--sub)">대기 중인 신청 없음</div>';
+  }catch(e){ $('#reqList').innerHTML='<div style="font-size:12px;color:var(--sub)">신청 목록을 못 불러왔어요</div>'; }
+}
+window.pickReq=i=>{
+  const x=REQS[i]; if(!x) return;
+  if(!$('#f_student').value) $('#f_student').value=x.name||'';
+  if(!$('#f_parent').value) $('#f_parent').value=x.name||'';
+  if(!$('#f_phone').value) $('#f_phone').value=x.phone||'';
+  const head=`[홈페이지 상담신청]\n신청자: ${x.name||''} / 연락처: ${x.phone||''}${x.want?' / 희망시간: '+x.want:''}${x.ts?' / 신청일: '+String(x.ts).slice(0,16):''}\n\n`;
+  if(!$('#f_note').value.startsWith('[홈페이지 상담신청]')) $('#f_note').value = head + $('#f_note').value;
+  window.scrollTo(0,0); toast('상담신청 불러옴 — 학생명 확인 후 상담내용 채우기');
+};
+
 async function loadList(){
   const q=$('#search')?.value.trim();
   let query=SB.from('consultations').select('id,student_name,grade,consult_date,status,recommend_class').order('consult_date',{ascending:false}).limit(50);
@@ -242,7 +273,7 @@ $('#search').oninput=loadList;
 
 async function route(){
   const { data:{ session } }=await SB.auth.getSession();
-  if(session && ADMINS.includes((session.user.email||'').toLowerCase())){ show('main'); clearForm(); loadList(); }
+  if(session && ADMINS.includes((session.user.email||'').toLowerCase())){ show('main'); clearForm(); loadList(); loadReqs(); }
   else show('login');
 }
 $('#loginBtn').onclick=async()=>{
