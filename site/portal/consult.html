@@ -109,6 +109,30 @@
           <span id="aiState" style="font-size:12px;color:var(--sub)"></span>
         </div>
       </div>
+
+      <div class="card">
+        <h2>수업영역별 정리</h2>
+        <div style="font-size:11.5px;color:var(--sub);margin-bottom:8px">AI가 상담에서 언급된 영역만 채워요. 빈칸은 추후 수기 보완.</div>
+        <div id="progBox"></div>
+      </div>
+
+      <div class="card">
+        <h2>운영정보</h2>
+        <div class="row3">
+          <div><label>차량</label><select id="f_transport"><option value="">-</option><option>탑승</option><option>미탑승</option><option>미정</option></select></div>
+          <div><label>탑승 장소</label><input id="f_transport_place"></div>
+          <div><label>수업 시작 시점</label><input id="f_start" placeholder="예: 다음주 월, 3월"></div>
+        </div>
+        <div class="row3">
+          <div><label>원비</label><input id="f_tuition"></div>
+          <div><label>결제 방법</label><input id="f_payment" placeholder="카드/이체/CMS"></div>
+          <div><label>타 학원 일정</label><input id="f_other" placeholder="피할 요일·시간"></div>
+        </div>
+        <div class="row">
+          <div><label>학생 특징</label><textarea id="f_traits" style="min-height:60px"></textarea></div>
+          <div><label>주의할 점</label><textarea id="f_cautions" style="min-height:60px"></textarea></div>
+        </div>
+      </div>
     </div>
 
     <!-- 정리·저장 -->
@@ -170,10 +194,20 @@ window.chkTog=i=>{ CHECK[i].done=!CHECK[i].done; renderCheck(); };
 window.chkDel=i=>{ CHECK.splice(i,1); renderCheck(); };
 $('#addChk').onclick=()=>{ const v=$('#newChk').value.trim(); if(!v)return; CHECK.push({t:v,done:false}); $('#newChk').value=''; renderCheck(); };
 
+const PROGS=["원어민","알파","독해","문법","단어&Extra","영어도서관","정독"];
+function renderProg(vals){
+  vals=vals||{};
+  $('#progBox').innerHTML = PROGS.map(a=>
+    `<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px"><span style="width:96px;font-size:12.5px;font-weight:700;color:var(--navy);flex:none">${a}</span><input class="e-prog" data-a="${esc(a)}" value="${esc(vals[a]||'')}" placeholder="상담 시 언급된 내용" style="flex:1"></div>`
+  ).join('');
+}
+function getProg(){ const o={}; document.querySelectorAll('.e-prog').forEach(i=>{ const v=i.value.trim(); if(v) o[i.dataset.a]=v; }); return o; }
+
 function clearForm(){
   EDIT_ID=null; CHECK=[];
-  ['f_student','f_grade','f_parent','f_phone','f_counselor','f_prev','f_hist','f_needs','f_note','f_summary','f_reco','f_level','f_next'].forEach(id=>$('#'+id).value='');
-  $('#f_date').value=kstToday(); $('#f_status').value='상담'; renderCheck(); $('#aiState').textContent='';
+  ['f_student','f_grade','f_parent','f_phone','f_counselor','f_prev','f_hist','f_needs','f_note','f_summary','f_reco','f_level','f_next',
+   'f_transport','f_transport_place','f_start','f_tuition','f_payment','f_other','f_traits','f_cautions'].forEach(id=>{ if($('#'+id)) $('#'+id).value=''; });
+  $('#f_date').value=kstToday(); $('#f_status').value='상담'; renderCheck(); renderProg({}); $('#aiState').textContent='';
 }
 $('#newBtn').onclick=clearForm;
 
@@ -197,6 +231,9 @@ $('#aiBtn').onclick=async()=>{
   if(j.recommend_class) $('#f_reco').value=j.recommend_class;
   if(j.level_test) $('#f_level').value=j.level_test;
   if(j.next_action) $('#f_next').value=j.next_action;
+  if(j.programs) renderProg(j.programs);
+  const map={transport:'f_transport',transport_place:'f_transport_place',start_date:'f_start',tuition:'f_tuition',payment:'f_payment',student_traits:'f_traits',cautions:'f_cautions',other_academy:'f_other'};
+  Object.keys(map).forEach(k=>{ if(j[k] && $('#'+map[k])) $('#'+map[k]).value=j[k]; });
   if(Array.isArray(j.checklist)) { CHECK=j.checklist.map(t=>({t:String(t),done:false})); renderCheck(); }
   toast('AI 정리 완료 — 확인 후 저장');
 };
@@ -210,6 +247,9 @@ $('#saveBtn').onclick=async()=>{
     prev_academy:$('#f_prev').value||null, level_history:$('#f_hist').value||null, needs:$('#f_needs').value||null,
     consult_note:$('#f_note').value||null, level_test:$('#f_level').value||null, recommend_class:$('#f_reco').value||null,
     checklist:CHECK, ai_summary:$('#f_summary').value||null, status:$('#f_status').value, next_action:$('#f_next').value||null,
+    programs:getProg(), transport:$('#f_transport').value||null, transport_place:$('#f_transport_place').value||null,
+    start_date:$('#f_start').value||null, tuition:$('#f_tuition').value||null, payment:$('#f_payment').value||null,
+    student_traits:$('#f_traits').value||null, cautions:$('#f_cautions').value||null, other_academy:$('#f_other').value||null,
     updated_at:new Date().toISOString()
   };
   let err;
@@ -267,6 +307,10 @@ window.openRec=async id=>{
   $('#f_prev').value=data.prev_academy||''; $('#f_hist').value=data.level_history||''; $('#f_needs').value=data.needs||'';
   $('#f_note').value=data.consult_note||''; $('#f_summary').value=data.ai_summary||''; $('#f_reco').value=data.recommend_class||'';
   $('#f_level').value=data.level_test||''; $('#f_next').value=data.next_action||''; $('#f_status').value=data.status||'상담';
+  $('#f_transport').value=data.transport||''; $('#f_transport_place').value=data.transport_place||''; $('#f_start').value=data.start_date||'';
+  $('#f_tuition').value=data.tuition||''; $('#f_payment').value=data.payment||''; $('#f_other').value=data.other_academy||'';
+  $('#f_traits').value=data.student_traits||''; $('#f_cautions').value=data.cautions||'';
+  renderProg(data.programs||{});
   CHECK=Array.isArray(data.checklist)?data.checklist.map(c=>typeof c==='string'?{t:c,done:false}:c):[]; renderCheck();
   window.scrollTo(0,0); toast('불러옴 — 수정 후 저장');
 };

@@ -32,16 +32,19 @@ export default async function handler(req, res){
   const note = String(b.consult_note||"").slice(0, 60000);   // 1시간 상담 전사문(수만 자)도 통째로
   if(!note.trim()) return res.status(400).json({error:"상담내용이 비어있음"});
 
-  const sys = "너는 영어학원(초·중·고 대상) 신규상담을 정리하는 한국어 도우미다. "
-    + "상담 기록과 학생 정보를 바탕으로 아래 JSON만 출력한다(설명·마크다운 금지). "
-    + '{"summary":"핵심요약 3~5줄(줄바꿈 포함)","recommend_class":"추천 반/과목(예: 알파+독해, 원어민 스피킹 등)","level_test":"레벨테스트로 확인할 것 또는 추정 레벨","checklist":["입회 시 수업준비 항목 5~8개(교재·반배정·초기설정·숙제앱계정 등)"],"next_action":"다음 액션 한 줄(예: 레벨테스트 예약, 등록서류 안내)"}';
+  const sys = "너는 영어학원(초·중·고, 클라이 어학원) 신규상담을 정리하는 한국어 도우미다. "
+    + "상담 기록(녹음 전사일 수 있음)과 학생 정보에서 사실만 뽑아 아래 JSON만 출력한다(설명·마크다운·코드펜스 금지). "
+    + "규칙: 상담에 언급된 내용만 채우고, 언급 없으면 빈 문자열(\"\")로 둔다(추후 수기 보완). 원비·날짜·숫자는 추정하지 말고 언급된 그대로만. "
+    + "programs 는 우리 학원 수업영역별로, 상담에서 그 영역에 대해 나온 얘기(수강여부·수준·요청)를 짧게 적고 없으면 \"\". "
+    + '수업영역: 원어민, 알파, 독해, 문법, "단어&Extra", 영어도서관, 정독. '
+    + '출력 형식: {"summary":"핵심요약 3~6줄(줄바꿈)","programs":{"원어민":"","알파":"","독해":"","문법":"","단어&Extra":"","영어도서관":"","정독":""},"recommend_class":"종합 추천 반/과목","level_test":"레벨테스트로 확인할 것 또는 추정 레벨","transport":"차량 탑승/미탑승/미정","transport_place":"탑승 장소","start_date":"수업 시작 시점","tuition":"원비(언급된 금액)","payment":"결제 방법","student_traits":"학생 특징","cautions":"주의할 점","other_academy":"타 학원 일정(피해야 할 요일/시간)","checklist":["입회 준비 항목 5~8개(교재·반배정·차량등록·결제·숙제앱계정 등)"],"next_action":"다음 액션 한 줄"}';
   const user = `${info}\n\n[상담내용]\n${note}`;
 
   try{
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method:"POST",
       headers:{ "x-api-key":key, "anthropic-version":"2023-06-01", "content-type":"application/json" },
-      body: JSON.stringify({ model:MODEL, max_tokens:2000, system:sys, messages:[{role:"user", content:user}] })
+      body: JSON.stringify({ model:MODEL, max_tokens:3000, system:sys, messages:[{role:"user", content:user}] })
     });
     const j = await r.json();
     if(!r.ok) return res.status(502).json({error:"AI 호출 실패", detail:(j&&j.error&&j.error.message)||JSON.stringify(j).slice(0,200)});
