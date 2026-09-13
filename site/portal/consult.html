@@ -156,7 +156,9 @@
             <select id="f_status"><option>상담</option><option>등록</option><option>보류</option><option>미등록</option></select>
           </div>
         </div>
-        <button class="btnp" id="saveBtn" style="width:100%;margin-top:14px">💾 저장</button>
+        <button class="btnp" id="saveBtn" style="width:100%;margin-top:14px">💾 저장 (상담 종료)</button>
+        <div id="draftHint" style="font-size:11px;color:var(--sub);text-align:center;margin-top:6px"></div>
+        <div style="font-size:11px;color:var(--sub);text-align:center;margin-top:2px">✍️ 입력 중 자동 임시저장 — 잠깐 멈추거나 창 닫아도 다시 열면 복원돼요.</div>
       </div>
 
       <div class="card">
@@ -209,7 +211,7 @@ function clearForm(){
    'f_transport','f_transport_place','f_start','f_tuition','f_payment','f_other','f_traits','f_cautions'].forEach(id=>{ if($('#'+id)) $('#'+id).value=''; });
   $('#f_date').value=kstToday(); $('#f_status').value='상담'; renderCheck(); renderProg({}); $('#aiState').textContent='';
 }
-$('#newBtn').onclick=clearForm;
+$('#newBtn').onclick=()=>{ clearForm(); clearDraft(); };
 
 async function api(path, body){
   const { data:{ session } } = await SB.auth.getSession();
@@ -256,7 +258,7 @@ $('#saveBtn').onclick=async()=>{
   if(EDIT_ID){ ({error:err}=await SB.from('consultations').update(row).eq('id',EDIT_ID)); }
   else { const { data:{ user } }=await SB.auth.getUser(); row.created_by=user?.id||null; ({error:err}=await SB.from('consultations').insert(row)); }
   if(err){ toast('저장 실패: '+err.message); return; }
-  toast(EDIT_ID?'수정됨':'저장됨'); clearForm(); loadList();
+  toast(EDIT_ID?'수정됨':'저장됨'); clearForm(); clearDraft(); loadList();
 };
 
 // 상담신청 접수(홈페이지 → /api/consult, 구글시트) 목록 → 클릭 시 폼 자동채움
@@ -278,7 +280,7 @@ async function loadReqs(){
 }
 window.pickReq=i=>{
   const x=REQS[i]; if(!x) return;
-  clearForm();                       // 다른 신청 선택 = 새 상담 시작(이전 입력 초기화)
+  clearForm(); clearDraft();                       // 다른 신청 선택 = 새 상담 시작(이전 입력 초기화)
   $('#f_student').value=x.name||'';
   $('#f_parent').value=x.name||'';
   $('#f_phone').value=x.phone||'';
@@ -316,10 +318,22 @@ window.openRec=async id=>{
 };
 $('#search').oninput=loadList;
 
+// ── 자동 임시저장(일시정지·창닫힘 대비) ──
+const DKEY='consult_draft_v1';
+const DFIELDS=['f_student','f_grade','f_date','f_parent','f_phone','f_counselor','f_prev','f_hist','f_needs','f_note','f_summary','f_reco','f_level','f_next','f_transport','f_transport_place','f_start','f_tuition','f_payment','f_other','f_traits','f_cautions','f_status'];
+let dT;
+function saveDraft(){ clearTimeout(dT); dT=setTimeout(()=>{ const o={edit:EDIT_ID,check:CHECK,prog:getProg()}; DFIELDS.forEach(id=>o[id]=$('#'+id)?$('#'+id).value:''); try{ localStorage.setItem(DKEY,JSON.stringify(o)); }catch(e){} const h=$('#draftHint'); if(h) h.textContent='임시저장됨 '+new Date().toLocaleTimeString('ko-KR').slice(0,8); },600); }
+function loadDraft(){ try{ const o=JSON.parse(localStorage.getItem(DKEY)||'null'); if(!o) return false; DFIELDS.forEach(id=>{ if($('#'+id)&&o[id]!=null) $('#'+id).value=o[id]; }); EDIT_ID=o.edit||null; CHECK=Array.isArray(o.check)?o.check:[]; renderCheck(); renderProg(o.prog||{}); return DFIELDS.some(id=>o[id]); }catch(e){ return false; } }
+function clearDraft(){ try{ localStorage.removeItem(DKEY); }catch(e){} const h=$('#draftHint'); if(h) h.textContent=''; }
+document.addEventListener('input',()=>{ const m=$('#mainView'); if(m && !m.classList.contains('hidden')) saveDraft(); });
+
 async function route(){
   const { data:{ session } }=await SB.auth.getSession();
-  if(session && ADMINS.includes((session.user.email||'').toLowerCase())){ show('main'); clearForm(); loadList(); loadReqs(); }
-  else show('login');
+  if(session && ADMINS.includes((session.user.email||'').toLowerCase())){
+    show('main'); clearForm();
+    if(loadDraft()) toast('작성 중이던 상담을 복원했어요 (새로 시작은 +새 상담)');
+    loadList(); loadReqs();
+  } else show('login');
 }
 $('#loginBtn').onclick=async()=>{
   const id=$('#uid').value.trim(), pw=$('#upw').value; $('#loginErr').textContent='';
