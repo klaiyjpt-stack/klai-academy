@@ -29,7 +29,7 @@ export default async function handler(req, res){
     b.needs && `학부모 니즈/목표: ${b.needs}`,
     b.level_test && `레벨테스트: ${b.level_test}`,
   ].filter(Boolean).join("\n");
-  const note = String(b.consult_note||"").slice(0, 8000);
+  const note = String(b.consult_note||"").slice(0, 60000);   // 1시간 상담 전사문(수만 자)도 통째로
   if(!note.trim()) return res.status(400).json({error:"상담내용이 비어있음"});
 
   const sys = "너는 영어학원(초·중·고 대상) 신규상담을 정리하는 한국어 도우미다. "
@@ -41,7 +41,7 @@ export default async function handler(req, res){
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method:"POST",
       headers:{ "x-api-key":key, "anthropic-version":"2023-06-01", "content-type":"application/json" },
-      body: JSON.stringify({ model:MODEL, max_tokens:1200, system:sys, messages:[{role:"user", content:user}] })
+      body: JSON.stringify({ model:MODEL, max_tokens:2000, system:sys, messages:[{role:"user", content:user}] })
     });
     const j = await r.json();
     if(!r.ok) return res.status(502).json({error:"AI 호출 실패", detail:(j&&j.error&&j.error.message)||JSON.stringify(j).slice(0,200)});
