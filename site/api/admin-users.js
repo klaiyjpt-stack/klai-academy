@@ -900,6 +900,10 @@ async function listAll(){
 
 export default async function handler(req, res){
   if(req.method!=="POST") return res.status(405).json({ok:false});
+  // 이름→아이디(영어+숫자4) 공개 조회 — 선생님 페이지에서 학생명 병기용(비밀 아님). 인증 불필요.
+  if((req.body||{}).action==="names"){
+    return res.status(200).json({ ok:true, names: ACCOUNTS.map(a=>({name:a.name, id:a.id})) });
+  }
   if(!SVC) return res.status(503).json({ok:false,error:"SUPABASE_SERVICE_ROLE 미설정"});
   const u = await caller(req);
   if(!u || !ADMINS.includes(String(u.email||"").toLowerCase())) return res.status(403).json({ok:false,error:"원장 전용"});
