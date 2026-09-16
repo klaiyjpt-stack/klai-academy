@@ -915,7 +915,8 @@ export default async function handler(req, res){
       const rows = (await listAll()).map(x=>{
         const m=x.user_metadata||{};
         return { id:x.id, email:x.email, name:m.name||"", subj:m.subj||"",
-          phone: m.phone || P_EMAIL[(x.email||"").toLowerCase()] || P_NAME[m.name] || "" };
+          phone: m.phone || P_EMAIL[(x.email||"").toLowerCase()] || P_NAME[m.name] || "",
+          paused: !!m.paused, paused_at: m.paused_at||"" };
       }).sort((a,c)=>(a.name||"").localeCompare(c.name||"","ko"));
       return res.status(200).json({ok:true, users:rows, total:rows.length});
     }
@@ -990,6 +991,17 @@ export default async function handler(req, res){
     }
     if(b.action==="delete"){
       const r = await fetch(URL+"/auth/v1/admin/users/"+b.id, { method:"DELETE", headers:H });
+      return res.status(r.ok?200:400).json({ok:r.ok});
+    }
+    if(b.action==="pause"){   // 휴원/복귀: 시간표 숨김(active 토글) + 계정 표시(metadata.paused)
+      const on = !!b.on;      // on=true 휴원, false 복귀
+      if(b.name){             // 시간표에서 숨김(휴원=active false) → 선생님/학부모 페이지에서 자동 제외
+        await fetch(URL+"/rest/v1/timetable?name_kor=eq."+encodeURIComponent(b.name),
+          { method:"PATCH", headers:Object.assign({},H,{Prefer:"return=minimal"}), body: JSON.stringify({ active: !on }) });
+      }
+      const cur = await fetch(URL+"/auth/v1/admin/users/"+b.id, { headers:H }).then(r=>r.json()).catch(()=>({}));
+      const meta = Object.assign({}, cur.user_metadata||{}, { paused:on, paused_at: on? new Date().toISOString().slice(0,10): null });
+      const r = await fetch(URL+"/auth/v1/admin/users/"+b.id, { method:"PUT", headers:H, body: JSON.stringify({ user_metadata:meta }) });
       return res.status(r.ok?200:400).json({ok:r.ok});
     }
     return res.status(400).json({ok:false,error:"unknown action"});

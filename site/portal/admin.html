@@ -437,13 +437,17 @@ function renderAcct(){
   $('#acctBody').innerHTML = rows.map(u=>{
     const idl=(u.email||'').replace('@klai.kr','');
     const subj=(window.SUBJMAP&&window.SUBJMAP[u.name])||u.subj||'';
-    return '<tr data-id="'+u.id+'">'+
-      '<td><input class="e-name" value="'+esc(u.name)+'"></td>'+
+    const pausedBadge = u.paused ? ' <span style="background:#fff3cd;color:#8a6d00;font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;white-space:nowrap">휴원'+(u.paused_at?' '+u.paused_at:'')+'</span>' : '';
+    const pauseBtn = u.paused
+      ? '<button class="actbtn on" onclick="acctPause(\''+u.id+'\',\''+esc(u.name)+'\',false)">복귀</button> '
+      : '<button class="actbtn" style="background:#fff3cd;color:#8a6d00;border-color:#f0d98a" onclick="acctPause(\''+u.id+'\',\''+esc(u.name)+'\',true)">휴원</button> ';
+    return '<tr data-id="'+u.id+'"'+(u.paused?' style="opacity:.6"':'')+'>'+
+      '<td><input class="e-name" value="'+esc(u.name)+'">'+pausedBadge+'</td>'+
       '<td><input class="e-id" value="'+esc(idl)+'"></td>'+
       '<td><input class="e-pw" value="'+esc(idl)+'" data-orig="'+esc(idl)+'"></td>'+
       '<td><input class="e-phone" value="'+esc(u.phone||'')+'" placeholder="-"></td>'+
       '<td style="font-size:12px;color:var(--sub)">'+esc(subj)+'</td>'+
-      '<td><button class="actbtn on" onclick="acctSave(\''+u.id+'\')">저장</button> '+
+      '<td>'+pauseBtn+'<button class="actbtn on" onclick="acctSave(\''+u.id+'\')">저장</button> '+
       '<button class="actbtn off" onclick="acctDel(\''+u.id+'\',\''+esc(u.name)+'\')">삭제</button></td></tr>';
   }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--sub);padding:22px">해당 없음</td></tr>';
 }
@@ -478,6 +482,10 @@ async function acctSave(id){
   toast(j.ok?'저장됨':(j.error||'실패')); if(j.ok)loadAcct();
 }
 async function acctDel(id,name){ if(!confirm('"'+name+'" 계정을 완전 삭제할까요?'))return; const j=await apiU('delete',{id}); toast(j.ok?'삭제됨':'실패'); if(j.ok)loadAcct(); }
+async function acctPause(id,name,on){
+  if(!confirm('"'+name+'" 학생을 '+(on?'휴원 처리':'복귀')+'할까요?\n'+(on?'휴원 중엔 선생님·학부모 페이지 시간표에서 숨겨집니다(계정·기록은 유지).':'시간표에 다시 나타납니다.')))return;
+  const j=await apiU('pause',{id,name,on}); toast(j.ok?(on?'휴원 처리됨':'복귀됨'):'실패'); if(j.ok)loadAcct();
+}
 async function acctAdd(){ const name=$('#ncName').value.trim(), id=$('#ncId').value.trim().toLowerCase(), pw=$('#ncPw').value.trim()||'klai0000', phone=$('#ncPhone').value.trim();
   if(!name||!id){ toast('이름·아이디 필수'); return; }
   const j=await apiU('create',{email:id+'@klai.kr',password:pw,name,phone});
