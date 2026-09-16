@@ -212,6 +212,12 @@ window.LANG = 'ko';
 const L = (ko,en)=> window.LANG==='en' ? en : ko;
 // 코드(영어이름+숫자)에서 영어 이름만 뽑아 표기 — 원어민 선생님이 학생을 영어이름으로 부른다.
 function enName(code){ if(!code) return ''; const e=String(code).replace(/[0-9]/g,'').trim(); return e ? e.charAt(0).toUpperCase()+e.slice(1) : ''; }
+function enNum(code){ const m=String(code||'').match(/\d{3,4}/); return m?m[0]:''; }
+// 학생 표기: 한글이름 + 영어이름 + 숫자4자리 모두. 언어에 따라 앞뒤만 바꾼다.
+function stuLabel(st){ const ko=st.name_kor||'', en=enName(st.code), n=enNum(st.code);
+  return window.LANG==='en'
+    ? `${en||ko} <small>${ko} ${n}</small>`
+    : `${ko} <small>${[en,n].filter(Boolean).join(' ')}</small>`; }
 function applyLang(l){
   window.LANG=l; try{ localStorage.setItem('tc_lang',l); }catch(e){}
   document.querySelectorAll('[data-en]').forEach(e=>{ if(e.dataset.ko==null) e.dataset.ko=e.textContent; e.textContent = (l==='en'? e.getAttribute('data-en') : e.dataset.ko); });
@@ -279,7 +285,7 @@ function renderRows(){
   $('#emptyMsg').classList.toggle('hidden', list.length>0);
   $('#rows').innerHTML = list.map(st=>`
     <tr data-code="${st.code}" data-name="${st.name_kor}">
-      <td class="name">${window.LANG==='en' ? `${enName(st.code)||st.name_kor} <small>${st.name_kor}</small>` : `${st.name_kor} <small>${enName(st.code)||st.code||''}</small>`}</td>
+      <td class="name">${stuLabel(st)}</td>
       <td><select class="att">${(window.LANG==='en'?ATT_EN:ATT).map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></td>
       <td><button class="hwbtn" data-hw="">${L('숙제','HW')}</button></td>
       <td><input class="txt book" placeholder="${L('교재','Book')}"></td>
