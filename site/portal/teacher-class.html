@@ -72,112 +72,112 @@
   <header>
     <div class="wrap hd">
       <div class="ttl" id="hubTtl">🅰️ 클라이 어학원 · 알파 선생님<small>실시간 시간표 · 반 기록</small></div>
-      <div><span class="me" id="meName">선생님</span><button class="out" id="logoutBtn">로그아웃</button></div>
+      <div><span class="me" id="meName" data-en="Teacher">선생님</span><button class="out" id="langBtn" style="margin-right:6px">EN</button><button class="out" id="logoutBtn" data-en="Log out">로그아웃</button></div>
     </div>
   </header>
 
   <div class="wrap">
     <div id="mkTodayWrap" style="display:none">
-      <div class="eyebrow" style="color:var(--green-d)">🔁 오늘 보강 (이 반 학생)</div>
+      <div class="eyebrow" style="color:var(--green-d)" data-en="🔁 Today's Make-up (this class)">🔁 오늘 보강 (이 반 학생)</div>
       <div class="panel" style="border-color:#cde7b8;background:#f6fcef">
         <div id="mkToday" style="font-size:14px"></div>
       </div>
     </div>
 
     <div class="bar">
-      <span class="lb">요일</span>
+      <span class="lb" data-en="Day">요일</span>
       <select id="daySel"></select>
-      <span class="lb">시간</span>
+      <span class="lb" data-en="Time">시간</span>
       <select id="timeSel"></select>
-      <span class="lb">날짜</span>
+      <span class="lb" data-en="Date">날짜</span>
       <input type="date" id="dateSel">
-      <span class="live"><span class="dot"></span>실시간</span>
+      <span class="live"><span class="dot"></span><span data-en="Live">실시간</span></span>
     </div>
 
-    <div class="eyebrow">반 기록 입력</div>
+    <div class="eyebrow" data-en="Class Record">반 기록 입력</div>
     <div class="panel">
-      <div class="phead"><h2>📝 출결 · 숙제 · 진도 · 결과</h2><span class="pill" id="slotPill"></span></div>
+      <div class="phead"><h2 data-en="📝 Attendance · Homework · Progress · Result">📝 출결 · 숙제 · 진도 · 결과</h2><span class="pill" id="slotPill"></span></div>
       <div class="tblwrap">
         <table class="grid">
           <thead><tr>
-            <th style="text-align:left">학생</th><th>출결</th><th>숙제</th>
-            <th>학습교재</th><th>진도(Unit·p)</th><th>결과</th><th>특이사항</th><th>교재배부</th>
+            <th style="text-align:left" data-en="Student">학생</th><th data-en="Attend.">출결</th><th data-en="HW">숙제</th>
+            <th data-en="Book">학습교재</th><th data-en="Progress (Unit·p)">진도(Unit·p)</th><th data-en="Result">결과</th><th data-en="Notes">특이사항</th><th data-en="Distribute">교재배부</th>
           </tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
-      <div id="emptyMsg" class="empty hidden">이 시간에 배정된 학생이 없어요. 원장 페이지에서 시간표를 세팅하세요.</div>
-      <div class="actbar"><button class="save" id="saveBtn">💾 저장</button></div>
+      <div id="emptyMsg" class="empty hidden" data-en="No students in this slot. Set the timetable in the director page.">이 시간에 배정된 학생이 없어요. 원장 페이지에서 시간표를 세팅하세요.</div>
+      <div class="actbar"><button class="save" id="saveBtn" data-en="💾 Save">💾 저장</button></div>
     </div>
 
-    <div class="eyebrow">교재 배부</div>
+    <div class="eyebrow" data-en="Book Distribution">교재 배부</div>
     <div class="panel">
       <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">학생·교재 선택 → 배부. 금액·청구월 자동. 앱 대신 여기서 바로.</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
         <input id="dbDate" type="date" style="padding:7px;border:1px solid var(--line);border-radius:8px">
-        <input id="dbName" list="dlStu" placeholder="학생 이름" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:120px">
-        <input id="dbBook" list="dlBk" placeholder="교재명" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:200px">
+        <input id="dbName" list="dlStu" placeholder="학생 이름" data-en-ph="Student name" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:120px">
+        <input id="dbBook" list="dlBk" placeholder="교재명" data-en-ph="Book title" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:200px">
         <span id="dbPrice" style="font-size:12.5px;color:var(--sub);min-width:70px"></span>
-        <button class="save" id="dbAdd" style="padding:8px 16px">배부</button>
+        <button class="save" id="dbAdd" style="padding:8px 16px" data-en="Give">배부</button>
       </div>
       <datalist id="dlStu"></datalist><datalist id="dlBk"></datalist>
       <div style="display:flex;gap:8px;align-items:center;margin:14px 0 8px">
         <span style="font-size:12px;font-weight:800;color:var(--sub)">배부 목록 (청구월)</span>
         <select id="dbYear" style="padding:6px;border:1px solid var(--line);border-radius:8px"></select>
         <select id="dbMonth" style="padding:6px;border:1px solid var(--line);border-radius:8px"></select>
-        <button class="hwbtn" onclick="loadDist()">🔄 조회</button>
+        <button class="hwbtn" onclick="loadDist()" data-en="🔄 View">🔄 조회</button>
       </div>
       <div id="dbList" class="tblwrap" style="font-size:13px"></div>
     </div>
 
-    <div class="eyebrow">🗂️ 전체 시간표</div>
+    <div class="eyebrow" data-en="🗂️ Full Timetable">🗂️ 전체 시간표</div>
     <div class="panel">
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
-        <span style="font-size:12.5px;color:var(--sub)">전체 반 시간표(구글시트). 조회만 — 수정은 원장.</span>
-        <button class="hwbtn" id="allBtn">🗂️ 펼치기</button>
+        <span style="font-size:12.5px;color:var(--sub)" data-en="Full timetable (Google Sheet). View only — director edits.">전체 반 시간표(구글시트). 조회만 — 수정은 원장.</span>
+        <button class="hwbtn" id="allBtn" data-en="🗂️ Expand">🗂️ 펼치기</button>
         <a href="https://docs.google.com/spreadsheets/d/1gM-LpQK84qix7AbhB3kvL4zubCCvhdRaQHVcwptsIiI/edit" target="_blank" rel="noopener" class="hwbtn" style="text-decoration:none">시트 열기 ↗</a>
       </div>
       <div id="allGrid" style="display:none"></div>
     </div>
 
-    <div class="eyebrow">📷 시험지 · 리포트</div>
+    <div class="eyebrow" data-en="📷 Test · Report">📷 시험지 · 리포트</div>
     <div class="panel">
       <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">시험지 사진 올리고 리포트 종류 고르면 → 원장님께 <b>생성 요청</b> 알림 → 리포트 만들어져 여기서 확인·발송.</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
         <select id="rpType" style="padding:7px;border:1px solid var(--line);border-radius:8px">
           <option>알파성장리포트</option><option>월말평가</option><option>단어시험</option><option>단원평가</option>
         </select>
-        <input id="rpName" list="dlStu" placeholder="학생(선택)" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:110px">
+        <input id="rpName" list="dlStu" placeholder="학생(선택)" data-en-ph="Student (optional)" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:110px">
         <input id="rpFiles" type="file" accept="image/*" multiple style="font-size:12px">
-        <button class="save" id="rpAdd" style="padding:8px 16px">📤 올리기</button>
+        <button class="save" id="rpAdd" style="padding:8px 16px" data-en="📤 Upload">📤 올리기</button>
       </div>
-      <textarea id="rpComment" rows="4" placeholder="멘트(선택) — 길게 작성 가능" style="width:100%;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;font-family:inherit"></textarea>
+      <textarea id="rpComment" rows="4" placeholder="멘트(선택) — 길게 작성 가능" data-en-ph="Comment (optional)" style="width:100%;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;font-family:inherit"></textarea>
       <div id="rpStatus" style="font-size:12px;color:var(--sub);margin-top:6px"></div>
       <div style="font-weight:800;color:var(--navy);font-size:13px;margin:12px 2px 6px">업로드·리포트 검토</div>
       <div id="rpList" class="tblwrap" style="font-size:13px"></div>
     </div>
 
     <div id="vidSec" style="display:none">
-    <div class="eyebrow">🎬 영어도서관 영상 (월 1회)</div>
+    <div class="eyebrow" data-en="🎬 English Library Video (monthly)">🎬 영어도서관 영상 (월 1회)</div>
     <div class="panel">
       <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">영상 올리고 멘트 적으면 → 학부모께 전달(예정). 월 1회.</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start">
         <input id="vidFile" type="file" accept="video/*" style="font-size:12px;margin-top:8px">
-        <button class="save" id="vidAdd" style="padding:10px 18px">📤 영상 올리기</button>
+        <button class="save" id="vidAdd" style="padding:10px 18px" data-en="📤 Upload Video">📤 영상 올리기</button>
       </div>
-      <textarea id="vidComment" rows="6" placeholder="멘트 (학부모께 안내) — 길게 작성 가능" style="width:100%;margin-top:10px;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;font-family:inherit"></textarea>
+      <textarea id="vidComment" rows="6" placeholder="멘트 (학부모께 안내) — 길게 작성 가능" data-en-ph="Comment for parents" style="width:100%;margin-top:10px;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;font-family:inherit"></textarea>
       <div id="vidStatus" style="font-size:12px;color:var(--sub);margin-top:6px"></div>
       <div id="vidList" style="font-size:13px;margin-top:10px"></div>
     </div>
     </div>
 
-    <div class="eyebrow">강사 일지 (비공개)</div>
+    <div class="eyebrow" data-en="Teacher Log (private)">강사 일지 (비공개)</div>
     <div class="panel">
-      <textarea id="teaLog" rows="3" placeholder="나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고"></textarea>
-      <div class="actbar"><button class="save" id="logBtn" style="background:var(--navy)">💾 일지 저장</button></div>
+      <textarea id="teaLog" rows="3" placeholder="나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고" data-en-ph="Private notes — today's class, handoffs, reports"></textarea>
+      <div class="actbar"><button class="save" id="logBtn" style="background:var(--navy)" data-en="💾 Save Log">💾 일지 저장</button></div>
     </div>
 
-    <div class="eyebrow">도구</div>
+    <div class="eyebrow" data-en="Tools">도구</div>
     <div class="tools">
       <a class="tool" id="toolBook" href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578#view=%EB%B0%B0%EB%B6%80%20%EC%9E%85%EB%A0%A5" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>교재배부 입력</h3><p>배부 입력 화면 바로 열기</p></div></a>
       <a class="tool" id="toolMemo" style="display:none" href="https://klai-memo.vercel.app/admin" target="_blank" rel="noopener"><div class="ic">📖</div><div><h3>본문 암기 출제</h3><p>교과서 본문 등록·문항 생성</p></div></a>
@@ -207,6 +207,19 @@ const PROG_META = {
 const PROGRAM = (new URLSearchParams(location.search).get('program')) || '알파';
 const META = PROG_META[PROGRAM] || {emoji:'🏫',sub:'반 기록'};
 const ATT = [['present','출석'],['late','지각'],['absent','결석'],['makeup','보강']];
+const ATT_EN = [['present','Present'],['late','Late'],['absent','Absent'],['makeup','Make-up']];
+window.LANG = 'ko';
+const L = (ko,en)=> window.LANG==='en' ? en : ko;
+// 코드(영어이름+숫자)에서 영어 이름만 뽑아 표기 — 원어민 선생님이 학생을 영어이름으로 부른다.
+function enName(code){ if(!code) return ''; const e=String(code).replace(/[0-9]/g,'').trim(); return e ? e.charAt(0).toUpperCase()+e.slice(1) : ''; }
+function applyLang(l){
+  window.LANG=l; try{ localStorage.setItem('tc_lang',l); }catch(e){}
+  document.querySelectorAll('[data-en]').forEach(e=>{ if(e.dataset.ko==null) e.dataset.ko=e.textContent; e.textContent = (l==='en'? e.getAttribute('data-en') : e.dataset.ko); });
+  document.querySelectorAll('[data-en-ph]').forEach(e=>{ if(e.dataset.koPh==null) e.dataset.koPh=e.getAttribute('placeholder')||''; e.setAttribute('placeholder', l==='en'? e.getAttribute('data-en-ph') : e.dataset.koPh); });
+  const b=document.getElementById('langBtn'); if(b) b.textContent = (l==='en'?'한국어':'EN');
+  if(typeof renderRows==='function' && document.getElementById('rows') && (window.TT||[]).length!==undefined) renderRows();
+}
+window.applyLang=applyLang;
 const DAYS = [['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
 let SB=null, USER=null, TT=[], RTchan=null;
 const $ = s=>document.querySelector(s);
@@ -266,19 +279,19 @@ function renderRows(){
   $('#emptyMsg').classList.toggle('hidden', list.length>0);
   $('#rows').innerHTML = list.map(st=>`
     <tr data-code="${st.code}" data-name="${st.name_kor}">
-      <td class="name">${st.name_kor} <small>${st.code&&st.code!==st.name_kor?st.code:''}</small></td>
-      <td><select class="att">${ATT.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></td>
-      <td><button class="hwbtn" data-hw="">숙제</button></td>
-      <td><input class="txt book" placeholder="교재"></td>
+      <td class="name">${window.LANG==='en' ? `${enName(st.code)||st.name_kor} <small>${st.name_kor}</small>` : `${st.name_kor} <small>${enName(st.code)||st.code||''}</small>`}</td>
+      <td><select class="att">${(window.LANG==='en'?ATT_EN:ATT).map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></td>
+      <td><button class="hwbtn" data-hw="">${L('숙제','HW')}</button></td>
+      <td><input class="txt book" placeholder="${L('교재','Book')}"></td>
       <td><input class="txt prog" placeholder="Unit·p"></td>
-      <td><input class="txt result" placeholder="결과"></td>
-      <td><input class="txt remark" placeholder="특이사항"></td>
+      <td><input class="txt result" placeholder="${L('결과','Result')}"></td>
+      <td><input class="txt remark" placeholder="${L('특이사항','Notes')}"></td>
       <td><select class="txt dist">${BOOK_OPTS}</select></td>
     </tr>`).join('');
   // 숙제 토글 (로스터 행 안의 버튼만 — 조회·펼치기 버튼 제외)
   document.querySelectorAll('#rows .hwbtn').forEach(b=>b.onclick=()=>{
     const cur=b.dataset.hw; const nx = cur===''?'done':cur==='done'?'none':'';
-    b.dataset.hw=nx; b.className='hwbtn'+(nx?' '+nx:''); b.textContent = nx==='done'?'완료':nx==='none'?'미완료':'숙제';
+    b.dataset.hw=nx; b.className='hwbtn'+(nx?' '+nx:''); b.textContent = nx==='done'?L('완료','Done'):nx==='none'?L('미완료','Not done'):L('숙제','HW');
   });
   // 출결 색
   document.querySelectorAll('.att').forEach(s=>{ const paint=()=>{ s.className='att'+(['absent','late'].includes(s.value)?' att-'+s.value:''); }; s.onchange=paint; paint(); });
@@ -301,7 +314,7 @@ async function loadRecords(){
   document.querySelectorAll('#rows tr').forEach(tr=>{
     const r=by[tr.dataset.code]; if(!r) return;
     if(r.attend){ const s=tr.querySelector('.att'); s.value=r.attend; s.dispatchEvent(new Event('change')); }
-    if(r.homework){ const b=tr.querySelector('.hwbtn'); b.dataset.hw=r.homework; b.className='hwbtn '+r.homework; b.textContent=r.homework==='done'?'완료':'미완료'; }
+    if(r.homework){ const b=tr.querySelector('.hwbtn'); b.dataset.hw=r.homework; b.className='hwbtn '+r.homework; b.textContent=r.homework==='done'?L('완료','Done'):L('미완료','Not done'); }
     if(r.book) tr.querySelector('.book').value=r.book;
     if(r.progress) tr.querySelector('.prog').value=r.progress;
     if(r.result) tr.querySelector('.result').value=r.result;
@@ -361,6 +374,8 @@ function boot(){
   reportInit();
   allInit();
   loadMakeupToday();
+  $('#langBtn').onclick=()=>applyLang(window.LANG==='en'?'ko':'en');
+  applyLang(localStorage.getItem('tc_lang')||'ko');
   // 창을 다시 보면(탭 전환·복귀) 시간표 변경분 자동 반영 — 단, 명단이 실제로 바뀐 경우에만
   // 다시 그려서 입력 중이던 출결·숙제가 날아가지 않게 한다.
   let _visT=0;
