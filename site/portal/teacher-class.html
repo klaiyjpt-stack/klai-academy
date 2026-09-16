@@ -121,7 +121,7 @@
         <span id="dbPrice" style="font-size:12.5px;color:var(--sub);min-width:70px"></span>
         <button class="save" id="dbAdd" style="padding:8px 16px" data-en="Give">배부</button>
       </div>
-      <datalist id="dlStu"></datalist><datalist id="dlBk"></datalist>
+      <datalist id="dlStu"></datalist><datalist id="dlBk"></datalist><datalist id="dlAll"></datalist>
       <div style="display:flex;gap:8px;align-items:center;margin:14px 0 8px">
         <span style="font-size:12px;font-weight:800;color:var(--sub)">배부 목록 (청구월)</span>
         <select id="dbYear" style="padding:6px;border:1px solid var(--line);border-radius:8px"></select>
@@ -143,12 +143,12 @@
 
     <div class="eyebrow" data-en="📷 Test · Report">📷 시험지 · 리포트</div>
     <div class="panel">
-      <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">시험지 사진 올리고 리포트 종류 고르면 → 원장님께 <b>생성 요청</b> 알림 → 리포트 만들어져 여기서 확인·발송.</div>
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">시험지 사진 올리고 리포트 종류 고르면 → 원장님께 <b>생성 요청</b> 알림 → 리포트 만들어져 여기서 확인·발송. <b>오늘 등원 안 한 학생도</b> 이름 직접 입력해 올릴 수 있어요.</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
         <select id="rpType" style="padding:7px;border:1px solid var(--line);border-radius:8px">
           <option>알파성장리포트</option><option>월말평가</option><option>단어시험</option><option>단원평가</option>
         </select>
-        <input id="rpName" list="dlStu" placeholder="학생(선택)" data-en-ph="Student (optional)" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:110px">
+        <input id="rpName" list="dlAll" placeholder="학생 이름 직접 입력" data-en-ph="Type student name" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:150px">
         <input id="rpFiles" type="file" accept="image/*" multiple style="font-size:12px">
         <button class="save" id="rpAdd" style="padding:8px 16px" data-en="📤 Upload">📤 올리기</button>
       </div>
@@ -216,7 +216,8 @@ const hwLabel = v => v==='done'?L('완료','Done'):v==='none'?L('미완료','Not
 function enName(code){ if(!code) return ''; const e=String(code).replace(/[0-9]/g,'').trim(); return /[a-zA-Z]/.test(e) ? e.toLowerCase() : ''; }
 function enNum(code){ const m=String(code||'').match(/\d{3,4}/); return m?m[0]:''; }
 let NMAP={};  // 한글이름 -> 아이디(영어+숫자4). 영어도서관 등 code가 한글인 반을 위해 계정에서 보충.
-async function loadNames(){ try{ const r=await fetch('/api/admin-users',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'names'})}); const j=await r.json(); (j.names||[]).forEach(x=>{ if(!NMAP[x.name]) NMAP[x.name]=x.id; }); }catch(e){} }
+async function loadNames(){ try{ const r=await fetch('/api/admin-users',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'names'})}); const j=await r.json(); (j.names||[]).forEach(x=>{ if(!NMAP[x.name]) NMAP[x.name]=x.id; });
+  const dl=$('#dlAll'); if(dl) dl.innerHTML=Object.keys(NMAP).sort((a,b)=>a.localeCompare(b,'ko')).map(n=>`<option value="${n}">${n} ${NMAP[n]}</option>`).join(''); }catch(e){} }
 // 학생 표기: 한글 + 영어 + 숫자4자리 모두(원어민 페이지와 동일). code가 한글이면 계정 아이디로 보충.
 function stuLabel(st){ const ko=st.name_kor||'';
   const tok = enName(st.code) && enNum(st.code) ? st.code : (NMAP[ko]||st.code);
