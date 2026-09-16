@@ -46,6 +46,7 @@
   .hwbtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-weight:800;font-size:12px;cursor:pointer;color:var(--sub)}
   .hwbtn.done{background:#eafce0;border-color:#bfe6a0;color:var(--green-d)}
   .hwbtn.none{background:#fdeaea;border-color:#f0b8b8;color:var(--red)}
+  .hwbtn.na{background:#eef0f3;border-color:#d5d8dd;color:#7a828e}
   .att-absent,.att-late{color:var(--red);font-weight:700}
   .actbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
   .save{background:var(--green-d);color:#fff;border:none;padding:11px 20px;border-radius:11px;font-weight:800;font-size:14px;cursor:pointer}
@@ -210,6 +211,7 @@ const ATT = [['present','출석'],['late','지각'],['absent','결석'],['makeup
 const ATT_EN = [['present','Present'],['late','Late'],['absent','Absent'],['makeup','Make-up']];
 window.LANG = 'ko';
 const L = (ko,en)=> window.LANG==='en' ? en : ko;
+const hwLabel = v => v==='done'?L('완료','Done'):v==='none'?L('미완료','Not done'):v==='na'?L('미배부','No HW'):L('숙제','HW');
 // 코드(영어이름+숫자)에서 영어 이름만 뽑아 표기 — 원어민 선생님이 학생을 영어이름으로 부른다.
 function enName(code){ if(!code) return ''; const e=String(code).replace(/[0-9]/g,'').trim(); return /[a-zA-Z]/.test(e) ? e.toLowerCase() : ''; }
 function enNum(code){ const m=String(code||'').match(/\d{3,4}/); return m?m[0]:''; }
@@ -294,13 +296,13 @@ function renderRows(){
       <td><input class="txt book" placeholder="${L('교재','Book')}"></td>
       <td><input class="txt prog" placeholder="Unit·p"></td>
       <td><input class="txt result" placeholder="${L('결과','Result')}"></td>
-      <td><input class="txt remark" placeholder="${L('특이사항','Notes')}"></td>
+      <td><input class="txt remark" placeholder="${L('특이사항(지각·결석 사유)','Notes (late/absent reason)')}"></td>
       <td><select class="txt dist">${BOOK_OPTS}</select></td>
     </tr>`).join('');
   // 숙제 토글 (로스터 행 안의 버튼만 — 조회·펼치기 버튼 제외)
   document.querySelectorAll('#rows .hwbtn').forEach(b=>b.onclick=()=>{
-    const cur=b.dataset.hw; const nx = cur===''?'done':cur==='done'?'none':'';
-    b.dataset.hw=nx; b.className='hwbtn'+(nx?' '+nx:''); b.textContent = nx==='done'?L('완료','Done'):nx==='none'?L('미완료','Not done'):L('숙제','HW');
+    const cur=b.dataset.hw; const nx = cur===''?'done':cur==='done'?'none':cur==='none'?'na':'';
+    b.dataset.hw=nx; b.className='hwbtn'+(nx?' '+nx:''); b.textContent = hwLabel(nx);
   });
   // 출결 색
   document.querySelectorAll('.att').forEach(s=>{ const paint=()=>{ s.className='att'+(['absent','late'].includes(s.value)?' att-'+s.value:''); }; s.onchange=paint; paint(); });
@@ -323,7 +325,7 @@ async function loadRecords(){
   document.querySelectorAll('#rows tr').forEach(tr=>{
     const r=by[tr.dataset.code]; if(!r) return;
     if(r.attend){ const s=tr.querySelector('.att'); s.value=r.attend; s.dispatchEvent(new Event('change')); }
-    if(r.homework){ const b=tr.querySelector('.hwbtn'); b.dataset.hw=r.homework; b.className='hwbtn '+r.homework; b.textContent=r.homework==='done'?L('완료','Done'):L('미완료','Not done'); }
+    if(r.homework){ const b=tr.querySelector('.hwbtn'); b.dataset.hw=r.homework; b.className='hwbtn '+r.homework; b.textContent=hwLabel(r.homework); }
     if(r.book) tr.querySelector('.book').value=r.book;
     if(r.progress) tr.querySelector('.prog').value=r.progress;
     if(r.result) tr.querySelector('.result').value=r.result;
