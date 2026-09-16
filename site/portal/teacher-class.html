@@ -211,7 +211,7 @@ const ATT_EN = [['present','Present'],['late','Late'],['absent','Absent'],['make
 window.LANG = 'ko';
 const L = (ko,en)=> window.LANG==='en' ? en : ko;
 // 코드(영어이름+숫자)에서 영어 이름만 뽑아 표기 — 원어민 선생님이 학생을 영어이름으로 부른다.
-function enName(code){ if(!code) return ''; const e=String(code).replace(/[0-9]/g,'').trim(); return /[a-zA-Z]/.test(e) ? e.charAt(0).toUpperCase()+e.slice(1) : ''; }
+function enName(code){ if(!code) return ''; const e=String(code).replace(/[0-9]/g,'').trim(); return /[a-zA-Z]/.test(e) ? e.toLowerCase() : ''; }
 function enNum(code){ const m=String(code||'').match(/\d{3,4}/); return m?m[0]:''; }
 let NMAP={};  // 한글이름 -> 아이디(영어+숫자4). 영어도서관 등 code가 한글인 반을 위해 계정에서 보충.
 async function loadNames(){ try{ const r=await fetch('/api/admin-users',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'names'})}); const j=await r.json(); (j.names||[]).forEach(x=>{ if(!NMAP[x.name]) NMAP[x.name]=x.id; }); }catch(e){} }
