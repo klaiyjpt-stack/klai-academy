@@ -175,7 +175,7 @@
           <div style="font-size:12px;color:var(--sub);margin-top:2px">요일 × 시간 그리드. 실시간 시간표 기준.</div>
         </div>
         <select id="ovProg" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;background:#fff">
-          <option value="">전체 과목</option><option>정독</option><option>독해</option><option>단어&Extra</option><option>알파</option><option>문법</option><option>영어도서관</option><option>엘리아G/W</option>
+          <option value="">전체 과목</option><option>정독</option><option>독해</option><option>단어&Extra</option><option>알파</option><option>문법</option><option>영어도서관</option>
         </select>
         <button class="actbtn" id="ovToggle" onclick="toggleOv()">펼치기 ▼</button>
         <button class="actbtn on" onclick="loadOverview()">🔄 새로고침</button>
@@ -937,7 +937,7 @@ function toggleDir(){ const b=$('#dirList'),t=$('#dirToggle'); const open=b.styl
 window.toggleOv=toggleOv; window.toggleDir=toggleDir;
 
 // ── 개별 시간표 편집 (학생 중심 그리드) ──
-let SUBJECTS=['정독','독해','단어&Extra','알파','문법','영어도서관','엘리아G/W'];
+let SUBJECTS=['정독','독해','단어&Extra','알파','문법','영어도서관'];
 const GTIMES=['1시','2시','3시','4시','5시','6시','6시30분','8시'];
 const GDAYS=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
 // 시간표에 이미 쓰인 과목을 합쳐 드롭다운 자동 확장 — 새 과목 추가하면 원장이 직접 관리
