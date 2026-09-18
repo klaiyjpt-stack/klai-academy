@@ -382,6 +382,7 @@ function boot(){
   $('#timeSel').onchange=renderRows;
   $('#dateSel').onchange=()=>{ if(SB) loadRecords(); };
   $('#saveBtn').onclick=saveRecords;
+  $('#rows').addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.tagName==='INPUT'){ e.preventDefault(); saveRecords(); } });  // 행 입력 중 엔터 → 저장
   $('#logBtn').onclick=saveLog;
   bookInit();
   reportInit();

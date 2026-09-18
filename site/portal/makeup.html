@@ -243,6 +243,7 @@ window.schedule=schedule; window.doneMk=doneMk; window.cancelMk=cancelMk; window
   $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter')$('#loginBtn').click(); });
   $('#logoutBtn').onclick=async()=>{ await SB.auth.signOut(); route(); };
   $('#mAdd').onclick=addMk;
+  ['mName','mPhone','mAbs','mProof'].forEach(id=>{ const el=$('#'+id); if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addMk(); } }); });
   document.querySelectorAll('#segFilter button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('#segFilter button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); FILTER=b.dataset.f; renderMakeup(); });
   route();
 })();

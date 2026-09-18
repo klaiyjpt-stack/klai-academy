@@ -1090,6 +1090,14 @@ else { (async()=>{
   $('#resetAllBtn').onclick = resetAllIdPw;
   $('#acctAddBtn').onclick = acctAdd;
   $('#acctSearch').oninput = renderAcct;
+  // ── 엔터로 실행 (되돌리기 힘든 확정·삭제는 제외) ──
+  const bindEnter=(ids,fn)=>ids.forEach(id=>{ const el=$('#'+id); if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); fn(); } }); });
+  bindEnter(['giName'], giLoad);                                   // 개별시간표: 이름 엔터 → 불러오기
+  bindEnter(['aTeacher','aClass','aKo','aEn','aCode','aBook'], addStudent);
+  bindEnter(['tName'], addTeacher);
+  bindEnter(['ncName','ncId','ncPw','ncPhone'], acctAdd);          // 계정 추가
+  bindEnter(['bkName','bkArea','bkPrice','bkMin','bkBase'], addBook);
+  const ab=$('#acctBody'); if(ab) ab.addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.tagName==='INPUT'){ const tr=e.target.closest('tr[data-id]'); if(tr){ e.preventDefault(); acctSave(tr.dataset.id); } } });
   route();
 })(); }
 </script>
