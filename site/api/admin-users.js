@@ -905,6 +905,14 @@ export default async function handler(req, res){
     return res.status(200).json({ ok:true, names: ACCOUNTS.map(a=>({name:a.name, id:a.id})) });
   }
   if(!SVC) return res.status(503).json({ok:false,error:"SUPABASE_SERVICE_ROLE 미설정"});
+  // 이름→학부모전화 맵 — 로그인한 스태프(선생님·원장) 누구나. 학생 계정 전화를 단일 소스로.
+  if((req.body||{}).action==="phonemap"){
+    const c = await caller(req);
+    if(!c || (c.user_metadata||{}).role==="student") return res.status(403).json({ok:false,error:"스태프 전용"});
+    const phones={};
+    (await listAll()).forEach(x=>{ const m=x.user_metadata||{}; if(m.name && m.phone) phones[m.name]=m.phone; });
+    return res.status(200).json({ok:true, phones});
+  }
   const u = await caller(req);
   if(!u || !ADMINS.includes(String(u.email||"").toLowerCase())) return res.status(403).json({ok:false,error:"원장 전용"});
   const b = req.body || {};

@@ -225,9 +225,15 @@ window.schedule=schedule; window.doneMk=doneMk; window.cancelMk=cancelMk; window
     show('dashView'); loadMakeup(); loadPhones(); }
   // 이름→학부모전화 자동입력 (매번 학생관리에서 복사할 필요 없이)
   async function loadPhones(){
+    window.PMAP={};
+    // 학생계정(auth) 전화를 최우선 소스로
+    try{ const { data:{ session } } = await SB.auth.getSession();
+      const r = await fetch('/api/admin-users',{method:'POST',headers:{'content-type':'application/json',Authorization:'Bearer '+session.access_token},body:JSON.stringify({action:'phonemap'})});
+      const j = await r.json(); if(j.ok) PMAP=j.phones||{};
+    }catch(e){}
+    // 폴백: 계정에 없는 이름은 students_master 로 보충
     const { data } = await SB.from('students_master').select('name_kor,parent_phone').limit(1000);
-    window.PMAP={}; (data||[]).forEach(r=>{ if(r.parent_phone && !PMAP[r.name_kor]) PMAP[r.name_kor]=r.parent_phone; });
-    const dl=$('#dlNm'); if(dl) dl.innerHTML=Object.keys(PMAP).sort((a,b)=>a.localeCompare(b,'ko')).map(n=>`<option value="${n}">`).join('');
+    (data||[]).forEach(r=>{ if(r.parent_phone && !PMAP[r.name_kor]) PMAP[r.name_kor]=r.parent_phone; });
     $('#mName').addEventListener('input',()=>{ const p=PMAP[$('#mName').value.trim()]; if(p) $('#mPhone').value=p; });
   }
   $('#loginBtn').onclick=async()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
