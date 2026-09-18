@@ -937,16 +937,33 @@ function toggleDir(){ const b=$('#dirList'),t=$('#dirToggle'); const open=b.styl
 window.toggleOv=toggleOv; window.toggleDir=toggleDir;
 
 // ── 개별 시간표 편집 (학생 중심 그리드) ──
-const SUBJECTS=['정독','독해','단어&Extra','알파','문법','영어도서관','엘리아G/W'];
+let SUBJECTS=['정독','독해','단어&Extra','알파','문법','영어도서관','엘리아G/W'];
 const GTIMES=['1시','2시','3시','4시','5시','6시','6시30분','8시'];
 const GDAYS=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
+// 시간표에 이미 쓰인 과목을 합쳐 드롭다운 자동 확장 — 새 과목 추가하면 원장이 직접 관리
+async function loadSubjects(){
+  if(!SB) return;
+  const { data } = await SB.from('timetable').select('subject').eq('active',true);
+  (data||[]).forEach(r=>{ if(r.subject && !SUBJECTS.includes(r.subject)) SUBJECTS.push(r.subject); });
+  giBuildGrid();
+}
 function giBuildGrid(){
   let h='<table class="grid" style="min-width:640px"><thead><tr><th style="width:70px">시간</th>'+GDAYS.map(([,l])=>`<th>${l}</th>`).join('')+'</tr></thead><tbody>';
   GTIMES.forEach(t=>{ h+=`<tr><td style="font-weight:800;background:var(--soft);text-align:center">${t}</td>`;
-    GDAYS.forEach(([d])=>{ h+=`<td style="padding:3px"><select class="gicell" data-day="${d}" data-time="${t}" style="width:100%;border:1px solid var(--line);border-radius:7px;padding:5px"><option value="">-</option>${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select></td>`; });
+    GDAYS.forEach(([d])=>{ h+=`<td style="padding:3px"><select class="gicell" data-day="${d}" data-time="${t}" style="width:100%;border:1px solid var(--line);border-radius:7px;padding:5px"><option value="">-</option>${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}<option value="__new">+ 새 과목…</option></select></td>`; });
     h+='</tr>'; });
   h+='</tbody></table>';
   $('#giGrid').innerHTML=h;
+  // "+ 새 과목…" 선택 시 이름 입력 → 전 셀 옵션에 추가(저장하면 런처·전 페이지 자동 반영)
+  document.querySelectorAll('.gicell').forEach(sel=>sel.addEventListener('change',()=>{
+    if(sel.value!=='__new') return;
+    const name=(prompt('새 과목(반) 이름을 입력하세요\n예: 파닉스, 회화, 라이팅')||'').trim();
+    if(!name){ sel.value=''; return; }
+    if(!SUBJECTS.includes(name)){ SUBJECTS.push(name);
+      document.querySelectorAll('.gicell').forEach(s=>{ const nw=s.querySelector('option[value="__new"]'); s.insertBefore(new Option(name,name), nw); });
+    }
+    sel.value=name;
+  }));
 }
 function giClear(){ document.querySelectorAll('.gicell').forEach(s=>s.value=''); }
 let giBaseline={};   // 확정본 {day|time: subject} — 비교 기준
@@ -1054,7 +1071,7 @@ else { (async()=>{
     if(!session){ location.replace('staff-login.html?next=admin.html'); return; }   // 타인 차단: 로그인 1회
     if(!ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('teacher-hub.html'); return; }  // 강사는 선생님 페이지로
     USER = session.user;
-    show('dashView'); giBuildGrid(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadBooks(); fillDistPeriods(); bindBooks(); loadReportReq();
+    show('dashView'); giBuildGrid(); loadSubjects(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadBooks(); fillDistPeriods(); bindBooks(); loadReportReq();
     const dq=$('#dirq'); if(dq) dq.addEventListener('keydown',e=>{ if(e.key==='Enter') loadDir(); }); }
   $('#logoutBtn').onclick = async ()=>{ await SB.auth.signOut(); route(); };
   $('#fTeacher').onchange = ()=>{ fillFilters(); render(); };

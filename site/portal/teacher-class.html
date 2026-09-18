@@ -314,7 +314,8 @@ function renderRows(){
 async function loadTT(){
   if(!SB){ TT=DEMO_TT.map(r=>({...r})); return; }
   let q = SB.from('timetable').select('*').eq('active',true).neq('status','draft');
-  q = (PROGRAM==='독해') ? q.in('subject',['독해','단어&Extra']) : q.eq('subject',PROGRAM);  // 독해 페이지엔 단어&Extra도 함께
+  const MERGE={ '독해':['독해','단어&Extra'], '영어도서관':['영어도서관','엘리아G/W'] };  // 한 선생님이 함께 관리하는 과목
+  q = MERGE[PROGRAM] ? q.in('subject',MERGE[PROGRAM]) : q.eq('subject',PROGRAM);
   const { data } = await q.order('sort');
   TT = data||[];
 }
