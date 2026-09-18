@@ -68,7 +68,7 @@
     <div class="panel">
       <h2>➕ 결석 등록</h2>
       <div class="addrow">
-        <input id="mName" placeholder="학생 이름" style="width:110px">
+        <input id="mName" placeholder="학생 이름" list="dlNm" style="width:110px"><datalist id="dlNm"></datalist>
         <input id="mClass" placeholder="반(선택)" style="width:120px">
         <input id="mPhone" placeholder="학부모 연락처" style="width:140px" inputmode="numeric">
         <input id="mAbs" type="date" title="결석일" style="width:150px">
@@ -222,7 +222,14 @@ window.schedule=schedule; window.doneMk=doneMk; window.cancelMk=cancelMk; window
   async function route(){ const { data:{ session } } = await SB.auth.getSession();
     if(!session){ location.replace('staff-login.html?next=makeup.html'); return; }
     USER = session.user;
-    show('dashView'); loadMakeup(); }
+    show('dashView'); loadMakeup(); loadPhones(); }
+  // 이름→학부모전화 자동입력 (매번 학생관리에서 복사할 필요 없이)
+  async function loadPhones(){
+    const { data } = await SB.from('students_master').select('name_kor,parent_phone').limit(1000);
+    window.PMAP={}; (data||[]).forEach(r=>{ if(r.parent_phone && !PMAP[r.name_kor]) PMAP[r.name_kor]=r.parent_phone; });
+    const dl=$('#dlNm'); if(dl) dl.innerHTML=Object.keys(PMAP).sort((a,b)=>a.localeCompare(b,'ko')).map(n=>`<option value="${n}">`).join('');
+    $('#mName').addEventListener('input',()=>{ const p=PMAP[$('#mName').value.trim()]; if(p) $('#mPhone').value=p; });
+  }
   $('#loginBtn').onclick=async()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
     if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
     const {error}=await SB.auth.signInWithPassword({email:id,password:pw});
