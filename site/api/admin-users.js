@@ -971,6 +971,11 @@ export default async function handler(req, res){
       if(b.password) body.password = b.password;
       const r = await fetch(URL+"/auth/v1/admin/users/"+b.id, { method:"PUT", headers:H, body: JSON.stringify(body) });
       const j = await r.json().catch(()=>({}));
+      // 전화 수정 시 students_master.parent_phone 도 맞춰 갱신(보강 자동입력 소스와 일치시키기)
+      if(r.ok && b.phone!==undefined && b.name){
+        await fetch(URL+"/rest/v1/students_master?name_kor=eq."+encodeURIComponent(b.name),
+          { method:"PATCH", headers:Object.assign({},H,{Prefer:"return=minimal"}), body: JSON.stringify({ parent_phone: b.phone }) }).catch(()=>{});
+      }
       return res.status(r.ok?200:400).json({ok:r.ok, error:r.ok?null:(j.msg||j.error_description||j.error||("HTTP "+r.status))});
     }
     if(b.action==="create"){
