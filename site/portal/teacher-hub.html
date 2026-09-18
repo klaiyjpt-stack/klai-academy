@@ -44,12 +44,7 @@
     <div class="lead"><h1>어느 수업 페이지로?</h1><p><span id="who"></span> 님 · 로그인됨</p></div>
     <div class="roles">
       <a class="role" href="teacher.html"><div class="ic">🌐</div><h3>원어민</h3><p>ZOOM · IB · Keystone · Pathways</p></a>
-      <a class="role" href="teacher-class.html?program=알파"><div class="ic">🅰️</div><h3>알파</h3><p>알파영어 반 기록</p></a>
-      <a class="role" href="teacher-class.html?program=문법"><div class="ic">📝</div><h3>문법</h3><p>영어도서관 문법</p></a>
-      <a class="role" href="teacher-class.html?program=독해"><div class="ic">📖</div><h3>독해</h3><p>독해 반 기록</p></a>
-      <a class="role" href="teacher-class.html?program=영어도서관"><div class="ic">📚</div><h3>영어도서관</h3><p>영어도서관 반 기록</p></a>
-      <a class="role" href="teacher-class.html?program=정독"><div class="ic">📗</div><h3>정독</h3><p>정독 반 기록</p></a>
-      <a class="role" href="teacher-class.html?program=%EC%97%98%EB%A6%AC%EC%95%84G%2FW"><div class="ic">🌱</div><h3>엘리아 G/W</h3><p>엘리아 Grammar/Writing</p></a>
+      <!-- 과목 카드는 시간표(timetable)에 실제 있는 과목으로 자동 생성 -->
       <a class="role" id="memoCard" href="#"><div class="ic">📖</div><h3>본문 암기</h3><p>교과서 본문 출제·관리</p></a>
     </div>
   </div>
@@ -84,6 +79,16 @@ function show(v){ ['pickView'].forEach(x=>{const el=$('#'+x); if(el) el.classLis
   });
   $('#who').textContent = session.user.user_metadata?.name||session.user.email?.split('@')[0]||'강사';
   show('pickView');
+  // 시간표에 실제 있는 과목으로 반 카드 자동 생성(과목 추가돼도 코드 수정 불필요)
+  try{
+    const ICON={알파:'🅰️',문법:'📝',독해:'📖',영어도서관:'📚',정독:'📗','엘리아G/W':'🌱','단어&Extra':'🔤'};
+    const { data } = await SB.from('timetable').select('subject').eq('active',true).neq('status','draft');
+    const subs=[...new Set((data||[]).map(r=>r.subject).filter(Boolean))]
+      .filter(s=>s!=='단어&Extra')   // 단어&Extra는 독해 페이지에 함께 표시됨
+      .sort((a,b)=>a.localeCompare(b,'ko'));
+    const html=subs.map(s=>`<a class="role" href="teacher-class.html?program=${encodeURIComponent(s)}"><div class="ic">${ICON[s]||'📘'}</div><h3>${s}</h3><p>${s} 반 기록</p></a>`).join('');
+    if(html) $('#memoCard').insertAdjacentHTML('beforebegin', html);
+  }catch(e){}
   const lo=$('#logoutBtn'); if(lo) lo.onclick=async()=>{ await SB.auth.signOut(); location.reload(); };
 })();
 </script>

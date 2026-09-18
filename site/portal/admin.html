@@ -984,7 +984,7 @@ function giRenderBase(nm){
 }
 // 현재 그리드 → 행 배열
 function giGridRows(status){
-  const nm=$('#giName').value.trim(), code=$('#giCode').value.trim()||null, level=$('#giLevel').value.trim()||null;
+  const nm=$('#giName').value.trim(), code=$('#giCode').value.trim()||nm, level=$('#giLevel').value.trim()||null;
   return [...document.querySelectorAll('.gicell')].filter(c=>c.value).map(c=>({
     subject:c.value, level, day:c.dataset.day, time_slot:c.dataset.time, name_kor:nm, code, status, updated_at:new Date().toISOString() }));
 }
@@ -992,9 +992,9 @@ function giGridRows(status){
 async function giSave(){
   if(!SB){ toast('로그인 필요'); return; }
   const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
-  const code=$('#giCode').value.trim()||null;
-  let del=SB.from('timetable').delete().eq('status','draft').eq('name_kor',nm); if(code) del=del.eq('code',code);
-  const de=await del; if(de.error){ toast('수정안 저장 실패: '+de.error.message); return; }
+  // 같은 학생 이름 기준으로 기존 수정안 싹 지우고 다시(중복 방지)
+  const de=await SB.from('timetable').delete().eq('status','draft').eq('name_kor',nm);
+  if(de.error){ toast('수정안 저장 실패: '+de.error.message); return; }
   const rows=giGridRows('draft');
   if(rows.length){ const { error } = await SB.from('timetable').insert(rows); if(error){ toast('수정안 저장 실패: '+error.message); return; } }
   toast('✏️ 수정안 저장됨 (미확정 — 운영 시간표 안 바뀜)');
@@ -1006,10 +1006,9 @@ async function giConfirm(){
   if(!SB){ toast('로그인 필요'); return; }
   const nm=$('#giName').value.trim(); if(!nm){ toast('학생 이름 입력'); return; }
   if(!confirm(`${nm} 학생 시간표를 지금 그리드대로 확정할까요? 확정하면 운영 시간표에 즉시 반영됩니다.`)) return;
-  const code=$('#giCode').value.trim()||null;
-  // 확정본·수정안 모두 삭제 후 현재 그리드를 확정본으로
-  let del=SB.from('timetable').delete().eq('name_kor',nm); if(code) del=del.eq('code',code);
-  const de=await del; if(de.error){ toast('확정 실패: '+de.error.message); return; }
+  // 확정본·수정안 모두 삭제 후 현재 그리드를 확정본으로 (이름 기준 전체 삭제 → 중복·유령행 원천차단)
+  const de=await SB.from('timetable').delete().eq('name_kor',nm);
+  if(de.error){ toast('확정 실패: '+de.error.message); return; }
   const rows=giGridRows('confirmed');
   if(rows.length){ const { error } = await SB.from('timetable').insert(rows); if(error){ toast('확정 실패: '+error.message); return; } }
   toast(`✅ 확정 완료 · ${rows.length}칸 → 운영 시간표 반영`);
