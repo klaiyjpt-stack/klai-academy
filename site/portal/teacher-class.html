@@ -231,6 +231,7 @@ function applyLang(l){
   document.querySelectorAll('[data-en-ph]').forEach(e=>{ if(e.dataset.koPh==null) e.dataset.koPh=e.getAttribute('placeholder')||''; e.setAttribute('placeholder', l==='en'? e.getAttribute('data-en-ph') : e.dataset.koPh); });
   const b=document.getElementById('langBtn'); if(b) b.textContent = (l==='en'?'한국어':'EN');
   if(typeof renderRows==='function' && document.getElementById('rows') && (window.TT||[]).length!==undefined) renderRows();
+  if(typeof loadMakeupToday==='function' && SB && USER) loadMakeupToday();
 }
 window.applyLang=applyLang;
 const DAYS = [['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금']];
@@ -421,7 +422,8 @@ async function loadMakeupToday(){
   wrap.style.display='';
   $('#mkToday').innerHTML='<table style="width:100%;border-collapse:collapse">'+rows.map(r=>{
     const t=new Date(r.makeup_at), hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
-    return `<tr><td style="padding:6px 10px;font-weight:800;color:var(--navy);width:120px">${r.student_name}</td><td style="padding:6px 10px;color:var(--green-d);font-weight:700">${hm} 보강</td></tr>`;
+    const en=enName(NMAP[r.student_name]), nm=window.LANG==='en'?(en||r.student_name):r.student_name;
+    return `<tr><td style="padding:6px 10px;font-weight:800;color:var(--navy);width:120px">${nm}</td><td style="padding:6px 10px;color:var(--green-d);font-weight:700">${hm} ${L('보강','Make-up')}</td></tr>`;
   }).join('')+'</table>';
 }
 // ── 전체 시간표 (구글시트, 접힘 기본) ──
