@@ -105,6 +105,11 @@
   <!-- ══ 대시보드(홈) ══ -->
   <section class="sec" data-sec="home">
     <div class="sectitle">🏠 대시보드</div>
+    <div id="ordAlert" onclick="gotoSec('orders')" style="display:none;cursor:pointer;background:#fff3cd;border:1px solid #f0d98a;border-left:5px solid #e0a11f;border-radius:12px;padding:14px 18px;margin-bottom:14px;align-items:center;gap:12px">
+      <span style="font-size:24px">📦</span>
+      <div style="flex:1"><div style="font-weight:900;color:#8a6d00;font-size:15px" id="ordAlertT">확인 안 한 교재주문이 있어요</div><div style="font-size:12.5px;color:#8a6d00;opacity:.85">눌러서 원서교재주문 탭으로 이동해 주문 처리하세요.</div></div>
+      <span class="actbtn on" style="background:#e0a11f;border-color:#e0a11f">확인하기 →</span>
+    </div>
     <div class="panel" style="border-left:4px solid #2b74c4;background:#f4f8ff">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <div style="flex:1;min-width:180px">
@@ -451,6 +456,8 @@ function renderOrders(){
   const waitG=cards.filter(c=>c.status==='요청').length;
   const nav=document.querySelector('.navbtn[data-go="orders"]');
   if(nav) nav.innerHTML='📦 원서교재주문'+(waitG?` <span style="background:var(--red);color:#fff;border-radius:999px;padding:0 7px;font-size:11px">${waitG}</span>`:'');
+  // 대시보드 경고 배너
+  const al=$('#ordAlert'); if(al){ al.style.display=waitG?'flex':'none'; const t=$('#ordAlertT'); if(t&&waitG) t.textContent=`확인 안 한 교재주문 ${waitG}건이 있어요`; }
   cards=cards.filter(c=>ordF==='all'||c.status===ordF);
   if(!cards.length){ $('#ordList').innerHTML='<span style="color:var(--sub)">해당 주문 없음</span>'; return; }
   $('#ordList').innerHTML=cards.map(c=>{
@@ -1142,7 +1149,9 @@ else { (async()=>{
     show('dashView'); giBuildGrid(); loadSubjects(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadBooks(); fillDistPeriods(); bindBooks(); loadReportReq(); loadOrders();
     // 실시간 반영(새로고침 불필요): 교재주문·선생님 기록·리포트요청
     SB.channel('rt-admin')
-      .on('postgres_changes',{event:'*',schema:'public',table:'book_orders'},()=>loadOrders())
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'book_orders'},p=>{ toast('📦 새 교재주문 요청이 들어왔어요'); try{ new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=').play(); }catch(e){} loadOrders(); })
+      .on('postgres_changes',{event:'UPDATE',schema:'public',table:'book_orders'},()=>loadOrders())
+      .on('postgres_changes',{event:'DELETE',schema:'public',table:'book_orders'},()=>loadOrders())
       .on('postgres_changes',{event:'*',schema:'public',table:'session_records'},()=>loadAlerts())
       .on('postgres_changes',{event:'*',schema:'public',table:'reports'},()=>loadReportReq())
       .on('postgres_changes',{event:'*',schema:'public',table:'timetable'},()=>{ if(ovLoaded) loadOverview(); })
