@@ -31,20 +31,22 @@ function solapiAuth(){
   const sig = crypto.createHmac("sha256", SECRET).update(date + salt).digest("hex");
   return `HMAC-SHA256 apiKey=${KEY}, date=${date}, salt=${salt}, signature=${sig}`;
 }
-async function sendMsg(msg){
+async function sendMsg(msg, scheduledDate){
+  const payload = { message: msg };
+  if (scheduledDate) payload.scheduledDate = scheduledDate;   // 예약발송: 최상위 필드(KST)
   const r = await fetch("https://api.solapi.com/messages/v4/send", {
-    method: "POST", headers: { Authorization: solapiAuth(), "Content-Type": "application/json" }, body: JSON.stringify({ message: msg }) });
+    method: "POST", headers: { Authorization: solapiAuth(), "Content-Type": "application/json" }, body: JSON.stringify(payload) });
   return { ok: r.ok, body: await r.text() };
 }
-async function solapi(to, name, timeStr, smsText, templateId){
+async function solapi(to, name, timeStr, smsText, templateId, scheduledDate){
   const FROM = process.env.SOLAPI_SENDER;
   const base = { to: normPhone(to), from: normPhone(FROM), text: smsText };
   // 1차: 알림톡. disableSms:false = 카톡 미가입·차단 등 개별 전달실패는 Solapi가 base.text로 자동 SMS 대체.
   const kakao = await sendMsg({ ...base, kakaoOptions: { pfId: KAKAO_PFID, templateId,
-    variables: { "#{학생명}": name, "#{시간}": timeStr }, disableSms: false } });
+    variables: { "#{학생명}": name, "#{시간}": timeStr }, disableSms: false } }, scheduledDate);
   if (kakao.ok) return { ok: true, via: "alimtalk", body: kakao.body };
   // 2차: 요청 자체 실패(템플릿 미승인 등) → 문자로 대체
-  const sms = await sendMsg(base);
+  const sms = await sendMsg(base, scheduledDate);
   return { ok: sms.ok, via: "sms", body: sms.body };
 }
 
@@ -70,10 +72,12 @@ export default async function handler(req, res) {
   if (!process.env.SUPABASE_SERVICE_ROLE || !process.env.SOLAPI_API_KEY || !process.env.SOLAPI_API_SECRET || !process.env.SOLAPI_SENDER)
     return res.status(500).json({ error: "환경변수 미설정: SOLAPI_API_KEY / SOLAPI_API_SECRET / SOLAPI_SENDER 필요" });
 
-  // 내일(KST) 00:00 ~ 24:00 범위를 UTC로 환산
+  // 대상일: 기본 내일. ?day=today 면 오늘. 예약발송: ?at=ISO(KST) 지정 시 그 시각에 예약.
+  const dayOffset = req.query.day === "today" ? 0 : 1;
+  const scheduledDate = req.query.at || null;
   const now = new Date();
   const kst = new Date(now.getTime() + 9 * 3600e3);
-  const startUTC = new Date(Date.UTC(kst.getUTCFullYear(), kst.getUTCMonth(), kst.getUTCDate() + 1, 0, 0, 0) - 9 * 3600e3);
+  const startUTC = new Date(Date.UTC(kst.getUTCFullYear(), kst.getUTCMonth(), kst.getUTCDate() + dayOffset, 0, 0, 0) - 9 * 3600e3);
   const endUTC = new Date(startUTC.getTime() + 24 * 3600e3);
   const q = `makeup?status=eq.scheduled&reminded=eq.false&makeup_at=gte.${startUTC.toISOString()}&makeup_at=lt.${endUTC.toISOString()}&select=id,student_name,parent_phone,makeup_at,msg_type`;
 
@@ -92,8 +96,9 @@ export default async function handler(req, res) {
       const timeStr = `${ap} ${h12}시${mm ? " " + mm + "분" : ""}`;
       const label = TEMPLATES[row.msg_type] ? row.msg_type : "보강";
       const tid = TEMPLATES[label];
-      const text = `[클라이 어학원] ${label} 안내\n\n안녕하세요. ${row.student_name} 학생의 ${label} 일정을 안내드립니다.\n\n▪ 일시: 내일 ${timeStr}\n\n잊지 마시고 참석 부탁드립니다.\n문의: 031-654-0571`;
-      const s = await solapi(row.parent_phone, row.student_name, timeStr, text, tid);
+      const whenWord = dayOffset === 0 ? "오늘" : "내일";
+      const text = `[클라이 어학원] ${label} 안내\n\n안녕하세요. ${row.student_name} 학생의 ${label} 일정을 안내드립니다.\n\n▪ 일시: ${whenWord} ${timeStr}\n\n잊지 마시고 참석 부탁드립니다.\n문의: 031-654-0571`;
+      const s = await solapi(row.parent_phone, row.student_name, timeStr, text, tid, scheduledDate);
       if (s.ok) {
         await sb(`makeup?id=eq.${row.id}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ reminded: true }) });
         sent++;
