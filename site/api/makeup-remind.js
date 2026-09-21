@@ -50,6 +50,23 @@ async function solapi(to, name, timeStr, smsText, templateId){
 
 export default async function handler(req, res) {
   if (req.query.token !== TOKEN && !req.headers["x-vercel-cron"]) return res.status(403).json({ error: "forbidden" });
+  // 진단: ?check=1 — 발송 안 하고 환경변수 + Solapi 최근 발송내역만 조회
+  if (req.query.check) {
+    const env = { key: !!process.env.SOLAPI_API_KEY, secret: !!process.env.SOLAPI_API_SECRET, sender: process.env.SOLAPI_SENDER || null, service_role: !!process.env.SUPABASE_SERVICE_ROLE };
+    if (!env.key || !env.secret) return res.status(200).json({ env, note: "SOLAPI 키 미설정 → 리마인더 발송 불가" });
+    // ?check=send&to=01012345678 → 그 번호로 보강 알림톡 1건 실발송(카톡 채널 작동 확인용). to 없으면 발신번호로.
+    if (req.query.check === "send") {
+      const to = req.query.to || env.sender;
+      const s = await solapi(to, "테스트", "오후 5시", "[클라이 어학원] 보강 안내\n\n(카카오 채널 발행 테스트) 내일 오후 5시 보강 안내드립니다.\n문의: 031-654-0571", TEMPLATES["보강"]);
+      return res.status(200).json({ env, test_to: normPhone(to), result: s });
+    }
+    try {
+      const r = await fetch("https://api.solapi.com/messages/v4/list?limit=30", { headers: { Authorization: solapiAuth() } });
+      const j = await r.json();
+      const list = (j.messageList ? Object.values(j.messageList) : (j.data || [])).map(m => ({ to: m.to, type: m.type, status: m.status, statusCode: m.statusCode, reason: m.reason || m.statusMessage, date: m.dateReceived || m.dateCreated }));
+      return res.status(200).json({ env, count: list.length, recent: list });
+    } catch (e) { return res.status(502).json({ env, error: String(e.message || e) }); }
+  }
   if (!process.env.SUPABASE_SERVICE_ROLE || !process.env.SOLAPI_API_KEY || !process.env.SOLAPI_API_SECRET || !process.env.SOLAPI_SENDER)
     return res.status(500).json({ error: "환경변수 미설정: SOLAPI_API_KEY / SOLAPI_API_SECRET / SOLAPI_SENDER 필요" });
 
