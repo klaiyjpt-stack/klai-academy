@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>교재 로드맵 · 클라이 어학원</title>
+<style>
+  :root{--blue:#215a99;--green:#7cc242;--green-d:#5ea52c;--navy:#1a2740;--ink:#233;--sub:#5b6577;--line:#e6e9f0;--soft:#f4f7fc;--red:#c0392b}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Apple SD Gothic Neo","Malgun Gothic",-apple-system,sans-serif;background:var(--soft);color:var(--ink);line-height:1.5}
+  .top{background:var(--navy);color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .top h1{margin:0;font-size:19px}.top .sub{color:#b9c4d6;font-size:12.5px;margin-top:2px}
+  .top .cnt{background:#fff;color:var(--navy);font-weight:800;border-radius:999px;padding:4px 14px;font-size:14px}
+  .wrap{max-width:1100px;margin:18px auto;padding:0 16px;column-gap:16px}
+  @media(min-width:800px){.wrap{column-count:2}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;margin:0 0 16px;overflow:hidden;break-inside:avoid;box-shadow:0 2px 8px rgba(20,30,60,.04)}
+  .hd{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;color:#fff}
+  .hd .step{font-size:11px;font-weight:800;opacity:.85;letter-spacing:.5px}
+  .hd h2{margin:0;font-size:16px;font-weight:800}
+  .hd .n{background:rgba(255,255,255,.25);border-radius:999px;padding:3px 12px;font-size:12.5px;font-weight:700}
+  ul{list-style:none;margin:0;padding:8px 16px 12px}
+  li{display:flex;gap:10px;padding:4px 0;font-size:14.5px;font-weight:600;color:var(--navy)}
+  li .i{color:var(--sub);font-weight:700;min-width:22px;text-align:right;font-size:13px}
+  .ex{color:var(--red);font-size:12.5px;font-weight:700;padding:2px 16px 12px}
+  .back{position:fixed;right:16px;bottom:16px;background:#fff;border:1px solid var(--line);border-radius:999px;width:48px;height:48px;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(20,30,60,.15)}
+  .foot{max-width:1100px;margin:0 auto 30px;padding:0 16px;color:var(--sub);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;border-top:1px solid var(--line);padding-top:12px}
+</style></head><body>
+<div class="top">
+  <div><h1>📚 KLAI 교재 로드맵</h1><div class="sub">Elia → IB PYP → Pathways · 전체 수업 순서 (내부용)</div></div>
+  <span class="cnt" id="tot">60권</span>
+</div>
+<div class="wrap" id="wrap"></div>
+<div class="foot"><b>클라이 어학원 · 교재 로드맵 (내부용)</b><span>교재 주문은 선생님 페이지 → 교재 주문요청</span></div>
+<button class="back" onclick="history.back()" title="뒤로">←</button>
+<script>
+const STEPS=[
+ {step:'STEP 1',name:'Elia Phonics',color:'#3a9b6e',books:['Phonics Bk 1','Phonics Bk 2','Phonics Bk 3','Phonics Bk 4']},
+ {step:'STEP 2',name:'Elia Zoom',color:'#2b74c4',books:['Zoom 1-1','Zoom 1-2','Zoom 1-3','Zoom 2-1','Zoom 2-2','Zoom 2-3','Zoom 3-2','Zoom 3-3','Zoom 4-2','Zoom 4-3'],ex:'3-1, 4-1'},
+ {step:'STEP 3',name:'Elia Keystone',color:'#6a4fa0',books:['Keystone 1-2','Keystone 1-3'],ex:'1-1'},
+ {step:'STEP 4',name:'IB PYP Year 1',color:'#e0592b',books:['4 · Is the Moon Made of Cheese?','5 · A Surprise Gift','6 · Recycling','13 · Good Friends','14 · Talking Through Time','15 · True Colors','16 · Tiny Seed to Towering Tree','17 · Unusual Schools Around the World','18 · Wiggly Worms','19 · Festivals of Light','20 · Life in a Castle','21 · Fantasy Fairy Tales','22 · Wild Weather','23 · Giants in the Sky','24 · Food Chains','25 · Eating the Rainbow','26 · Dinosaur Detective','27 · Dots and Spots','28 · Amazing Amphibians'],ex:'1·2·3, 7–12, 29·30'},
+ {step:'STEP 5',name:'IB PYP Year 2',color:'#e0a11f',books:['Brilliant Brains','Maps','Crack the Code','Opposite Attract','Story of Clothes','Everyone Belongs','Terrific Teeth','Great Explorers','Marvelous Myths','States of Matter','Beautiful Bridges','Living in a Desert']},
+ {step:'STEP 6',name:'IB PYP Year 3',color:'#3a9b6e',books:['Awesome Organs 1-1','Awesome Organs 1-2','Money, Money, Money 2-1','Money, Money, Money 2-2','Flying Through Time 3-1','Flying Through Time 3-2','Wild Cities 4-1','Wild Cities 4-2','Rocks 5-1','Rocks 5-2']},
+ {step:'STEP 7',name:'Pathways',color:'#1a2740',books:['Pathways 2','Pathways 3','Pathways 4']},
+];
+document.getElementById('wrap').innerHTML=STEPS.map(s=>`
+  <div class="card">
+    <div class="hd" style="background:${s.color}"><div><div class="step">${s.step}</div><h2>${s.name}</h2></div><span class="n">${s.books.length}권</span></div>
+    <ul>${s.books.map((b,i)=>`<li><span class="i">${i+1}</span><span>${b}</span></li>`).join('')}</ul>
+    ${s.ex?`<div class="ex">✗ 제외: ${s.ex}</div>`:''}
+  </div>`).join('');
+document.getElementById('tot').textContent=STEPS.reduce((a,s)=>a+s.books.length,0)+'권';
+</script>
+</body></html>

@@ -59,6 +59,9 @@
   .navgrp{font-size:10.5px;font-weight:800;color:#9aa5b5;letter-spacing:.08em;text-transform:uppercase;padding:12px 12px 5px}
   .navbtn{display:flex;align-items:center;gap:9px;background:none;border:none;border-radius:10px;padding:10px 12px;font-weight:700;font-size:14px;color:var(--ink);cursor:pointer;text-align:left;transition:.12s;width:100%}
   .navbtn:hover{background:var(--soft)}
+  .seg{display:inline-flex;gap:6px;flex-wrap:wrap}
+  .seg button{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--sub);cursor:pointer}
+  .seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
   .navbtn.on{background:var(--navy);color:#fff}
   .sectitle{font-weight:800;color:var(--navy);font-size:18px;margin:2px 2px 12px}
   .sec.hidden{display:none}
@@ -90,6 +93,7 @@
     <div class="navgrp">운영</div>
     <button class="navbtn" data-go="makeup">🔁 보강관리</button>
     <button class="navbtn" data-go="books">📚 교재관리</button>
+    <button class="navbtn" data-go="orders">📦 교재 주문</button>
     <button class="navbtn" data-go="learning">📈 학습관리</button>
     <div class="navgrp">바로가기</div>
     <a class="navbtn" href="teacher-hub.html?as=teacher">🧑‍🏫 선생님 페이지</a>
@@ -295,6 +299,23 @@
     </div>
   </section>
 
+  <!-- ══ 교재 주문 (데스크) ══ -->
+  <section class="sec hidden" data-sec="orders">
+    <div class="sectitle">📦 교재 주문</div>
+    <div class="panel">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+        <div style="flex:1;min-width:200px;font-size:12.5px;color:var(--sub)">선생님이 요청한 교재 목록. <b>주문 완료</b>를 누르면 요청한 선생님 화면에도 ✅ 표시됩니다. · <a href="books.html" target="_blank" style="color:var(--blue)">교재 로드맵 ↗</a></div>
+        <button class="actbtn on" onclick="loadOrders()" style="padding:8px 14px">🔄 새로고침</button>
+      </div>
+      <div class="seg" id="ordSeg" style="margin-bottom:10px">
+        <button data-f="요청" class="on" onclick="ordFilter('요청')">🕗 주문 대기</button>
+        <button data-f="주문완료" onclick="ordFilter('주문완료')">✅ 주문완료</button>
+        <button data-f="all" onclick="ordFilter('all')">전체</button>
+      </div>
+      <div id="ordList"><span style="color:var(--sub)">불러오는 중…</span></div>
+    </div>
+  </section>
+
   <!-- ══ 교재관리 ══ -->
   <section class="sec hidden" data-sec="books">
     <div class="sectitle">📚 교재관리</div>
@@ -411,6 +432,34 @@ function gotoSec(name){
   window.scrollTo(0,0);
 }
 window.gotoSec=gotoSec;
+
+// ===== 교재 주문 (데스크) =====
+let ORDERS=[], ordF='요청';
+async function loadOrders(){
+  if(!SB) return;
+  const { data, error }=await SB.from('book_orders').select('*').order('requested_at',{ascending:false});
+  if(error){ $('#ordList').innerHTML='<span style="color:var(--sub)">book_orders 테이블 없음</span>'; return; }
+  ORDERS=data||[]; renderOrders();
+}
+function ordFilter(f){ ordF=f; document.querySelectorAll('#ordSeg button').forEach(b=>b.classList.toggle('on', b.dataset.f===f)); renderOrders(); }
+window.ordFilter=ordFilter; window.loadOrders=loadOrders;
+function renderOrders(){
+  const rows=ORDERS.filter(o=>ordF==='all'||o.status===ordF);
+  const wait=ORDERS.filter(o=>o.status==='요청').length;
+  const nav=document.querySelector('.navbtn[data-go="orders"]');
+  if(nav) nav.innerHTML='📦 교재 주문'+(wait?` <span style="background:var(--red);color:#fff;border-radius:999px;padding:0 7px;font-size:11px">${wait}</span>`:'');
+  if(!rows.length){ $('#ordList').innerHTML='<span style="color:var(--sub)">해당 주문 없음</span>'; return; }
+  $('#ordList').innerHTML='<table class="grid" style="min-width:640px"><thead><tr><th>요청일</th><th>반</th><th style="text-align:left">교재</th><th>수량</th><th style="text-align:left">메모</th><th>선생님</th><th>상태</th><th>처리</th></tr></thead><tbody>'+
+    rows.map(o=>{ const done=o.status==='주문완료';
+      return `<tr><td style="white-space:nowrap">${(o.requested_at||'').slice(5,10)}</td><td>${o.program||''}</td><td style="text-align:left;font-weight:700">${esc(o.book_name)}</td><td style="text-align:center">${o.qty}</td><td style="text-align:left;color:var(--sub);font-size:12px">${esc(o.note||'')}</td><td style="font-size:12px;color:var(--sub)">${esc((o.teacher||'').split('@')[0])}</td>`+
+        `<td style="text-align:center;color:${done?'var(--green-d)':'#b8860b'};font-weight:800">${done?'✅완료':'🕗대기'}</td>`+
+        `<td style="white-space:nowrap">${done?`<button class="actbtn" onclick="ordUndo('${o.id}')">되돌리기</button>`:`<button class="actbtn on" onclick="ordDone('${o.id}')">주문완료</button>`} <button class="actbtn off" onclick="ordDel('${o.id}')">삭제</button></td></tr>`;
+    }).join('')+'</tbody></table>';
+}
+async function ordDone(id){ const {error}=await SB.from('book_orders').update({status:'주문완료',ordered_at:new Date().toISOString()}).eq('id',id); toast(error?'실패':'주문완료 처리'); if(!error)loadOrders(); }
+async function ordUndo(id){ const {error}=await SB.from('book_orders').update({status:'요청',ordered_at:null}).eq('id',id); toast(error?'실패':'대기로 되돌림'); if(!error)loadOrders(); }
+async function ordDel(id){ if(!confirm('이 주문요청을 삭제할까요?'))return; const {error}=await SB.from('book_orders').delete().eq('id',id); toast(error?'실패':'삭제됨'); if(!error)loadOrders(); }
+window.ordDone=ordDone; window.ordUndo=ordUndo; window.ordDel=ordDel;
 
 // ===== 학생 계정 관리 (/api/admin-users) =====
 let ACCT=[];
@@ -1071,7 +1120,7 @@ else { (async()=>{
     if(!session){ location.replace('staff-login.html?next=admin.html'); return; }   // 타인 차단: 로그인 1회
     if(!ADMINS.includes((session.user.email||'').toLowerCase())){ location.replace('teacher-hub.html'); return; }  // 강사는 선생님 페이지로
     USER = session.user;
-    show('dashView'); giBuildGrid(); loadSubjects(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadBooks(); fillDistPeriods(); bindBooks(); loadReportReq();
+    show('dashView'); giBuildGrid(); loadSubjects(); giFillDatalists(); loadData(); loadTeachers(); loadConsult(); loadAlerts(); loadMakeup(); loadBooks(); fillDistPeriods(); bindBooks(); loadReportReq(); loadOrders();
     const dq=$('#dirq'); if(dq) dq.addEventListener('keydown',e=>{ if(e.key==='Enter') loadDir(); }); }
   $('#logoutBtn').onclick = async ()=>{ await SB.auth.signOut(); route(); };
   $('#fTeacher').onchange = ()=>{ fillFilters(); render(); };

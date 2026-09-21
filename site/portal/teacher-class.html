@@ -178,8 +178,22 @@
       <div class="actbar"><button class="save" id="logBtn" style="background:var(--navy)" data-en="💾 Save Log">💾 일지 저장</button></div>
     </div>
 
+    <div class="eyebrow" data-en="Book Order Request">📦 교재 주문요청</div>
+    <div class="panel">
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px" data-en="Request books this class needs — the desk will order them.">이 반에 필요한 교재를 요청하면 <b>데스크에서 주문</b>합니다. (예: 다음 진도 교재·부족분)</div>
+      <div class="addrow" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <input id="boBook" list="dlBooks" placeholder="교재명" data-en-ph="Book title" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:220px">
+        <input id="boQty" type="number" min="1" value="1" title="수량" style="padding:7px;border:1px solid var(--line);border-radius:8px;width:70px">
+        <input id="boNote" placeholder="메모(선택) — 반·학생·급함 등" data-en-ph="Note (optional)" style="padding:7px;border:1px solid var(--line);border-radius:8px;flex:1;min-width:160px">
+        <button class="save" id="boBtn" style="background:var(--green-d)" data-en="Request">📦 요청</button>
+      </div>
+      <datalist id="dlBooks"></datalist>
+      <div id="boList" style="margin-top:10px"></div>
+    </div>
+
     <div class="eyebrow" data-en="Tools">도구</div>
     <div class="tools">
+      <a class="tool" href="books.html"><div class="ic">📚</div><div><h3>교재 로드맵</h3><p>전체 수업 교재 순서 (60권)</p></div></a>
       <a class="tool" id="toolBook" href="https://www.appsheet.com/start/b6ff2c0c-bed1-4c9c-990d-6cb7770ec578#view=%EB%B0%B0%EB%B6%80%20%EC%9E%85%EB%A0%A5" target="_blank" rel="noopener"><div class="ic">📚</div><div><h3>교재배부 입력</h3><p>배부 입력 화면 바로 열기</p></div></a>
       <a class="tool" id="toolMemo" style="display:none" href="https://klai-memo.vercel.app/admin" target="_blank" rel="noopener"><div class="ic">📖</div><div><h3>본문 암기 출제</h3><p>교과서 본문 등록·문항 생성</p></div></a>
       <a class="tool" id="toolExt" style="display:none" target="_blank" rel="noopener"><div class="ic">📦</div><div><h3>Extended resource</h3><p>Zoom · Keystone Let's Talk</p></div></a>
@@ -356,6 +370,40 @@ async function saveRecords(){
   const { error } = await SB.from('session_records').upsert(uniq,{onConflict:'program,code,date'});
   toast(error? '저장 실패: '+error.message : `저장 완료 · ${uniq.length}명`);
 }
+// ── 교재 주문요청 ──
+const ORDER_BOOKS=['Phonics Bk 1','Phonics Bk 2','Phonics Bk 3','Phonics Bk 4','Zoom 1-1','Zoom 1-2','Zoom 1-3','Zoom 2-1','Zoom 2-2','Zoom 2-3','Zoom 3-2','Zoom 3-3','Zoom 4-2','Zoom 4-3','Keystone 1-2','Keystone 1-3','Is the Moon Made of Cheese?','A Surprise Gift','Recycling','Good Friends','Talking Through Time','True Colors','Tiny Seed to Towering Tree','Unusual Schools Around the World','Wiggly Worms','Festivals of Light','Life in a Castle','Fantasy Fairy Tales','Wild Weather','Giants in the Sky','Food Chains','Eating the Rainbow','Dinosaur Detective','Dots and Spots','Amazing Amphibians','Brilliant Brains','Maps','Crack the Code','Opposite Attract','Story of Clothes','Everyone Belongs','Terrific Teeth','Great Explorers','Marvelous Myths','States of Matter','Beautiful Bridges','Living in a Desert','Awesome Organs 1-1','Awesome Organs 1-2','Money, Money, Money 2-1','Money, Money, Money 2-2','Flying Through Time 3-1','Flying Through Time 3-2','Wild Cities 4-1','Wild Cities 4-2','Rocks 5-1','Rocks 5-2','Pathways 2','Pathways 3','Pathways 4'];
+function orderInit(){
+  const dl=$('#dlBooks'); if(dl) dl.innerHTML=ORDER_BOOKS.map(b=>`<option value="${b}">`).join('');
+  const btn=$('#boBtn'); if(btn) btn.onclick=submitOrder;
+  ['boBook','boNote'].forEach(id=>{ const el=$('#'+id); if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); submitOrder(); } }); });
+  loadMyOrders();
+}
+async function submitOrder(){
+  const book=$('#boBook').value.trim(); if(!book){ toast('교재명을 입력하세요'); return; }
+  if(!SB){ toast('로그인 필요'); return; }
+  const row={ program:PROGRAM, teacher:USER?.email||null, book_name:book, qty:parseInt($('#boQty').value)||1, note:$('#boNote').value.trim()||null, status:'요청' };
+  const { error }=await SB.from('book_orders').insert(row);
+  if(error){ toast('요청 실패: '+error.message); return; }
+  $('#boBook').value=''; $('#boQty').value=1; $('#boNote').value='';
+  toast('📦 주문요청 보냄'); loadMyOrders();
+}
+async function loadMyOrders(){
+  if(!SB) return;
+  const { data }=await SB.from('book_orders').select('*').eq('program',PROGRAM).order('requested_at',{ascending:false}).limit(20);
+  const box=$('#boList'); if(!box) return;
+  if(!data||!data.length){ box.innerHTML='<span style="color:var(--sub);font-size:12.5px">아직 요청한 교재 없음</span>'; return; }
+  box.innerHTML='<table class="rec" style="width:100%;font-size:13px"><tbody>'+data.map(o=>{
+    const done=o.status==='주문완료';
+    return `<tr><td style="padding:5px 4px">${o.status==='주문완료'?'✅':'🕗'} <b>${o.book_name}</b> ×${o.qty} ${o.note?`<span style="color:var(--sub)">· ${o.note}</span>`:''}</td>`+
+      `<td style="text-align:right;color:${done?'var(--green-d)':'var(--sub)'};white-space:nowrap">${done?'주문완료':'요청됨'} ${!done?`<button class="hwbtn" onclick="cancelOrder('${o.id}')" style="margin-left:6px">취소</button>`:''}</td></tr>`;
+  }).join('')+'</tbody></table>';
+}
+async function cancelOrder(id){
+  if(!confirm('이 주문요청을 취소할까요?')) return;
+  const { error }=await SB.from('book_orders').delete().eq('id',id);
+  toast(error?'취소 실패':'취소됨'); if(!error) loadMyOrders();
+}
+window.cancelOrder=cancelOrder;
 async function saveLog(){
   const date=$('#dateSel').value, day=$('#daySel').value, t=$('#timeSel').value;
   if(!SB){ toast('데모 모드 — 저장 안 됨'); return; }
@@ -387,6 +435,7 @@ function boot(){
   $('#saveBtn').onclick=saveRecords;
   $('#rows').addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.tagName==='INPUT'){ e.preventDefault(); saveRecords(); } });  // 행 입력 중 엔터 → 저장
   $('#logBtn').onclick=saveLog;
+  orderInit();
   bookInit();
   reportInit();
   allInit();
