@@ -350,8 +350,11 @@ async function saveRecords(){
   }));
   if(!rows.length){ toast('학생이 없어요'); return; }
   if(!SB){ toast('데모 모드 — 저장 안 됨 (로그인 필요)'); return; }
-  const { error } = await SB.from('session_records').upsert(rows,{onConflict:'program,code,date'});
-  toast(error? '저장 실패: '+error.message : `저장 완료 · ${rows.length}명`);
+  // 방어: code 없으면 이름으로, 같은 (program,code,date) 배치 중복은 마지막 것만 (upsert 중복키 오류 방지)
+  const seen={}; rows.forEach(r=>{ if(!r.code) r.code=r.name_kor; seen[r.program+'|'+r.code+'|'+r.date]=r; });
+  const uniq=Object.values(seen);
+  const { error } = await SB.from('session_records').upsert(uniq,{onConflict:'program,code,date'});
+  toast(error? '저장 실패: '+error.message : `저장 완료 · ${uniq.length}명`);
 }
 async function saveLog(){
   const date=$('#dateSel').value, day=$('#daySel').value, t=$('#timeSel').value;
