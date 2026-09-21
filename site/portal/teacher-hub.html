@@ -84,7 +84,7 @@ function show(v){ ['pickView'].forEach(x=>{const el=$('#'+x); if(el) el.classLis
     const ICON={알파:'🅰️',문법:'📝',독해:'📖',영어도서관:'📚',정독:'📗','엘리아G/W':'🌱','단어&Extra':'🔤'};
     const { data } = await SB.from('timetable').select('subject').eq('active',true).neq('status','draft');
     const subs=[...new Set((data||[]).map(r=>r.subject).filter(Boolean))]
-      .filter(s=>s!=='단어&Extra' && s!=='엘리아G/W')   // 단어&Extra→독해, 엘리아G/W→영어도서관 페이지에 함께 표시됨
+      .filter(s=>s!=='단어&Extra' && s!=='엘리아G/W' && s!=='정독')   // 단어&Extra→독해, 엘리아G/W→영어도서관, 정독→원어민 페이지에서 관리
       .sort((a,b)=>a.localeCompare(b,'ko'));
     const html=subs.map(s=>`<a class="role" href="teacher-class.html?program=${encodeURIComponent(s)}"><div class="ic">${ICON[s]||'📘'}</div><h3>${s}</h3><p>${s} 반 기록</p></a>`).join('');
     if(html) $('#memoCard').insertAdjacentHTML('beforebegin', html);

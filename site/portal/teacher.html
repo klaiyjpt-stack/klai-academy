@@ -130,6 +130,20 @@
       <a class="tool" href="#" onclick="toast(T().soonReport);return false"><div class="ic">📄</div><div><h3 data-t="toolReport"></h3><p data-t="toolReportSub"></p></div></a>
     </div>
 
+    <div class="eyebrow" style="margin-top:24px">📦 원서교재주문 · Book Order</div>
+    <div class="panel">
+      <div class="desc">필요한 원서교재를 요청하면 데스크에서 주문합니다. · Request the books you need — the desk will order them.</div>
+      <div class="addrow" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0">
+        <input id="boBook" list="dlBooks" placeholder="교재명 / Book title" style="padding:8px;border:1px solid var(--line);border-radius:8px;width:240px">
+        <input id="boQty" type="number" min="1" value="1" title="수량 / Qty" style="padding:8px;border:1px solid var(--line);border-radius:8px;width:72px">
+        <input id="boNote" placeholder="메모(선택) / Note — class·urgent" style="padding:8px;border:1px solid var(--line);border-radius:8px;flex:1;min-width:160px">
+        <button class="mini" id="boBtn" style="padding:9px 16px;background:var(--green,#5ea52c);color:#fff;border:none;border-radius:8px;font-weight:800;cursor:pointer">📦 요청 / Request</button>
+      </div>
+      <datalist id="dlBooks"></datalist>
+      <a href="books.html" style="font-size:12.5px;color:var(--blue,#215a99)">📚 교재 로드맵 보기 · Book roadmap ↗</a>
+      <div id="boList" style="margin-top:10px"></div>
+    </div>
+
     <div class="eyebrow" style="margin-top:24px" data-t="records"></div>
     <div class="panel">
       <div class="phead"><h2 data-t="indEntry"></h2><span class="pill" id="clsPill"></span></div>
@@ -418,7 +432,36 @@ async function dbLoadDaily(){
   memoSync();
 }
 
-function boot(){ if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
+// ── 원서교재주문 ──
+const ORDER_BOOKS=['Phonics Bk 1','Phonics Bk 2','Phonics Bk 3','Phonics Bk 4','Zoom 1-1','Zoom 1-2','Zoom 1-3','Zoom 2-1','Zoom 2-2','Zoom 2-3','Zoom 3-2','Zoom 3-3','Zoom 4-2','Zoom 4-3','Keystone 1-2','Keystone 1-3','Is the Moon Made of Cheese?','A Surprise Gift','Recycling','Good Friends','Talking Through Time','True Colors','Tiny Seed to Towering Tree','Unusual Schools Around the World','Wiggly Worms','Festivals of Light','Life in a Castle','Fantasy Fairy Tales','Wild Weather','Giants in the Sky','Food Chains','Eating the Rainbow','Dinosaur Detective','Dots and Spots','Amazing Amphibians','Brilliant Brains','Maps','Crack the Code','Opposite Attract','Story of Clothes','Everyone Belongs','Terrific Teeth','Great Explorers','Marvelous Myths','States of Matter','Beautiful Bridges','Living in a Desert','Awesome Organs 1-1','Awesome Organs 1-2','Money, Money, Money 2-1','Money, Money, Money 2-2','Flying Through Time 3-1','Flying Through Time 3-2','Wild Cities 4-1','Wild Cities 4-2','Rocks 5-1','Rocks 5-2','Pathways 2','Pathways 3','Pathways 4'];
+function orderInit(){
+  const dl=$('#dlBooks'); if(dl) dl.innerHTML=ORDER_BOOKS.map(b=>`<option value="${b}">`).join('');
+  const btn=$('#boBtn'); if(btn) btn.onclick=submitOrder;
+  ['boBook','boNote'].forEach(id=>{ const el=$('#'+id); if(el) el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); submitOrder(); } }); });
+  loadMyOrders();
+}
+async function submitOrder(){
+  const book=$('#boBook').value.trim(); if(!book){ toast('교재명 / Book title?'); return; }
+  if(!SB||!USER){ toast('로그인 필요 / Login'); return; }
+  const row={ program:'원어민', teacher:USER.email||null, book_name:book, qty:parseInt($('#boQty').value)||1, note:$('#boNote').value.trim()||null, status:'요청' };
+  const { error }=await SB.from('book_orders').insert(row);
+  if(error){ toast('요청 실패: '+error.message); return; }
+  $('#boBook').value=''; $('#boQty').value=1; $('#boNote').value='';
+  toast('📦 요청 보냄 / Sent'); loadMyOrders();
+}
+async function loadMyOrders(){
+  if(!SB||!USER) return;
+  const { data }=await SB.from('book_orders').select('*').order('requested_at',{ascending:false}).limit(30);
+  const box=$('#boList'); if(!box) return;
+  if(!data||!data.length){ box.innerHTML='<span style="color:var(--sub);font-size:12.5px">아직 요청한 교재 없음 / No requests yet</span>'; return; }
+  box.innerHTML='<div style="font-size:13px">'+data.map(o=>{ const done=o.status==='주문완료';
+    return `<div style="padding:5px 0;border-top:1px solid var(--line)">${done?'✅':'🕗'} <b>${o.book_name}</b> ×${o.qty} ${o.note?`<span style="color:var(--sub)">· ${o.note}</span>`:''} <span style="color:${done?'var(--green,#5ea52c)':'var(--sub)'};float:right">${done?'주문완료 / Ordered':`요청됨 / Pending <button class="mini" onclick="cancelOrder('${o.id}')" style="padding:2px 8px;margin-left:4px">취소</button>`}</span></div>`;
+  }).join('')+'</div>';
+}
+async function cancelOrder(id){ if(!confirm('취소할까요? / Cancel?'))return; const {error}=await SB.from('book_orders').delete().eq('id',id); toast(error?'실패':'취소됨 / Cancelled'); if(!error)loadMyOrders(); }
+window.cancelOrder=cancelOrder;
+
+function boot(){ orderInit(); if(NOTION_URL) $('#notionCard').href=NOTION_URL; $('#dateSel').value='2026-08-18';
   $('#teaSel').innerHTML = Object.keys(ROSTER).map(t=>`<option>${t}</option>`).join('');
   $('#teaSel').value = TEACHER;
   $('#teaSel').onchange = ()=>{ TEACHER=$('#teaSel').value; DEMO=ROSTER[TEACHER]; fillClasses(); memoLoad(); applyLang(); };
