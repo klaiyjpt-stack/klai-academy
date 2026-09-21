@@ -444,22 +444,41 @@ async function loadOrders(){
 function ordFilter(f){ ordF=f; document.querySelectorAll('#ordSeg button').forEach(b=>b.classList.toggle('on', b.dataset.f===f)); renderOrders(); }
 window.ordFilter=ordFilter; window.loadOrders=loadOrders;
 function renderOrders(){
-  const rows=ORDERS.filter(o=>ordF==='all'||o.status===ordF);
-  const wait=ORDERS.filter(o=>o.status==='요청').length;
+  // 신청(req_group) 단위로 묶기
+  const groups={}; ORDERS.forEach(o=>{ const k=o.req_group||o.id; (groups[k]=groups[k]||[]).push(o); });
+  let cards=Object.entries(groups).map(([k,items])=>({key:k,items,status:items.every(o=>o.status==='주문완료')?'주문완료':'요청',ts:items[0].requested_at||''}))
+    .sort((a,b)=>a.ts<b.ts?1:-1);
+  const waitG=cards.filter(c=>c.status==='요청').length;
   const nav=document.querySelector('.navbtn[data-go="orders"]');
-  if(nav) nav.innerHTML='📦 원서교재주문'+(wait?` <span style="background:var(--red);color:#fff;border-radius:999px;padding:0 7px;font-size:11px">${wait}</span>`:'');
-  if(!rows.length){ $('#ordList').innerHTML='<span style="color:var(--sub)">해당 주문 없음</span>'; return; }
-  $('#ordList').innerHTML='<table class="grid" style="min-width:640px"><thead><tr><th>요청일</th><th>반</th><th style="text-align:left">교재</th><th>수량</th><th style="text-align:left">메모</th><th>선생님</th><th>상태</th><th>처리</th></tr></thead><tbody>'+
-    rows.map(o=>{ const done=o.status==='주문완료';
-      return `<tr><td style="white-space:nowrap">${(o.requested_at||'').slice(5,10)}</td><td>${o.program||''}</td><td style="text-align:left;font-weight:700">${esc(o.book_name)}</td><td style="text-align:center">${o.qty}</td><td style="text-align:left;color:var(--sub);font-size:12px">${esc(o.note||'')}</td><td style="font-size:12px;color:var(--sub)">${esc((o.teacher||'').split('@')[0])}</td>`+
-        `<td style="text-align:center;color:${done?'var(--green-d)':'#b8860b'};font-weight:800">${done?'✅완료':'🕗대기'}</td>`+
-        `<td style="white-space:nowrap">${done?`<button class="actbtn" onclick="ordUndo('${o.id}')">되돌리기</button>`:`<button class="actbtn on" onclick="ordDone('${o.id}')">주문완료</button>`} <button class="actbtn off" onclick="ordDel('${o.id}')">삭제</button></td></tr>`;
-    }).join('')+'</tbody></table>';
+  if(nav) nav.innerHTML='📦 원서교재주문'+(waitG?` <span style="background:var(--red);color:#fff;border-radius:999px;padding:0 7px;font-size:11px">${waitG}</span>`:'');
+  cards=cards.filter(c=>ordF==='all'||c.status===ordF);
+  if(!cards.length){ $('#ordList').innerHTML='<span style="color:var(--sub)">해당 주문 없음</span>'; return; }
+  $('#ordList').innerHTML=cards.map(c=>{
+    const done=c.status==='주문완료', o0=c.items[0], total=c.items.reduce((s,o)=>s+(o.qty||0),0);
+    return `<div style="border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:#fff">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+        <b style="color:${done?'var(--green-d)':'#b8860b'}">${done?'✅ 주문완료':'🕗 대기'}</b>
+        <span style="font-weight:800">${esc((o0.teacher||'').split('@')[0])}</span>
+        <span style="background:#eef3fb;color:var(--blue);border-radius:20px;padding:2px 10px;font-size:11.5px;font-weight:800">${c.items.length}개 반 · 총 ${total}권</span>
+        <span style="color:var(--sub);font-size:12px">${(o0.requested_at||'').slice(0,10)}${o0.want_date?` · 수령희망 ${o0.want_date}`:''}</span>
+        <span style="flex:1"></span>
+        ${done?`<button class="actbtn" onclick="ordUndo('${c.key}')">되돌리기</button>`:`<button class="actbtn on" onclick="ordDone('${c.key}')">주문완료</button>`}
+        <button class="actbtn" onclick="ordCopy('${c.key}')">📋 복사</button>
+        <button class="actbtn off" onclick="ordDel('${c.key}')">삭제</button>
+      </div>
+      <table class="grid" style="width:100%"><tbody>${c.items.map(o=>`<tr><td style="width:26%;color:var(--sub)">${esc(o.klass||o.program||'')}</td><td style="text-align:left;font-weight:700">${esc(o.book_name)} ×${o.qty}</td><td style="text-align:left;color:var(--sub);font-size:12px">${esc(o.note||'')}</td></tr>`).join('')}</tbody></table>
+    </div>`;
+  }).join('');
 }
-async function ordDone(id){ const {error}=await SB.from('book_orders').update({status:'주문완료',ordered_at:new Date().toISOString()}).eq('id',id); toast(error?'실패':'주문완료 처리'); if(!error)loadOrders(); }
-async function ordUndo(id){ const {error}=await SB.from('book_orders').update({status:'요청',ordered_at:null}).eq('id',id); toast(error?'실패':'대기로 되돌림'); if(!error)loadOrders(); }
-async function ordDel(id){ if(!confirm('이 주문요청을 삭제할까요?'))return; const {error}=await SB.from('book_orders').delete().eq('id',id); toast(error?'실패':'삭제됨'); if(!error)loadOrders(); }
-window.ordDone=ordDone; window.ordUndo=ordUndo; window.ordDel=ordDel;
+function ordKeyFilter(key){ return key&&String(key).startsWith('g')?['req_group',key]:['id',key]; }
+async function ordDone(key){ const [c,v]=ordKeyFilter(key); const {error}=await SB.from('book_orders').update({status:'주문완료',ordered_at:new Date().toISOString()}).eq(c,v); toast(error?'실패':'주문완료 처리'); if(!error)loadOrders(); }
+async function ordUndo(key){ const [c,v]=ordKeyFilter(key); const {error}=await SB.from('book_orders').update({status:'요청',ordered_at:null}).eq(c,v); toast(error?'실패':'대기로 되돌림'); if(!error)loadOrders(); }
+async function ordDel(key){ if(!confirm('이 신청을 삭제할까요?'))return; const [c,v]=ordKeyFilter(key); const {error}=await SB.from('book_orders').delete().eq(c,v); toast(error?'실패':'삭제됨'); if(!error)loadOrders(); }
+function ordCopy(key){ const [,v]=ordKeyFilter(key); const items=ORDERS.filter(o=>(o.req_group||o.id)===v||o.id===v);
+  if(!items.length)return; const o0=items[0]; let t=`[교재 요청] ${(o0.teacher||'').split('@')[0]}\n요청 ${(o0.requested_at||'').slice(0,10)}${o0.want_date?` / 수령희망 ${o0.want_date}`:''}\n`;
+  items.forEach(o=>t+=`· ${o.klass||o.program||''} — ${o.book_name} (${o.qty}권)${o.note?` [${o.note}]`:''}\n`);
+  navigator.clipboard?.writeText(t).then(()=>toast('복사됨'),()=>toast('복사 실패')); }
+window.ordDone=ordDone; window.ordUndo=ordUndo; window.ordDel=ordDel; window.ordCopy=ordCopy;
 
 // ===== 학생 계정 관리 (/api/admin-users) =====
 let ACCT=[];
