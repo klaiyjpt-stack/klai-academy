@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>원서교재주문 · 클라이 어학원</title>
+<title>Book Order · 원서교재주문 · KLAI</title>
 <style>
   :root{--bg:#eef0f7;--card:#fff;--ink:#26303f;--sub:#6b7686;--line:#e6e9f2;--green:#5ea52c;--greenD:#4e8f22;--navy:#1a2740;--blue:#215a99;--red:#c0392b}
   *{box-sizing:border-box}
@@ -11,6 +11,9 @@
   .crumb{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
   .crumb h1{font-size:22px;font-weight:900;margin:0}
   .crumb .tag{background:#e8f5ef;color:var(--greenD);font-weight:800;font-size:12px;padding:4px 12px;border-radius:20px}
+  .langseg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:10px;padding:3px}
+  .langseg button{border:0;background:transparent;padding:6px 13px;border-radius:8px;font-weight:800;font-size:13px;color:var(--sub);cursor:pointer}
+  .langseg button.on{background:var(--navy);color:#fff}
   .lead{color:var(--sub);font-size:13.5px;margin-bottom:16px}
   .card{background:#fff;border:1px solid #eef;border-radius:16px;box-shadow:0 4px 14px rgba(40,50,80,.05);padding:18px 20px;margin-bottom:14px}
   .card h2{font-size:14px;font-weight:900;color:var(--navy);margin:0 0 12px}
@@ -41,40 +44,42 @@
 <div class="top"></div>
 
 <div id="loginView" style="display:none"><div id="login" class="card">
-  <h2>선생님 로그인</h2>
-  <input id="uid" placeholder="이메일"><input id="upw" type="password" placeholder="비밀번호">
+  <h2 data-en="Teacher Login">선생님 로그인</h2>
+  <input id="uid" placeholder="이메일" data-en-ph="Email"><input id="upw" type="password" placeholder="비밀번호" data-en-ph="Password">
   <div id="loginErr" style="color:var(--red);font-size:13px;min-height:18px"></div>
-  <button class="btn pri" id="loginBtn" style="width:100%">로그인</button>
+  <button class="btn pri" id="loginBtn" style="width:100%" data-en="Log in">로그인</button>
 </div></div>
 
 <div id="dashView" class="wrap" style="display:none">
-  <div class="crumb"><h1>📦 원서교재주문</h1><span class="tag">TEACHER</span><span style="flex:1"></span><a href="books.html" target="_blank" style="color:var(--blue);font-size:13px;font-weight:700">📚 교재 로드맵 ↗</a></div>
-  <div class="lead">여러 반 교재를 <b>한 번에</b> 신청하면 데스크에서 주문합니다. 반을 추가해 필요한 만큼 신청하세요.</div>
+  <div class="crumb"><h1 data-en="📦 Book Order">📦 원서교재주문</h1><span class="tag">TEACHER</span><span style="flex:1"></span>
+    <span class="langseg"><button data-lang="ko">한국어</button><button data-lang="en">EN</button></span>
+    <a href="books.html" target="_blank" style="color:var(--blue);font-size:13px;font-weight:700" data-en="📚 Book roadmap ↗">📚 교재 로드맵 ↗</a></div>
+  <div class="lead" data-en="Request books for several classes at once — the desk will order them. Add a class row for each request.">여러 반 교재를 <b>한 번에</b> 신청하면 데스크에서 주문합니다. 반을 추가해 필요한 만큼 신청하세요.</div>
 
   <div class="card">
-    <h2>① 신청 정보</h2>
+    <h2 data-en="① Request info">① 신청 정보</h2>
     <div style="display:flex;gap:14px;flex-wrap:wrap">
-      <div><label>신청 선생님</label><input id="who" readonly style="min-width:180px;background:#f7f8fb"></div>
-      <div><label>수령 희망일 (선택)</label><input type="date" id="want"></div>
+      <div><label data-en="Teacher">신청 선생님</label><input id="who" readonly style="min-width:180px;background:#f7f8fb"></div>
+      <div><label data-en="Want by (optional)">수령 희망일 (선택)</label><input type="date" id="want"></div>
     </div>
   </div>
 
   <div class="card">
-    <h2>② 반별 교재 선택 <span style="font-weight:700;color:var(--sub);font-size:12px">(여러 반 추가 가능)</span></h2>
+    <h2 data-en="② Choose books by class (add multiple)">② 반별 교재 선택 <span style="font-weight:700;color:var(--sub);font-size:12px" data-en="(add multiple classes)">(여러 반 추가 가능)</span></h2>
     <table class="req">
-      <thead><tr><th style="width:24%">반 (Class)</th><th style="width:38%">교재</th><th style="width:14%">학생 수</th><th>비고</th><th style="width:48px"></th></tr></thead>
+      <thead><tr><th style="width:24%" data-en="Class">반 (Class)</th><th style="width:38%" data-en="Book">교재</th><th style="width:14%" data-en="Students">학생 수</th><th data-en="Note">비고</th><th style="width:48px"></th></tr></thead>
       <tbody id="rows"></tbody>
     </table>
-    <button class="addrow" onclick="addRow()">＋ 반 추가</button>
+    <button class="addrow" onclick="addRow()" data-en="＋ Add class">＋ 반 추가</button>
   </div>
 
   <div class="actions">
-    <button class="btn ghost" onclick="clearRows()">초기화</button>
-    <button class="btn pri" onclick="submitReq()">신청 접수 ✓</button>
+    <button class="btn ghost" onclick="clearRows()" data-en="Clear">초기화</button>
+    <button class="btn pri" onclick="submitReq()" data-en="Submit ✓">신청 접수 ✓</button>
   </div>
 
-  <div class="subhead"><div class="t">접수된 요청</div><div class="c" id="cnt">0건</div></div>
-  <div id="list"><div class="empty">아직 신청이 없습니다.</div></div>
+  <div class="subhead"><div class="t" data-en="My requests">접수된 요청</div><div class="c" id="cnt"></div></div>
+  <div id="list"></div>
 </div>
 
 <datalist id="dlClasses"></datalist>
@@ -83,8 +88,29 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 const SB=createClient("https://hxlzccwqxamtsjrrtcdq.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4");
 let USER=null;
+let LANG=localStorage.getItem('order_lang')||'en';   // 원어민 페이지라 영어 기본
 const $=s=>document.querySelector(s);
+const L=(ko,en)=>LANG==='en'?en:ko;
 const toast=m=>{ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800); };
+
+// i18n: data-en 텍스트/placeholder 스왑 (원문 ko 캐시)
+function applyLang(l){
+  LANG=l; localStorage.setItem('order_lang',l); document.documentElement.lang=l;
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    if(el.dataset.ko===undefined) el.dataset.ko=el.textContent;
+    el.textContent = l==='en' ? el.dataset.en : el.dataset.ko;
+  });
+  document.querySelectorAll('[data-en-ph]').forEach(el=>{
+    if(el.dataset.koPh===undefined) el.dataset.koPh=el.placeholder;
+    el.placeholder = l==='en' ? el.dataset.enPh : el.dataset.koPh;
+  });
+  document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===l));
+  // 동적으로 그린 부분 다시 렌더
+  document.querySelectorAll('#rows tr').forEach(tr=>{ const bs=tr.querySelector('.c-class'); if(bs) bs.placeholder=L('반','Class'); const mm=tr.querySelector('.c-memo'); if(mm) mm.placeholder=L('예: 신규 5명','e.g. 5 new'); const bk=tr.querySelector('.c-book'); if(bk){ const v=bk.value; bk.innerHTML=bookOpts(); bk.value=v; } });
+  if(USER) loadMine();
+}
+document.querySelectorAll('.langseg button').forEach(b=>b.onclick=()=>applyLang(b.dataset.lang));
+
 const BOOK_GROUPS={
  "엘리아 파닉스":["Phonics 1권","Phonics 2권","Phonics 3권","Phonics 4권"],
  "엘리아 줌":["Zoom 1-1","Zoom 1-2","Zoom 1-3","Zoom 2-1","Zoom 2-2","Zoom 2-3","Zoom 3-2","Zoom 3-3","Zoom 4-2","Zoom 4-3"],
@@ -94,46 +120,50 @@ const BOOK_GROUPS={
  "IB PYP Year 3":["Awesome Organs 1-1","Awesome Organs 1-2","Money, Money, Money 2-1","Money, Money, Money 2-2","Flying Through Time 3-1","Flying Through Time 3-2","Wild Cities 4-1","Wild Cities 4-2","Rocks 5-1","Rocks 5-2"],
  "Pathways":["Pathways 2","Pathways 3","Pathways 4"]
 };
-function bookOpts(){ let h='<option value="">— 교재 —</option>'; for(const g in BOOK_GROUPS){ h+=`<optgroup label="${g}">`; BOOK_GROUPS[g].forEach(b=>h+=`<option>${g} · ${b}</option>`); h+='</optgroup>'; } return h; }
+const GROUP_EN={"엘리아 파닉스":"Elia Phonics","엘리아 줌":"Elia Zoom","엘리아 Keystone":"Elia Keystone","IB PYP Year 1":"IB PYP Year 1","IB PYP Year 2":"IB PYP Year 2","IB PYP Year 3":"IB PYP Year 3","Pathways":"Pathways"};
+function bookOpts(){ let h=`<option value="">${L('— 교재 —','— Book —')}</option>`; for(const g in BOOK_GROUPS){ h+=`<optgroup label="${L(g,GROUP_EN[g])}">`; BOOK_GROUPS[g].forEach(b=>h+=`<option value="${g} · ${b}">${L(g,GROUP_EN[g])} · ${b}</option>`); h+='</optgroup>'; } return h; }
 window.addRow=function(){ const tr=document.createElement('tr');
-  tr.innerHTML=`<td><input class="c-class" list="dlClasses" placeholder="반"></td><td><select class="c-book">${bookOpts()}</select></td><td><input type="number" min="0" class="c-num" placeholder="0"></td><td><input class="c-memo" placeholder="예: 신규 5명"></td><td style="text-align:center"><button class="del" onclick="this.closest('tr').remove()">✕</button></td>`;
+  tr.innerHTML=`<td><input class="c-class" list="dlClasses" placeholder="${L('반','Class')}"></td><td><select class="c-book">${bookOpts()}</select></td><td><input type="number" min="0" class="c-num" placeholder="0"></td><td><input class="c-memo" placeholder="${L('예: 신규 5명','e.g. 5 new')}"></td><td style="text-align:center"><button class="del" onclick="this.closest('tr').remove()">✕</button></td>`;
   $('#rows').appendChild(tr); };
 window.clearRows=function(){ $('#rows').innerHTML=''; addRow(); };
 window.submitReq=async function(){
   const want=$('#want').value||null;
   const items=[...$('#rows').querySelectorAll('tr')].map(tr=>({ klass:tr.querySelector('.c-class').value.trim(), book_name:tr.querySelector('.c-book').value, qty:parseInt(tr.querySelector('.c-num').value)||1, note:tr.querySelector('.c-memo').value.trim()||null })).filter(i=>i.klass&&i.book_name);
-  if(!items.length){ toast('반과 교재를 1건 이상 입력하세요'); return; }
+  if(!items.length){ toast(L('반과 교재를 1건 이상 입력하세요','Add at least one class & book')); return; }
   const grp='g'+Date.now();
   const rows=items.map(i=>({ program:'원어민', teacher:USER.email||null, klass:i.klass, book_name:i.book_name, qty:i.qty, note:i.note, want_date:want, req_group:grp, status:'요청' }));
   const { error }=await SB.from('book_orders').insert(rows);
-  if(error){ toast('신청 실패: '+error.message); return; }
-  clearRows(); toast('신청이 접수되었습니다 ✓'); loadMine(); $('#list').scrollIntoView({behavior:'smooth'});
+  if(error){ toast(L('신청 실패: ','Failed: ')+error.message); return; }
+  clearRows(); toast(L('신청이 접수되었습니다 ✓','Request submitted ✓')); loadMine(); $('#list').scrollIntoView({behavior:'smooth'});
 };
-window.cancelGroup=async function(grp){ if(!confirm('이 신청을 취소할까요?'))return; const {error}=await SB.from('book_orders').delete().eq(grp.startsWith('g')?'req_group':'id',grp); toast(error?'실패':'취소됨'); if(!error)loadMine(); };
-window.copyGroup=function(grp){ const items=MINE.filter(o=>(o.req_group||o.id)===grp); if(!items.length)return; const o0=items[0]; let t=`[교재 요청] ${(o0.teacher||'').split('@')[0]}\n요청 ${(o0.requested_at||'').slice(0,10)}${o0.want_date?` / 수령희망 ${o0.want_date}`:''}\n`; items.forEach(o=>t+=`· ${o.klass||''} — ${o.book_name} (${o.qty}권)${o.note?` [${o.note}]`:''}\n`); navigator.clipboard?.writeText(t).then(()=>toast('복사됨'),()=>toast('복사 실패')); };
+window.cancelGroup=async function(grp){ if(!confirm(L('이 신청을 취소할까요?','Cancel this request?')))return; const {error}=await SB.from('book_orders').delete().eq(grp.startsWith('g')?'req_group':'id',grp); toast(error?'Error':L('취소됨','Cancelled')); if(!error)loadMine(); };
+window.copyGroup=function(grp){ const items=MINE.filter(o=>(o.req_group||o.id)===grp); if(!items.length)return; const o0=items[0]; let t=`[Book Order] ${(o0.teacher||'').split('@')[0]}\n${(o0.requested_at||'').slice(0,10)}${o0.want_date?` / want ${o0.want_date}`:''}\n`; items.forEach(o=>t+=`· ${o.klass||''} — ${o.book_name} (${o.qty})${o.note?` [${o.note}]`:''}\n`); navigator.clipboard?.writeText(t).then(()=>toast(L('복사됨','Copied')),()=>toast('Error')); };
 let MINE=[];
 async function loadMine(){
   const { data }=await SB.from('book_orders').select('*').eq('teacher',USER.email).order('requested_at',{ascending:false}).limit(300);
   MINE=data||[];
   const groups={}; MINE.forEach(o=>{ const k=o.req_group||o.id; (groups[k]=groups[k]||[]).push(o); });
-  const keys=Object.keys(groups); $('#cnt').textContent=keys.length+'건';
-  if(!keys.length){ $('#list').innerHTML='<div class="empty">아직 신청이 없습니다.</div>'; return; }
+  const keys=Object.keys(groups); $('#cnt').textContent=keys.length?keys.length+L('건',''):'';
+  if(!keys.length){ $('#list').innerHTML=`<div class="empty">${L('아직 신청이 없습니다.','No requests yet.')}</div>`; return; }
   $('#list').innerHTML=keys.map(k=>{ const g=groups[k], done=g.every(o=>o.status==='주문완료'), total=g.reduce((s,o)=>s+(o.qty||0),0), o0=g[0];
-    return `<div class="rcard"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px"><b>${done?'✅ 주문완료':'🕗 접수됨'}</b><span class="chip">${g.length}개 반 · 총 ${total}권</span><span style="color:var(--sub);font-size:12px">${(o0.requested_at||'').slice(0,10)}${o0.want_date?` · 수령희망 ${o0.want_date}`:''}</span></div>
+    return `<div class="rcard"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px"><b>${done?L('✅ 주문완료','✅ Ordered'):L('🕗 접수됨','🕗 Received')}</b><span class="chip">${g.length}${L('개 반',' classes')} · ${L('총 ','')}${total}${L('권','')}</span><span style="color:var(--sub);font-size:12px">${(o0.requested_at||'').slice(0,10)}${o0.want_date?` · ${L('수령희망','want')} ${o0.want_date}`:''}</span></div>
       <table style="width:100%;font-size:12.5px;border-collapse:collapse">${g.map(o=>`<tr><td style="padding:3px 6px;color:var(--sub);width:34%">${o.klass||''}</td><td style="padding:3px 6px">${o.book_name} <b>×${o.qty}</b>${o.note?` <span style="color:var(--sub)">(${o.note})</span>`:''} ${o.status==='주문완료'?'✅':''}</td></tr>`).join('')}</table>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px"><button class="del" style="background:#fff;border:1px solid var(--line);color:var(--navy)" onclick="copyGroup('${k}')">📋 복사</button>${!done?`<button class="del" onclick="cancelGroup('${o0.req_group||o0.id}')">신청 취소</button>`:''}</div></div>`;
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px"><button class="del" style="background:#fff;border:1px solid var(--line);color:var(--navy)" onclick="copyGroup('${k}')">📋 ${L('복사','Copy')}</button>${!done?`<button class="del" onclick="cancelGroup('${o0.req_group||o0.id}')">${L('신청 취소','Cancel')}</button>`:''}</div></div>`;
   }).join('');
 }
 async function route(){ const { data:{ session } }=await SB.auth.getSession();
+  applyLang(LANG);
   if(!session){ $('#loginView').style.display='block'; $('#dashView').style.display='none'; return; }
   USER=session.user; $('#loginView').style.display='none'; $('#dashView').style.display='block';
-  $('#who').value=USER.user_metadata?.name||USER.email?.split('@')[0]||'선생님';
-  $('#want').value=''; clearRows(); loadMine();
+  $('#who').value=USER.user_metadata?.name||USER.email?.split('@')[0]||'Teacher';
+  $('#want').value=''; clearRows(); applyLang(LANG); loadMine();
+  // 실시간: 데스크가 주문완료 처리하면 새로고침 없이 바로 반영
+  SB.channel('bo-mine').on('postgres_changes',{event:'*',schema:'public',table:'book_orders'},()=>loadMine()).subscribe();
 }
 $('#loginBtn').onclick=async()=>{ const id=$('#uid').value.trim(),pw=$('#upw').value; $('#loginErr').textContent='';
-  if(!id||!pw){ $('#loginErr').textContent='이메일과 비밀번호를 입력하세요.'; return; }
+  if(!id||!pw){ $('#loginErr').textContent=L('이메일과 비밀번호를 입력하세요.','Enter email and password.'); return; }
   const {error}=await SB.auth.signInWithPassword({email:id,password:pw});
-  if(error) $('#loginErr').textContent='이메일 또는 비밀번호가 맞지 않아요.'; else route(); };
+  if(error) $('#loginErr').textContent=L('이메일 또는 비밀번호가 맞지 않아요.','Wrong email or password.'); else route(); };
 $('#upw').addEventListener('keydown',e=>{ if(e.key==='Enter')$('#loginBtn').click(); });
 route();
 </script>
