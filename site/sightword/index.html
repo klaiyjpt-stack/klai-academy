@@ -677,7 +677,7 @@ function renderWrongReview(){
     const b=document.createElement("button"); b.className="btn opt"; b.textContent=o.ko;
     b.onclick=()=>{
       if(optLock) return;
-      if(o.en===w.en){ optLock=true; b.style.background="var(--ok)"; b.style.color="#fff"; correct(); state.wrong.shift(); setTimeout(()=>{ renderWrongReview(); showScreen("review"); },1100); }
+      if(o.en===w.en){ optLock=true; b.style.background="var(--ok)"; b.style.color="#fff"; correct(); state.wrong.shift(); setTimeout(()=>{ if(state.wrong.length){ renderWrongReview(); showScreen("review"); } else afterSet(); },1100); }
       else { b.style.background="#f8d7da"; b.style.color="#c0392b"; wrong(); }
     };
     box.appendChild(b);
