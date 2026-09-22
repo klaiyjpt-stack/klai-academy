@@ -426,8 +426,9 @@ function setGames(){ const rot=["catch","catchko","speed","cloze"]; return [ rot
 function startGames(){ gameQueue=setGames(); gameIdx=0; runGame(); }
 function runGame(){
   if(gameIdx>=gameQueue.length){
-    if(state.wrong.length) toast("틀린 단어 다시 학습하기 🔁");
-    renderWrongReview(); showScreen("review"); return;
+    if(state.wrong.length){ toast("틀린 단어 다시 학습하기 🔁"); renderWrongReview(); showScreen("review"); }
+    else afterSet();
+    return;
   }
   const g=gameQueue[gameIdx];
   if(g==="catch"){ renderCatch(); showScreen("catch"); }

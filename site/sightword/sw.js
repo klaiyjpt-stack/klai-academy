@@ -1,5 +1,5 @@
 // Service worker — offline app shell so the pad works without internet after first load.
-const CACHE = "klai-sightword-v6";
+const CACHE = "klai-sightword-v7";
 const ASSETS = [
   "./", "./index.html",
   "./data/words.js", "./data/stories.js",
