@@ -130,6 +130,13 @@
         </div>
         <img src="news/teacher-guide-1.png" style="width:100%;border-radius:10px;margin-bottom:14px" alt="Teacher page guide 1">
         <img src="news/teacher-guide-2.png" style="width:100%;border-radius:10px" alt="Teacher page guide 2">
+        <div style="margin:22px 0 12px;padding-top:16px;border-top:2px dashed #d5dae3">
+          <b style="font-size:17px;color:var(--navy,#1a2740)" data-t="reportTitle">📊 Your daily inputs → the Monthly Report</b>
+          <div style="font-size:13.5px;color:#5b6577;margin-top:4px" data-t="reportDesc">Everything you enter each class (attendance · homework · score · attitude · notes) is compiled into each student's monthly report — like these samples.</div>
+        </div>
+        <img src="news/report-emma-1.png" style="width:100%;border:1px solid #e6e9f0;border-radius:10px;margin-bottom:14px" alt="Monthly report sample 1">
+        <img src="news/report-emma-2.png" style="width:100%;border:1px solid #e6e9f0;border-radius:10px;margin-bottom:14px" alt="Monthly report sample 2">
+        <img src="news/report-daniel.png" style="width:100%;border:1px solid #e6e9f0;border-radius:10px" alt="Monthly report sample 3 (IB)">
       </div>
     </div>
 
@@ -246,7 +253,7 @@ const STR = {
     test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항 기본 — 단어시험 6 · 월말평가 25 (필요시 칸에서 조정)',
     gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
     clsMemo:'📋 오늘 반 전체 메모 (학생·학부모 공개)',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 발행하면 반 학생·학부모 페이지에 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
-    teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',bookOrder:'📦 원서교재주문 ↗',howTo:'❔ 사용법',howToTitle:'사용법 · 선생님 페이지',
+    teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',bookOrder:'📦 원서교재주문 ↗',howTo:'❔ 사용법',howToTitle:'사용법 · 선생님 페이지',reportTitle:'📊 매 수업 입력 → 월말 리포트',reportDesc:'매 수업 입력하는 값(출결·숙제·점수·태도·메모)이 학생별 월말 리포트로 이렇게 만들어집니다. (아래는 샘플)',
     cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',allLbl:'전체',
     saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
     att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
@@ -265,7 +272,7 @@ const STR = {
     test:'Test',newTest:'＋ New test',testHint:'Default total — Vocab 6 · Monthly 25 (adjust per cell)',
     gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
     clsMemo:'📋 Today · class note (shared)',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When published, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
-    teaLog:'🗒️ Teacher log · work report (private)',teaLogDesc:'Private to you — class reflections, handoffs, work report. Not shown to students or parents. Change the date to see past logs.',teaLogPh:'e.g. Class 3 finished Unit 5 · Jihoon needs parent call · low textbook stock — report to director',bookOrder:'📦 Book Order ↗',howTo:'❔ How to use',howToTitle:'How to use · Teacher Page',
+    teaLog:'🗒️ Teacher log · work report (private)',teaLogDesc:'Private to you — class reflections, handoffs, work report. Not shown to students or parents. Change the date to see past logs.',teaLogPh:'e.g. Class 3 finished Unit 5 · Jihoon needs parent call · low textbook stock — report to director',bookOrder:'📦 Book Order ↗',howTo:'❔ How to use',howToTitle:'How to use · Teacher Page',reportTitle:'📊 Your daily inputs → the Monthly Report',reportDesc:'Everything you enter each class (attendance · homework · score · attitude · notes) is compiled into each student\'s monthly report — like these samples.',
     cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',allLbl:'All',
     saveNote:'✅ After entering, saving publishes only students with Publish ON.',saveDraft:'Save draft',savePublish:'Save & publish class',
     att:['Present','Late','Absent','Excused'],tae:['Excellent','Good','Needs work'],
