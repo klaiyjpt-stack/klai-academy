@@ -1,0 +1,16 @@
+{
+  "name": "클라이 어학원",
+  "short_name": "클라이",
+  "description": "클라이 어학원 학생·학부모 포털 — 학습앱·리포트·반 숙제",
+  "start_url": "/portal/login.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#215a99",
+  "icons": [
+    { "src": "/portal/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/portal/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/portal/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
