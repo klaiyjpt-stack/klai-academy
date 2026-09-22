@@ -549,7 +549,7 @@ function buildQuiz(){
         <div class="q">퀴즈 완료! 🎉</div>
         <div class="big" style="font-size:30px;color:var(--accent)">${score} / ${order.length}</div>
         <div class="rowbtns" style="justify-content:center"><button class="btn play" onclick="switchTab('quiz');buildQuizAgain()">다시 풀기</button></div>
-      </div>`; progress[cur.id].quiz=score; return;
+      </div>`; progress[cur.id].quiz=score; progress[cur.id].read=true; if(window.__phSave)window.__phSave(); return;
     }
     const qi=order[idx]; const [en,kr]=cur.vocab[qi];
     const opts=shuffle([en,...shuffle(cur.vocab.filter((_,i)=>i!==qi)).slice(0,3).map(v=>v[0])]);
