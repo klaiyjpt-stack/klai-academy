@@ -800,7 +800,7 @@ function renderLevelGrid(){
       ${isDone?`<span class="dot">${SVG_CHECK}</span>`:isNow?`<span class="dot">${SVG_PLAY_S}</span>`:""}
       <span class="num">${l}</span><small>${state}</small>
       <span class="lbar"><i style="width:${pct}%"></i></span>`;
-    b.onclick=()=>startLevel(l); grid.appendChild(b);
+    b.onclick=()=> isNow ? resumeProg() : startLevel(l); grid.appendChild(b);
   }
 }
 // 판매본은 access.js가 있어 접속코드 확인 후 시작(샘플은 레벨 1·9만). 원내용은 바로 시작.
