@@ -132,7 +132,10 @@ input.spell{font-size:24px;text-align:center;padding:8px;border:2px solid var(--
 <script src="data/words.js"></script>
 <script src="data/stories.js"></script>
 <script>
-if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+  let swReloaded; navigator.serviceWorker.addEventListener("controllerchange",()=>{ if(swReloaded)return; swReloaded=true; location.reload(); });
+}
 const state = { level:1, setIdx:0, wordIdx:0, wrong:[] };
 let optLock = false;   // input-lock so a double-tap can't skip items / corrupt the wrong-review
 

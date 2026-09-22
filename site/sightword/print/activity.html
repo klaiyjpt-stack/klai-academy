@@ -45,6 +45,7 @@ h1{font-size:16px;margin:0 0 3px} h2{font-size:13.5px;border-bottom:2px solid #3
   레벨: <select id="lvSel"></select>
   세트: <select id="setSel"></select>
   <button onclick="render()">워크북 생성</button>
+  <button onclick="renderAll()">📚 전체 워크북 생성</button>
   <button onclick="print()">🖨 인쇄</button>
   <span style="font-size:12px;color:#555">세트별 7단어 · 2쪽 · 숙제·보충 배부</span>
 </div>
@@ -81,8 +82,7 @@ function makeGrid(rawWords, size){
   return g;
 }
 
-function render(){
-  const lvl=+sel.value, setV=+setSel.value;
+function setHTML(lvl,setV){
   const words=levelWords(lvl).slice(setV*SET_SIZE, setV*SET_SIZE+SET_SIZE);
   let h=`<h1>사이트워드 워크북 · L${lvl} 세트 ${setV+1}</h1>`;
   h+=`<div class="hd"><span>이름: __________</span><span>날짜: __________</span></div>`;
@@ -140,6 +140,13 @@ function render(){
   });
   h+=`</div>`;
 
+  return h;
+}
+function render(){ document.getElementById("sheet").innerHTML=setHTML(+sel.value,+setSel.value); }
+function renderAll(){
+  const levels=[...new Set(window.WORDS.map(w=>w.level))].sort((a,b)=>a-b);
+  let h="";
+  for(const l of levels){ for(let s=0;s<nSets(l);s++){ if(h) h+=`<div style="page-break-before:always"></div>`; h+=setHTML(l,s); } }
   document.getElementById("sheet").innerHTML=h;
 }
 render();

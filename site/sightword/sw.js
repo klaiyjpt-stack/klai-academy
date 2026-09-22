@@ -1,5 +1,5 @@
 // Service worker — offline app shell so the pad works without internet after first load.
-const CACHE = "klai-sightword-v3";
+const CACHE = "klai-sightword-v6";
 const ASSETS = [
   "./", "./index.html",
   "./data/words.js", "./data/stories.js",
@@ -15,11 +15,12 @@ self.addEventListener("activate", e => {
 });
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
+  // network-first: online always fresh; cache is offline fallback
   e.respondWith(
-    caches.match(e.request).then(hit => hit || fetch(e.request).then(resp => {
+    fetch(e.request).then(resp => {
       const copy = resp.clone();
       caches.open(CACHE).then(c => c.put(e.request, copy));
       return resp;
-    }).catch(() => caches.match("./index.html")))
+    }).catch(() => caches.match(e.request).then(hit => hit || caches.match("./index.html")))
   );
 });
