@@ -268,6 +268,8 @@ window.BOOKS = [
 <script>
 /* KLAI Phonics Fluency — app logic. Depends on window.BOOKS (js/content.js) */
 const BOOKS = window.BOOKS;
+// 포털 로그인 세션이 있으면 클라우드 기록 불러올 때까지 홈을 잠깐 "불러오는 중"
+try{ if(Object.keys(localStorage).some(k=>/^sb-.*-auth-token$/.test(k))) window.__phPending=true; }catch(e){}
 
 /* ============ SPEECH ============ */
 let VOICE=null;
@@ -297,6 +299,7 @@ let cur=null, curTab='read';
 /* ============ HOME ============ */
 function renderHome(){
   const g=document.getElementById('bookgrid'); g.innerHTML='';
+  if(window.__phPending){ g.innerHTML='<div style="padding:30px;text-align:center;color:#888">내 기록 불러오는 중… 🎧</div>'; return; }
   BOOKS.forEach((b,idx)=>{
     const pct = progress[b.id].read?100:0;
     const el=document.createElement('button');
@@ -417,7 +420,7 @@ function playLine(i,cb){
 }
 function playAll(){
   let i=0; stopSpeak();
-  (function next(){ if(i>=cur.lines.length){clearActive(); progress[cur.id].read=true; return;} playLine(i,()=>{i++;setTimeout(next,220);}); })();
+  (function next(){ if(i>=cur.lines.length){clearActive(); progress[cur.id].read=true; if(window.__phSave)window.__phSave(); return;} playLine(i,()=>{i++;setTimeout(next,220);}); })();
 }
 /* timer / WPM */
 let tStart=null;
@@ -431,7 +434,7 @@ function toggleTimer(){
     m.innerHTML=`<span class="chip">시간 <b>${sec.toFixed(1)}s</b></span>
       <span class="chip">단어 <b>${w}</b></span>
       <span class="chip">유창성 <b>${wpm}</b> WPM</span>`;
-    progress[cur.id].read=true;
+    progress[cur.id].read=true; if(window.__phSave)window.__phSave();
   }
 }
 
@@ -689,6 +692,33 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 }
 
+</script>
+<!-- 개인 학습기록: 포털 로그인 학생이면 읽은 책을 Supabase에 저장·복원. 비로그인이면 저장 안 함(화면 내 진행만). -->
+<script type="module">
+try{
+  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");
+  const SB_URL="https://hxlzccwqxamtsjrrtcdq.supabase.co";
+  const SB_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bHpjY3dxeGFtdHNqcnJ0Y2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODA2NzgsImV4cCI6MjEwMTg1NjY3OH0.V19Jbcb7fS1lW6SwsZrn-dCTkUPaNN1KmBbdslDxfr4";
+  const sb = createClient(SB_URL, SB_ANON);
+  const { data:{ session } } = await sb.auth.getSession();
+  const finish = ()=>{ window.__phPending=false; try{ renderHome(); }catch(e){} };
+  if(!session){ finish(); }
+  else {
+    const uid = session.user.id, code = (session.user.email||"").split("@")[0];
+    const { data } = await sb.from("phonics_progress").select("read_books").eq("user_id",uid).maybeSingle();
+    if(data && Array.isArray(data.read_books)){
+      data.read_books.forEach(id=>{ if(progress[id]) progress[id].read=true; });
+    } else {
+      const readNow = BOOKS.filter(b=>progress[b.id].read).map(b=>b.id);
+      await sb.from("phonics_progress").upsert({user_id:uid,student_code:code,read_books:readNow,updated_at:new Date().toISOString()});
+    }
+    let t; window.__phSave = ()=>{ clearTimeout(t); t=setTimeout(async()=>{
+      const readNow = BOOKS.filter(b=>progress[b.id].read).map(b=>b.id);
+      try{ await sb.from("phonics_progress").upsert({user_id:uid,student_code:code,read_books:readNow,updated_at:new Date().toISOString()}); }catch(e){}
+    }, 600); };
+    finish();
+  }
+}catch(e){ window.__phPending=false; try{ renderHome(); }catch(_){} }
 </script>
 </body>
 </html>
