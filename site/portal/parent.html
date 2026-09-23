@@ -105,11 +105,17 @@
     <div class="eyebrow">🗓️ 시간표</div>
     <div id="ttBox" class="ttgrid"><div class="mut">불러오는 중…</div></div>
 
+    <div class="eyebrow">🔁 예정된 보강</div>
+    <div id="mkBox" class="stack"><div class="mut">불러오는 중…</div></div>
+
     <div class="eyebrow">📋 반 숙제 · 공지</div>
     <div id="hwBox" class="stack"><div class="mut">불러오는 중…</div></div>
 
     <div class="eyebrow">📊 성적 · 출결 요약</div>
     <div class="card"><div class="metrics" id="sumBox"><div class="row"><span class="mut">불러오는 중…</span></div></div></div>
+
+    <div class="eyebrow">📚 수업 기록</div>
+    <div id="recBox" class="stack"><div class="mut">불러오는 중…</div></div>
 
     <div class="eyebrow">📄 리포트</div>
     <div id="rpBox" class="stack"><div class="mut">불러오는 중…</div></div>
@@ -180,7 +186,7 @@ else {
     $('#childBtn').onclick=go;
     $('#childIn').addEventListener('keydown',e=>{ if(e.key==='Enter') go(); });
     const c=$('#childCancel'); if(c) c.onclick=()=>loadChild();
-    ['ttBox','hwBox','rpBox','vidBox'].forEach(id=>$('#'+id).innerHTML='<div class="mut">자녀 연결 후 표시돼요.</div>');
+    ['ttBox','mkBox','hwBox','recBox','rpBox','vidBox'].forEach(id=>$('#'+id).innerHTML='<div class="mut">자녀 연결 후 표시돼요.</div>');
     $('#sumBox').innerHTML='<div class="row"><span class="mut">자녀 연결 후 표시돼요.</span></div>';
   }
   async function loadChild(){
@@ -204,8 +210,10 @@ else {
     const name=nameOf(code);
     const { data:cr } = await sb.from('class_records').select('teacher,class_name,student_name').eq('student_code',code);
     const classes = [...new Map((cr||[]).map(r=>[r.teacher+'|'+r.class_name,r])).values()];
+    loadMakeup(name);
     loadHomework(classes);
-    loadSummary(code);
+    loadSummary(code, name);
+    loadRecords(name, code);
     loadReports(name);
     loadVideos(code);
     loadTimetable(name);
@@ -224,22 +232,48 @@ else {
     box.innerHTML = memos.length ? memos.map(m=>`<div class="item hw"><div class="top"><span class="h">${esc(m.class_name)}</span><span class="dt">${(m.date||'').slice(0,10)}</span></div><div class="txt">${esc(m.class_memo)}</div></div>`).join('')
       : '<div class="mut">아직 등록된 숙제·공지가 없어요.</div>';
   }
-  async function loadSummary(code){
+  async function loadSummary(code, name){
     const box=$('#sumBox');
-    const { data } = await sb.from('class_records').select('date,attendance,homework,score,max')
-      .eq('student_code',code).eq('published',true).order('date',{ascending:false}).limit(60);
-    const rows=data||[];
-    if(!rows.length){ box.innerHTML='<div class="row"><span class="mut">아직 공개된 기록이 없어요.</span></div>'; return; }
+    const [cr, sr] = await Promise.all([
+      sb.from('class_records').select('date,attendance,score,max').eq('student_code',code).eq('published',true).order('date',{ascending:false}).limit(80),
+      sb.from('session_records').select('date,attend').eq('name_kor',name).order('date',{ascending:false}).limit(150)
+    ]);
+    const crr=cr.data||[], srr=sr.data||[], total=crr.length+srr.length;
+    if(!total){ box.innerHTML='<div class="row"><span class="mut">아직 공개된 기록이 없어요.</span></div>'; return; }
     const ym=(new Date()).toISOString().slice(0,7);
-    const month=rows.filter(r=>(r.date||'').slice(0,7)===ym);
-    const absent=month.filter(r=>['결석','absent','A'].includes(String(r.attendance))).length;
-    const late=month.filter(r=>['지각','late','L'].includes(String(r.attendance))).length;
-    const scored=rows.filter(r=>r.score!=null&&r.max);
+    const isAbs=v=>['결석','absent','A'].includes(String(v)), isLate=v=>['지각','late','L'].includes(String(v));
+    const att=[...crr.map(r=>({d:r.date,a:r.attendance})),...srr.map(r=>({d:r.date,a:r.attend}))].filter(r=>(r.d||'').slice(0,7)===ym);
+    const absent=att.filter(r=>isAbs(r.a)).length, late=att.filter(r=>isLate(r.a)).length;
+    const scored=crr.filter(r=>r.score!=null&&r.max);
     const lastScore = scored.length? `${scored[0].score}/${scored[0].max}` : '-';
     box.innerHTML =
       `<div class="row"><span>이번 달 출결</span><span class="v">결석 ${absent} · 지각 ${late}</span></div>`+
       `<div class="row"><span>최근 점수</span><span class="v">${lastScore}</span></div>`+
-      `<div class="row"><span>공개된 수업 기록</span><span class="v">${rows.length}건</span></div>`;
+      `<div class="row"><span>수업 기록</span><span class="v">${total}건</span></div>`;
+  }
+  async function loadMakeup(name){
+    const box=$('#mkBox');
+    const { data } = await sb.from('makeup').select('makeup_at,status').eq('student_name',name).eq('status','scheduled').order('makeup_at');
+    const today=new Date(); today.setHours(0,0,0,0);
+    const up=(data||[]).filter(r=>r.makeup_at && new Date(r.makeup_at)>=today);
+    if(!up.length){ box.innerHTML='<div class="mut">예정된 보강이 없어요.</div>'; return; }
+    box.innerHTML=up.map(r=>{ const t=new Date(r.makeup_at);
+      const md=`${t.getMonth()+1}/${t.getDate()}`, wd='일월화수목금토'[t.getDay()], hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+      return `<div class="item"><div class="top"><span class="h">🔁 보강</span><span class="dt">${md}(${wd}) ${hm}</span></div></div>`; }).join('');
+  }
+  async function loadRecords(name, code){
+    const box=$('#recBox');
+    const [sr, cr] = await Promise.all([
+      sb.from('session_records').select('program,date,attend,homework,book,progress').eq('name_kor',name).order('date',{ascending:false}).limit(20),
+      sb.from('class_records').select('class_name,date,attendance,homework,score,max').eq('student_code',code).eq('published',true).order('date',{ascending:false}).limit(20)
+    ]);
+    const A={present:'출석',late:'지각',absent:'결석',excused:'인정결석'}, H={done:'완료','not done':'미완료',not_done:'미완료',notdone:'미완료'};
+    let rows=[];
+    (sr.data||[]).forEach(r=>rows.push({date:r.date,cls:r.program,att:A[r.attend]||r.attend||'',hw:H[r.homework]||(r.homework||''),extra:[r.book,r.progress].filter(Boolean).join(' ')}));
+    (cr.data||[]).forEach(r=>rows.push({date:r.date,cls:r.class_name,att:A[r.attendance]||r.attendance||'',hw:(r.homework?'완료':''),extra:(r.score!=null&&r.max)?`${r.score}/${r.max}`:''}));
+    rows.sort((a,b)=>a.date<b.date?1:-1); rows=rows.slice(0,15);
+    if(!rows.length){ box.innerHTML='<div class="mut">아직 등록된 수업 기록이 없어요.</div>'; return; }
+    box.innerHTML=rows.map(r=>`<div class="item"><div class="top"><span class="h">${esc(r.cls||'')}</span><span class="dt">${(r.date||'').slice(0,10)}</span></div><div class="txt">${[r.att&&('출결 '+r.att),r.hw&&('숙제 '+r.hw),r.extra].filter(Boolean).map(esc).join(' · ')}</div></div>`).join('');
   }
   async function loadReports(name){
     const box=$('#rpBox');
