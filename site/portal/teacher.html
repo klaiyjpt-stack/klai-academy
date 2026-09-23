@@ -344,7 +344,7 @@ function applyLang(){
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-t]').forEach(el=>{ const v=s[el.dataset.t]; if(typeof v==='string') el.textContent=v; });
   { const sb=$('#setupBanner'); if(sb) sb.textContent = s.setup; }
-  $('#evalSel').innerHTML = s.evals.map(e=>`<option>${e}</option>`).join('');
+  { const cur=$('#evalSel').value; $('#evalSel').innerHTML = s.evals.map((e,i)=>`<option value="${EVAL_KEYS[i]}">${e}</option>`).join(''); if(cur) $('#evalSel').value=cur; }
   $('#clsMemo').placeholder = s.clsMemoPh; $('#teaLog').placeholder = s.teaLogPh; memoSync();
   document.querySelectorAll('.langseg button').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
   if($('#teaName').dataset.demo==='1'){ $('#teaName').textContent=TEACHER; $('#teaClasses').textContent=`${Object.keys(DEMO).length}${LANG==='ko'?'개 반':' classes'}`; }
@@ -356,6 +356,7 @@ document.querySelectorAll('.langseg button').forEach(b=>b.onclick=()=>setLang(b.
 function toggleCol(cls,on){ document.querySelectorAll('#rows .'+cls).forEach(c=>c.checked=on); }
 window.toggleCol=toggleCol;
 function fillClasses(){ $('#classSel').innerHTML = Object.keys(DEMO).map(n=>`<option>${n}</option>`).join(''); }
+const EVAL_KEYS=['단어시험','월말평가','레벨테스트']; // 언어 무관 저장 키(option value). 표시는 언어별, 저장/조회는 이 값
 const EVALMAX=[6,25,'']; // evals 순서: 단어시험=6, 월말평가=25, 레벨테스트=빈칸(통과/미달)
 function renderRows(cls){
   const s=STR[LANG], list=DEMO[cls]||[];
