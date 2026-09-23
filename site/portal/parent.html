@@ -50,6 +50,10 @@
   .kidtab{background:#e9e0fb;color:#5b3ca8;border:1px solid #ddd0f5;border-radius:999px;padding:6px 14px;font-size:14px;font-weight:800;cursor:pointer}
   .kidtab.on{background:#7b3fe4;color:#fff;border-color:#7b3fe4}
   .kidtab.add{background:#fff;color:#7b3fe4;border-style:dashed}
+  .ttgrid{display:flex;gap:10px;flex-wrap:wrap}
+  .ttcol{flex:1 1 0;min-width:96px;max-width:150px;background:#fff;border:1px solid #e7e0f5;border-radius:14px;padding:12px 8px 10px;text-align:center}
+  .ttcol .dlab{font-weight:800;font-size:13.5px;color:#5a2ec4;margin-bottom:8px}
+  .ttcol .slot{display:block;font-size:12.5px;color:#333;background:#f1ecfb;border-radius:8px;padding:5px 6px;margin:5px 0 0;line-height:1.35}
   .childbar b{color:#5a2ec4}
   .childbar .chg{margin-left:auto;color:#7b3fe4;font-weight:800;font-size:12px;cursor:pointer;background:none;border:none}
   .childform{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -99,7 +103,7 @@
     <div id="childBar" class="childbar"></div>
 
     <div class="eyebrow">🗓️ 시간표</div>
-    <div id="ttBox" class="stack"><div class="mut">불러오는 중…</div></div>
+    <div id="ttBox" class="ttgrid"><div class="mut">불러오는 중…</div></div>
 
     <div class="eyebrow">📋 반 숙제 · 공지</div>
     <div id="hwBox" class="stack"><div class="mut">불러오는 중…</div></div>
@@ -252,13 +256,13 @@ else {
     const { data } = await sb.from('timetable').select('day,time_slot,subject').eq('name_kor',name).eq('active',true);
     const rows=data||[];
     if(!rows.length){ box.innerHTML='<div class="mut">등록된 시간표가 없어요.</div>'; return; }
-    const order={mon:0,tue:1,wed:2,thu:3,fri:4,sat:5,sun:6}, kday={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'};
+    const ORD=['mon','tue','wed','thu','fri','sat','sun'], KL={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'};
+    const tk=t=>parseInt(String(t||'').replace(/[^0-9]/g,''))||0;
     const byday={}; rows.forEach(r=>{ (byday[r.day]=byday[r.day]||[]).push(r); });
-    Object.values(byday).forEach(a=>a.sort((x,y)=>String(x.time_slot||'').localeCompare(String(y.time_slot||''),'ko')));
-    box.innerHTML='<div class="card"><table style="width:100%;border-collapse:collapse;font-size:14px">'+
-      Object.keys(byday).sort((a,b)=>(order[a]??9)-(order[b]??9)).map(d=>
-        `<tr style="border-top:1px solid #eee"><td style="padding:8px 10px;font-weight:800;color:#7b3fe4;white-space:nowrap;vertical-align:top;width:44px">${kday[d]||d}</td><td style="padding:8px 10px">${byday[d].map(r=>`${esc(r.time_slot||'')} · ${esc(r.subject||'')}`).join('<br>')}</td></tr>`
-      ).join('')+'</table></div>';
+    box.innerHTML=ORD.filter(d=>byday[d]).map(d=>{
+      const list=byday[d].sort((a,b)=>tk(a.time_slot)-tk(b.time_slot));
+      return `<div class="ttcol"><div class="dlab">${KL[d]}</div>${list.map(r=>`<span class="slot">${esc(r.time_slot||'')}<br>${esc(r.subject||'')}</span>`).join('')}</div>`;
+    }).join('');
   }
   async function loadVideos(login){
     const box=$('#vidBox');
