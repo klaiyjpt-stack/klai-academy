@@ -94,6 +94,9 @@
 
     <div id="childBar" class="childbar"></div>
 
+    <div class="eyebrow">🗓️ 시간표</div>
+    <div id="ttBox" class="stack"><div class="mut">불러오는 중…</div></div>
+
     <div class="eyebrow">📋 반 숙제 · 공지</div>
     <div id="hwBox" class="stack"><div class="mut">불러오는 중…</div></div>
 
@@ -161,13 +164,15 @@ else {
       bar.innerHTML = '<span class="mut">자녀의 <b>로그인 아이디</b>(예: elin1136)를 한 번만 입력하면 학습 현황이 연결돼요.</span>'+
         '<div class="childform" style="width:100%;margin-top:8px"><input id="childIn" placeholder="자녀 로그인 아이디" autocapitalize="none"><button id="childBtn">연결</button></div>';
       $('#childBtn').onclick=()=>{ const v=$('#childIn').value.trim(); if(v){ localStorage.setItem('klai_child_code',v); loadChild(); } };
-      ['hwBox','rpBox','vidBox'].forEach(id=>$('#'+id).innerHTML='<div class="mut">자녀 연결 후 표시돼요.</div>');
+      ['ttBox','hwBox','rpBox','vidBox'].forEach(id=>$('#'+id).innerHTML='<div class="mut">자녀 연결 후 표시돼요.</div>');
       $('#sumBox').innerHTML='<div class="row"><span class="mut">자녀 연결 후 표시돼요.</span></div>';
       return;
     }
-    // 자녀 이름 + 반 조회
+    // 자녀 이름 + 반 조회 (이름은 student_dir 로그인id→한글이름 우선)
+    const lid=String(code).toLowerCase();
+    const { data:sd } = await sb.from('student_dir').select('name_kor').eq('login_id',lid).maybeSingle();
     const { data:cr } = await sb.from('class_records').select('teacher,class_name,student_name').eq('student_code',code);
-    const name = (cr&&cr[0]&&cr[0].student_name) || code;
+    const name = (sd&&sd.name_kor) || (cr&&cr[0]&&cr[0].student_name) || code;
     const classes = [...new Map((cr||[]).map(r=>[r.teacher+'|'+r.class_name,r])).values()];
     bar.innerHTML = `<span>👧 <b>${esc(name)}</b> 학생 · <span class="mut">${esc(String(code).toLowerCase())}</span></span><button class="chg" id="childChg">자녀 변경</button>`;
     $('#childChg').onclick=()=>{ localStorage.removeItem('klai_child_code'); loadChild(); };
@@ -175,6 +180,7 @@ else {
     loadSummary(code);
     loadReports(name);
     loadVideos(code);
+    loadTimetable(name);
   }
   async function loadHomework(classes){
     const box=$('#hwBox');
@@ -216,6 +222,19 @@ else {
       const files=(r.files||[]).map(u=>`<a href="${u}" target="_blank" rel="noopener"><img src="${u}"></a>`).join('');
       return `<div class="item"><div class="top"><span class="h">${esc(r.report_type||'리포트')}</span><span class="dt">${(r.created_at||'').slice(0,10)}</span></div>${r.comment?`<div class="txt">${esc(r.comment)}</div>`:''}<div class="thumbs">${files}</div></div>`;
     }).join('') : '<div class="mut">아직 발송된 리포트가 없어요.</div>';
+  }
+  async function loadTimetable(name){
+    const box=$('#ttBox');
+    const { data } = await sb.from('timetable').select('day,time_slot,subject').eq('name_kor',name).eq('active',true);
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<div class="mut">등록된 시간표가 없어요.</div>'; return; }
+    const order={mon:0,tue:1,wed:2,thu:3,fri:4,sat:5,sun:6}, kday={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'};
+    const byday={}; rows.forEach(r=>{ (byday[r.day]=byday[r.day]||[]).push(r); });
+    Object.values(byday).forEach(a=>a.sort((x,y)=>String(x.time_slot||'').localeCompare(String(y.time_slot||''),'ko')));
+    box.innerHTML='<div class="card"><table style="width:100%;border-collapse:collapse;font-size:14px">'+
+      Object.keys(byday).sort((a,b)=>(order[a]??9)-(order[b]??9)).map(d=>
+        `<tr style="border-top:1px solid #eee"><td style="padding:8px 10px;font-weight:800;color:#7b3fe4;white-space:nowrap;vertical-align:top;width:44px">${kday[d]||d}</td><td style="padding:8px 10px">${byday[d].map(r=>`${esc(r.time_slot||'')} · ${esc(r.subject||'')}`).join('<br>')}</td></tr>`
+      ).join('')+'</table></div>';
   }
   async function loadVideos(login){
     const box=$('#vidBox');
