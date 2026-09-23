@@ -400,12 +400,15 @@
   <section class="sec hidden" data-sec="learning">
     <div class="sectitle">📈 학습관리</div>
     <div class="panel">
-      <div style="font-size:12.5px;color:var(--sub);margin-bottom:10px">월말 레포트 · 영상 기록 · 출결 기록. (연동 준비중 — 현재 밴드 게시)</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">
-        <div class="panel" style="margin:0"><b>📄 월말 레포트</b><div style="font-size:12px;color:var(--sub);margin-top:4px">원서반·알파 성장 리포트 자동생성 → 학부모 페이지(예정)</div></div>
-        <div class="panel" style="margin:0"><b>🎬 영상 기록</b><div style="font-size:12px;color:var(--sub);margin-top:4px">수업 영상 → 학부모 페이지 게시(예정)</div></div>
-        <div class="panel" style="margin:0"><b>🗓️ 출결 기록</b><div style="font-size:12px;color:var(--sub);margin-top:4px">전 수업 출결 집계·조회(예정)</div></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <b style="font-size:15px;color:var(--navy)">🎬 영상 기록</b>
+        <span style="font-size:12px;color:var(--sub);flex:1">선생님이 올린 수업 영상. <b style="color:var(--green-d)">게시됨</b>=학부모 노출 · <b style="color:#b8860b">임시</b>=검토대기(학부모 안 보임).</span>
+        <button class="actbtn on" onclick="loadLearning()">🔄 새로고침</button>
       </div>
+      <div id="learnVid" style="font-size:13px">로그인 후 표시됩니다.</div>
+    </div>
+    <div class="panel">
+      <div style="font-size:12.5px;color:var(--sub)">📄 월말 레포트 · 🗓️ 출결 기록 — 연동 준비중.</div>
     </div>
   </section>
 
@@ -434,6 +437,7 @@ function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,
 function gotoSec(name){
   document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('hidden', s.dataset.sec!==name));
   document.querySelectorAll('.navbtn[data-go]').forEach(b=>b.classList.toggle('on', b.dataset.go===name));
+  if(name==='learning') loadLearning();
   window.scrollTo(0,0);
 }
 window.gotoSec=gotoSec;
@@ -857,6 +861,19 @@ async function loadReportReq(){
 }
 window.loadReportReq=loadReportReq;
 
+// ══ 학습관리: 영상 기록 ══
+async function loadLearning(){
+  if(!SB){ return; }
+  const { data, error }=await SB.from('reports').select('*').eq('media_type','video').order('created_at',{ascending:false}).limit(80);
+  const box=$('#learnVid'); if(!box) return;
+  if(error){ box.innerHTML='<span style="color:var(--sub)">reports 테이블 없음</span>'; return; }
+  const d=data||[];
+  if(!d.length){ box.innerHTML='<span style="color:var(--sub)">아직 올라온 영상이 없습니다.</span>'; return; }
+  box.innerHTML='<div class="tblwrap"><table class="grid" style="min-width:660px"><thead><tr><th>날짜</th><th>반</th><th>대상</th><th>상태</th><th>멘트</th><th>영상</th><th>선생님</th></tr></thead><tbody>'+
+    d.map(r=>`<tr><td>${(r.created_at||'').slice(0,10)}</td><td>${esc(r.program||'')}</td><td style="font-weight:700">${esc(r.name_kor||'반 전체')}</td><td>${r.status==='발송'?'<b style="color:var(--green-d)">게시됨</b>':'<b style="color:#b8860b">임시</b>'}</td><td>${esc(r.comment||'')}</td><td>${(r.files||[]).map(u=>`<a href="${u}" target="_blank">▶</a>`).join(' ')}</td><td style="font-size:11px;color:var(--sub)">${esc((r.teacher||'').split('@')[0])}</td></tr>`).join('')+'</tbody></table></div>';
+}
+window.loadLearning=loadLearning;
+
 // ══ 교재관리 ══
 let BOOKS=[], IO=[], DIST=[];
 function bkTab(t){
@@ -1153,7 +1170,7 @@ else { (async()=>{
       .on('postgres_changes',{event:'UPDATE',schema:'public',table:'book_orders'},()=>loadOrders())
       .on('postgres_changes',{event:'DELETE',schema:'public',table:'book_orders'},()=>loadOrders())
       .on('postgres_changes',{event:'*',schema:'public',table:'session_records'},()=>loadAlerts())
-      .on('postgres_changes',{event:'*',schema:'public',table:'reports'},()=>loadReportReq())
+      .on('postgres_changes',{event:'*',schema:'public',table:'reports'},()=>{ loadReportReq(); loadLearning(); })
       .on('postgres_changes',{event:'*',schema:'public',table:'timetable'},()=>{ if(ovLoaded) loadOverview(); })
       .subscribe();
     const dq=$('#dirq'); if(dq) dq.addEventListener('keydown',e=>{ if(e.key==='Enter') loadDir(); }); }

@@ -208,7 +208,6 @@
           <th style="text-align:left" data-t="cStudent"></th><th data-t="cAtt"></th>
           <th><span data-t="cHw"></span><label class="allck"><input type="checkbox" onchange="toggleCol('hw',this.checked)"><span data-t="allLbl"></span></label></th>
           <th data-t="cScore"></th><th data-t="cAttitude"></th><th data-t="cNote"></th>
-          <th><span data-t="cPub"></span><label class="allck"><input type="checkbox" onchange="toggleCol('pub',this.checked)"><span data-t="allLbl"></span></label></th>
         </tr></thead>
         <tbody id="rows"></tbody>
       </table></div>
@@ -283,7 +282,7 @@ const STR = {
     toolElaverse:'Zoom & Keystone',toolElaverseSub:'엘리아영어 · EQ Talk · Group Talk',toolPathways:'Pathways (3rd Edition)',toolPathwaysSub:'티칭툴 (NGL)',
     indEntry:'📝 성적·출결 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
     test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항 기본 — 단어시험 6 · 월말평가 25 (필요시 칸에서 조정)',
-    gridHelp:'📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요. · 🎬 영상은 맨 아래 “영상 올려 보내기”에서 학생 골라 보냅니다.',
+    gridHelp:'📝 메모: 🔒비공개(선생님·원장만). · 저장·게시하면 반 전체 학생·학부모 페이지에 반영돼요. · 🎬 영상은 맨 아래 “영상 올려 보내기”에서 학생 골라 보냅니다.',
     clsMemo:'📋 오늘 반 전체 메모 (학생·학부모 공개)',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 발행하면 반 학생·학부모 페이지에 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
     teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',bookOrder:'📦 원서교재주문 ↗',howTo:'❔ 사용법',howToTitle:'사용법 · 선생님 페이지',reportTitle:'📊 매 수업 입력 → 월말 리포트',reportDesc:'매 수업 입력하는 값(출결·숙제·점수·태도·메모)이 학생별 월말 리포트로 이렇게 만들어집니다. (아래는 샘플)',capA:'1. 성적 요약',capAd:'출결·숙제·참여·시험평균 + 선생님 코멘트.',capB:'2. 주간·일일 기록',capBd:'입력한 모든 수업이 자동 집계 — 주간 요약 + 일일 수업 로그.',capC:'3. IB 리포트 (IB반)',capCd:'역량 레이더 · IB 성취기준 · 루브릭 — IB 프로그램 반용.',vidHowTitle:'🎬 영상 올려 보내기',vidHowDesc:'페이지 맨 아래 “영상 올려 보내기”에서 영상 1개 올리고 받을 학생을 골라요.',vidHow1:'1명 선택 → 개별 영상 (그 학생 학부모만).',vidHow2:'여러 명 선택 → 그룹 영상 (고른 학생들 학부모만).',vidHow3:'전체 선택 → 반 전체 영상.',vidHow4:'같은 영상은 한 번만 올리면 됨 · 파일당 50MB 이하 (긴 영상은 먼저 압축).',vidPanelTitle:'🎬 영상 올려 보내기',vidPanelDesc:'영상 1개 올리고 받을 학생을 고르세요. 1명=개별 · 여러 명=그룹 · 전체 선택=반 전체. 아래 임시 저장=검토용(학부모 안 보임), 저장·게시=학부모 노출. (파일당 50MB 이하)',vidAll:'전체 선택',vidCommentPh:'멘트 (학부모께 안내) — 선택',vidSend:'📤 영상 보내기',
     cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',allLbl:'전체',
@@ -302,7 +301,7 @@ const STR = {
     toolElaverse:'Zoom & Keystone',toolElaverseSub:'Elia English · EQ Talk · Group Talk',toolPathways:'Pathways (3rd Edition)',toolPathwaysSub:'Teaching tools (NGL)',
     indEntry:'📝 Scores & Attendance',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
     test:'Test',newTest:'＋ New test',testHint:'Default total — Vocab 6 · Monthly 25 (adjust per cell)',
-    gridHelp:'📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents. · 🎬 Videos: use “Upload & send video” at the bottom and pick who gets it.',
+    gridHelp:'📝 Note: 🔒 private (teachers & director only). · Save & publish pushes the whole class to student/parent pages. · 🎬 Videos: use “Upload & send video” at the bottom and pick who gets it.',
     clsMemo:'📋 Today · class note (shared)',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When published, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
     teaLog:'🗒️ Teacher log · work report (private)',teaLogDesc:'Private to you — class reflections, handoffs, work report. Not shown to students or parents. Change the date to see past logs.',teaLogPh:'e.g. Class 3 finished Unit 5 · Jihoon needs parent call · low textbook stock — report to director',bookOrder:'📦 Book Order ↗',howTo:'❔ How to use',howToTitle:'How to use · Teacher Page',reportTitle:'📊 Your daily inputs → the Monthly Report',reportDesc:'Everything you enter each class (attendance · homework · score · attitude · notes) is compiled into each student\'s monthly report — like these samples.',capA:'1. Performance summary',capAd:'Attendance · homework · participation · test average + teacher comment.',capB:'2. Weekly & daily log',capBd:'Auto-built from every class you recorded — weekly summary + daily class log.',capC:'3. IB report (IB classes)',capCd:'Competency radar · IB standards · rubric — for IB program classes.',vidHowTitle:'🎬 Upload & send video',vidHowDesc:'At the bottom of the page, use “Upload & send video”: upload one video and pick who gets it.',vidHow1:'Pick 1 student → individual video (only that parent).',vidHow2:'Pick several → group video (only those parents).',vidHow3:'Select all → whole-class video.',vidHow4:'Upload the same video just once · keep each file under 50MB.',vidPanelTitle:'🎬 Upload & send video',vidPanelDesc:'Upload one video, then pick who gets it. 1 = individual · several = group · select all = whole class. Only the chosen students\' parents see it. (Under 50MB each)',vidAll:'Select all',vidCommentPh:'Comment for parents — optional',vidSend:'📤 Send video',
     cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',allLbl:'All',
@@ -381,7 +380,6 @@ function renderRows(cls){
       <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="${MX}"></span></td>
       <td><select class="tae">${s.tae.map(a=>`<option>${a}</option>`).join('')}</select></td>
       <td><button class="iconbtn notebtn" onclick="openCell(this,'note')">📝</button></td>
-      <td><input type="checkbox" class="chk pub" checked></td>
     </tr>`).join('');
   dbLoadRecords();   // DB 값 있으면 덮어씀
   vpRefresh(); vpLoad();   // 영상 보내기 패널 학생목록·보낸목록 갱신
@@ -434,7 +432,7 @@ async function vpLoad(){
 function collect(){ return [...document.querySelectorAll('#rows tr')].map(tr=>({
   att:ATTV[tr.querySelector('.att').value], homework:tr.querySelector('.hw').checked,
   score:tr.querySelector('.sc').value||null, max:tr.querySelector('.mx').value||null,
-  attitude:tr.querySelector('.tae').selectedIndex, isPublic:tr.querySelector('.pub').checked })); }
+  attitude:tr.querySelector('.tae').selectedIndex, isPublic:true })); }
 async function save(publish){
   const n=document.querySelectorAll('#rows tr').length;
   if(SB && USER){ const err=await dbSaveRecords(publish);
@@ -473,7 +471,7 @@ async function dbSaveRecords(publish){
     note:tr.dataset.note||null, note_type:tr.dataset.notetype||'general',
     note_public:tr.dataset.notepub==='1',
     video_url:tr.dataset.vid||null, video_public:!!tr.dataset.vid && tr.dataset.vidpub!=='0',
-    published: publish ? tr.querySelector('.pub').checked : false,
+    published: publish,
     updated_at:new Date().toISOString()
   }));
   const { error } = await SB.from('class_records').upsert(rows,{onConflict:'teacher,class_name,date,eval,student_code'});
@@ -492,7 +490,6 @@ async function dbLoadRecords(){
     if(r.score!=null) tr.querySelector('.sc').value=r.score;
     if(r.max!=null)   tr.querySelector('.mx').value=r.max;
     if(r.attitude!=null) tr.querySelector('.tae').selectedIndex=r.attitude;
-    tr.querySelector('.pub').checked=!!r.published;
     if(r.note){ tr.dataset.note=r.note; tr.dataset.notetype=r.note_type||'general'; tr.dataset.notepub=r.note_public?'1':'0';
       const nb=tr.querySelector('.notebtn'); nb.textContent={general:'📝•',repeat:'⚠️•',sensitive:'🔒•'}[tr.dataset.notetype]||'📝•'; nb.classList.add('filled'); }
   });
