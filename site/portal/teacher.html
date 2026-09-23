@@ -216,16 +216,8 @@
 
     <div class="desc" data-t="gridHelp" style="margin-top:12px;font-size:12.5px;line-height:1.7"></div>
 
-    <div class="saverow">
-      <div class="note" data-t="saveNote"></div>
-      <div class="btnsave">
-        <button class="btn2 ghost" onclick="save(false)" data-t="saveDraft"></button>
-        <button class="btn2 pri" onclick="save(true)" data-t="savePublish"></button>
-      </div>
-    </div>
-
-    <div class="eyebrow" style="margin-top:24px" data-t="vidPanelTitle"></div>
-    <div class="panel" id="vidPanel">
+    <div class="panel" id="saveCard" style="margin-top:16px">
+      <div class="eyebrow" style="margin:0 0 8px" data-t="vidPanelTitle"></div>
       <div style="font-size:13px;color:var(--sub);margin-bottom:10px" data-t="vidPanelDesc"></div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
         <input id="vpFile" type="file" accept="video/*" style="font-size:13px">
@@ -233,11 +225,14 @@
       </div>
       <div id="vpPick" style="display:flex;flex-wrap:wrap;gap:8px 16px;margin:12px 0;font-size:14px"></div>
       <textarea id="vpComment" rows="2" data-t-ph="vidCommentPh" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:14px;resize:vertical;font-family:inherit"></textarea>
-      <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
-        <button class="btn2 pri" id="vpSend" onclick="vpSend()" data-t="vidSend"></button>
-        <span id="vpStatus" style="font-size:13px;color:var(--sub)"></span>
+      <div id="vpList" style="font-size:13px;margin-top:10px"></div>
+      <div class="saverow" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px;align-items:center">
+        <span id="vpStatus" class="note" style="flex:1;color:var(--sub)"></span>
+        <div class="btnsave">
+          <button class="btn2 ghost" onclick="save(false)" data-t="saveDraft"></button>
+          <button class="btn2 pri" onclick="save(true)" data-t="savePublish"></button>
+        </div>
       </div>
-      <div id="vpList" style="font-size:13px;margin-top:12px"></div>
     </div>
     <div style="height:30px"></div>
   </div>
@@ -288,9 +283,9 @@ const STR = {
     toolElaverse:'Zoom & Keystone',toolElaverseSub:'엘리아영어 · EQ Talk · Group Talk',toolPathways:'Pathways (3rd Edition)',toolPathwaysSub:'티칭툴 (NGL)',
     indEntry:'📝 성적·출결 입력',indDesc:'학생 한 명씩 페이지를 열지 않고, 구글시트처럼 반 전체를 한 화면에서 체크·입력합니다. 점수는 맞은 개수 / 총 문항(예: 18/20).',
     test:'평가 회차',newTest:'＋ 새 평가 만들기',testHint:'총 문항 기본 — 단어시험 6 · 월말평가 25 (필요시 칸에서 조정)',
-    gridHelp:'🎬 영상: 학생별 수업 영상 링크·업로드 → 공개 ON이면 학생·학부모 페이지에 표시돼요. · 📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요.',
+    gridHelp:'📝 메모: 🔒비공개(선생님·원장만) · 공개 OFF면 그 학생 기록은 학부모에게 숨겨져요. · 🎬 영상은 맨 아래 “영상 올려 보내기”에서 학생 골라 보냅니다.',
     clsMemo:'📋 오늘 반 전체 메모 (학생·학부모 공개)',clsMemoDesc:'이 반 모두에게 해당되는 내용 — 오늘 배운 것·숙제·공지. 발행하면 반 학생·학부모 페이지에 보여요.',clsMemoPh:'예) 오늘 Unit 5 단어 학습, 숙제 워크북 p.12 / 금요일 단어시험',
-    teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',bookOrder:'📦 원서교재주문 ↗',howTo:'❔ 사용법',howToTitle:'사용법 · 선생님 페이지',reportTitle:'📊 매 수업 입력 → 월말 리포트',reportDesc:'매 수업 입력하는 값(출결·숙제·점수·태도·메모)이 학생별 월말 리포트로 이렇게 만들어집니다. (아래는 샘플)',capA:'1. 성적 요약',capAd:'출결·숙제·참여·시험평균 + 선생님 코멘트.',capB:'2. 주간·일일 기록',capBd:'입력한 모든 수업이 자동 집계 — 주간 요약 + 일일 수업 로그.',capC:'3. IB 리포트 (IB반)',capCd:'역량 레이더 · IB 성취기준 · 루브릭 — IB 프로그램 반용.',vidHowTitle:'🎬 영상 올려 보내기',vidHowDesc:'페이지 맨 아래 “영상 올려 보내기”에서 영상 1개 올리고 받을 학생을 골라요.',vidHow1:'1명 선택 → 개별 영상 (그 학생 학부모만).',vidHow2:'여러 명 선택 → 그룹 영상 (고른 학생들 학부모만).',vidHow3:'전체 선택 → 반 전체 영상.',vidHow4:'같은 영상은 한 번만 올리면 됨 · 파일당 50MB 이하 (긴 영상은 먼저 압축).',vidPanelTitle:'🎬 영상 올려 보내기',vidPanelDesc:'영상 1개 올리고 받을 학생을 고르세요. 1명=개별 · 여러 명=그룹 · 전체 선택=반 전체. 고른 학생의 학부모만 봐요. (파일당 50MB 이하)',vidAll:'전체 선택',vidCommentPh:'멘트 (학부모께 안내) — 선택',vidSend:'📤 영상 보내기',
+    teaLog:'🗒️ 강사 일지 · 업무보고 (비공개)',teaLogDesc:'나만 보는 기록 — 오늘 수업 소감·전달사항·업무보고. 학생·학부모에겐 안 보여요. 날짜 바꾸면 지난 일지가 떠요.',teaLogPh:'예) 3반 Unit5 완료 · 지훈이 학부모 상담 필요 · 교재 재고 부족 원장님 보고',bookOrder:'📦 원서교재주문 ↗',howTo:'❔ 사용법',howToTitle:'사용법 · 선생님 페이지',reportTitle:'📊 매 수업 입력 → 월말 리포트',reportDesc:'매 수업 입력하는 값(출결·숙제·점수·태도·메모)이 학생별 월말 리포트로 이렇게 만들어집니다. (아래는 샘플)',capA:'1. 성적 요약',capAd:'출결·숙제·참여·시험평균 + 선생님 코멘트.',capB:'2. 주간·일일 기록',capBd:'입력한 모든 수업이 자동 집계 — 주간 요약 + 일일 수업 로그.',capC:'3. IB 리포트 (IB반)',capCd:'역량 레이더 · IB 성취기준 · 루브릭 — IB 프로그램 반용.',vidHowTitle:'🎬 영상 올려 보내기',vidHowDesc:'페이지 맨 아래 “영상 올려 보내기”에서 영상 1개 올리고 받을 학생을 골라요.',vidHow1:'1명 선택 → 개별 영상 (그 학생 학부모만).',vidHow2:'여러 명 선택 → 그룹 영상 (고른 학생들 학부모만).',vidHow3:'전체 선택 → 반 전체 영상.',vidHow4:'같은 영상은 한 번만 올리면 됨 · 파일당 50MB 이하 (긴 영상은 먼저 압축).',vidPanelTitle:'🎬 영상 올려 보내기',vidPanelDesc:'영상 1개 올리고 받을 학생을 고르세요. 1명=개별 · 여러 명=그룹 · 전체 선택=반 전체. 아래 임시 저장=검토용(학부모 안 보임), 저장·게시=학부모 노출. (파일당 50MB 이하)',vidAll:'전체 선택',vidCommentPh:'멘트 (학부모께 안내) — 선택',vidSend:'📤 영상 보내기',
     cStudent:'학생',cAtt:'출결',cHw:'숙제',cScore:'점수 (맞은/총)',cAttitude:'학습 태도',cVideo:'영상',cNote:'개별메모🔒',cPub:'공개',allLbl:'전체',
     saveNote:'✅ 체크·입력 후 저장하면 공개 ON인 학생만 학생·학부모 페이지에 반영됩니다.',saveDraft:'임시 저장',savePublish:'반 전체 저장·게시',
     att:['출석','지각','결석','사유결석'],tae:['우수','양호','노력요망'],
@@ -307,7 +302,7 @@ const STR = {
     toolElaverse:'Zoom & Keystone',toolElaverseSub:'Elia English · EQ Talk · Group Talk',toolPathways:'Pathways (3rd Edition)',toolPathwaysSub:'Teaching tools (NGL)',
     indEntry:'📝 Scores & Attendance',indDesc:'No need to open each student one by one — check and enter for the whole class on one screen, like Google Sheets. Scores are correct / total (e.g., 18/20).',
     test:'Test',newTest:'＋ New test',testHint:'Default total — Vocab 6 · Monthly 25 (adjust per cell)',
-    gridHelp:'🎬 Video: attach/upload each student\'s clip — shows on student & parent pages when Publish is ON. · 📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents.',
+    gridHelp:'📝 Note: 🔒 private (teachers & director only). Turn Publish OFF to hide that student\'s record from parents. · 🎬 Videos: use “Upload & send video” at the bottom and pick who gets it.',
     clsMemo:'📋 Today · class note (shared)',clsMemoDesc:'For the whole class — what you covered today, homework, notices. When published, it shows on every student & parent page in this class.',clsMemoPh:'e.g. Today: Unit 5 vocabulary · HW: workbook p.12 · Vocab test on Friday',
     teaLog:'🗒️ Teacher log · work report (private)',teaLogDesc:'Private to you — class reflections, handoffs, work report. Not shown to students or parents. Change the date to see past logs.',teaLogPh:'e.g. Class 3 finished Unit 5 · Jihoon needs parent call · low textbook stock — report to director',bookOrder:'📦 Book Order ↗',howTo:'❔ How to use',howToTitle:'How to use · Teacher Page',reportTitle:'📊 Your daily inputs → the Monthly Report',reportDesc:'Everything you enter each class (attendance · homework · score · attitude · notes) is compiled into each student\'s monthly report — like these samples.',capA:'1. Performance summary',capAd:'Attendance · homework · participation · test average + teacher comment.',capB:'2. Weekly & daily log',capBd:'Auto-built from every class you recorded — weekly summary + daily class log.',capC:'3. IB report (IB classes)',capCd:'Competency radar · IB standards · rubric — for IB program classes.',vidHowTitle:'🎬 Upload & send video',vidHowDesc:'At the bottom of the page, use “Upload & send video”: upload one video and pick who gets it.',vidHow1:'Pick 1 student → individual video (only that parent).',vidHow2:'Pick several → group video (only those parents).',vidHow3:'Select all → whole-class video.',vidHow4:'Upload the same video just once · keep each file under 50MB.',vidPanelTitle:'🎬 Upload & send video',vidPanelDesc:'Upload one video, then pick who gets it. 1 = individual · several = group · select all = whole class. Only the chosen students\' parents see it. (Under 50MB each)',vidAll:'Select all',vidCommentPh:'Comment for parents — optional',vidSend:'📤 Send video',
     cStudent:'Student',cAtt:'Attendance',cHw:'Homework',cScore:'Score (correct/total)',cAttitude:'Attitude',cVideo:'Video',cNote:'Note🔒',cPub:'Publish',allLbl:'All',
@@ -401,33 +396,40 @@ function vpRefresh(){
 }
 function vpToggleAll(on){ document.querySelectorAll('.vpck').forEach(c=>c.checked=on); }
 window.vpToggleAll=vpToggleAll;
-async function vpSend(){
-  if(!(SB&&USER)){ toast(L('로그인 후 이용','Log in first')); return; }
-  const f=$('#vpFile').files[0]; if(!f){ $('#vpStatus').textContent=L('영상 파일을 선택하세요','Pick a video file'); return; }
-  const picked=[...document.querySelectorAll('.vpck:checked')].map(c=>c.value);
-  const total=document.querySelectorAll('.vpck').length;
-  if(!picked.length){ $('#vpStatus').textContent=L('받을 학생을 선택하세요','Pick who gets it'); return; }
-  $('#vpSend').disabled=true; $('#vpStatus').textContent=L('업로드 중… (영상은 시간이 걸려요)','Uploading… (videos take a moment)');
-  const path=`video/${Date.now()}_${f.name.replace(/[^\w.]/g,'_')}`;
-  const up=await SB.storage.from('reports').upload(path,f,{upsert:false});
-  if(up.error){ $('#vpStatus').textContent=L('업로드 실패: ','Upload failed: ')+up.error.message; $('#vpSend').disabled=false; return; }
-  const url=SB.storage.from('reports').getPublicUrl(path).data.publicUrl;
-  const base={program:$('#classSel').value,report_type:'영상',media_type:'video',files:[url],comment:$('#vpComment').value||null,status:'발송',teacher:TEACHER,created_by:USER.id};
-  const rows = picked.length===total ? [{...base,name_kor:null}] : picked.map(n=>({...base,name_kor:n}));
-  const { error }=await SB.from('reports').insert(rows);
-  $('#vpSend').disabled=false;
-  if(error){ $('#vpStatus').textContent=L('전송 실패: ','Send failed: ')+error.message; return; }
-  $('#vpFile').value=''; $('#vpComment').value=''; vpToggleAll(false);
-  const who = picked.length===total ? L('반 전체','the whole class') : picked.length+L('명','');
-  $('#vpStatus').innerHTML=`<span style="color:var(--green-d,#5ea52c);font-weight:800">✅ ${who} ${L('전송 완료','sent')}</span>`;
+// 저장 버튼이 호출: 임시저장=대기(학부모 안보임), 게시=발송(학부모 노출)+기존 대기 게시
+async function vpProcess(publish){
+  if(!(SB&&USER)) return true;
+  const cls=$('#classSel').value;
+  if(publish){   // 이전에 임시저장(대기)해둔 이 반 영상 게시
+    await SB.from('reports').update({status:'발송'}).eq('media_type','video').eq('teacher',TEACHER).eq('program',cls).eq('status','대기');
+  }
+  const f=$('#vpFile').files[0];
+  if(f){
+    const picked=[...document.querySelectorAll('.vpck:checked')].map(c=>c.value);
+    const total=document.querySelectorAll('.vpck').length;
+    if(!picked.length){ $('#vpStatus').textContent=L('영상 받을 학생을 선택하세요','Pick who gets the video'); return false; }
+    $('#vpStatus').textContent=L('영상 업로드 중…','Uploading video…');
+    const path=`video/${Date.now()}_${f.name.replace(/[^\w.]/g,'_')}`;
+    const up=await SB.storage.from('reports').upload(path,f,{upsert:false});
+    if(up.error){ $('#vpStatus').textContent=L('영상 업로드 실패: ','Video upload failed: ')+up.error.message; return false; }
+    const url=SB.storage.from('reports').getPublicUrl(path).data.publicUrl;
+    const base={program:cls,report_type:'영상',media_type:'video',files:[url],comment:$('#vpComment').value||null,status:publish?'발송':'대기',teacher:TEACHER,created_by:USER.id};
+    const rows = picked.length===total ? [{...base,name_kor:null}] : picked.map(n=>({...base,name_kor:n}));
+    const { error }=await SB.from('reports').insert(rows);
+    if(error){ $('#vpStatus').textContent=L('영상 저장 실패: ','Video save failed: ')+error.message; return false; }
+    $('#vpFile').value=''; $('#vpComment').value=''; vpToggleAll(false);
+    const who = picked.length===total ? L('반 전체','whole class') : picked.length+L('명','');
+    $('#vpStatus').innerHTML=`<span style="color:var(--green-d,#5ea52c);font-weight:800">✅ ${who} ${publish?L('영상 게시','video published'):L('영상 임시저장','video draft saved')} · ${L('다음 영상 이어서 올려도 됨','add another below')}</span>`;
+  }
   vpLoad();
+  return true;
 }
-window.vpSend=vpSend;
 async function vpLoad(){
   if(!(SB&&USER)) return;
-  const { data }=await SB.from('reports').select('name_kor,comment,created_at,files').eq('media_type','video').eq('teacher',TEACHER).order('created_at',{ascending:false}).limit(12);
+  const { data }=await SB.from('reports').select('name_kor,comment,created_at,files,status').eq('media_type','video').eq('teacher',TEACHER).order('created_at',{ascending:false}).limit(12);
   const d=data||[]; const box=$('#vpList'); if(!box) return;
-  box.innerHTML=d.length?('<b style="font-size:12.5px;color:var(--sub)">'+L('보낸 영상','Sent videos')+'</b>'+d.map(r=>`<div style="border-top:1px solid var(--line);padding:6px 0;display:flex;gap:10px;align-items:center;font-size:12.5px"><span style="color:var(--sub)">${(r.created_at||'').slice(5,10)}</span><b style="min-width:64px">${r.name_kor||L('반 전체','Whole class')}</b><span style="color:var(--sub);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.comment||''}</span>${(r.files||[]).map(u=>`<a href="${u}" target="_blank">▶</a>`).join('')}</div>`).join('')):'';
+  const tag=s=>s==='발송'?`<span style="color:var(--green-d,#5ea52c);font-weight:800">${L('게시됨','Published')}</span>`:`<span style="color:#b8860b;font-weight:800">${L('임시(검토대기)','Draft')}</span>`;
+  box.innerHTML=d.length?('<b style="font-size:12.5px;color:var(--sub)">'+L('올린 영상','Videos')+'</b>'+d.map(r=>`<div style="border-top:1px solid var(--line);padding:6px 0;display:flex;gap:10px;align-items:center;font-size:12.5px"><span style="color:var(--sub)">${(r.created_at||'').slice(5,10)}</span><b style="min-width:64px">${r.name_kor||L('반 전체','Whole class')}</b>${tag(r.status)}<span style="color:var(--sub);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.comment||''}</span>${(r.files||[]).map(u=>`<a href="${u}" target="_blank">▶</a>`).join('')}</div>`).join('')):'';
 }
 function collect(){ return [...document.querySelectorAll('#rows tr')].map(tr=>({
   att:ATTV[tr.querySelector('.att').value], homework:tr.querySelector('.hw').checked,
@@ -436,7 +438,8 @@ function collect(){ return [...document.querySelectorAll('#rows tr')].map(tr=>({
 async function save(publish){
   const n=document.querySelectorAll('#rows tr').length;
   if(SB && USER){ const err=await dbSaveRecords(publish);
-    if(err){ toast((LANG==='ko'?'저장 실패: ':'Save failed: ')+err.message); return; } }
+    if(err){ toast((LANG==='ko'?'저장 실패: ':'Save failed: ')+err.message); return; }
+    const ok=await vpProcess(publish); if(!ok) return; }
   toast(publish ? STR[LANG].savedPub(n) : STR[LANG].savedDraft);
 }
 window.save = save;
