@@ -143,6 +143,20 @@
 
   <section class="band">
     <div class="wrap">
+      <div class="head"><div class="eyebrow" style="color:var(--brand)">Records</div><h2>수업 기록</h2><div class="cap">출결 · 숙제 · 진도</div></div>
+      <div id="recBox" class="hwbox"><div class="hw empty">불러오는 중…</div></div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="head"><div class="eyebrow">Video</div><h2>선생님 영상</h2></div>
+      <div id="vidBox" class="hwbox"><div class="hw empty">불러오는 중…</div></div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
       <div class="head"><div class="eyebrow">Learning Apps</div><h2>클라이 학습 앱</h2><div class="cap">눌러서 바로 학습</div></div>
       <div class="apps">
         <a class="app" href="../phonics/index.html"><div class="ic">🎧</div><div><h3>파닉스 유창성</h3><p>소리 내어 읽기 훈련</p></div></a>
@@ -205,6 +219,8 @@ if(!SUPABASE_URL || !SUPABASE_ANON){
       loadHomework(code);
       loadSchedule(name);
       loadMakeup(name);
+      loadRecords(name, code);
+      loadVideos(code);
 
       // 본문 암기 — 포털 로그인 증표를 넘겨 반코드·이름 선택 없이 바로 들어간다.
       // teacher-hub.html 의 memoCard 처리와 같은 방식. 증표가 없으면(세션 만료 등)
@@ -220,6 +236,29 @@ if(!SUPABASE_URL || !SUPABASE_ANON){
   }
   const DAYLBL={mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'};
   const DAYORD=['mon','tue','wed','thu','fri','sat','sun'];
+  const escX = t => String(t==null?'':t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  async function loadRecords(name, code){
+    const box=$('#recBox'); if(!box) return;
+    const [sr, cr] = await Promise.all([
+      sb.from('session_records').select('program,date,attend,homework,book,progress').eq('name_kor',name).order('date',{ascending:false}).limit(20),
+      sb.from('class_records').select('class_name,date,attendance,homework,score,max').eq('student_code',code).eq('published',true).order('date',{ascending:false}).limit(20)
+    ]);
+    const A={present:'출석',late:'지각',absent:'결석',excused:'인정결석'}, H={done:'완료','not done':'미완료',not_done:'미완료'};
+    let rows=[];
+    (sr.data||[]).forEach(r=>rows.push({date:r.date,cls:r.program,att:A[r.attend]||r.attend||'',hw:H[r.homework]||(r.homework||''),extra:[r.book,r.progress].filter(Boolean).join(' ')}));
+    (cr.data||[]).forEach(r=>rows.push({date:r.date,cls:r.class_name,att:A[r.attendance]||r.attendance||'',hw:(r.homework?'완료':''),extra:(r.score!=null&&r.max)?`${r.score}/${r.max}`:''}));
+    rows.sort((a,b)=>a.date<b.date?1:-1); rows=rows.slice(0,12);
+    if(!rows.length){ box.innerHTML='<div class="hw empty">아직 수업 기록이 없어요.</div>'; return; }
+    box.innerHTML=rows.map(r=>`<div class="hw"><b>${escX(r.cls)}</b> <span style="color:#8a93a3;font-size:13px">${(r.date||'').slice(5,10)}</span><br>${[r.att&&('출결 '+r.att),r.hw&&('숙제 '+r.hw),r.extra].filter(Boolean).map(escX).join(' · ')}</div>`).join('');
+  }
+  async function loadVideos(code){
+    const box=$('#vidBox'); if(!box) return;
+    const lid=String(code).toLowerCase();
+    const { data } = await sb.from('reports').select('files,comment,created_at').eq('media_type','video').eq('status','발송').eq('student_login',lid).order('created_at',{ascending:false}).limit(6);
+    const rows=data||[];
+    if(!rows.length){ box.innerHTML='<div class="hw empty">아직 등록된 영상이 없어요.</div>'; return; }
+    box.innerHTML=rows.map(r=>`<div class="hw"><span style="color:#8a93a3;font-size:13px">${(r.created_at||'').slice(0,10)}</span>${r.comment?' · '+escX(r.comment):''}<br>${(r.files||[]).map(u=>`<a href="${u}" target="_blank" rel="noopener">▶ 영상 보기</a>`).join(' ')}</div>`).join('');
+  }
   async function loadSchedule(name){
     const box=$('#ttBox'); if(!box) return;
     if(!name){ box.innerHTML='<div class="ttmsg">이름 확인 후 표시돼요.</div>'; return; }
