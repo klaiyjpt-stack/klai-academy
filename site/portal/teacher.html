@@ -373,8 +373,8 @@ function renderRows(cls){
   const MX = EVALMAX[$('#evalSel').selectedIndex] ?? '';
   $('#clsPill').textContent = `${cls} · ${list.length}${LANG==='ko'?'명':' '+s.students}`;
   $('#rows').innerHTML = list.map(st=>`
-    <tr data-code="${st.en}${st.code}" data-name="${st.ko}">
-      <td class="name">${LANG==='ko'?st.ko:st.en} <span style="color:var(--sub);font-weight:500;font-size:12px">${st.en}${st.code}</span><small>${LANG==='ko'?st.en:st.ko}</small></td>
+    <tr data-code="${st.en}${st.code}" data-name="${st.ko}" data-login="${(st.en+st.code).toLowerCase()}" data-label="${st.ko} ${st.en}${st.code}">
+      <td class="name">${st.ko} <span style="color:var(--sub);font-weight:500;font-size:12px">${st.en}${st.code}</span></td>
       <td><select class="att">${s.att.map(a=>`<option>${a}</option>`).join('')}</select></td>
       <td><input type="checkbox" class="chk hw"></td>
       <td><span class="scorebox"><input class="sc" type="number" min="0" placeholder="-"> / <input class="mx" type="number" min="1" value="${MX}"></span></td>
@@ -389,7 +389,7 @@ function L(k,e){ return LANG==='ko'?k:e; }
 function vpRefresh(){
   const rows=[...document.querySelectorAll('#rows tr')];
   const box=$('#vpPick'); if(!box) return;
-  box.innerHTML=rows.map(tr=>`<label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="checkbox" class="vpck" value="${tr.dataset.name}">${tr.dataset.name}</label>`).join('');
+  box.innerHTML=rows.map(tr=>`<label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="checkbox" class="vpck" value="${tr.dataset.login}" data-nm="${tr.dataset.name}">${tr.dataset.label}</label>`).join('');
   const all=$('#vpAll'); if(all) all.checked=false;
 }
 function vpToggleAll(on){ document.querySelectorAll('.vpck').forEach(c=>c.checked=on); }
@@ -403,20 +403,20 @@ async function vpProcess(publish){
   }
   const f=$('#vpFile').files[0];
   if(f){
-    const picked=[...document.querySelectorAll('.vpck:checked')].map(c=>c.value);
+    const picks=[...document.querySelectorAll('.vpck:checked')].map(c=>({login:c.value,nm:c.dataset.nm}));
     const total=document.querySelectorAll('.vpck').length;
-    if(!picked.length){ $('#vpStatus').textContent=L('영상 받을 학생을 선택하세요','Pick who gets the video'); return false; }
+    if(!picks.length){ $('#vpStatus').textContent=L('영상 받을 학생을 선택하세요','Pick who gets the video'); return false; }
     $('#vpStatus').textContent=L('영상 업로드 중…','Uploading video…');
     const path=`video/${Date.now()}_${f.name.replace(/[^\w.]/g,'_')}`;
     const up=await SB.storage.from('reports').upload(path,f,{upsert:false});
     if(up.error){ $('#vpStatus').textContent=L('영상 업로드 실패: ','Video upload failed: ')+up.error.message; return false; }
     const url=SB.storage.from('reports').getPublicUrl(path).data.publicUrl;
     const base={program:cls,report_type:'영상',media_type:'video',files:[url],comment:$('#vpComment').value||null,status:publish?'발송':'대기',teacher:TEACHER,created_by:USER.id};
-    const rows = picked.length===total ? [{...base,name_kor:null}] : picked.map(n=>({...base,name_kor:n}));
+    const rows = picks.map(p=>({...base,name_kor:p.nm,student_login:p.login}));  // 반전체=그 반 학생 전원 각각(반 스코프 유지)
     const { error }=await SB.from('reports').insert(rows);
     if(error){ $('#vpStatus').textContent=L('영상 저장 실패: ','Video save failed: ')+error.message; return false; }
     $('#vpFile').value=''; $('#vpComment').value=''; vpToggleAll(false);
-    const who = picked.length===total ? L('반 전체','whole class') : picked.length+L('명','');
+    const who = picks.length===total ? L('반 전체','whole class') : picks.length+L('명','');
     $('#vpStatus').innerHTML=`<span style="color:var(--green-d,#5ea52c);font-weight:800">✅ ${who} ${publish?L('영상 게시','video published'):L('영상 임시저장','video draft saved')} · ${L('다음 영상 이어서 올려도 됨','add another below')}</span>`;
   }
   vpLoad();
