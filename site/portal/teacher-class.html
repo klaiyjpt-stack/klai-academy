@@ -161,8 +161,9 @@
     <div id="vidSec" style="display:none">
     <div class="eyebrow" data-en="🎬 English Library Video (monthly)">🎬 영어도서관 영상 (월 1회)</div>
     <div class="panel">
-      <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">영상 올리고 멘트 적으면 → 학부모께 전달(예정). 월 1회.</div>
+      <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">영상 올리고 멘트 적으면 → 학부모께 전달(예정). <b>학생 이름 비우면 반 전체</b>, 이름 넣으면 그 학생 학부모만 봄.</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start">
+        <input id="vidName" list="dlStu" placeholder="학생 (비우면 반 전체)" data-en-ph="Student (blank = whole class)" style="padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-size:14px">
         <input id="vidFile" type="file" accept="video/*" style="font-size:12px;margin-top:8px">
         <button class="save" id="vidAdd" style="padding:10px 18px" data-en="📤 Upload Video">📤 영상 올리기</button>
       </div>
@@ -459,9 +460,9 @@ async function vidAdd(){
   const up=await SB.storage.from('reports').upload(path,f,{upsert:false});
   if(up.error){ $('#vidStatus').textContent='업로드 실패: '+up.error.message; return; }
   const url=SB.storage.from('reports').getPublicUrl(path).data.publicUrl;
-  const { error }=await SB.from('reports').insert({program:'영어도서관',report_type:'영상',media_type:'video',files:[url],comment:$('#vidComment').value||null,status:'대기',teacher:USER.email,created_by:USER.id});
+  const { error }=await SB.from('reports').insert({program:'영어도서관',report_type:'영상',media_type:'video',name_kor:$('#vidName').value.trim()||null,files:[url],comment:$('#vidComment').value||null,status:'대기',teacher:USER.email,created_by:USER.id});
   if(error){ $('#vidStatus').textContent='기록 실패: '+error.message; return; }
-  $('#vidFile').value='';$('#vidComment').value='';
+  $('#vidFile').value='';$('#vidComment').value='';$('#vidName').value='';
   $('#vidStatus').innerHTML='<span style="color:var(--green-d);font-weight:800">✅ 영상 올림 (학부모 전달 예정)</span>';
   toast('영상 업로드 완료'); loadVideos();
 }
@@ -469,8 +470,8 @@ async function loadVideos(){
   if(!(SB&&USER)) return;
   const { data }=await SB.from('reports').select('*').eq('media_type','video').order('created_at',{ascending:false}).limit(20);
   const d=data||[];
-  $('#vidList').innerHTML=d.length?('<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="background:var(--soft)"><th style="text-align:left;padding:6px">날짜</th><th style="text-align:left;padding:6px">멘트</th><th style="padding:6px">영상</th><th style="padding:6px">상태</th></tr>'+
-    d.map(r=>`<tr><td style="padding:6px;border-top:1px solid var(--line)">${(r.created_at||'').slice(0,10)}</td><td style="padding:6px;border-top:1px solid var(--line)">${r.comment||''}</td><td style="padding:6px;border-top:1px solid var(--line);text-align:center">${(r.files||[]).map(u=>`<a href="${u}" target="_blank">▶</a>`).join('')}</td><td style="padding:6px;border-top:1px solid var(--line);text-align:center">${r.status}</td></tr>`).join('')+'</table>'):'<span style="color:var(--sub)">올린 영상 없음</span>';
+  $('#vidList').innerHTML=d.length?('<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="background:var(--soft)"><th style="text-align:left;padding:6px">날짜</th><th style="text-align:left;padding:6px">대상</th><th style="text-align:left;padding:6px">멘트</th><th style="padding:6px">영상</th><th style="padding:6px">상태</th></tr>'+
+    d.map(r=>`<tr><td style="padding:6px;border-top:1px solid var(--line)">${(r.created_at||'').slice(0,10)}</td><td style="padding:6px;border-top:1px solid var(--line);font-weight:700">${r.name_kor||'반 전체'}</td><td style="padding:6px;border-top:1px solid var(--line)">${r.comment||''}</td><td style="padding:6px;border-top:1px solid var(--line);text-align:center">${(r.files||[]).map(u=>`<a href="${u}" target="_blank">▶</a>`).join('')}</td><td style="padding:6px;border-top:1px solid var(--line);text-align:center">${r.status}</td></tr>`).join('')+'</table>'):'<span style="color:var(--sub)">올린 영상 없음</span>';
 }
 async function rpAdd(){
   if(!(SB&&USER)){ toast('로그인 필요'); return; }

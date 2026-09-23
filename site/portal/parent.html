@@ -174,7 +174,7 @@ else {
     loadHomework(classes);
     loadSummary(code);
     loadReports(name);
-    loadVideos();
+    loadVideos(name);
   }
   async function loadHomework(classes){
     const box=$('#hwBox');
@@ -217,10 +217,12 @@ else {
       return `<div class="item"><div class="top"><span class="h">${esc(r.report_type||'리포트')}</span><span class="dt">${(r.created_at||'').slice(0,10)}</span></div>${r.comment?`<div class="txt">${esc(r.comment)}</div>`:''}<div class="thumbs">${files}</div></div>`;
     }).join('') : '<div class="mut">아직 발송된 리포트가 없어요.</div>';
   }
-  async function loadVideos(){
+  async function loadVideos(name){
     const box=$('#vidBox');
-    const { data } = await sb.from('reports').select('files,comment,created_at,media_type,status')
-      .eq('media_type','video').eq('status','발송').order('created_at',{ascending:false}).limit(6);
+    let q=sb.from('reports').select('files,comment,created_at,media_type,status,name_kor')
+      .eq('media_type','video').eq('status','발송');
+    if(name) q=q.or(`name_kor.is.null,name_kor.eq.${name}`); else q=q.is('name_kor',null);
+    const { data } = await q.order('created_at',{ascending:false}).limit(6);
     const rows=data||[];
     box.innerHTML = rows.length ? rows.map(r=>{
       const links=(r.files||[]).map(u=>`<a href="${u}" target="_blank" rel="noopener" class="link">▶ 영상 보기</a>`).join(' ');
