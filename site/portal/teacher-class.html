@@ -455,7 +455,7 @@ async function vidAdd(){
   if(!(SB&&USER)){ toast('로그인 필요'); return; }
   const f=$('#vidFile').files[0]; if(!f){ toast('영상 선택'); return; }
   $('#vidStatus').textContent='업로드 중… (영상은 시간이 걸려요)';
-  const path=`영어도서관/${Date.now()}_${f.name.replace(/[^\w.]/g,'_')}`;
+  const path=`video/${Date.now()}_${f.name.replace(/[^\w.]/g,'_')}`;
   const up=await SB.storage.from('reports').upload(path,f,{upsert:false});
   if(up.error){ $('#vidStatus').textContent='업로드 실패: '+up.error.message; return; }
   const url=SB.storage.from('reports').getPublicUrl(path).data.publicUrl;
@@ -479,7 +479,7 @@ async function rpAdd(){
   $('#rpStatus').textContent='업로드 중…';
   const urls=[];
   for(const f of files){
-    const path=`${PROGRAM}/${Date.now()}_${Math.round(Math.random()*1e6)}_${f.name.replace(/[^\w.]/g,'_')}`;
+    const path=`sheet/${Date.now()}_${Math.round(Math.random()*1e6)}_${f.name.replace(/[^\w.]/g,'_')}`;
     const { error }=await SB.storage.from('reports').upload(path,f,{upsert:false});
     if(error){ $('#rpStatus').textContent='업로드 실패: '+error.message; return; }
     urls.push(SB.storage.from('reports').getPublicUrl(path).data.publicUrl);
