@@ -45,7 +45,11 @@
   .paybtn .ic{font-size:28px;width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#f3eeff;flex:none}
   .paybtn h3{font-size:15.5px;color:var(--navy);font-weight:800}
   .paybtn p{font-size:12.5px;color:var(--sub)}
-  .childbar{display:flex;align-items:center;gap:10px;background:#f3eeff;border:1px solid #ddd0f7;border-radius:12px;padding:10px 14px;margin-top:18px;font-size:13.5px}
+  .childbar{display:flex;flex-direction:column;align-items:stretch;gap:6px;background:#f3eeff;border:1px solid #ddd0f7;border-radius:12px;padding:10px 14px;margin-top:18px;font-size:13.5px}
+  .kidtabs{display:flex;flex-wrap:wrap;gap:6px}
+  .kidtab{background:#e9e0fb;color:#5b3ca8;border:1px solid #ddd0f5;border-radius:999px;padding:6px 14px;font-size:14px;font-weight:800;cursor:pointer}
+  .kidtab.on{background:#7b3fe4;color:#fff;border-color:#7b3fe4}
+  .kidtab.add{background:#fff;color:#7b3fe4;border-style:dashed}
   .childbar b{color:#5a2ec4}
   .childbar .chg{margin-left:auto;color:#7b3fe4;font-weight:800;font-size:12px;cursor:pointer;background:none;border:none}
   .childform{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -145,8 +149,15 @@ else {
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
   const esc = t => (t||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   let SESSION=null;
+  function getChildren(){ try{ return JSON.parse(localStorage.getItem('klai_children')||'[]'); }catch(e){ return []; } }
+  function saveChildren(a){ localStorage.setItem('klai_children', JSON.stringify([...new Set(a)])); }
+  function addChild(code){ const l=String(code).trim().toLowerCase(); if(!l) return; const a=getChildren(); if(!a.includes(l)) a.push(l); saveChildren(a); localStorage.setItem('klai_child_active',l); }
   function childCode(){
-    return SESSION?.user?.user_metadata?.child_code || localStorage.getItem('klai_child_code') || '';
+    const a=getChildren(); const act=localStorage.getItem('klai_child_active');
+    if(act && a.includes(act)) return act;
+    const legacy=localStorage.getItem('klai_child_code');   // 구버전 단일 자녀 이관
+    if(legacy){ addChild(legacy); localStorage.removeItem('klai_child_code'); return legacy.toLowerCase(); }
+    return a[0]||'';
   }
   async function route(){
     const { data:{ session } } = await sb.auth.getSession();
@@ -157,25 +168,38 @@ else {
       loadChild();
     } else show('loginView');
   }
+  function childAddForm(bar){
+    bar.innerHTML = '<span class="mut">자녀의 <b>로그인 아이디</b>(예: elin1136)를 입력하세요. 형제자매는 여러 명 추가할 수 있어요.</span>'+
+      '<div class="childform" style="width:100%;margin-top:8px"><input id="childIn" placeholder="자녀 로그인 아이디" autocapitalize="none"><button id="childBtn">추가</button></div>'+
+      (getChildren().length?'<button class="chg" id="childCancel" style="margin-top:6px">취소</button>':'');
+    const go=()=>{ const v=$('#childIn').value.trim(); if(v){ addChild(v); loadChild(); } };
+    $('#childBtn').onclick=go;
+    $('#childIn').addEventListener('keydown',e=>{ if(e.key==='Enter') go(); });
+    const c=$('#childCancel'); if(c) c.onclick=()=>loadChild();
+    ['ttBox','hwBox','rpBox','vidBox'].forEach(id=>$('#'+id).innerHTML='<div class="mut">자녀 연결 후 표시돼요.</div>');
+    $('#sumBox').innerHTML='<div class="row"><span class="mut">자녀 연결 후 표시돼요.</span></div>';
+  }
   async function loadChild(){
+    const kids = getChildren();
     const code = childCode();
     const bar = $('#childBar');
-    if(!code){
-      bar.innerHTML = '<span class="mut">자녀의 <b>로그인 아이디</b>(예: elin1136)를 한 번만 입력하면 학습 현황이 연결돼요.</span>'+
-        '<div class="childform" style="width:100%;margin-top:8px"><input id="childIn" placeholder="자녀 로그인 아이디" autocapitalize="none"><button id="childBtn">연결</button></div>';
-      $('#childBtn').onclick=()=>{ const v=$('#childIn').value.trim(); if(v){ localStorage.setItem('klai_child_code',v); loadChild(); } };
-      ['ttBox','hwBox','rpBox','vidBox'].forEach(id=>$('#'+id).innerHTML='<div class="mut">자녀 연결 후 표시돼요.</div>');
-      $('#sumBox').innerHTML='<div class="row"><span class="mut">자녀 연결 후 표시돼요.</span></div>';
-      return;
-    }
-    // 자녀 이름 + 반 조회 (이름은 student_dir 로그인id→한글이름 우선)
-    const lid=String(code).toLowerCase();
-    const { data:sd } = await sb.from('student_dir').select('name_kor').eq('login_id',lid).maybeSingle();
+    if(!kids.length || !code){ childAddForm(bar); return; }
+    // 자녀들 이름 (student_dir 로그인id→한글이름)
+    const { data:sd } = await sb.from('student_dir').select('login_id,name_kor').in('login_id',kids);
+    const nameOf=l=>{ const r=(sd||[]).find(x=>x.login_id===l); return (r&&r.name_kor)||l; };
+    bar.innerHTML =
+      `<div class="kidtabs">`+
+        kids.map(l=>`<button class="kidtab${l===code?' on':''}" data-k="${l}">${esc(nameOf(l))}</button>`).join('')+
+        `<button class="kidtab add" id="kidAdd">＋ 자녀</button>`+
+      `</div>`+
+      `<div style="margin-top:7px;font-size:12.5px;color:#6b6b76">👧 <b>${esc(nameOf(code))}</b> · ${esc(code)} <button class="chg" id="kidDel" style="margin-left:8px">이 자녀 삭제</button></div>`;
+    bar.querySelectorAll('.kidtab[data-k]').forEach(b=>b.onclick=()=>{ localStorage.setItem('klai_child_active',b.dataset.k); loadChild(); });
+    $('#kidAdd').onclick=()=>childAddForm(bar);
+    $('#kidDel').onclick=()=>{ const a=getChildren().filter(x=>x!==code); saveChildren(a); localStorage.removeItem('klai_child_active'); loadChild(); };
+    // 활성 자녀 데이터 로드
+    const name=nameOf(code);
     const { data:cr } = await sb.from('class_records').select('teacher,class_name,student_name').eq('student_code',code);
-    const name = (sd&&sd.name_kor) || (cr&&cr[0]&&cr[0].student_name) || code;
     const classes = [...new Map((cr||[]).map(r=>[r.teacher+'|'+r.class_name,r])).values()];
-    bar.innerHTML = `<span>👧 <b>${esc(name)}</b> 학생 · <span class="mut">${esc(String(code).toLowerCase())}</span></span><button class="chg" id="childChg">자녀 변경</button>`;
-    $('#childChg').onclick=()=>{ localStorage.removeItem('klai_child_code'); loadChild(); };
     loadHomework(classes);
     loadSummary(code);
     loadReports(name);
