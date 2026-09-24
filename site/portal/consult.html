@@ -109,7 +109,7 @@
           <button class="btnai" id="aiBtn">✨ AI로 정리</button>
           <span id="aiState" style="font-size:12px;color:var(--sub)"></span>
         </div>
-        <div style="font-size:11.5px;color:var(--sub);margin-top:5px">🎤 짧은 메모는 여기서 바로 녹음(말하면 자동 입력) · 긴 상담은 위 <b>클로바노트</b> 추천</div>
+        <div style="font-size:11.5px;color:var(--sub);margin-top:5px">🎤 녹음 후 <b>중지</b>하면 자동으로 받아써서 상담내용에 입력돼요(정확 전사). 1회 <b>20분 이내</b> 권장 · 더 길면 위 <b>클로바노트</b></div>
       </div>
 
       <div class="card">
@@ -221,31 +221,42 @@ async function api(path, body){
   return r.json();
 }
 
-// 🎤 마이크 녹음 → 실시간 텍스트 (Web Speech API, ko-KR)
+// 🎤 마이크 녹음 → OpenAI Whisper 전사 → 상담내용에 입력
 (function(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const btn = $('#recBtn'); if(!btn) return;
-  if(!SR){ btn.disabled=true; btn.textContent='🎤 미지원 브라우저'; btn.title='Chrome/Safari에서 이용'; return; }
-  let rec=null, on=false, base='', finalTxt='';
-  function reset(){ btn.textContent='🎤 녹음 시작'; btn.style.background='#c0392b'; }
-  function start(){
-    base = $('#f_note').value ? $('#f_note').value.replace(/\s*$/,'')+'\n' : '';
-    finalTxt='';
-    rec = new SR(); rec.lang='ko-KR'; rec.continuous=true; rec.interimResults=true;
-    rec.onresult=e=>{
-      let interim='';
-      for(let i=e.resultIndex;i<e.results.length;i++){
-        const t=e.results[i][0].transcript;
-        if(e.results[i].isFinal) finalTxt+=t+' '; else interim+=t;
-      }
-      $('#f_note').value = base + finalTxt + interim;
-    };
-    rec.onend=()=>{ if(on){ try{ rec.start(); }catch(e){} } };   // 침묵으로 끊기면 자동 재시작
-    rec.onerror=e=>{ if(e.error==='not-allowed'||e.error==='service-not-allowed'){ on=false; reset(); alert('마이크 권한을 허용해주세요.'); } };
-    try{ rec.start(); on=true; btn.textContent='⏹ 녹음 중지'; btn.style.background='#1a2740'; }
-    catch(e){ alert('녹음 시작 실패: '+e.message); }
+  const btn=$('#recBtn'); if(!btn) return;
+  if(!navigator.mediaDevices || !window.MediaRecorder){ btn.disabled=true; btn.textContent='🎤 미지원 브라우저'; return; }
+  let mr=null, chunks=[], stream=null, on=false;
+  function reset(){ btn.textContent='🎤 녹음 시작'; btn.style.background='#c0392b'; btn.disabled=false; }
+  async function start(){
+    try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }
+    catch(e){ alert('마이크 권한을 허용해주세요.'); return; }
+    chunks=[];
+    const mime = MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':(MediaRecorder.isTypeSupported('audio/mp4')?'audio/mp4':'');
+    mr = new MediaRecorder(stream, mime?{mimeType:mime,audioBitsPerSecond:24000}:{});
+    mr.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+    mr.onstop=onStop;
+    mr.start();
+    on=true; btn.textContent='⏹ 녹음 중지'; btn.style.background='#1a2740';
   }
-  function stop(){ on=false; if(rec){ try{ rec.stop(); }catch(e){} } reset(); }
+  function stop(){ on=false; btn.textContent='⏳ 전사 중…'; btn.disabled=true; if(mr&&mr.state!=='inactive') mr.stop(); }
+  async function onStop(){
+    if(stream){ stream.getTracks().forEach(t=>t.stop()); }
+    const blob=new Blob(chunks,{type:(mr&&mr.mimeType)||'audio/webm'});
+    if(!blob.size){ reset(); return; }
+    try{
+      const path=`audio/consult_${Date.now()}.webm`;
+      const up=await SB.storage.from('reports').upload(path,blob,{contentType:blob.type||'audio/webm',upsert:false});
+      if(up.error) throw new Error('업로드 실패: '+up.error.message);
+      const url=SB.storage.from('reports').getPublicUrl(path).data.publicUrl;
+      const { data:{ session } } = await SB.auth.getSession();
+      const r=await fetch('/api/consult-transcribe',{ method:'POST', headers:{ Authorization:'Bearer '+(session?session.access_token:''), 'Content-Type':'application/json' }, body:JSON.stringify({url}) });
+      const j=await r.json();
+      SB.storage.from('reports').remove([path]).catch(()=>{});   // 임시 오디오 삭제
+      if(!j.ok) throw new Error(j.error||'전사 실패');
+      const ta=$('#f_note'); ta.value = (ta.value?ta.value.replace(/\s*$/,'')+'\n':'') + (j.text||'');
+    }catch(e){ alert('전사 오류: '+e.message); }
+    reset();
+  }
   btn.onclick=()=> on?stop():start();
 })();
 
