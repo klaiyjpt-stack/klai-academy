@@ -104,10 +104,12 @@
         <h2>상담 내용</h2>
         <textarea id="f_note" placeholder="학부모와 나눈 대화·요청·특이사항을 그대로 적어주세요. (녹취/메모 붙여넣기 OK)"></textarea>
         <div style="font-size:12px;color:var(--sub);margin-top:6px">💡 1시간 상담은 <b>클로바노트</b>(무료 앱)로 녹음·전사 → 그 글을 여기 붙여넣고 <b>AI로 정리</b>를 누르세요.</div>
-        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button type="button" class="btnai" id="recBtn" style="background:#c0392b">🎤 녹음 시작</button>
           <button class="btnai" id="aiBtn">✨ AI로 정리</button>
           <span id="aiState" style="font-size:12px;color:var(--sub)"></span>
         </div>
+        <div style="font-size:11.5px;color:var(--sub);margin-top:5px">🎤 짧은 메모는 여기서 바로 녹음(말하면 자동 입력) · 긴 상담은 위 <b>클로바노트</b> 추천</div>
       </div>
 
       <div class="card">
@@ -218,6 +220,34 @@ async function api(path, body){
   const r=await fetch(path,{ method:'POST', headers:{ Authorization:'Bearer '+(session?session.access_token:''), 'Content-Type':'application/json' }, body:JSON.stringify(body) });
   return r.json();
 }
+
+// 🎤 마이크 녹음 → 실시간 텍스트 (Web Speech API, ko-KR)
+(function(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const btn = $('#recBtn'); if(!btn) return;
+  if(!SR){ btn.disabled=true; btn.textContent='🎤 미지원 브라우저'; btn.title='Chrome/Safari에서 이용'; return; }
+  let rec=null, on=false, base='', finalTxt='';
+  function reset(){ btn.textContent='🎤 녹음 시작'; btn.style.background='#c0392b'; }
+  function start(){
+    base = $('#f_note').value ? $('#f_note').value.replace(/\s*$/,'')+'\n' : '';
+    finalTxt='';
+    rec = new SR(); rec.lang='ko-KR'; rec.continuous=true; rec.interimResults=true;
+    rec.onresult=e=>{
+      let interim='';
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const t=e.results[i][0].transcript;
+        if(e.results[i].isFinal) finalTxt+=t+' '; else interim+=t;
+      }
+      $('#f_note').value = base + finalTxt + interim;
+    };
+    rec.onend=()=>{ if(on){ try{ rec.start(); }catch(e){} } };   // 침묵으로 끊기면 자동 재시작
+    rec.onerror=e=>{ if(e.error==='not-allowed'||e.error==='service-not-allowed'){ on=false; reset(); alert('마이크 권한을 허용해주세요.'); } };
+    try{ rec.start(); on=true; btn.textContent='⏹ 녹음 중지'; btn.style.background='#1a2740'; }
+    catch(e){ alert('녹음 시작 실패: '+e.message); }
+  }
+  function stop(){ on=false; if(rec){ try{ rec.stop(); }catch(e){} } reset(); }
+  btn.onclick=()=> on?stop():start();
+})();
 
 $('#aiBtn').onclick=async()=>{
   const note=$('#f_note').value.trim();
